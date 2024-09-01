@@ -1,0 +1,171 @@
+package QnAForumInterface.MainPanelPackage;
+
+import CustomControls.RoundedJPanel;
+
+import QnAForumInterface.InformationBarPackage.AnswerBar;
+import QnAForumInterface.QnABoard;
+import Resources.ResourceManager;
+
+import javax.swing.*;
+import javax.swing.border.LineBorder;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+public class MainPanelHeader extends JPanel {
+
+    private final JLabel contentUserProfile;
+    private final JLabel contentUserName;
+    private final JButton viewQuestionBtn;
+    private final JLabel tagText;
+
+    private RoundedJPanel tagsPanel;
+
+    public MainPanelHeader() {
+        contentUserProfile = new JLabel();
+        contentUserName = new JLabel();
+        tagsPanel = new RoundedJPanel();
+        tagText = new JLabel();
+        viewQuestionBtn = new JButton();
+
+        init();
+    }
+
+    private void init() {
+        setBackground(new Color(0, 102, 51));
+        setOpaque(false);
+        setPreferredSize(new Dimension(315, 130));
+        setLayout(new GridBagLayout());
+
+        initUserProfile();
+        initUserName();
+        initTagsPanel();
+        initViewQuestionButton();
+    }
+
+    private void initUserProfile() {
+        GridBagConstraints gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weighty = 1.0;
+
+        contentUserProfile.setIcon(ResourceManager.getIcon("user_profile", ResourceManager.REGULAR));
+
+        add(contentUserProfile, gridBagConstraints);
+    }
+
+    private void initUserName() {
+        GridBagConstraints gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(20, 20, 0, 0);
+
+        contentUserName.setForeground(ResourceManager.getColor("text_fg_light"));
+        contentUserName.setText("Content User Name");
+        contentUserName.setFont(ResourceManager.getFont("inter_bold.36"));
+
+        add(contentUserName, gridBagConstraints);
+    }
+
+    private void initTagsPanel() {
+        GridBagConstraints gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(0, 20, 20, 0);
+
+        tagsPanel.setBackground(ResourceManager.getColor("main_light"));
+        tagsPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+        tagsPanel.setBorderColor(ResourceManager.getColor("main"));
+        tagsPanel.setCornerRadius(50);
+        tagsPanel.setLimitRadius(false);
+        tagsPanel.setLayout(new BoxLayout(tagsPanel, BoxLayout.X_AXIS));
+
+        tagText.setText("tag1 | tag2 | tag3");
+        tagText.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        tagText.setForeground(ResourceManager.getColor("text_fg_light"));
+        tagText.setFont(ResourceManager.getFont("inter_regular.22"));
+        tagsPanel.add(tagText);
+
+        add(tagsPanel, gridBagConstraints);
+    }
+
+    private void initViewQuestionButton() {
+        GridBagConstraints gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(0, 20, 20, 0);
+
+        viewQuestionBtn.setText("View Question");
+        viewQuestionBtn.setHorizontalAlignment(SwingConstants.LEFT);
+        viewQuestionBtn.setBackground(new Color(204, 204, 204));
+        viewQuestionBtn.setForeground(ResourceManager.getColor("text_fg_light"));
+        viewQuestionBtn.setBorder(BorderFactory.createCompoundBorder(new LineBorder(ResourceManager.getColor("main_light"), 2, true), BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+        viewQuestionBtn.setBorderPainted(false);
+        viewQuestionBtn.setContentAreaFilled(false);
+        viewQuestionBtn.setFocusPainted(false);
+        viewQuestionBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        viewQuestionBtn.setIcon(ResourceManager.getIcon("arrowL_default", 32));
+        viewQuestionBtn.setPressedIcon(ResourceManager.getIcon("arrowL_pressed", 32));
+        viewQuestionBtn.setRolloverIcon(ResourceManager.getIcon("arrowL_rollover", 32));
+        viewQuestionBtn.setFont(ResourceManager.getFont("inter_regular.22"));
+
+        viewQuestionBtn.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent evt) {
+                setForeground(ResourceManager.getColor("main"));
+            }
+
+            public void mouseExited(MouseEvent evt) {
+                setForeground(ResourceManager.getColor("text_fg_light"));
+            }
+        });
+
+        viewQuestionBtn.addActionListener(evt -> {
+            AnswerBar.setSelected(null);
+            QnABoard.CurrentInstance.displayQuestionPanel();
+        });
+
+        add(viewQuestionBtn, gridBagConstraints);
+    }
+
+    public void setContent(String contentUserName, String contentUserProfileIndex, String[] tags) {
+        this.contentUserName.setText(contentUserName);
+        ResourceManager.setProfileIcon(contentUserProfileIndex, contentUserProfile, ResourceManager.REGULAR);
+
+        if(tags == null) return;
+
+        tagText.setText("");
+        tagsPanel.setVisible(tags.length != 0);
+
+        for (String tag : tags)
+            createTag(tag);
+    }
+
+    private void createTag(String tagText) {
+        if (!this.tagText.getText().isEmpty())
+            tagText = this.tagText.getText() + " | " + tagText;
+
+        this.tagText.setText(tagText);
+    }
+
+    public void setContentType(int type) {
+        viewQuestionBtn.setVisible(type == 0);
+        tagsPanel.setVisible(type != 0);
+    }
+
+    public String getContentUserName() {
+        return contentUserName.getText();
+    }
+}

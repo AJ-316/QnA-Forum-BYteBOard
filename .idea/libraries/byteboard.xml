@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="byteboard">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/src/Resources/IconResource/byteboard/byteboard.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
