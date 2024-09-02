@@ -65,6 +65,7 @@ public class LoginForm extends JPanel {
         gridBagConstraints.insets = new Insets(10, 10, 10, 10);
         add(idLabel, gridBagConstraints);
         idLabel.setFont(ResourceManager.getFont("inter_regular.26"));
+        idLabel.setForeground(ResourceManager.getColor("text_fg_dark"));
 
         idField.setMinimumSize(new Dimension(200, 39));
         idField.setPreferredSize(new Dimension(200, 29));
@@ -74,6 +75,8 @@ public class LoginForm extends JPanel {
         gridBagConstraints.insets = new Insets(10, 10, 10, 40);
         add(idField, gridBagConstraints);
         idField.setFont(ResourceManager.getFont("inter_regular.24"));
+        idField.setForeground(ResourceManager.getColor("text_fg_dark"));
+        idField.setBackground(ResourceManager.getColor("base"));
 
         pwdLabel.setText("Password:");
         gridBagConstraints = new GridBagConstraints();
@@ -82,6 +85,7 @@ public class LoginForm extends JPanel {
         gridBagConstraints.insets = new Insets(10, 10, 50, 10);
         add(pwdLabel, gridBagConstraints);
         pwdLabel.setFont(ResourceManager.getFont("inter_regular.26"));
+        pwdLabel.setForeground(ResourceManager.getColor("text_fg_dark"));
 
         pwdField.setMinimumSize(new Dimension(200, 29));
         pwdField.setPreferredSize(new Dimension(200, 29));
@@ -91,6 +95,8 @@ public class LoginForm extends JPanel {
         gridBagConstraints.insets = new Insets(10, 10, 50, 40);
         add(pwdField, gridBagConstraints);
         pwdField.setFont(ResourceManager.getFont("inter_regular.18"));
+        pwdField.setForeground(ResourceManager.getColor("text_fg_dark"));
+        pwdField.setBackground(ResourceManager.getColor("base"));
 
         loginErrorLabel.setForeground(new Color(210, 0, 0));
         loginErrorLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -102,16 +108,16 @@ public class LoginForm extends JPanel {
         add(loginErrorLabel, gridBagConstraints);
         loginErrorLabel.setFont(ResourceManager.getFont("inter_regular.18"));
 
-        loginBtn.setForeground(new Color(10, 120, 120));
-        loginBtn.setIcon(ResourceManager.getIcon("login_default", 32)
+        loginBtn.setForeground(ResourceManager.getColor("main"));
+        loginBtn.setIcon(ResourceManager.getIcon("login_default", ResourceManager.MINI)
         );
         loginBtn.setText("Log In");
         loginBtn.setBorderPainted(false);
         loginBtn.setContentAreaFilled(false);
         loginBtn.setFocusPainted(false);
-        loginBtn.setPressedIcon(ResourceManager.getIcon("login_pressed", 32)
+        loginBtn.setPressedIcon(ResourceManager.getIcon("login_pressed", ResourceManager.MINI)
         );
-        loginBtn.setRolloverIcon(ResourceManager.getIcon("login_rollover", 32)
+        loginBtn.setRolloverIcon(ResourceManager.getIcon("login_rollover", ResourceManager.MINI)
         );
         loginBtn.addActionListener(evt -> loginBtnActionPerformed(evt));
         gridBagConstraints = new GridBagConstraints();
@@ -128,17 +134,18 @@ public class LoginForm extends JPanel {
         gridBagConstraints.insets = new Insets(20, 10, 10, 10);
         add(signupInfoLabel, gridBagConstraints);
         signupInfoLabel.setFont(ResourceManager.getFont("inter_regular.20"));
+        signupInfoLabel.setForeground(ResourceManager.getColor("text_fg_dark"));
 
         signupBtn.setForeground(ResourceManager.getColor("main_dark"));
-        signupBtn.setIcon(ResourceManager.getIcon("signup_default", 32)
+        signupBtn.setIcon(ResourceManager.getIcon("signup_default", ResourceManager.MINI)
         );
         signupBtn.setText("Sign Up");
         signupBtn.setBorderPainted(false);
         signupBtn.setContentAreaFilled(false);
         signupBtn.setFocusPainted(false);
-        signupBtn.setPressedIcon(ResourceManager.getIcon("signup_pressed", 32)
+        signupBtn.setPressedIcon(ResourceManager.getIcon("signup_pressed", ResourceManager.MINI)
         );
-        signupBtn.setRolloverIcon(ResourceManager.getIcon("signup_rollover", 32)
+        signupBtn.setRolloverIcon(ResourceManager.getIcon("signup_rollover", ResourceManager.MINI)
         );
         signupBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {

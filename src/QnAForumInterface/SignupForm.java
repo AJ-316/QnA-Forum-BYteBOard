@@ -84,6 +84,7 @@ public class SignupForm extends JPanel {
         gridBagConstraints.insets = new Insets(0, 5, 5, 5);
         add(usernameLabel, gridBagConstraints);
         usernameLabel.setFont(ResourceManager.getFont("inter_regular.26"));
+        usernameLabel.setForeground(ResourceManager.getColor("text_fg_dark"));
 
         usernameField.setMinimumSize(new Dimension(200, 39));
         usernameField.setPreferredSize(new Dimension(200, 29));
@@ -93,6 +94,8 @@ public class SignupForm extends JPanel {
         gridBagConstraints.insets = new Insets(0, 5, 5, 5);
         add(usernameField, gridBagConstraints);
         usernameField.setFont(ResourceManager.getFont("inter_regular.24"));
+        usernameField.setForeground(ResourceManager.getColor("text_fg_dark"));
+        usernameField.setBackground(ResourceManager.getColor("base"));
 
         emailLabel.setText("Email-ID:");
         gridBagConstraints = new GridBagConstraints();
@@ -101,6 +104,7 @@ public class SignupForm extends JPanel {
         gridBagConstraints.insets = new Insets(10, 5, 5, 5);
         add(emailLabel, gridBagConstraints);
         emailLabel.setFont(ResourceManager.getFont("inter_regular.26"));
+        emailLabel.setForeground(ResourceManager.getColor("text_fg_dark"));
 
         emailField.setMinimumSize(new Dimension(200, 39));
         emailField.setPreferredSize(new Dimension(200, 29));
@@ -110,6 +114,8 @@ public class SignupForm extends JPanel {
         gridBagConstraints.insets = new Insets(10, 5, 5, 5);
         add(emailField, gridBagConstraints);
         emailField.setFont(ResourceManager.getFont("inter_regular.24"));
+        emailField.setForeground(ResourceManager.getColor("text_fg_dark"));
+        emailField.setBackground(ResourceManager.getColor("base"));
 
         pwdLabel.setText("Password:");
         gridBagConstraints = new GridBagConstraints();
@@ -118,6 +124,7 @@ public class SignupForm extends JPanel {
         gridBagConstraints.insets = new Insets(10, 5, 5, 5);
         add(pwdLabel, gridBagConstraints);
         pwdLabel.setFont(ResourceManager.getFont("inter_regular.26"));
+        pwdLabel.setForeground(ResourceManager.getColor("text_fg_dark"));
 
         pwdField.setMinimumSize(new Dimension(200, 29));
         pwdField.setPreferredSize(new Dimension(200, 29));
@@ -127,6 +134,8 @@ public class SignupForm extends JPanel {
         gridBagConstraints.insets = new Insets(10, 5, 5, 5);
         add(pwdField, gridBagConstraints);
         pwdField.setFont(ResourceManager.getFont("inter_regular.18"));
+        pwdField.setForeground(ResourceManager.getColor("text_fg_dark"));
+        pwdField.setBackground(ResourceManager.getColor("base"));
 
         pwdCheckLabel.setText("Re- Enter Password:");
         gridBagConstraints = new GridBagConstraints();
@@ -135,6 +144,7 @@ public class SignupForm extends JPanel {
         gridBagConstraints.insets = new Insets(10, 5, 5, 5);
         add(pwdCheckLabel, gridBagConstraints);
         pwdCheckLabel.setFont(ResourceManager.getFont("inter_regular.26"));
+        pwdCheckLabel.setForeground(ResourceManager.getColor("text_fg_dark"));
 
         pwdCheckField.setMinimumSize(new Dimension(200, 29));
         pwdCheckField.setPreferredSize(new Dimension(200, 29));
@@ -144,6 +154,8 @@ public class SignupForm extends JPanel {
         gridBagConstraints.insets = new Insets(10, 5, 5, 5);
         add(pwdCheckField, gridBagConstraints);
         pwdCheckField.setFont(ResourceManager.getFont("inter_regular.18"));
+        pwdCheckField.setForeground(ResourceManager.getColor("text_fg_dark"));
+        pwdCheckField.setBackground(ResourceManager.getColor("base"));
 
         signupErrorLabel.setForeground(new Color(210, 0, 0));
         signupErrorLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -155,16 +167,16 @@ public class SignupForm extends JPanel {
         add(signupErrorLabel, gridBagConstraints);
         signupErrorLabel.setFont(ResourceManager.getFont("inter_regular.18"));
 
-        signupBtn.setForeground(new Color(10, 120, 120));
-        signupBtn.setIcon(ResourceManager.getIcon("signup_default", 32)
+        signupBtn.setForeground(ResourceManager.getColor("main"));
+        signupBtn.setIcon(ResourceManager.getIcon("signup_default", ResourceManager.MINI)
         );
         signupBtn.setText("Sign Up");
         signupBtn.setBorderPainted(false);
         signupBtn.setContentAreaFilled(false);
         signupBtn.setFocusPainted(false);
-        signupBtn.setPressedIcon(ResourceManager.getIcon("signup_pressed", 32)
+        signupBtn.setPressedIcon(ResourceManager.getIcon("signup_pressed", ResourceManager.MINI)
         );
-        signupBtn.setRolloverIcon(ResourceManager.getIcon("signup_rollover", 32)
+        signupBtn.setRolloverIcon(ResourceManager.getIcon("signup_rollover", ResourceManager.MINI)
         );
         signupBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
@@ -187,17 +199,18 @@ public class SignupForm extends JPanel {
         gridBagConstraints.insets = new Insets(20, 10, 10, 10);
         add(loginInfoLabel, gridBagConstraints);
         loginInfoLabel.setFont(ResourceManager.getFont("inter_regular.20"));
+        loginInfoLabel.setForeground(ResourceManager.getColor("text_fg_dark"));
 
         loginBtn.setForeground(ResourceManager.getColor("main_dark"));
-        loginBtn.setIcon(ResourceManager.getIcon("logout_default", 32)
+        loginBtn.setIcon(ResourceManager.getIcon("logout_default", ResourceManager.MINI)
         );
         loginBtn.setText("Log In");
         loginBtn.setBorderPainted(false);
         loginBtn.setContentAreaFilled(false);
         loginBtn.setFocusPainted(false);
-        loginBtn.setPressedIcon(ResourceManager.getIcon("logout_pressed", 32)
+        loginBtn.setPressedIcon(ResourceManager.getIcon("logout_pressed", ResourceManager.MINI)
         );
-        loginBtn.setRolloverIcon(ResourceManager.getIcon("logout_rollover", 32)
+        loginBtn.setRolloverIcon(ResourceManager.getIcon("logout_rollover", ResourceManager.MINI)
         );
         loginBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {

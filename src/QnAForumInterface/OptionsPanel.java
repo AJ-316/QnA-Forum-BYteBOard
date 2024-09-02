@@ -5,6 +5,7 @@
 package QnAForumInterface;
 
 
+import QnAForumInterface.ProfileBoardPackage.ProfileBoard;
 import Resources.ResourceManager;
 
 import javax.swing.*;
@@ -85,8 +86,7 @@ public class OptionsPanel extends JPanel {
         setBackground(ResourceManager.getColor("base"));
         setLayout(new GridBagLayout());
 
-        userProfile.setIcon(ResourceManager.getIcon("user_profile", ResourceManager.SMALL)
-        );
+        userProfile.setIcon(ResourceManager.getIcon("user_profile", ResourceManager.SMALL));
         userProfile.setVerticalAlignment(SwingConstants.BOTTOM);
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -103,83 +103,78 @@ public class OptionsPanel extends JPanel {
         gridBagConstraints.insets = new Insets(0, 25, 25, 25);
         add(userName, gridBagConstraints);
         userName.setFont(ResourceManager.getFont("inter_bold.28"));
+        userName.setForeground(ResourceManager.getColor("text_fg_dark"));
 
         buttonHolder.setOpaque(false);
         buttonHolder.setLayout(new GridBagLayout());
 
         profileBtn.setBackground(getBackground());
-        profileBtn.setIcon(ResourceManager.getIcon("home_default", 32)
-        );
+        profileBtn.setIcon(ResourceManager.getIcon("home_default", ResourceManager.MINI));
         profileBtn.setText("Profile");
         profileBtn.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         profileBtn.setBorderPainted(false);
         profileBtn.setContentAreaFilled(false);
         profileBtn.setFocusPainted(false);
-        profileBtn.setPressedIcon(ResourceManager.getIcon("home_pressed", 32)
-        );
-        profileBtn.setRolloverIcon(ResourceManager.getIcon("home_rollover", 32)
-        );
+        profileBtn.setPressedIcon(ResourceManager.getIcon("home_pressed", ResourceManager.MINI));
+        profileBtn.setRolloverIcon(ResourceManager.getIcon("home_rollover", ResourceManager.MINI));
         profileBtn.addActionListener(evt -> profileBtnActionPerformed(evt));
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         buttonHolder.add(profileBtn, gridBagConstraints);
         profileBtn.setFont(ResourceManager.getFont("inter_regular.22"));
+        profileBtn.setForeground(ResourceManager.getColor("text_fg_dark"));
 
         searchBtn.setBackground(getBackground());
-        searchBtn.setIcon(ResourceManager.getIcon("search_default", 32)
-        );
+        searchBtn.setIcon(ResourceManager.getIcon("search_default", ResourceManager.MINI));
         searchBtn.setText("Search");
         searchBtn.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         searchBtn.setBorderPainted(false);
         searchBtn.setContentAreaFilled(false);
         searchBtn.setFocusPainted(false);
-        searchBtn.setPressedIcon(ResourceManager.getIcon("search_pressed", 32)
-        );
-        searchBtn.setRolloverIcon(ResourceManager.getIcon("search_rollover", 32)
-        );
+        searchBtn.setPressedIcon(ResourceManager.getIcon("search_pressed", ResourceManager.MINI));
+        searchBtn.setRolloverIcon(ResourceManager.getIcon("search_rollover", ResourceManager.MINI));
         searchBtn.addActionListener(evt -> searchBtnActionPerformed(evt));
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         buttonHolder.add(searchBtn, gridBagConstraints);
         searchBtn.setFont(ResourceManager.getFont("inter_regular.22"));
+        searchBtn.setForeground(ResourceManager.getColor("text_fg_dark"));
 
         askBtn.setBackground(getBackground());
-        askBtn.setIcon(ResourceManager.getIcon("question_default", 32));
+        askBtn.setIcon(ResourceManager.getIcon("question_default", ResourceManager.MINI));
         askBtn.setText("Ask");
         askBtn.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         askBtn.setBorderPainted(false);
         askBtn.setContentAreaFilled(false);
         askBtn.setFocusPainted(false);
-        askBtn.setPressedIcon(ResourceManager.getIcon("question_pressed", 32)
-        );
-        askBtn.setRolloverIcon(ResourceManager.getIcon("question_rollover", 32)
-        );
+        askBtn.setPressedIcon(ResourceManager.getIcon("question_pressed", ResourceManager.MINI));
+        askBtn.setRolloverIcon(ResourceManager.getIcon("question_rollover", ResourceManager.MINI));
         askBtn.addActionListener(evt -> askBtnActionPerformed(evt));
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         buttonHolder.add(askBtn, gridBagConstraints);
         askBtn.setFont(ResourceManager.getFont("inter_regular.22"));
+        askBtn.setForeground(ResourceManager.getColor("text_fg_dark"));
 
         answerButton.setBackground(getBackground());
-        answerButton.setIcon(ResourceManager.getIcon("answer_default", 32));
+        answerButton.setIcon(ResourceManager.getIcon("answer_default", ResourceManager.MINI));
         answerButton.setText("Answer");
         answerButton.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         answerButton.setBorderPainted(false);
         answerButton.setContentAreaFilled(false);
         answerButton.setFocusPainted(false);
-        answerButton.setPressedIcon(ResourceManager.getIcon("answer_pressed", 32)
-        );
-        answerButton.setRolloverIcon(ResourceManager.getIcon("answer_rollover", 32)
-        );
+        answerButton.setPressedIcon(ResourceManager.getIcon("answer_pressed", ResourceManager.MINI));
+        answerButton.setRolloverIcon(ResourceManager.getIcon("answer_rollover", ResourceManager.MINI));
         answerButton.addActionListener(evt -> answerButtonActionPerformed(evt));
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         buttonHolder.add(answerButton, gridBagConstraints);
         answerButton.setFont(ResourceManager.getFont("inter_regular.22"));
+        answerButton.setForeground(ResourceManager.getColor("text_fg_dark"));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -204,6 +199,7 @@ public class OptionsPanel extends JPanel {
         gridBagConstraints.insets = new Insets(10, 0, 25, 0);
         add(displayAnswerBtn, gridBagConstraints);
         displayAnswerBtn.setFont(ResourceManager.getFont("inter_regular.22"));
+        displayAnswerBtn.setForeground(ResourceManager.getColor("text_fg_dark"));
     }
 
     private void profileBtnActionPerformed(ActionEvent evt) {

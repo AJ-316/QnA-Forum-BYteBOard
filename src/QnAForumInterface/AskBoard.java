@@ -8,13 +8,13 @@ import CustomControls.SimpleScrollPane;
 import DataObjects.*;
 import QnAForumDatabase.Database;
 
+import QnAForumInterface.ProfileBoardPackage.ProfileBoard;
 import Resources.ResourceManager;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 import java.awt.*;
 import java.awt.event.*;
-import java.beans.Beans;
 
 /**
  * @author AJ
@@ -26,14 +26,14 @@ public class AskBoard extends JPanel {
     private JTextArea body;
     private CustomControls.RoundedJPanel bodyContainer;
     private JLabel bodyLabel;
-    private JScrollPane bodyScrollPane;
+    private SimpleScrollPane bodyScrollPane;
     private JPanel buttonHolder;
     private CustomControls.RoundedJPanel container;
-    private JScrollPane containerScrollPane;
+    private SimpleScrollPane containerScrollPane;
     private JTextArea head;
     private CustomControls.RoundedJPanel headContainer;
     private JLabel headLabel;
-    private JScrollPane headScrollPane;
+    private SimpleScrollPane headScrollPane;
     private JButton searchBtn;
     private JButton submitBtn;
     private JComboBox<String> tag;
@@ -69,7 +69,7 @@ public class AskBoard extends JPanel {
         board.bodyLabel.setText("Answer:");
         board.submitBtn.setText("Submit Answer");
         board.titleLabel.setText("Respond to Question");
-        board.bodyLabel.setIcon(ResourceManager.getIcon("answer_pressed", 32));
+        board.bodyLabel.setIcon(ResourceManager.getIcon("answer_pressed", ResourceManager.MINI));
         board.questionID = questionID;
         return board;
     }
@@ -81,7 +81,6 @@ public class AskBoard extends JPanel {
         ResourceManager.setProfileIcon(userProfileIndex, board.userProfile, ResourceManager.REGULAR);
         board.headLabel.setText("Question Head - Keep it simple");
         board.bodyLabel.setText("Question Body - Elaborate your Question");
-        board.submitBtn.setText("Submit Question");
         board.submitBtn.setText("Ask a Question");
         board.tagText.setText("");
         board.tagsRoundedPanel.setVisible(false);
@@ -202,14 +201,14 @@ public class AskBoard extends JPanel {
         buttonHolder.setLayout(new GridBagLayout());
 
         searchBtn.setForeground(ResourceManager.getColor("text_fg_light"));
-        searchBtn.setIcon(ResourceManager.getIcon("search_default", 32));
+        searchBtn.setIcon(ResourceManager.getIcon("search_default", ResourceManager.MINI));
         searchBtn.setText("Search");
         searchBtn.setBorderPainted(false);
         searchBtn.setContentAreaFilled(false);
         searchBtn.setFocusPainted(false);
-        searchBtn.setPressedIcon(ResourceManager.getIcon("search_pressed", 32)
+        searchBtn.setPressedIcon(ResourceManager.getIcon("search_pressed", ResourceManager.MINI)
         );
-        searchBtn.setRolloverIcon(ResourceManager.getIcon("search_rollover", 32)
+        searchBtn.setRolloverIcon(ResourceManager.getIcon("search_rollover", ResourceManager.MINI)
         );
         searchBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
@@ -225,14 +224,14 @@ public class AskBoard extends JPanel {
         searchBtn.setFont(ResourceManager.getFont("inter_regular.22"));
 
         submitBtn.setForeground(ResourceManager.getColor("text_fg_light"));
-        submitBtn.setIcon(ResourceManager.getIcon("submit_default", 32));
+        submitBtn.setIcon(ResourceManager.getIcon("submit_default", ResourceManager.MINI));
         submitBtn.setText("Submit");
         submitBtn.setBorderPainted(false);
         submitBtn.setContentAreaFilled(false);
         submitBtn.setFocusPainted(false);
-        submitBtn.setPressedIcon(ResourceManager.getIcon("submit_pressed", 32)
+        submitBtn.setPressedIcon(ResourceManager.getIcon("submit_pressed", ResourceManager.MINI)
         );
-        submitBtn.setRolloverIcon(ResourceManager.getIcon("submit_rollover", 32)
+        submitBtn.setRolloverIcon(ResourceManager.getIcon("submit_rollover", ResourceManager.MINI)
         );
         submitBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
@@ -248,14 +247,14 @@ public class AskBoard extends JPanel {
         submitBtn.setFont(ResourceManager.getFont("inter_regular.22"));
 
         backBtn.setForeground(ResourceManager.getColor("text_fg_light"));
-        backBtn.setIcon(ResourceManager.getIcon("home_default", 32));
+        backBtn.setIcon(ResourceManager.getIcon("home_default", ResourceManager.MINI));
         backBtn.setText("Back");
         backBtn.setBorderPainted(false);
         backBtn.setContentAreaFilled(false);
         backBtn.setFocusPainted(false);
-        backBtn.setPressedIcon(ResourceManager.getIcon("home_pressed", 32)
+        backBtn.setPressedIcon(ResourceManager.getIcon("home_pressed", ResourceManager.MINI)
         );
-        backBtn.setRolloverIcon(ResourceManager.getIcon("home_rollover", 32)
+        backBtn.setRolloverIcon(ResourceManager.getIcon("home_rollover", ResourceManager.MINI)
         );
         backBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
@@ -298,6 +297,7 @@ public class AskBoard extends JPanel {
         gridBagConstraints.insets = new Insets(20, 20, 20, 20);
         add(titleLabel, gridBagConstraints);
         titleLabel.setFont(ResourceManager.getFont("inter_semibold.32"));
+        titleLabel.setForeground(ResourceManager.getColor("text_fg_dark"));
 
         containerScrollPane.setBackground(ResourceManager.getColor("base"));
         containerScrollPane.setBorder(null);
@@ -310,7 +310,7 @@ public class AskBoard extends JPanel {
         askContainer.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         askContainer.setLayout(new GridBagLayout());
 
-        headLabel.setIcon(ResourceManager.getIcon("question_pressed", 32)
+        headLabel.setIcon(ResourceManager.getIcon("question_pressed", ResourceManager.MINI)
         );
         headLabel.setText("Question Head - Keep it simple");
         gridBagConstraints = new GridBagConstraints();
@@ -320,6 +320,7 @@ public class AskBoard extends JPanel {
         gridBagConstraints.weightx = 1.0;
         askContainer.add(headLabel, gridBagConstraints);
         headLabel.setFont(ResourceManager.getFont("inter_regular.24"));
+        headLabel.setForeground(ResourceManager.getColor("text_fg_dark"));
 
         headContainer.setBackground(ResourceManager.getColor("main_dark"));
         headContainer.setCornerRadius(90);
@@ -365,7 +366,7 @@ public class AskBoard extends JPanel {
         gridBagConstraints.weightx = 1.0;
         askContainer.add(headContainer, gridBagConstraints);
 
-        bodyLabel.setIcon(ResourceManager.getIcon("question_pressed", 32)
+        bodyLabel.setIcon(ResourceManager.getIcon("question_pressed", ResourceManager.MINI)
         );
         bodyLabel.setText("Question Body - Elaborate your Question");
         gridBagConstraints = new GridBagConstraints();
@@ -376,6 +377,7 @@ public class AskBoard extends JPanel {
         gridBagConstraints.insets = new Insets(40, 0, 0, 0);
         askContainer.add(bodyLabel, gridBagConstraints);
         bodyLabel.setFont(ResourceManager.getFont("inter_regular.24"));
+        bodyLabel.setForeground(ResourceManager.getColor("text_fg_dark"));
 
         bodyContainer.setBackground(ResourceManager.getColor("main_dark"));
         bodyContainer.setCornerRadius(90);
@@ -434,12 +436,12 @@ public class AskBoard extends JPanel {
 
         tagsDisplay.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 5));
 
-        tagsLabel.setIcon(ResourceManager.getIcon("tag_pressed", 32)
+        tagsLabel.setIcon(ResourceManager.getIcon("tag_pressed", ResourceManager.MINI)
         );
         tagsLabel.setText("Tags");
         tagsLabel.setToolTipText("");
         tagsDisplay.add(tagsLabel);
-        bodyLabel.setFont(ResourceManager.getFont("inter_regular.24"));
+        tagsLabel.setFont(ResourceManager.getFont("inter_regular.24"));
 
         tagsRoundedPanel.setBackground(ResourceManager.getColor("main"));
         tagsRoundedPanel.setBorder(BorderFactory.createEmptyBorder(8, 10, 8, 10));
@@ -494,11 +496,11 @@ public class AskBoard extends JPanel {
         JTextField textField = (JTextField) tag.getEditor().getEditorComponent();
         textField.addFocusListener(new FocusAdapter() {
             public void focusGained(FocusEvent evt) {
-                tagsLabel.setIcon(ResourceManager.getIcon("tag_default", 32));
+                tagsLabel.setIcon(ResourceManager.getIcon("tag_default", ResourceManager.MINI));
             }
 
             public void focusLost(FocusEvent evt) {
-                tagsLabel.setIcon(ResourceManager.getIcon("tag_pressed", 32));
+                tagsLabel.setIcon(ResourceManager.getIcon("tag_pressed", ResourceManager.MINI));
             }
         });
         textField.setForeground(Color.white);
@@ -616,24 +618,24 @@ public class AskBoard extends JPanel {
 
     private void bodyFocusGained(FocusEvent evt) {
         if (isAskBoard())
-            bodyLabel.setIcon(ResourceManager.getIcon("question_default", 32));
+            bodyLabel.setIcon(ResourceManager.getIcon("question_default", ResourceManager.MINI));
         else
-            bodyLabel.setIcon(ResourceManager.getIcon("answer_default", 32));
+            bodyLabel.setIcon(ResourceManager.getIcon("answer_default", ResourceManager.MINI));
     }
 
     private void bodyFocusLost(FocusEvent evt) {
         if (isAskBoard())
-            bodyLabel.setIcon(ResourceManager.getIcon("question_pressed", 32));
+            bodyLabel.setIcon(ResourceManager.getIcon("question_pressed", ResourceManager.MINI));
         else
-            bodyLabel.setIcon(ResourceManager.getIcon("answer_pressed", 32));
+            bodyLabel.setIcon(ResourceManager.getIcon("answer_pressed", ResourceManager.MINI));
     }
 
     private void headFocusGained(FocusEvent evt) {
-        headLabel.setIcon(ResourceManager.getIcon("question_default", 32));
+        headLabel.setIcon(ResourceManager.getIcon("question_default", ResourceManager.MINI));
     }
 
     private void headFocusLost(FocusEvent evt) {
-        headLabel.setIcon(ResourceManager.getIcon("question_pressed", 32));
+        headLabel.setIcon(ResourceManager.getIcon("question_pressed", ResourceManager.MINI));
     }
 
     private void tagsRoundedPanelMouseReleased(MouseEvent evt) {

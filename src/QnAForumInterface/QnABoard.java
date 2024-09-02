@@ -23,7 +23,7 @@ public class QnABoard extends JPanel {
     private MainPanel answerPanel;
     private JPanel answersContainer;
     private CustomControls.RoundedJPanel answersContainerHolder;
-    private JScrollPane answersContainerScrollPane;
+    private SimpleScrollPane answersContainerScrollPane;
     private JLabel noRespondersLabel;
     private OptionsPanel optionsPanel;
     private MainPanel questionPanel;
@@ -207,7 +207,7 @@ public class QnABoard extends JPanel {
         answersContainerHolder.setLayout(new GridBagLayout());
 
         noRespondersLabel.setBackground(ResourceManager.getColor("base"));
-        noRespondersLabel.setForeground(new Color(153, 153, 153));
+        noRespondersLabel.setForeground(ResourceManager.getColor("disabled"));
         noRespondersLabel.setHorizontalAlignment(SwingConstants.CENTER);
         noRespondersLabel.setText("No Responds Yet!");
         gridBagConstraints = new GridBagConstraints();

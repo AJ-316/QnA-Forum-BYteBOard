@@ -1,8 +1,6 @@
 package QnAForumInterface.InformationBarPackage;
 
-import CustomControls.RoundedJPanel;
-
-import QnAForumInterface.ProfileBoard;
+import QnAForumInterface.ProfileBoardPackage.ProfileBoard;
 import QnAForumInterface.QnABoard;
 import QnAForumInterface.QnAForum;
 import Resources.ResourceManager;

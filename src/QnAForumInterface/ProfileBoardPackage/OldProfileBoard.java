@@ -1,72 +1,43 @@
-package QnAForumInterface;
+/*
+package QnAForumInterface.ProfileBoardPackage;
 
-import CustomControls.*;
 import DataObjects.AnswerDataObject;
 import DataObjects.QuestionDataObject;
 import DataObjects.UserDataObject;
 import QnAForumDatabase.Database;
 import QnAForumDatabase.EncryptionUtils;
 
+import QnAForumInterface.*;
 import QnAForumInterface.InformationBarPackage.ActivityBar;
 import Resources.ResourceManager;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
+*/
 /**
  * @author AJ
- */
-public class ProfileBoard extends JPanel {
+ *//*
+
+public class OldProfileBoard extends JPanel {
 
     private static String CURRENT_USER;
-    int i = 0;
-    private JPanel activityContainer;
-    private RoundedJPanel activityContainerHolder;
-    private JScrollPane activityContainerScrollPane;
-    private JButton askQuestionBtn;
-    private JButton backBtn;
-    private RoundedJPanel buttonHolder;
-    private JPanel buttonHolder2;
-    private RoundedJPanel chooseProfileHolder;
-    private JPanel chooseProfilePane;
-    private JScrollPane chooseProfileScrollPane;
-    private JPanel editHolder;
-    private JButton editProfileBtn;
-    private JLabel editProfileIcon;
-    private JTextField editUserEmail;
-    private JTextField editUserName;
-    private JPasswordField editUserPassword;
-    private JLabel editUserProfile;
-    private JPanel editUserProfileHolder;
-    private JPasswordField editUserRePassword;
-    private JButton hideActivityBtn;
-    private JButton logoutBtn;
-    private JLabel noActivityLabel;
-    private JButton saveEditBtn;
-    private JLabel saveErrorLabel;
-    private JButton searchBtn;
-    private JLabel userEmail;
-    private JLabel userEmailLabel;
-    private JLabel userName;
-    private JLabel userNameLabel;
-    private JLabel userPasswordLabel;
-    private JLabel userProfile;
-    private JPanel userProfileHolder;
-    private JLabel userRePasswordLabel;
-    private JButton viewActivityBtn;
+    int pi = 0;
+    //private RoundedJPanel activityContainerHolder;
+    //private JPanel userProfileHolder;
+    //private JPanel editUserProfileHolder;
+    //private RoundedJPanel buttonHolder;
 
-    public ProfileBoard() {
+    public OldProfileBoard() {
         initComponents();
         setEditProfile(false);
         displayActivity(false);
-        chooseProfileHolder.setVisible(false);
+        //chooseProfileHolder.setVisible(false);
     }
 
-    public static ProfileBoard init(String username) {
-        ProfileBoard board = new ProfileBoard();
+    public static OldProfileBoard init(String username) {
+        OldProfileBoard board = new OldProfileBoard();
 
         String userID = Database.getData(UserDataObject.TABLE, UserDataObject.userIDKey(),
                 UserDataObject.usernameKey(), username, true)[0];
@@ -97,10 +68,10 @@ public class ProfileBoard extends JPanel {
                     questionData.get(QuestionDataObject.questionIDKey()));
         }
 
-        String[] questionsAnswerdID = Database.getData(AnswerDataObject.TABLE, AnswerDataObject.questionIDKey(),
+        String[] questionsAnsweredID = Database.getData(AnswerDataObject.TABLE, AnswerDataObject.questionIDKey(),
                 AnswerDataObject.userIDKey(), userID, true);
 
-        for (String questionAnswerdID : questionsAnswerdID) {
+        for (String questionAnswerdID : questionsAnsweredID) {
             QuestionDataObject questionAnswerd = (QuestionDataObject) Database.getData(QuestionDataObject.TABLE,
                     QuestionDataObject.questionIDKey(), questionAnswerdID)[0];
 
@@ -124,21 +95,8 @@ public class ProfileBoard extends JPanel {
     private void initComponents() {
         GridBagConstraints gridBagConstraints;
 
-        buttonHolder = new RoundedJPanel();
-        searchBtn = new JButton();
-        askQuestionBtn = new JButton();
-        viewActivityBtn = new JButton();
-        hideActivityBtn = new JButton();
-        editProfileBtn = new JButton();
-        logoutBtn = new JButton();
-        editUserProfileHolder = new JPanel();
-        chooseProfileHolder = new RoundedJPanel();
-        chooseProfileScrollPane = new SimpleScrollPane();
-        chooseProfilePane = new JPanel();
-        editProfileIcon = new JLabel();
-        editUserProfile = new JLabel();
-        editHolder = new JPanel();
-        userNameLabel = new JLabel();
+        */
+/*userNameLabel = new JLabel();
         editUserName = new JTextField();
         userEmailLabel = new JLabel();
         editUserEmail = new JTextField();
@@ -146,10 +104,7 @@ public class ProfileBoard extends JPanel {
         editUserPassword = new JPasswordField();
         userRePasswordLabel = new JLabel();
         editUserRePassword = new JPasswordField();
-        saveErrorLabel = new JLabel();
-        buttonHolder2 = new JPanel();
-        saveEditBtn = new JButton();
-        backBtn = new JButton();
+
         userProfileHolder = new JPanel();
         userProfile = new JLabel();
         userName = new JLabel();
@@ -157,14 +112,18 @@ public class ProfileBoard extends JPanel {
         activityContainerHolder = new RoundedJPanel();
         noActivityLabel = new JLabel();
         activityContainerScrollPane = new SimpleScrollPane();
-        activityContainer = new JPanel();
+        activityContainer = new JPanel();*//*
 
-        setBackground(ResourceManager.getColor("base"));
+
+        */
+/*setBackground(ResourceManager.getColor("base"));
         setMinimumSize(new Dimension(1280, 720));
         setPreferredSize(new Dimension(1280, 720));
-        setLayout(new GridBagLayout());
+        setLayout(new GridBagLayout());*//*
 
-        buttonHolder.setBackground(ResourceManager.getColor("main"));
+
+        */
+/*buttonHolder.setBackground(ResourceManager.getColor("main"));
         buttonHolder.setCornerRadius(90);
         buttonHolder.setLayout(new GridBagLayout());
 
@@ -174,11 +133,9 @@ public class ProfileBoard extends JPanel {
         searchBtn.setBorderPainted(false);
         searchBtn.setContentAreaFilled(false);
         searchBtn.setFocusPainted(false);
-        searchBtn.setPressedIcon(ResourceManager.getIcon("search_pressed", 32)
-        );
-        searchBtn.setRolloverIcon(ResourceManager.getIcon("search_rollover", 32)
-        );
-        searchBtn.addActionListener(evt -> searchBtnActionPerformed(evt));
+        searchBtn.setPressedIcon(ResourceManager.getIcon("search_pressed", 32));
+        searchBtn.setRolloverIcon(ResourceManager.getIcon("search_rollover", 32));
+        searchBtn.addActionListener(evt -> QnAForum.setContent(SearchBoard.init(userName.getText(), userProfile.getName())));
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.anchor = GridBagConstraints.SOUTHWEST;
@@ -299,9 +256,11 @@ public class ProfileBoard extends JPanel {
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(5, 5, 5, 0);
-        add(buttonHolder, gridBagConstraints);
+        add(buttonHolder, gridBagConstraints);*//*
 
-        editUserProfileHolder.setBackground(ResourceManager.getColor("base"));
+
+        */
+/*editUserProfileHolder.setBackground(ResourceManager.getColor("base"));
         editUserProfileHolder.setMinimumSize(new Dimension(640, 360));
         editUserProfileHolder.setPreferredSize(new Dimension(640, 360));
         editUserProfileHolder.setLayout(new GridBagLayout());
@@ -544,9 +503,11 @@ public class ProfileBoard extends JPanel {
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.5;
         gridBagConstraints.weighty = 1.0;
-        add(editUserProfileHolder, gridBagConstraints);
+        add(editUserProfileHolder, gridBagConstraints);*//*
 
-        userProfileHolder.setBackground(ResourceManager.getColor("base"));
+
+        */
+/*userProfileHolder.setBackground(ResourceManager.getColor("base"));
         userProfileHolder.setMinimumSize(new Dimension(640, 360));
         userProfileHolder.setPreferredSize(new Dimension(640, 360));
         userProfileHolder.setLayout(new GridBagLayout());
@@ -576,9 +537,11 @@ public class ProfileBoard extends JPanel {
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.5;
         gridBagConstraints.weighty = 1.0;
-        add(userProfileHolder, gridBagConstraints);
+        add(userProfileHolder, gridBagConstraints);*//*
 
-        activityContainerHolder.setBackground(ResourceManager.getColor("main_dark"));
+
+        */
+/*activityContainerHolder.setBackground(ResourceManager.getColor("main_dark"));
         activityContainerHolder.setCornerRadius(90);
         activityContainerHolder.setLayout(new GridBagLayout());
 
@@ -625,11 +588,8 @@ public class ProfileBoard extends JPanel {
         gridBagConstraints.weightx = 0.5;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(5, 0, 5, 5);
-        add(activityContainerHolder, gridBagConstraints);
-    }
+        add(activityContainerHolder, gridBagConstraints);*//*
 
-    private void selectNewProfile(int index) {
-        ResourceManager.setProfileIcon(Integer.toString(index), editUserProfile, ResourceManager.LARGE);
     }
 
     private void setEditProfile(boolean editProfile) {
@@ -751,28 +711,6 @@ public class ProfileBoard extends JPanel {
         QnAForum.logout();
     }
 
-    private void searchBtnActionPerformed(ActionEvent evt) {
-        QnAForum.setContent(SearchBoard.init(userName.getText(), userProfile.getName()));
-    }
-
-    private void editUserProfileMouseEntered(MouseEvent evt) {
-        editProfileIcon.setIcon(ResourceManager.getIcon("edit_profile_rollover", ResourceManager.REGULAR));
-    }
-
-    private void editUserProfileMouseExited(MouseEvent evt) {
-        editProfileIcon.setIcon(ResourceManager.getIcon("edit_profile", ResourceManager.REGULAR));
-    }
-
-    private void editUserProfileMouseReleased(MouseEvent evt) {
-        chooseProfileHolder.setVisible(!chooseProfileHolder.isVisible());
-        revalidate();
-        repaint();
-    }
-
-    private void chooseProfileScrollPaneMouseReleased(MouseEvent evt) {
-        saveEditBtn.setText(chooseProfilePane.getSize().getHeight() + ", " + i++);
-    }
-
     private void backBtnActionPerformed(ActionEvent evt) {
         setEditProfile(false);
     }
@@ -832,3 +770,4 @@ public class ProfileBoard extends JPanel {
         }
     }
 }
+*/

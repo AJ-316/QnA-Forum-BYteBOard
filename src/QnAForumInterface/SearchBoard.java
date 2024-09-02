@@ -12,6 +12,7 @@ import DataObjects.UserDataObject;
 import QnAForumDatabase.Database;
 
 import QnAForumInterface.InformationBarPackage.ActivityBar;
+import QnAForumInterface.ProfileBoardPackage.ProfileBoard;
 import Resources.ResourceManager;
 
 import javax.swing.*;
@@ -97,15 +98,16 @@ public class SearchBoard extends JPanel {
         gridBagConstraints.insets = new Insets(5, 0, 0, 0);
         userContainer.add(userName, gridBagConstraints);
         userName.setFont(ResourceManager.getFont("inter_bold.36"));
+        userName.setForeground(ResourceManager.getColor("text_fg_dark"));
 
-        profileBtn.setIcon(ResourceManager.getIcon("home_default", 32));
+        profileBtn.setIcon(ResourceManager.getIcon("home_default", ResourceManager.MINI));
         profileBtn.setText("Profile");
         profileBtn.setBorderPainted(false);
         profileBtn.setContentAreaFilled(false);
         profileBtn.setFocusPainted(false);
-        profileBtn.setPressedIcon(ResourceManager.getIcon("home_pressed", 32)
+        profileBtn.setPressedIcon(ResourceManager.getIcon("home_pressed", ResourceManager.MINI)
         );
-        profileBtn.setRolloverIcon(ResourceManager.getIcon("home_rollover", 32)
+        profileBtn.setRolloverIcon(ResourceManager.getIcon("home_rollover", ResourceManager.MINI)
         );
         profileBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
@@ -118,6 +120,8 @@ public class SearchBoard extends JPanel {
         gridBagConstraints.insets = new Insets(5, 5, 5, 5);
         userContainer.add(profileBtn, gridBagConstraints);
         profileBtn.setFont(ResourceManager.getFont("inter_regular.22"));
+        profileBtn.setForeground(ResourceManager.getColor("text_fg_dark"));
+        profileBtn.setBackground(ResourceManager.getColor("base"));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -134,8 +138,7 @@ public class SearchBoard extends JPanel {
         searchContainer.setPreferredSize(new Dimension(340, 74));
         searchContainer.setLayout(new GridBagLayout());
 
-        searchIcon.setIcon(ResourceManager.getIcon("search", 48)
-        );
+        searchIcon.setIcon(ResourceManager.getIcon("search", ResourceManager.SMALL)); // 48 -> 50[SMALL]
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridy = 0;
         searchContainer.add(searchIcon, gridBagConstraints);
@@ -149,6 +152,7 @@ public class SearchBoard extends JPanel {
         gridBagConstraints.weightx = 1.0;
         searchContainer.add(search, gridBagConstraints);
         search.setFont(ResourceManager.getFont("inter_regular.24"));
+        search.setForeground(ResourceManager.getColor("text_fg_dark"));
 
         search.setUI(new BasicComboBoxUI() {
             @Override

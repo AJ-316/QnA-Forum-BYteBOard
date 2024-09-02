@@ -6,6 +6,7 @@ package QnAForumInterface;
 
 
 import CustomControls.RoundedJPanel;
+import QnAForumInterface.ProfileBoardPackage.ProfileBoard;
 import Resources.ResourceManager;
 
 import javax.swing.*;

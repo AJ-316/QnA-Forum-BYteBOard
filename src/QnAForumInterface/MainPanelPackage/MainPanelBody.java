@@ -34,7 +34,7 @@ public class MainPanelBody extends JPanel {
         containerHead = getContainer();
 
         contentHead = getContent("Head...", "inter_semibold.26");
-        JScrollPane contentScrollPane = getContentScrollPane(2, 484, 70, contentHead);
+        SimpleScrollPane contentScrollPane = getContentScrollPane(2, 484, 70, contentHead);
 
         containerHead.add(contentScrollPane, BorderLayout.CENTER);
         add(containerHead, gridBagConstraints);
@@ -74,7 +74,7 @@ public class MainPanelBody extends JPanel {
         RoundedJPanel containerBody = getContainer();
 
         contentBody = getContent("Body...", "inter_semibold.24");
-        JScrollPane contentScrollPane = getContentScrollPane(4, 480, 0, contentBody);
+        SimpleScrollPane contentScrollPane = getContentScrollPane(4, 480, 0, contentBody);
 
         containerBody.add(contentScrollPane, BorderLayout.CENTER);
         add(containerBody, gridBagConstraints);
@@ -108,8 +108,8 @@ public class MainPanelBody extends JPanel {
         return container;
     }
 
-    private JScrollPane getContentScrollPane(int unitIncrement, int sizeX, int sizeY, JTextArea viewportComponent) {
-        JScrollPane contentScrollPane = new SimpleScrollPane(viewportComponent);
+    private SimpleScrollPane getContentScrollPane(int unitIncrement, int sizeX, int sizeY, JTextArea viewportComponent) {
+        SimpleScrollPane contentScrollPane = new SimpleScrollPane(viewportComponent);
         contentScrollPane.getVerticalScrollBar().setUnitIncrement(unitIncrement);
 
         contentScrollPane.setBorder(null);
