@@ -6,6 +6,7 @@ import DataObjects.UserDataObject;
 import QnAForumDatabase.Database;
 import QnAForumInterface.InformationBarPackage.ActivityBar;
 import QnAForumInterface.InterfaceEventPackage.InterfaceEventManager;
+import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
 
 import javax.swing.*;
@@ -21,7 +22,7 @@ public class ProfileBoard extends JPanel {
     private ActivityContainer activityContainer;
 
     public ProfileBoard() {
-        setBackground(ResourceManager.getColor("base"));
+        setBackground(ResourceManager.getColor(ByteBoardTheme.BASE));
         setMinimumSize(new Dimension(1280, 720));
         setPreferredSize(new Dimension(1280, 720));
         setLayout(new GridBagLayout());

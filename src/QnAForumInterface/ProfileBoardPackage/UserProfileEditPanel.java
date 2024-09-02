@@ -7,6 +7,7 @@ import QnAForumDatabase.Database;
 import QnAForumDatabase.EncryptionUtils;
 import QnAForumInterface.InterfaceEventPackage.InterfaceEventManager;
 import QnAForumInterface.WrapLayout;
+import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
 
 import javax.swing.*;
@@ -39,7 +40,7 @@ public class UserProfileEditPanel extends JPanel {
     }
 
     private void init() {
-        setBackground(ResourceManager.getColor("base"));
+        setBackground(ResourceManager.getColor(ByteBoardTheme.BASE));
         setMinimumSize(new Dimension(640, 360));
         setPreferredSize(new Dimension(640, 360));
         setLayout(new GridBagLayout());
@@ -56,7 +57,7 @@ public class UserProfileEditPanel extends JPanel {
         gridBagConstraints.insets = new Insets(5, 5, 5, 5);
         add(profileChooser, gridBagConstraints);
 
-        editProfileIcon.setIcon(ResourceManager.getIcon("edit_profile", ResourceManager.REGULAR));
+        editProfileIcon.setIcon(ResourceManager.getStateIcon("edit_profile", ResourceManager.DEFAULT, ResourceManager.REGULAR));
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -64,14 +65,14 @@ public class UserProfileEditPanel extends JPanel {
         gridBagConstraints.weighty = 0.1;
         add(editProfileIcon, gridBagConstraints);
 
-        editUserProfile.setIcon(ResourceManager.getIcon("profiles/profile_0", ResourceManager.LARGE));
+        editUserProfile.setIcon(ResourceManager.getProfileIcon("0", ResourceManager.LARGE));
         editUserProfile.addMouseListener(new MouseAdapter() {
             public void mouseEntered(MouseEvent evt) {
-                editProfileIcon.setIcon(ResourceManager.getIcon("edit_profile_rollover", ResourceManager.REGULAR));
+                editProfileIcon.setIcon(ResourceManager.getStateIcon("edit_profile", ResourceManager.ROLLOVER, ResourceManager.REGULAR));
             }
 
             public void mouseExited(MouseEvent evt) {
-                editProfileIcon.setIcon(ResourceManager.getIcon("edit_profile", ResourceManager.REGULAR));
+                editProfileIcon.setIcon(ResourceManager.getStateIcon("edit_profile", ResourceManager.DEFAULT, ResourceManager.REGULAR));
             }
 
             public void mouseReleased(MouseEvent evt) {
@@ -95,7 +96,7 @@ public class UserProfileEditPanel extends JPanel {
         add(editControlsContainer, gridBagConstraints);
 
         saveErrorLabel.setText("errorLabel");
-        saveErrorLabel.setForeground(ResourceManager.getColor("error"));
+        saveErrorLabel.setForeground(ResourceManager.getColor(ByteBoardTheme.ERROR));
         saveErrorLabel.setFont(ResourceManager.getFont("inter_semibold.20"));
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -212,13 +213,16 @@ public class UserProfileEditPanel extends JPanel {
         if (newPassword == null) {
             String currentProfileIndex = (String) userProfileData[0];
             String currentEmail = (String) userProfileData[2];
-            if(newEmail.equals(currentEmail) && newUsername.equals(currentUsername) && newProfileIndex.equals(currentProfileIndex))
+            if(newEmail.equals(currentEmail) && newUsername.equals(currentUsername) && newProfileIndex.equals(currentProfileIndex)) {
                 return;
+            }
+
         }
 
         UserDataObject userData = new UserDataObject(newUsername, newPassword, newEmail.toLowerCase(), newProfileIndex);
         Database.updateData(userData, UserDataObject.usernameKey(), currentUsername);
         InterfaceEventManager.invokeEvent("Update.ProfileBoard", newProfileIndex, newUsername, newEmail);
+        InterfaceEventManager.invokeEvent("Edit.ProfileBoard", false);
     }
 
     private boolean isPasswordConfirmed() {
@@ -236,13 +240,13 @@ public class UserProfileEditPanel extends JPanel {
     private JButton getButton(String text, ActionListener listener, String iconLabel) {
         JButton button = new JButton(text);
         button.setFont(ResourceManager.getFont("inter_regular.22"));
-        button.setForeground(ResourceManager.getColor("text_fg_dark"));
+        button.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_DARK));
 
         button.addActionListener(listener);
 
-        button.setIcon(ResourceManager.getIcon(iconLabel + "_default", ResourceManager.MINI));
-        button.setPressedIcon(ResourceManager.getIcon(iconLabel + "_pressed", ResourceManager.MINI));
-        button.setRolloverIcon(ResourceManager.getIcon(iconLabel + "_rollover", ResourceManager.MINI));
+        button.setIcon(ResourceManager.getStateIcon(iconLabel, ResourceManager.DEFAULT, ResourceManager.MINI));
+        button.setPressedIcon(ResourceManager.getStateIcon(iconLabel, ResourceManager.PRESSED, ResourceManager.MINI));
+        button.setRolloverIcon(ResourceManager.getStateIcon(iconLabel, ResourceManager.ROLLOVER, ResourceManager.MINI));
 
         button.setBorderPainted(false);
         button.setContentAreaFilled(false);
@@ -255,7 +259,7 @@ public class UserProfileEditPanel extends JPanel {
         private final JPanel profilesContainer = new JPanel();
 
         public UserProfileChooser() {
-            setBackground(ResourceManager.getColor("main_dark"));
+            setBackground(ResourceManager.getColor(ByteBoardTheme.MAIN_DARK));
             setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
             setMinimumSize(new Dimension(310, 41));
             setLayout(new BorderLayout());
@@ -281,7 +285,7 @@ public class UserProfileEditPanel extends JPanel {
             int iconPtr = 0;
             Icon icon;
 
-            while ((icon = ResourceManager.getIcon("profiles/profile_" + iconPtr++, ResourceManager.REGULAR)) != null) {
+            while ((icon = ResourceManager.getProfileIcon("" + iconPtr++, ResourceManager.REGULAR)) != null) {
                 ProfilePane profilePane = ProfilePane.create(icon);
                 profilesContainer.add(profilePane);
                 profilePane.addMouseListener(new MouseAdapter() {
@@ -328,7 +332,7 @@ public class UserProfileEditPanel extends JPanel {
         private JLabel userRePasswordLabel;
 
         public EditControlsContainer() {
-            setBackground(ResourceManager.getColor("base"));
+            setBackground(ResourceManager.getColor(ByteBoardTheme.BASE));
             setLayout(new GridBagLayout());
         }
 
@@ -354,12 +358,12 @@ public class UserProfileEditPanel extends JPanel {
         }
 
         private void addContent(JLabel label, JTextField textField, int textFieldFontSize, int index) {
-            label.setForeground(ResourceManager.getColor("text_fg_dark"));
+            label.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_DARK));
             label.setFont(ResourceManager.getFont("inter_regular.24"));
             label.setHorizontalAlignment(SwingConstants.TRAILING);
 
-            textField.setForeground(ResourceManager.getColor("text_fg_dark"));
-            textField.setBackground(ResourceManager.getColor("base"));
+            textField.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_DARK));
+            textField.setBackground(ResourceManager.getColor(ByteBoardTheme.BASE));
             textField.setCaretColor(textField.getForeground());
             textField.setFont(ResourceManager.getFont("inter_regular." + textFieldFontSize));
             textField.setMinimumSize(new Dimension(220, 40));

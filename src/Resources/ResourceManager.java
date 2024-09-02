@@ -1,69 +1,77 @@
 package Resources;
 
+import QnAForumInterface.AuthenticationForm;
+import QnAForumInterface.InterfaceEventPackage.InterfaceEventManager;
+import QnAForumInterface.QnAForum;
+
 import javax.swing.*;
+import javax.xml.ws.spi.Invoker;
 import java.awt.*;
+import java.io.File;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class ResourceManager {
 
-    public static int LARGE = 256;
-    public static int REGULAR = 128;
-    public static int SMALL = 50;
-    public static int MINI = 32;
+    public static final int DEFAULT = 0;
+    public static final int ROLLOVER = 1;
+    public static final int PRESSED = 2;
+
+    public static final int LARGE = 256;
+    public static final int REGULAR = 128;
+    public static final int SMALL = 50;
+    public static final int MINI = 32;
+    public static final int MICRO = 24;
+
+    public static List<ByteBoardTheme> themes = new ArrayList<>();
+    private static String CURRENT_THEME = "";
 
     public static void init() {
         initLookNFeel();
+        themes.add(ByteBoardTheme.ByteBoardBaseTheme);
+        setTheme(ByteBoardTheme.ByteBoardBaseTheme.getName());
 
-        // Theme Dark
-        createColor("base", 30, 30, 30);  // A very dark grey, almost black for the base/background color
-        createColor("main", 45, 95, 130);  // A muted blue for the main color
-        createColor("main_light", 70, 120, 155);  // A lighter shade of the main blue for hover states or lighter accents
-        createColor("main_dark", 25, 70, 105);  // A darker shade of the main blue for depth and contrast
-        createColor("accent", 255, 150, 0);  // A bright orange accent color for highlights or important elements
-        createColor("accent_dark", 200, 120, 0);  // A darker orange for a more subdued accent
-        createColor("error", 255, 69, 58);  // A vivid red for error messages
-        createColor("disabled", 85, 85, 85);  // A medium grey for disabled elements
+        loadAvailableThemes();
+    }
 
-        createColor("text_fg_light", 245, 245, 245);  // Light grey for text on dark backgrounds, easier on the eyes than pure white
-        createColor("text_fg_dark", 200, 200, 200);  // Slightly darker grey for secondary text
-        createColor("text_fg_main", 255, 150, 0);  // Bright orange text to match the accent color, suitable for important headings or primary text
+    private static void loadAvailableThemes() {
+        URL dirURL = ResourceManager.class.getResource("Themes/");
+        if (dirURL != null && dirURL.getProtocol().equals("file")) {
+            File directory = new File(dirURL.getFile());
+            String[] files = directory.list();
+            if (files != null) {
+                for (String fileName : files) {
+                    loadTheme(fileName.substring(0, fileName.length() - 4));
+                }
+            }
+        }
+    }
 
-        // Theme Purple
-        /*createColor("base", 245, 245, 245);
-        createColor("main", 102, 51, 153);  // A rich purple
-        createColor("main_light", 153, 102, 204);  // A lighter shade of purple
-        createColor("main_dark", 51, 25, 77);  // A darker shade of purple
-        createColor("accent", 255, 204, 102);  // A warm yellow-orange
-        createColor("accent_dark", 204, 153, 51);  // A deeper golden color
-        createColor("error", 255, 87, 87);  // A bright coral red for errors
-        createColor("disabled", 179, 179, 179);  // A light grey for disabled elements
+    public static void setTheme(String name) {
+        CURRENT_THEME = name;
+        deleteIconCache();
+        for (ByteBoardTheme theme : themes) {
+            if(theme.getName().equals(name)) {
+                theme.load();
+                return;
+            }
+        }
+    }
 
-        createColor("text_fg_light", 255, 255, 255);  // White for light text
-        createColor("text_fg_dark", 28, 28, 28);  // A very dark grey for dark text
-        createColor("text_fg_main", 102, 51, 153);  // The same rich purple as "main"*/
+    public static void loadTheme(String file) {
+        ByteBoardTheme theme = ThemeLoader.getTheme(file);
+        if(theme == null) return;
+        themes.add(theme);
+    }
 
-        // Theme default
-        /*createColor("base", 255, 255, 255);
-        createColor("main", 0, 120, 120);
-        createColor("main_light", 10, 130, 130);
-        createColor("main_dark", 0, 80, 80);
-        createColor("accent", 81, 180, 127);
-        createColor("accent_dark", 48, 150, 96);
-        createColor("error", 255, 80, 80);
-        createColor("disabled", 153, 153, 153);
+    public static List<ByteBoardTheme> getThemes() {
+        return themes;
+    }
 
-        createColor("text_fg_light", 255, 255, 255);
-        createColor("text_fg_dark", 0, 0, 0);
-        createColor("text_fg_main", 0, 120, 120);*/
-
-        createFont("inter_regular", "Inter-Regular", 14, 18, 20, 22, 24, 26);
-        createFont("inter_semibold", "Inter-SemiBold", 16, 20, 22, 24, 26, 32, 36, 48);
-        createFont("inter_thin", "Inter-Thin", 48);
-        createFont("inter_bold", "Inter-Bold", 28, 32, 36);
-
-        createFont(Font.ITALIC, "carltine_bold_italic", "Carltine-Bold", 48);
-
-        UIManager.put("ComboBox.selectionBackground", getColor("accent"));
-        UIManager.put("ComboBox.selectionForeground", getColor("text_fg_light"));
+    public static String getCurrentTheme() {
+        return CURRENT_THEME;
     }
 
     public static Color getColor(String label) {
@@ -72,6 +80,21 @@ public class ResourceManager {
 
     public static Font getFont(String label) {
         return UIManager.getFont("QnAForum.font." + label);
+    }
+
+    public static void deleteIconCache() {
+        UIDefaults defaults = UIManager.getDefaults();
+        List<Object> keysToRemove = new ArrayList<>();
+
+        for (Object key : defaults.keySet()) {
+            if (key instanceof String && ((String) key).startsWith("QnAForum.")) {
+                keysToRemove.add(key);
+            }
+        }
+
+        for (Object key : keysToRemove) {
+            UIManager.put(key, null);
+        }
     }
 
     public static Icon getIcon(String label, int size) {
@@ -88,8 +111,53 @@ public class ResourceManager {
         return icon;
     }
 
+    public static Icon getStateIcon(String label, int state, int size) {
+        String key = "QnAForum.icon." + label + state + "." + size;
+
+        Icon icon = UIManager.getIcon(key);
+        if(icon != null)
+            return icon;
+
+        Color iconFg = Color.black;
+        Color iconBg = Color.white;
+        switch (state) {
+            case ResourceManager.DEFAULT:
+                iconFg = ResourceManager.getColor(ByteBoardTheme.BASE);
+                iconBg = ResourceManager.getColor(ByteBoardTheme.MAIN);
+            break;
+            case ResourceManager.ROLLOVER:
+                iconFg = ResourceManager.getColor(ByteBoardTheme.BASE);
+                iconBg = ResourceManager.getColor(ByteBoardTheme.ACCENT);
+            break;
+            case ResourceManager.PRESSED:
+                iconFg = ResourceManager.getColor(ByteBoardTheme.ACCENT_DARK);
+                iconBg = ResourceManager.getColor(ByteBoardTheme.BASE);
+        }
+
+        if((icon = IconLoader.getRecoloredIcon(label, iconFg, iconBg, size)) == null)
+            return null;
+
+        UIManager.put(key, icon);
+        return icon;
+    }
+
+    public static Icon getProfileIcon(String userProfileIndex, int size) {
+        String label = "profiles/profile_" + userProfileIndex;
+        String key = "QnAForum.icon." + label + "." + size;
+
+        Icon icon = UIManager.getIcon(key);
+        if(icon != null)
+           return icon;
+
+        if((icon = IconLoader.getRecoloredIconTargeted(label, ResourceManager.getColor(ByteBoardTheme.MAIN), Color.white, size)) == null)
+            return null;
+
+        UIManager.put(key, icon);
+        return icon;
+    }
+
     public static void setProfileIcon(String userProfileIndex, JLabel userProfile, int size) {
-        userProfile.setIcon(getIcon("profiles/profile_" + userProfileIndex, size));
+        userProfile.setIcon(getProfileIcon(userProfileIndex, size));
         userProfile.setName(userProfileIndex);
     }
 
@@ -107,12 +175,20 @@ public class ResourceManager {
         }
     }
 
-    private static void createColor(String label, int r, int g, int b) {
+    /*private static void createColor(String label, int r, int g, int b) {
         UIManager.put("QnAForum.color." + label, new Color(r, g, b));
     }
 
-    private static void createFont(int type, String label, String fontFile, int... sizes) {
+    private static void createFont(int type, String fontFile, int... sizes) {
         if (sizes.length == 0) return;
+        String label = fontFile.toLowerCase();
+
+        switch (type) {
+            case Font.BOLD: label += "_bold"; break;
+            case Font.ITALIC: label += "_italic"; break;
+            case Font.PLAIN: break;
+            default: label += "_" + type;
+        }
 
         Font font = FontLoader.getFont(fontFile, sizes[0], type);
         for (int size : sizes) {
@@ -121,7 +197,7 @@ public class ResourceManager {
         }
     }
 
-    private static void createFont(String label, String fontFile, int... sizes) {
-        createFont(Font.PLAIN, label, fontFile, sizes);
-    }
+    private static void createFont(String fontFile, int... sizes) {
+        createFont(Font.PLAIN, fontFile, sizes);
+    }*/
 }

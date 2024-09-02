@@ -7,6 +7,7 @@ package QnAForumInterface;
 
 import CustomControls.RoundedJPanel;
 import QnAForumInterface.ProfileBoardPackage.ProfileBoard;
+import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
 
 import javax.swing.*;
@@ -21,7 +22,8 @@ public class AuthenticationForm extends JFrame {
     private QnAForumInterface.LoginForm loginForm;
     private QnAForumInterface.SignupForm signupForm;
 
-    public AuthenticationForm() {
+    public AuthenticationForm(String title) {
+        setTitle(title);
         initComponents();
     }
 
@@ -29,12 +31,12 @@ public class AuthenticationForm extends JFrame {
         authenticateUser(userName);
     }
 
-    public static void init() {
+    public static void init(boolean isVisible) {
         EventQueue.invokeLater(() -> {
-            instance = new AuthenticationForm();
-            instance.setVisible(true);
+            instance = new AuthenticationForm("BYteBOard Authentication Form");
             instance.setLocationRelativeTo(null);
             setRegisterUser(false);
+            instance.setVisible(isVisible);
         });
     }
 
@@ -49,6 +51,10 @@ public class AuthenticationForm extends JFrame {
         instance.signupForm.setVisible(isRegister);
     }
 
+    public static AuthenticationForm getInstance() {
+        return instance;
+    }
+
     private void initComponents() {
         GridBagConstraints gridBagConstraints;
 
@@ -58,19 +64,19 @@ public class AuthenticationForm extends JFrame {
         loginForm = new QnAForumInterface.LoginForm();
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setBackground(ResourceManager.getColor("base"));
+        setBackground(ResourceManager.getColor(ByteBoardTheme.BASE));
         setMinimumSize(new Dimension(1280, 720));
 
-        contentPane.setBackground(ResourceManager.getColor("base"));
+        contentPane.setBackground(ResourceManager.getColor(ByteBoardTheme.BASE));
         contentPane.setLayout(new GridBagLayout());
 
-        roundedJPanel1.setBackground(ResourceManager.getColor("main"));
+        roundedJPanel1.setBackground(ResourceManager.getColor(ByteBoardTheme.MAIN));
         roundedJPanel1.setCornerRadius(120);
         roundedJPanel1.setLayout(new BorderLayout());
 
         JLabel name = new JLabel();
-        name.setBackground(ResourceManager.getColor("base"));
-        name.setForeground(ResourceManager.getColor("text_fg_light"));
+        name.setBackground(ResourceManager.getColor(ByteBoardTheme.BASE));
+        name.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_LIGHT));
         name.setHorizontalAlignment(SwingConstants.CENTER);
         name.setIcon(ResourceManager.getIcon("byteboard/byteboard-logo-transparent", -384));
         name.setBorder(BorderFactory.createEmptyBorder(75, 75, 75, 75));

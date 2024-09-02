@@ -1,5 +1,6 @@
 package QnAForumInterface.ProfileBoardPackage;
 
+import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
 
 import javax.swing.*;
@@ -35,12 +36,12 @@ public class ProfilePane extends JPanel {
         addMouseListener(new MouseAdapter() {
             public void mouseEntered(MouseEvent evt) {
                 if (isSelected()) return;
-                setColor(ResourceManager.getColor("accent"));
+                setColor(ResourceManager.getColor(ByteBoardTheme.ACCENT));
             }
 
             public void mouseExited(MouseEvent evt) {
                 if (isSelected()) return;
-                setColor(ResourceManager.getColor("main_light"));
+                setColor(ResourceManager.getColor(ByteBoardTheme.MAIN_LIGHT));
             }
 
             public void mouseReleased(MouseEvent evt) {
@@ -49,9 +50,9 @@ public class ProfilePane extends JPanel {
         });
         setLayout(new BorderLayout());
 
-        roundedPane.setBackground(ResourceManager.getColor("main_light"));
+        roundedPane.setBackground(ResourceManager.getColor(ByteBoardTheme.MAIN_LIGHT));
         roundedPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        roundedPane.setBorderColor(ResourceManager.getColor("main_dark"));
+        roundedPane.setBorderColor(ResourceManager.getColor(ByteBoardTheme.MAIN_DARK));
         roundedPane.setCornerRadius(180);
         roundedPane.setLimitRadius(false);
         roundedPane.setLayout(new BorderLayout());
@@ -75,8 +76,8 @@ public class ProfilePane extends JPanel {
         if (isSelected()) return;
 
         if (SELECTED_PANE != null)
-            SELECTED_PANE.setColor(ResourceManager.getColor("main_light"));
+            SELECTED_PANE.setColor(ResourceManager.getColor(ByteBoardTheme.MAIN_LIGHT));
         SELECTED_PANE = this;
-        setColor(ResourceManager.getColor("accent_dark"));
+        setColor(ResourceManager.getColor(ByteBoardTheme.ACCENT_DARK));
     }
 }

@@ -3,6 +3,7 @@ package QnAForumInterface.MainPanelPackage;
 import CustomControls.RoundedJPanel;
 import DataObjects.UserDataObject;
 import QnAForumDatabase.Database;
+import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
 
 import javax.swing.*;
@@ -25,12 +26,12 @@ public class MainPanel extends JPanel {
     }
 
     private void init() {
-        setBackground(ResourceManager.getColor("main"));
+        setBackground(ResourceManager.getColor(ByteBoardTheme.MAIN));
         setMinimumSize(new Dimension(499, 300));
         setOpaque(false);
         setLayout(new BorderLayout());
 
-        container.setBackground(ResourceManager.getColor("main"));
+        container.setBackground(ResourceManager.getColor(ByteBoardTheme.MAIN));
         container.setCornerRadius(90);
         container.setLayout(new GridBagLayout());
 

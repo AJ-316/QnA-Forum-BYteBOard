@@ -13,6 +13,7 @@ import QnAForumDatabase.Database;
 
 import QnAForumInterface.InformationBarPackage.ActivityBar;
 import QnAForumInterface.ProfileBoardPackage.ProfileBoard;
+import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
 
 import javax.swing.*;
@@ -74,17 +75,17 @@ public class SearchBoard extends JPanel {
         noResultLabel = new JLabel();
         resultContainer = new CustomControls.RoundedJPanel();
 
-        setBackground(ResourceManager.getColor("base"));
+        setBackground(ResourceManager.getColor(ByteBoardTheme.BASE));
         setMinimumSize(new Dimension(1280, 720));
         setPreferredSize(new Dimension(1280, 720));
         setLayout(new GridBagLayout());
 
-        userContainer.setBackground(ResourceManager.getColor("base"));
+        userContainer.setBackground(ResourceManager.getColor(ByteBoardTheme.BASE));
         userContainer.setMinimumSize(new Dimension(0, 0));
         userContainer.setOpaque(false);
         userContainer.setLayout(new GridBagLayout());
 
-        userProfile.setIcon(ResourceManager.getIcon("user_profile", ResourceManager.REGULAR)
+        userProfile.setIcon(ResourceManager.getProfileIcon("0", ResourceManager.REGULAR)
         );
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -98,17 +99,15 @@ public class SearchBoard extends JPanel {
         gridBagConstraints.insets = new Insets(5, 0, 0, 0);
         userContainer.add(userName, gridBagConstraints);
         userName.setFont(ResourceManager.getFont("inter_bold.36"));
-        userName.setForeground(ResourceManager.getColor("text_fg_dark"));
+        userName.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_DARK));
 
-        profileBtn.setIcon(ResourceManager.getIcon("home_default", ResourceManager.MINI));
+        profileBtn.setIcon(ResourceManager.getStateIcon("home", ResourceManager.DEFAULT, ResourceManager.MINI));
         profileBtn.setText("Profile");
         profileBtn.setBorderPainted(false);
         profileBtn.setContentAreaFilled(false);
         profileBtn.setFocusPainted(false);
-        profileBtn.setPressedIcon(ResourceManager.getIcon("home_pressed", ResourceManager.MINI)
-        );
-        profileBtn.setRolloverIcon(ResourceManager.getIcon("home_rollover", ResourceManager.MINI)
-        );
+        profileBtn.setPressedIcon(ResourceManager.getStateIcon("home", ResourceManager.PRESSED, ResourceManager.MINI));
+        profileBtn.setRolloverIcon(ResourceManager.getStateIcon("home", ResourceManager.ROLLOVER, ResourceManager.MINI));
         profileBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 profileBtnActionPerformed(evt);
@@ -120,8 +119,8 @@ public class SearchBoard extends JPanel {
         gridBagConstraints.insets = new Insets(5, 5, 5, 5);
         userContainer.add(profileBtn, gridBagConstraints);
         profileBtn.setFont(ResourceManager.getFont("inter_regular.22"));
-        profileBtn.setForeground(ResourceManager.getColor("text_fg_dark"));
-        profileBtn.setBackground(ResourceManager.getColor("base"));
+        profileBtn.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_DARK));
+        profileBtn.setBackground(ResourceManager.getColor(ByteBoardTheme.BASE));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -130,7 +129,7 @@ public class SearchBoard extends JPanel {
         gridBagConstraints.insets = new Insets(10, 10, 10, 10);
         add(userContainer, gridBagConstraints);
 
-        searchContainer.setBackground(ResourceManager.getColor("main_dark"));
+        searchContainer.setBackground(ResourceManager.getColor(ByteBoardTheme.MAIN_DARK));
         searchContainer.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         searchContainer.setCornerRadius(90);
         searchContainer.setMaximumSize(new Dimension(340, 2147483647));
@@ -138,21 +137,21 @@ public class SearchBoard extends JPanel {
         searchContainer.setPreferredSize(new Dimension(340, 74));
         searchContainer.setLayout(new GridBagLayout());
 
-        searchIcon.setIcon(ResourceManager.getIcon("search", ResourceManager.SMALL)); // 48 -> 50[SMALL]
+        searchIcon.setIcon(ResourceManager.getIcon("search_icon", ResourceManager.SMALL)); // 48 -> 50[SMALL]
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridy = 0;
         searchContainer.add(searchIcon, gridBagConstraints);
 
-        search.setBackground(ResourceManager.getColor("main_dark"));
+        search.setBackground(ResourceManager.getColor(ByteBoardTheme.MAIN_DARK));
         search.setEditable(true);
-        search.setForeground(ResourceManager.getColor("text_fg_light"));
+        search.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_LIGHT));
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         searchContainer.add(search, gridBagConstraints);
         search.setFont(ResourceManager.getFont("inter_regular.24"));
-        search.setForeground(ResourceManager.getColor("text_fg_dark"));
+        search.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_DARK));
 
         search.setUI(new BasicComboBoxUI() {
             @Override
@@ -171,9 +170,9 @@ public class SearchBoard extends JPanel {
 
         JTextField textField = (JTextField) search.getEditor().getEditorComponent();
         textField.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-        textField.setForeground(ResourceManager.getColor("text_fg_light"));
+        textField.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_LIGHT));
         textField.setCaretColor(Color.white);
-        textField.setBackground(ResourceManager.getColor("main_dark"));
+        textField.setBackground(ResourceManager.getColor(ByteBoardTheme.MAIN_DARK));
         textField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
@@ -228,7 +227,7 @@ public class SearchBoard extends JPanel {
         gridBagConstraints.insets = new Insets(10, 10, 10, 10);
         add(searchContainer, gridBagConstraints);
 
-        tagsContainer.setBackground(ResourceManager.getColor("main"));
+        tagsContainer.setBackground(ResourceManager.getColor(ByteBoardTheme.MAIN));
         tagsContainer.setMaximumSize(new Dimension(300, 300));
         tagsContainer.setMinimumSize(new Dimension(300, 300));
         tagsContainer.setOpaque(false);
@@ -239,13 +238,13 @@ public class SearchBoard extends JPanel {
             }
         });
 
-        tagHolder.setBackground(ResourceManager.getColor("main"));
+        tagHolder.setBackground(ResourceManager.getColor(ByteBoardTheme.MAIN));
         tagHolder.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         tagHolder.setCornerRadius(90);
         tagHolder.setLayout(new BorderLayout());
 
-        tagText.setBackground(ResourceManager.getColor("main_dark"));
-        tagText.setForeground(ResourceManager.getColor("text_fg_light"));
+        tagText.setBackground(ResourceManager.getColor(ByteBoardTheme.MAIN_DARK));
+        tagText.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_LIGHT));
         tagText.setText("tag1");
         tagText.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         tagHolder.add(tagText, BorderLayout.CENTER);
@@ -259,7 +258,7 @@ public class SearchBoard extends JPanel {
         gridBagConstraints.weighty = 1.0;
         add(tagsContainer, gridBagConstraints);
 
-        noResultLabel.setForeground(ResourceManager.getColor("text_fg_light"));
+        noResultLabel.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_LIGHT));
         noResultLabel.setText("No Available Questions");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -270,7 +269,7 @@ public class SearchBoard extends JPanel {
         add(noResultLabel, gridBagConstraints);
         noResultLabel.setFont(ResourceManager.getFont("inter_thin.48"));
 
-        resultContainer.setBackground(ResourceManager.getColor("main_dark"));
+        resultContainer.setBackground(ResourceManager.getColor(ByteBoardTheme.MAIN_DARK));
         resultContainer.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         resultContainer.setCornerRadius(90);
         resultContainer.setMaximumSize(new Dimension(350, 2147483647));
@@ -317,8 +316,8 @@ public class SearchBoard extends JPanel {
             ActivityBar activityBar = (ActivityBar) resultContainer.getComponent(i);
 
             activityBar.setDefaultBackground(i % 2 == 0 ?
-                    ResourceManager.getColor("main") :
-                    ResourceManager.getColor("main_light"));
+                    ResourceManager.getColor(ByteBoardTheme.MAIN) :
+                    ResourceManager.getColor(ByteBoardTheme.MAIN_LIGHT));
         }
     }
 
@@ -331,14 +330,14 @@ public class SearchBoard extends JPanel {
     private void createTag(String text) {
 
         RoundedJPanel tagHolder = new RoundedJPanel();
-        tagHolder.setBackground(ResourceManager.getColor("main"));
+        tagHolder.setBackground(ResourceManager.getColor(ByteBoardTheme.MAIN));
         tagHolder.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         tagHolder.setCornerRadius(90);
         tagHolder.setLayout(new BorderLayout());
 
         JLabel tagText = new JLabel(text);
-        tagText.setBackground(ResourceManager.getColor("main_dark"));
-        tagText.setForeground(ResourceManager.getColor("text_fg_light"));
+        tagText.setBackground(ResourceManager.getColor(ByteBoardTheme.MAIN_DARK));
+        tagText.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_LIGHT));
         tagText.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         tagHolder.add(tagText, BorderLayout.CENTER);
         tagText.setFont(ResourceManager.getFont("inter_regular.22"));

@@ -3,6 +3,7 @@ package QnAForumInterface.InformationBarPackage;
 
 import CustomControls.RoundedJPanel;
 import QnAForumInterface.QnABoard;
+import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
 
 import javax.swing.*;
@@ -30,7 +31,7 @@ public class AnswerBar extends InformationBar {
     }
 
     private void initResponderProfile() {
-        responderProfile.setIcon(ResourceManager.getIcon("user_profile", ResourceManager.SMALL));
+        responderProfile.setIcon(ResourceManager.getProfileIcon("0", ResourceManager.SMALL));
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -67,7 +68,7 @@ public class AnswerBar extends InformationBar {
         SELECTED_ANSWER_BAR = answerBar;
 
         if (answerBar != null)
-            answerBar.setColor(ResourceManager.getColor("accent_dark"));
+            answerBar.setColor(ResourceManager.getColor(ByteBoardTheme.ACCENT_DARK));
     }
 
     protected void addMouseListeners() {
@@ -75,7 +76,7 @@ public class AnswerBar extends InformationBar {
         addMouseListener(new MouseAdapter() {
             public void mouseEntered(MouseEvent evt) {
                 if (isSelected()) return;
-                setColor(ResourceManager.getColor("accent"));
+                setColor(ResourceManager.getColor(ByteBoardTheme.ACCENT));
             }
 
             public void mouseExited(MouseEvent evt) {

@@ -8,6 +8,7 @@ import DataObjects.UserDataObject;
 import QnAForumDatabase.Database;
 import QnAForumDatabase.EncryptionUtils;
 
+import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
 
 import javax.swing.*;
@@ -46,10 +47,10 @@ public class LoginForm extends JPanel {
         signupInfoLabel = new JLabel();
         signupBtn = new JToggleButton();
 
-        setBackground(ResourceManager.getColor("base"));
+        setBackground(ResourceManager.getColor(ByteBoardTheme.BASE));
         setLayout(new GridBagLayout());
 
-        titleLabel.setForeground(ResourceManager.getColor("main"));
+        titleLabel.setForeground(ResourceManager.getColor(ByteBoardTheme.MAIN));
         titleLabel.setText("Login");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -65,7 +66,7 @@ public class LoginForm extends JPanel {
         gridBagConstraints.insets = new Insets(10, 10, 10, 10);
         add(idLabel, gridBagConstraints);
         idLabel.setFont(ResourceManager.getFont("inter_regular.26"));
-        idLabel.setForeground(ResourceManager.getColor("text_fg_dark"));
+        idLabel.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_DARK));
 
         idField.setMinimumSize(new Dimension(200, 39));
         idField.setPreferredSize(new Dimension(200, 29));
@@ -75,8 +76,9 @@ public class LoginForm extends JPanel {
         gridBagConstraints.insets = new Insets(10, 10, 10, 40);
         add(idField, gridBagConstraints);
         idField.setFont(ResourceManager.getFont("inter_regular.24"));
-        idField.setForeground(ResourceManager.getColor("text_fg_dark"));
-        idField.setBackground(ResourceManager.getColor("base"));
+        idField.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_DARK));
+        idField.setCaretColor(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_DARK));
+        idField.setBackground(ResourceManager.getColor(ByteBoardTheme.BASE));
 
         pwdLabel.setText("Password:");
         gridBagConstraints = new GridBagConstraints();
@@ -85,7 +87,7 @@ public class LoginForm extends JPanel {
         gridBagConstraints.insets = new Insets(10, 10, 50, 10);
         add(pwdLabel, gridBagConstraints);
         pwdLabel.setFont(ResourceManager.getFont("inter_regular.26"));
-        pwdLabel.setForeground(ResourceManager.getColor("text_fg_dark"));
+        pwdLabel.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_DARK));
 
         pwdField.setMinimumSize(new Dimension(200, 29));
         pwdField.setPreferredSize(new Dimension(200, 29));
@@ -95,8 +97,9 @@ public class LoginForm extends JPanel {
         gridBagConstraints.insets = new Insets(10, 10, 50, 40);
         add(pwdField, gridBagConstraints);
         pwdField.setFont(ResourceManager.getFont("inter_regular.18"));
-        pwdField.setForeground(ResourceManager.getColor("text_fg_dark"));
-        pwdField.setBackground(ResourceManager.getColor("base"));
+        pwdField.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_DARK));
+        pwdField.setCaretColor(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_DARK));
+        pwdField.setBackground(ResourceManager.getColor(ByteBoardTheme.BASE));
 
         loginErrorLabel.setForeground(new Color(210, 0, 0));
         loginErrorLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -108,17 +111,14 @@ public class LoginForm extends JPanel {
         add(loginErrorLabel, gridBagConstraints);
         loginErrorLabel.setFont(ResourceManager.getFont("inter_regular.18"));
 
-        loginBtn.setForeground(ResourceManager.getColor("main"));
-        loginBtn.setIcon(ResourceManager.getIcon("login_default", ResourceManager.MINI)
-        );
+        loginBtn.setForeground(ResourceManager.getColor(ByteBoardTheme.MAIN));
+        loginBtn.setIcon(ResourceManager.getStateIcon("login", ResourceManager.DEFAULT, ResourceManager.MINI));
         loginBtn.setText("Log In");
         loginBtn.setBorderPainted(false);
         loginBtn.setContentAreaFilled(false);
         loginBtn.setFocusPainted(false);
-        loginBtn.setPressedIcon(ResourceManager.getIcon("login_pressed", ResourceManager.MINI)
-        );
-        loginBtn.setRolloverIcon(ResourceManager.getIcon("login_rollover", ResourceManager.MINI)
-        );
+        loginBtn.setPressedIcon(ResourceManager.getStateIcon("login", ResourceManager.PRESSED, ResourceManager.MINI));
+        loginBtn.setRolloverIcon(ResourceManager.getStateIcon("login", ResourceManager.ROLLOVER, ResourceManager.MINI));
         loginBtn.addActionListener(evt -> loginBtnActionPerformed(evt));
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -134,19 +134,16 @@ public class LoginForm extends JPanel {
         gridBagConstraints.insets = new Insets(20, 10, 10, 10);
         add(signupInfoLabel, gridBagConstraints);
         signupInfoLabel.setFont(ResourceManager.getFont("inter_regular.20"));
-        signupInfoLabel.setForeground(ResourceManager.getColor("text_fg_dark"));
+        signupInfoLabel.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_DARK));
 
-        signupBtn.setForeground(ResourceManager.getColor("main_dark"));
-        signupBtn.setIcon(ResourceManager.getIcon("signup_default", ResourceManager.MINI)
-        );
+        signupBtn.setForeground(ResourceManager.getColor(ByteBoardTheme.MAIN_DARK));
+        signupBtn.setIcon(ResourceManager.getStateIcon("signup", ResourceManager.DEFAULT, ResourceManager.MINI));
         signupBtn.setText("Sign Up");
         signupBtn.setBorderPainted(false);
         signupBtn.setContentAreaFilled(false);
         signupBtn.setFocusPainted(false);
-        signupBtn.setPressedIcon(ResourceManager.getIcon("signup_pressed", ResourceManager.MINI)
-        );
-        signupBtn.setRolloverIcon(ResourceManager.getIcon("signup_rollover", ResourceManager.MINI)
-        );
+        signupBtn.setPressedIcon(ResourceManager.getStateIcon("signup", ResourceManager.PRESSED, ResourceManager.MINI));
+        signupBtn.setRolloverIcon(ResourceManager.getStateIcon("signup", ResourceManager.ROLLOVER, ResourceManager.MINI));
         signupBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 signupBtnActionPerformed(evt);
@@ -203,5 +200,13 @@ public class LoginForm extends JPanel {
 
     private void signupBtnActionPerformed(ActionEvent evt) {
         AuthenticationForm.setRegisterUser(true);
+    }
+
+    @Override
+    public void setVisible(boolean aFlag) {
+        super.setVisible(aFlag);
+        idField.setText("");
+        pwdField.setText("");
+        loginErrorLabel.setText("");
     }
 }

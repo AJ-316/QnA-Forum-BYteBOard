@@ -8,6 +8,7 @@ import DataObjects.UserDataObject;
 import QnAForumDatabase.Database;
 import QnAForumDatabase.EncryptionUtils;
 
+import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
 
 import javax.swing.*;
@@ -65,10 +66,10 @@ public class SignupForm extends JPanel {
         loginInfoLabel = new JLabel();
         loginBtn = new JToggleButton();
 
-        setBackground(ResourceManager.getColor("base"));
+        setBackground(ResourceManager.getColor(ByteBoardTheme.BASE));
         setLayout(new GridBagLayout());
 
-        titleLabel.setForeground(ResourceManager.getColor("main"));
+        titleLabel.setForeground(ResourceManager.getColor(ByteBoardTheme.MAIN));
         titleLabel.setText("Register");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -84,7 +85,7 @@ public class SignupForm extends JPanel {
         gridBagConstraints.insets = new Insets(0, 5, 5, 5);
         add(usernameLabel, gridBagConstraints);
         usernameLabel.setFont(ResourceManager.getFont("inter_regular.26"));
-        usernameLabel.setForeground(ResourceManager.getColor("text_fg_dark"));
+        usernameLabel.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_DARK));
 
         usernameField.setMinimumSize(new Dimension(200, 39));
         usernameField.setPreferredSize(new Dimension(200, 29));
@@ -94,8 +95,9 @@ public class SignupForm extends JPanel {
         gridBagConstraints.insets = new Insets(0, 5, 5, 5);
         add(usernameField, gridBagConstraints);
         usernameField.setFont(ResourceManager.getFont("inter_regular.24"));
-        usernameField.setForeground(ResourceManager.getColor("text_fg_dark"));
-        usernameField.setBackground(ResourceManager.getColor("base"));
+        usernameField.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_DARK));
+        usernameField.setCaretColor(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_DARK));
+        usernameField.setBackground(ResourceManager.getColor(ByteBoardTheme.BASE));
 
         emailLabel.setText("Email-ID:");
         gridBagConstraints = new GridBagConstraints();
@@ -104,7 +106,7 @@ public class SignupForm extends JPanel {
         gridBagConstraints.insets = new Insets(10, 5, 5, 5);
         add(emailLabel, gridBagConstraints);
         emailLabel.setFont(ResourceManager.getFont("inter_regular.26"));
-        emailLabel.setForeground(ResourceManager.getColor("text_fg_dark"));
+        emailLabel.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_DARK));
 
         emailField.setMinimumSize(new Dimension(200, 39));
         emailField.setPreferredSize(new Dimension(200, 29));
@@ -114,8 +116,9 @@ public class SignupForm extends JPanel {
         gridBagConstraints.insets = new Insets(10, 5, 5, 5);
         add(emailField, gridBagConstraints);
         emailField.setFont(ResourceManager.getFont("inter_regular.24"));
-        emailField.setForeground(ResourceManager.getColor("text_fg_dark"));
-        emailField.setBackground(ResourceManager.getColor("base"));
+        emailField.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_DARK));
+        emailField.setCaretColor(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_DARK));
+        emailField.setBackground(ResourceManager.getColor(ByteBoardTheme.BASE));
 
         pwdLabel.setText("Password:");
         gridBagConstraints = new GridBagConstraints();
@@ -124,7 +127,7 @@ public class SignupForm extends JPanel {
         gridBagConstraints.insets = new Insets(10, 5, 5, 5);
         add(pwdLabel, gridBagConstraints);
         pwdLabel.setFont(ResourceManager.getFont("inter_regular.26"));
-        pwdLabel.setForeground(ResourceManager.getColor("text_fg_dark"));
+        pwdLabel.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_DARK));
 
         pwdField.setMinimumSize(new Dimension(200, 29));
         pwdField.setPreferredSize(new Dimension(200, 29));
@@ -134,8 +137,9 @@ public class SignupForm extends JPanel {
         gridBagConstraints.insets = new Insets(10, 5, 5, 5);
         add(pwdField, gridBagConstraints);
         pwdField.setFont(ResourceManager.getFont("inter_regular.18"));
-        pwdField.setForeground(ResourceManager.getColor("text_fg_dark"));
-        pwdField.setBackground(ResourceManager.getColor("base"));
+        pwdField.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_DARK));
+        pwdField.setCaretColor(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_DARK));
+        pwdField.setBackground(ResourceManager.getColor(ByteBoardTheme.BASE));
 
         pwdCheckLabel.setText("Re- Enter Password:");
         gridBagConstraints = new GridBagConstraints();
@@ -144,7 +148,7 @@ public class SignupForm extends JPanel {
         gridBagConstraints.insets = new Insets(10, 5, 5, 5);
         add(pwdCheckLabel, gridBagConstraints);
         pwdCheckLabel.setFont(ResourceManager.getFont("inter_regular.26"));
-        pwdCheckLabel.setForeground(ResourceManager.getColor("text_fg_dark"));
+        pwdCheckLabel.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_DARK));
 
         pwdCheckField.setMinimumSize(new Dimension(200, 29));
         pwdCheckField.setPreferredSize(new Dimension(200, 29));
@@ -154,8 +158,9 @@ public class SignupForm extends JPanel {
         gridBagConstraints.insets = new Insets(10, 5, 5, 5);
         add(pwdCheckField, gridBagConstraints);
         pwdCheckField.setFont(ResourceManager.getFont("inter_regular.18"));
-        pwdCheckField.setForeground(ResourceManager.getColor("text_fg_dark"));
-        pwdCheckField.setBackground(ResourceManager.getColor("base"));
+        pwdCheckField.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_DARK));
+        pwdCheckField.setCaretColor(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_DARK));
+        pwdCheckField.setBackground(ResourceManager.getColor(ByteBoardTheme.BASE));
 
         signupErrorLabel.setForeground(new Color(210, 0, 0));
         signupErrorLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -167,16 +172,16 @@ public class SignupForm extends JPanel {
         add(signupErrorLabel, gridBagConstraints);
         signupErrorLabel.setFont(ResourceManager.getFont("inter_regular.18"));
 
-        signupBtn.setForeground(ResourceManager.getColor("main"));
-        signupBtn.setIcon(ResourceManager.getIcon("signup_default", ResourceManager.MINI)
+        signupBtn.setForeground(ResourceManager.getColor(ByteBoardTheme.MAIN));
+        signupBtn.setIcon(ResourceManager.getStateIcon("signup", ResourceManager.DEFAULT, ResourceManager.MINI)
         );
         signupBtn.setText("Sign Up");
         signupBtn.setBorderPainted(false);
         signupBtn.setContentAreaFilled(false);
         signupBtn.setFocusPainted(false);
-        signupBtn.setPressedIcon(ResourceManager.getIcon("signup_pressed", ResourceManager.MINI)
+        signupBtn.setPressedIcon(ResourceManager.getStateIcon("signup", ResourceManager.PRESSED, ResourceManager.MINI)
         );
-        signupBtn.setRolloverIcon(ResourceManager.getIcon("signup_rollover", ResourceManager.MINI)
+        signupBtn.setRolloverIcon(ResourceManager.getStateIcon("signup", ResourceManager.ROLLOVER, ResourceManager.MINI)
         );
         signupBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
@@ -199,19 +204,17 @@ public class SignupForm extends JPanel {
         gridBagConstraints.insets = new Insets(20, 10, 10, 10);
         add(loginInfoLabel, gridBagConstraints);
         loginInfoLabel.setFont(ResourceManager.getFont("inter_regular.20"));
-        loginInfoLabel.setForeground(ResourceManager.getColor("text_fg_dark"));
+        loginInfoLabel.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_DARK));
 
-        loginBtn.setForeground(ResourceManager.getColor("main_dark"));
-        loginBtn.setIcon(ResourceManager.getIcon("logout_default", ResourceManager.MINI)
+        loginBtn.setForeground(ResourceManager.getColor(ByteBoardTheme.MAIN_DARK));
+        loginBtn.setIcon(ResourceManager.getStateIcon("logout", ResourceManager.DEFAULT, ResourceManager.MINI)
         );
         loginBtn.setText("Log In");
         loginBtn.setBorderPainted(false);
         loginBtn.setContentAreaFilled(false);
         loginBtn.setFocusPainted(false);
-        loginBtn.setPressedIcon(ResourceManager.getIcon("logout_pressed", ResourceManager.MINI)
-        );
-        loginBtn.setRolloverIcon(ResourceManager.getIcon("logout_rollover", ResourceManager.MINI)
-        );
+        loginBtn.setPressedIcon(ResourceManager.getStateIcon("logout", ResourceManager.PRESSED, ResourceManager.MINI));
+        loginBtn.setRolloverIcon(ResourceManager.getStateIcon("logout", ResourceManager.ROLLOVER, ResourceManager.MINI));
         loginBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 loginBtnActionPerformed(evt);
@@ -282,4 +285,15 @@ public class SignupForm extends JPanel {
         AuthenticationForm.setRegisterUser(false);
     }
     // End of variables declaration//GEN-END:variables
+
+
+    @Override
+    public void setVisible(boolean aFlag) {
+        super.setVisible(aFlag);
+        usernameField.setText("");
+        pwdCheckField.setText("");
+        emailField.setText("");
+        pwdField.setText("");
+        signupErrorLabel.setText("");
+    }
 }

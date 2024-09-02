@@ -4,6 +4,7 @@ import CustomControls.RoundedJPanel;
 import CustomControls.SimpleScrollPane;
 import QnAForumInterface.InformationBarPackage.ActivityBar;
 import QnAForumInterface.InterfaceEventPackage.InterfaceEventManager;
+import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
 
 import javax.swing.*;
@@ -15,7 +16,7 @@ public class ActivityContainer extends RoundedJPanel {
     private JPanel activityContainer;
 
     public ActivityContainer() {
-        setBackground(ResourceManager.getColor("main_dark"));
+        setBackground(ResourceManager.getColor(ByteBoardTheme.MAIN_DARK));
         setCornerRadius(90);
         setLayout(new GridBagLayout());
 
@@ -27,7 +28,7 @@ public class ActivityContainer extends RoundedJPanel {
 
     private void initLabel() {
         noActivityLabel = new JLabel("No Activity Yet!");
-        noActivityLabel.setForeground(ResourceManager.getColor("disabled"));
+        noActivityLabel.setForeground(ResourceManager.getColor(ByteBoardTheme.DISABLED));
         noActivityLabel.setHorizontalAlignment(SwingConstants.CENTER);
         noActivityLabel.setFont(ResourceManager.getFont("inter_thin.48"));
 
@@ -44,13 +45,13 @@ public class ActivityContainer extends RoundedJPanel {
         activityContainer = new JPanel();
         activityContainer.setLayout(new BoxLayout(activityContainer, BoxLayout.Y_AXIS));
         activityContainer.setOpaque(false);
-        activityContainer.setBackground(ResourceManager.getColor("main_dark"));
+        activityContainer.setBackground(ResourceManager.getColor(ByteBoardTheme.MAIN_DARK));
 
         SimpleScrollPane scrollPane = new SimpleScrollPane();
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setMinimumSize(new Dimension(640, 360));
         scrollPane.setPreferredSize(new Dimension(640, 360));
-        scrollPane.setBackground(ResourceManager.getColor("main"));
+        scrollPane.setBackground(ResourceManager.getColor(ByteBoardTheme.MAIN));
         scrollPane.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
         scrollPane.setOpaque(false);
         scrollPane.getViewport().setOpaque(false);
@@ -88,8 +89,8 @@ public class ActivityContainer extends RoundedJPanel {
             ActivityBar activityBar = (ActivityBar) activityContainer.getComponent(i);
 
             activityBar.setDefaultBackground(i % 2 == 0 ?
-                    ResourceManager.getColor("main") :
-                    ResourceManager.getColor("main_light"));
+                    ResourceManager.getColor(ByteBoardTheme.MAIN) :
+                    ResourceManager.getColor(ByteBoardTheme.MAIN_LIGHT));
         }
     }
 

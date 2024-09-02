@@ -1,8 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package QnAForumInterface;
+
+import QnAForumInterface.InterfaceEventPackage.InterfaceEventManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,23 +14,32 @@ import java.util.Enumeration;
 public class QnAForum extends JFrame {
 
     private static QnAForum instance;
-    private QnAForumInterface.AskBoard askBoard;
 
-    public QnAForum() {
+    public QnAForum(String title) {
+        setTitle(title);
         initComponents();
     }
 
-    public static void logout() {
-        AuthenticationForm.init();
+    public static void logout(boolean isRepeatAuthentication) {
+        AuthenticationForm.init(isRepeatAuthentication);
         instance.dispose();
+    }
+
+    public static void restart() {
+        Object[] userData = InterfaceEventManager.invokeRequest("UserData.ProfileBoard");
+        logout(false);
+        EventQueue.invokeLater(() -> {
+            AuthenticationForm.authenticateUser((String) userData[1]);
+            AuthenticationForm.getInstance().setVisible(false);
+        });
     }
 
     public static void init(JPanel panel) {
         EventQueue.invokeLater(() -> {
-            instance = new QnAForum();
-            instance.setVisible(true);
+            instance = new QnAForum("BYteBOard QnA-Forum");
             instance.setLocationRelativeTo(null);
             setContent(panel);
+            instance.setVisible(true);
         });
     }
 
@@ -57,8 +64,7 @@ public class QnAForum extends JFrame {
     }
 
     private void initComponents() {
-
-        askBoard = new QnAForumInterface.AskBoard();
+        AskBoard askBoard = new AskBoard();
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new Dimension(1280, 720));

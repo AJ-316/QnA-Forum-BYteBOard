@@ -9,6 +9,7 @@ import DataObjects.*;
 import QnAForumDatabase.Database;
 
 import QnAForumInterface.ProfileBoardPackage.ProfileBoard;
+import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
 
 import javax.swing.*;
@@ -69,7 +70,7 @@ public class AskBoard extends JPanel {
         board.bodyLabel.setText("Answer:");
         board.submitBtn.setText("Submit Answer");
         board.titleLabel.setText("Respond to Question");
-        board.bodyLabel.setIcon(ResourceManager.getIcon("answer_pressed", ResourceManager.MINI));
+        board.bodyLabel.setIcon(ResourceManager.getStateIcon("answer", ResourceManager.PRESSED, ResourceManager.MINI));
         board.questionID = questionID;
         return board;
     }
@@ -168,10 +169,10 @@ public class AskBoard extends JPanel {
         tagContainer = new CustomControls.RoundedJPanel();
         tag = new JComboBox<>();
 
-        setBackground(ResourceManager.getColor("base"));
+        setBackground(ResourceManager.getColor(ByteBoardTheme.BASE));
         setLayout(new GridBagLayout());
 
-        container.setBackground(ResourceManager.getColor("main"));
+        container.setBackground(ResourceManager.getColor(ByteBoardTheme.MAIN));
         container.setCornerRadius(90);
         container.setPreferredSize(new Dimension(400, 120));
         container.setLayout(new GridBagLayout());
@@ -179,13 +180,13 @@ public class AskBoard extends JPanel {
         userHolder.setOpaque(false);
         userHolder.setLayout(new GridBagLayout());
 
-        userProfile.setIcon(ResourceManager.getIcon("user_profile", ResourceManager.REGULAR)
+        userProfile.setIcon(ResourceManager.getProfileIcon("0", ResourceManager.REGULAR)
         );
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.insets = new Insets(0, 20, 0, 20);
         userHolder.add(userProfile, gridBagConstraints);
 
-        userName.setForeground(ResourceManager.getColor("text_fg_light"));
+        userName.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_LIGHT));
         userName.setText("Username");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -200,16 +201,14 @@ public class AskBoard extends JPanel {
         buttonHolder.setOpaque(false);
         buttonHolder.setLayout(new GridBagLayout());
 
-        searchBtn.setForeground(ResourceManager.getColor("text_fg_light"));
-        searchBtn.setIcon(ResourceManager.getIcon("search_default", ResourceManager.MINI));
+        searchBtn.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_LIGHT));
+        searchBtn.setIcon(ResourceManager.getStateIcon("search", ResourceManager.DEFAULT, ResourceManager.MINI));
         searchBtn.setText("Search");
         searchBtn.setBorderPainted(false);
         searchBtn.setContentAreaFilled(false);
         searchBtn.setFocusPainted(false);
-        searchBtn.setPressedIcon(ResourceManager.getIcon("search_pressed", ResourceManager.MINI)
-        );
-        searchBtn.setRolloverIcon(ResourceManager.getIcon("search_rollover", ResourceManager.MINI)
-        );
+        searchBtn.setPressedIcon(ResourceManager.getStateIcon("search", ResourceManager.PRESSED, ResourceManager.MINI));
+        searchBtn.setRolloverIcon(ResourceManager.getStateIcon("search", ResourceManager.ROLLOVER, ResourceManager.MINI));
         searchBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 searchBtnActionPerformed(evt);
@@ -223,15 +222,15 @@ public class AskBoard extends JPanel {
         buttonHolder.add(searchBtn, gridBagConstraints);
         searchBtn.setFont(ResourceManager.getFont("inter_regular.22"));
 
-        submitBtn.setForeground(ResourceManager.getColor("text_fg_light"));
-        submitBtn.setIcon(ResourceManager.getIcon("submit_default", ResourceManager.MINI));
+        submitBtn.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_LIGHT));
+        submitBtn.setIcon(ResourceManager.getStateIcon("submit", ResourceManager.DEFAULT, ResourceManager.MINI));
         submitBtn.setText("Submit");
         submitBtn.setBorderPainted(false);
         submitBtn.setContentAreaFilled(false);
         submitBtn.setFocusPainted(false);
-        submitBtn.setPressedIcon(ResourceManager.getIcon("submit_pressed", ResourceManager.MINI)
+        submitBtn.setPressedIcon(ResourceManager.getStateIcon("submit", ResourceManager.PRESSED, ResourceManager.MINI)
         );
-        submitBtn.setRolloverIcon(ResourceManager.getIcon("submit_rollover", ResourceManager.MINI)
+        submitBtn.setRolloverIcon(ResourceManager.getStateIcon("submit", ResourceManager.ROLLOVER, ResourceManager.MINI)
         );
         submitBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
@@ -246,15 +245,15 @@ public class AskBoard extends JPanel {
         buttonHolder.add(submitBtn, gridBagConstraints);
         submitBtn.setFont(ResourceManager.getFont("inter_regular.22"));
 
-        backBtn.setForeground(ResourceManager.getColor("text_fg_light"));
-        backBtn.setIcon(ResourceManager.getIcon("home_default", ResourceManager.MINI));
+        backBtn.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_LIGHT));
+        backBtn.setIcon(ResourceManager.getStateIcon("home", ResourceManager.DEFAULT, ResourceManager.MINI));
         backBtn.setText("Back");
         backBtn.setBorderPainted(false);
         backBtn.setContentAreaFilled(false);
         backBtn.setFocusPainted(false);
-        backBtn.setPressedIcon(ResourceManager.getIcon("home_pressed", ResourceManager.MINI)
+        backBtn.setPressedIcon(ResourceManager.getStateIcon("home", ResourceManager.PRESSED, ResourceManager.MINI)
         );
-        backBtn.setRolloverIcon(ResourceManager.getIcon("home_rollover", ResourceManager.MINI)
+        backBtn.setRolloverIcon(ResourceManager.getStateIcon("home", ResourceManager.ROLLOVER, ResourceManager.MINI)
         );
         backBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
@@ -297,20 +296,20 @@ public class AskBoard extends JPanel {
         gridBagConstraints.insets = new Insets(20, 20, 20, 20);
         add(titleLabel, gridBagConstraints);
         titleLabel.setFont(ResourceManager.getFont("inter_semibold.32"));
-        titleLabel.setForeground(ResourceManager.getColor("text_fg_dark"));
+        titleLabel.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_DARK));
 
-        containerScrollPane.setBackground(ResourceManager.getColor("base"));
+        containerScrollPane.setBackground(ResourceManager.getColor(ByteBoardTheme.BASE));
         containerScrollPane.setBorder(null);
         containerScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         containerScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         containerScrollPane.setAutoscrolls(true);
         containerScrollPane.setOpaque(false);
 
-        askContainer.setBackground(ResourceManager.getColor("base"));
+        askContainer.setBackground(ResourceManager.getColor(ByteBoardTheme.BASE));
         askContainer.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         askContainer.setLayout(new GridBagLayout());
 
-        headLabel.setIcon(ResourceManager.getIcon("question_pressed", ResourceManager.MINI)
+        headLabel.setIcon(ResourceManager.getStateIcon("question", ResourceManager.PRESSED, ResourceManager.MINI)
         );
         headLabel.setText("Question Head - Keep it simple");
         gridBagConstraints = new GridBagConstraints();
@@ -320,9 +319,9 @@ public class AskBoard extends JPanel {
         gridBagConstraints.weightx = 1.0;
         askContainer.add(headLabel, gridBagConstraints);
         headLabel.setFont(ResourceManager.getFont("inter_regular.24"));
-        headLabel.setForeground(ResourceManager.getColor("text_fg_dark"));
+        headLabel.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_DARK));
 
-        headContainer.setBackground(ResourceManager.getColor("main_dark"));
+        headContainer.setBackground(ResourceManager.getColor(ByteBoardTheme.MAIN_DARK));
         headContainer.setCornerRadius(90);
         headContainer.setLimitRadius(false);
         headContainer.setLayout(new BorderLayout());
@@ -333,15 +332,13 @@ public class AskBoard extends JPanel {
         headScrollPane.setOpaque(false);
         headScrollPane.setPreferredSize(new Dimension(486, 100));
 
-        head.setBackground(ResourceManager.getColor("main_dark"));
-        head.setColumns(20);
-        head.setForeground(ResourceManager.getColor("text_fg_light"));
+        head.setBackground(ResourceManager.getColor(ByteBoardTheme.MAIN_DARK));
+        head.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_LIGHT));
         head.setLineWrap(true);
-        head.setRows(5);
         head.setText("Head...");
         head.setWrapStyleWord(true);
         head.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        head.setCaretColor(ResourceManager.getColor("base"));
+        head.setCaretColor(ResourceManager.getColor(ByteBoardTheme.BASE));
         head.setMinimumSize(new Dimension(0, 0));
         head.setOpaque(false);
         head.addFocusListener(new FocusAdapter() {
@@ -366,7 +363,7 @@ public class AskBoard extends JPanel {
         gridBagConstraints.weightx = 1.0;
         askContainer.add(headContainer, gridBagConstraints);
 
-        bodyLabel.setIcon(ResourceManager.getIcon("question_pressed", ResourceManager.MINI)
+        bodyLabel.setIcon(ResourceManager.getStateIcon("question", ResourceManager.PRESSED, ResourceManager.MINI)
         );
         bodyLabel.setText("Question Body - Elaborate your Question");
         gridBagConstraints = new GridBagConstraints();
@@ -377,9 +374,9 @@ public class AskBoard extends JPanel {
         gridBagConstraints.insets = new Insets(40, 0, 0, 0);
         askContainer.add(bodyLabel, gridBagConstraints);
         bodyLabel.setFont(ResourceManager.getFont("inter_regular.24"));
-        bodyLabel.setForeground(ResourceManager.getColor("text_fg_dark"));
+        bodyLabel.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_DARK));
 
-        bodyContainer.setBackground(ResourceManager.getColor("main_dark"));
+        bodyContainer.setBackground(ResourceManager.getColor(ByteBoardTheme.MAIN_DARK));
         bodyContainer.setCornerRadius(90);
         bodyContainer.setLayout(new BorderLayout());
 
@@ -389,15 +386,13 @@ public class AskBoard extends JPanel {
         bodyScrollPane.setOpaque(false);
         bodyScrollPane.setPreferredSize(new Dimension(486, 200));
 
-        body.setBackground(ResourceManager.getColor("main_dark"));
-        body.setColumns(20);
-        body.setForeground(ResourceManager.getColor("text_fg_light"));
+        body.setBackground(ResourceManager.getColor(ByteBoardTheme.MAIN_DARK));
+        body.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_LIGHT));
         body.setLineWrap(true);
-        body.setRows(5);
         body.setText("Body...");
         body.setWrapStyleWord(true);
         body.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        body.setCaretColor(ResourceManager.getColor("base"));
+        body.setCaretColor(ResourceManager.getColor(ByteBoardTheme.BASE));
         body.setMinimumSize(new Dimension(0, 0));
         body.setOpaque(false);
         body.addFocusListener(new FocusAdapter() {
@@ -424,7 +419,7 @@ public class AskBoard extends JPanel {
         gridBagConstraints.insets = new Insets(0, 0, 40, 0);
         askContainer.add(bodyContainer, gridBagConstraints);
 
-        tagsErrorLabel.setForeground(ResourceManager.getColor("error"));
+        tagsErrorLabel.setForeground(ResourceManager.getColor(ByteBoardTheme.ERROR));
         tagsErrorLabel.setText("Add atleast 3 tags!");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -435,15 +430,16 @@ public class AskBoard extends JPanel {
         tagsErrorLabel.setVisible(false);
 
         tagsDisplay.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 5));
+        tagsDisplay.setOpaque(false);
 
-        tagsLabel.setIcon(ResourceManager.getIcon("tag_pressed", ResourceManager.MINI)
-        );
+        tagsLabel.setIcon(ResourceManager.getStateIcon("tag", ResourceManager.PRESSED, ResourceManager.MINI));
         tagsLabel.setText("Tags");
         tagsLabel.setToolTipText("");
         tagsDisplay.add(tagsLabel);
         tagsLabel.setFont(ResourceManager.getFont("inter_regular.24"));
+        tagsLabel.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_DARK));
 
-        tagsRoundedPanel.setBackground(ResourceManager.getColor("main"));
+        tagsRoundedPanel.setBackground(ResourceManager.getColor(ByteBoardTheme.MAIN));
         tagsRoundedPanel.setBorder(BorderFactory.createEmptyBorder(8, 10, 8, 10));
         tagsRoundedPanel.setCornerRadius(50);
         tagsRoundedPanel.setLimitRadius(false);
@@ -454,7 +450,7 @@ public class AskBoard extends JPanel {
         });
         tagsRoundedPanel.setLayout(new BoxLayout(tagsRoundedPanel, BoxLayout.X_AXIS));
 
-        tagText.setForeground(ResourceManager.getColor("text_fg_light"));
+        tagText.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_LIGHT));
         tagText.setText("tag1 | tag2 | tag3");
         tagText.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         tagsRoundedPanel.add(tagText);
@@ -468,14 +464,14 @@ public class AskBoard extends JPanel {
         gridBagConstraints.weightx = 1.0;
         askContainer.add(tagsDisplay, gridBagConstraints);
 
-        tagContainer.setBackground(ResourceManager.getColor("main_dark"));
+        tagContainer.setBackground(ResourceManager.getColor(ByteBoardTheme.MAIN_DARK));
         tagContainer.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         tagContainer.setCornerRadius(90);
         tagContainer.setLayout(new BorderLayout());
 
         tag.setBackground(tagContainer.getBackground());
         tag.setEditable(true);
-        tag.setForeground(ResourceManager.getColor("text_fg_light"));
+        tag.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_LIGHT));
         tagContainer.add(tag, BorderLayout.PAGE_END);
         tag.setFont(ResourceManager.getFont("inter_regular.24"));
 
@@ -496,16 +492,16 @@ public class AskBoard extends JPanel {
         JTextField textField = (JTextField) tag.getEditor().getEditorComponent();
         textField.addFocusListener(new FocusAdapter() {
             public void focusGained(FocusEvent evt) {
-                tagsLabel.setIcon(ResourceManager.getIcon("tag_default", ResourceManager.MINI));
+                tagsLabel.setIcon(ResourceManager.getStateIcon("tag", ResourceManager.ROLLOVER, ResourceManager.MINI));
             }
 
             public void focusLost(FocusEvent evt) {
-                tagsLabel.setIcon(ResourceManager.getIcon("tag_pressed", ResourceManager.MINI));
+                tagsLabel.setIcon(ResourceManager.getStateIcon("tag", ResourceManager.PRESSED, ResourceManager.MINI));
             }
         });
-        textField.setForeground(Color.white);
-        textField.setCaretColor(Color.white);
-        textField.setBackground(ResourceManager.getColor("main_dark"));
+        textField.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_LIGHT));
+        textField.setCaretColor(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_LIGHT));
+        textField.setBackground(ResourceManager.getColor(ByteBoardTheme.MAIN_DARK));
 
         textField.addKeyListener(new KeyAdapter() {
             @Override
@@ -618,24 +614,24 @@ public class AskBoard extends JPanel {
 
     private void bodyFocusGained(FocusEvent evt) {
         if (isAskBoard())
-            bodyLabel.setIcon(ResourceManager.getIcon("question_default", ResourceManager.MINI));
+            bodyLabel.setIcon(ResourceManager.getStateIcon("question", ResourceManager.ROLLOVER, ResourceManager.MINI));
         else
-            bodyLabel.setIcon(ResourceManager.getIcon("answer_default", ResourceManager.MINI));
+            bodyLabel.setIcon(ResourceManager.getStateIcon("answer", ResourceManager.ROLLOVER, ResourceManager.MINI));
     }
 
     private void bodyFocusLost(FocusEvent evt) {
         if (isAskBoard())
-            bodyLabel.setIcon(ResourceManager.getIcon("question_pressed", ResourceManager.MINI));
+            bodyLabel.setIcon(ResourceManager.getStateIcon("question", ResourceManager.PRESSED, ResourceManager.MINI));
         else
-            bodyLabel.setIcon(ResourceManager.getIcon("answer_pressed", ResourceManager.MINI));
+            bodyLabel.setIcon(ResourceManager.getStateIcon("answer", ResourceManager.PRESSED, ResourceManager.MINI));
     }
 
     private void headFocusGained(FocusEvent evt) {
-        headLabel.setIcon(ResourceManager.getIcon("question_default", ResourceManager.MINI));
+        headLabel.setIcon(ResourceManager.getStateIcon("question", ResourceManager.ROLLOVER, ResourceManager.MINI));
     }
 
     private void headFocusLost(FocusEvent evt) {
-        headLabel.setIcon(ResourceManager.getIcon("question_pressed", ResourceManager.MINI));
+        headLabel.setIcon(ResourceManager.getStateIcon("question", ResourceManager.PRESSED, ResourceManager.MINI));
     }
 
     private void tagsRoundedPanelMouseReleased(MouseEvent evt) {

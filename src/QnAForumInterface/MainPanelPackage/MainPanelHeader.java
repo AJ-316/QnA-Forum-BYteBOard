@@ -4,6 +4,7 @@ import CustomControls.RoundedJPanel;
 
 import QnAForumInterface.InformationBarPackage.AnswerBar;
 import QnAForumInterface.QnABoard;
+import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
 
 import javax.swing.*;
@@ -52,7 +53,7 @@ public class MainPanelHeader extends JPanel {
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weighty = 1.0;
 
-        contentUserProfile.setIcon(ResourceManager.getIcon("user_profile", ResourceManager.REGULAR));
+        contentUserProfile.setIcon(ResourceManager.getProfileIcon("0", ResourceManager.REGULAR));
 
         add(contentUserProfile, gridBagConstraints);
     }
@@ -67,7 +68,7 @@ public class MainPanelHeader extends JPanel {
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(20, 20, 0, 0);
 
-        contentUserName.setForeground(ResourceManager.getColor("text_fg_light"));
+        contentUserName.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_LIGHT));
         contentUserName.setText("Content User Name");
         contentUserName.setFont(ResourceManager.getFont("inter_bold.36"));
 
@@ -82,16 +83,16 @@ public class MainPanelHeader extends JPanel {
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(0, 20, 20, 0);
 
-        tagsPanel.setBackground(ResourceManager.getColor("main_light"));
+        tagsPanel.setBackground(ResourceManager.getColor(ByteBoardTheme.MAIN_LIGHT));
         tagsPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
-        tagsPanel.setBorderColor(ResourceManager.getColor("main"));
+        tagsPanel.setBorderColor(ResourceManager.getColor(ByteBoardTheme.MAIN));
         tagsPanel.setCornerRadius(50);
         tagsPanel.setLimitRadius(false);
         tagsPanel.setLayout(new BoxLayout(tagsPanel, BoxLayout.X_AXIS));
 
         tagText.setText("tag1 | tag2 | tag3");
         tagText.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-        tagText.setForeground(ResourceManager.getColor("text_fg_light"));
+        tagText.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_LIGHT));
         tagText.setFont(ResourceManager.getFont("inter_regular.22"));
         tagsPanel.add(tagText);
 
@@ -110,25 +111,25 @@ public class MainPanelHeader extends JPanel {
         viewQuestionBtn.setText("View Question");
         viewQuestionBtn.setHorizontalAlignment(SwingConstants.LEFT);
         viewQuestionBtn.setBackground(new Color(204, 204, 204));
-        viewQuestionBtn.setForeground(ResourceManager.getColor("text_fg_light"));
-        viewQuestionBtn.setBorder(BorderFactory.createCompoundBorder(new LineBorder(ResourceManager.getColor("main_light"), 2, true), BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+        viewQuestionBtn.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_LIGHT));
+        viewQuestionBtn.setBorder(BorderFactory.createCompoundBorder(new LineBorder(ResourceManager.getColor(ByteBoardTheme.MAIN_LIGHT), 2, true), BorderFactory.createEmptyBorder(5, 5, 5, 5)));
         viewQuestionBtn.setBorderPainted(false);
         viewQuestionBtn.setContentAreaFilled(false);
         viewQuestionBtn.setFocusPainted(false);
         viewQuestionBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        viewQuestionBtn.setIcon(ResourceManager.getIcon("arrowL_default", ResourceManager.MINI));
-        viewQuestionBtn.setPressedIcon(ResourceManager.getIcon("arrowL_pressed", ResourceManager.MINI));
-        viewQuestionBtn.setRolloverIcon(ResourceManager.getIcon("arrowL_rollover", ResourceManager.MINI));
+        viewQuestionBtn.setIcon(ResourceManager.getStateIcon("arrowL", ResourceManager.DEFAULT, ResourceManager.MINI));
+        viewQuestionBtn.setPressedIcon(ResourceManager.getStateIcon("arrowL", ResourceManager.PRESSED, ResourceManager.MINI));
+        viewQuestionBtn.setRolloverIcon(ResourceManager.getStateIcon("arrowL",ResourceManager.ROLLOVER, ResourceManager.MINI));
         viewQuestionBtn.setFont(ResourceManager.getFont("inter_regular.22"));
 
         viewQuestionBtn.addMouseListener(new MouseAdapter() {
             public void mouseEntered(MouseEvent evt) {
-                setForeground(ResourceManager.getColor("main"));
+                setForeground(ResourceManager.getColor(ByteBoardTheme.MAIN));
             }
 
             public void mouseExited(MouseEvent evt) {
-                setForeground(ResourceManager.getColor("text_fg_light"));
+                setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_LIGHT));
             }
         });
 

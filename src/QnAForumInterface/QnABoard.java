@@ -9,6 +9,7 @@ import DataObjects.*;
 import QnAForumDatabase.Database;
 import QnAForumInterface.InformationBarPackage.AnswerBar;
 import QnAForumInterface.MainPanelPackage.MainPanel;
+import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
 
 import javax.swing.*;
@@ -143,8 +144,8 @@ public class QnABoard extends JPanel {
             AnswerBar answerBar = (AnswerBar) answersContainer.getComponent(i);
 
             answerBar.setDefaultBackground(i % 2 == 0 ?
-                    ResourceManager.getColor("main") :
-                    ResourceManager.getColor("main_light"));
+                    ResourceManager.getColor(ByteBoardTheme.MAIN) :
+                    ResourceManager.getColor(ByteBoardTheme.MAIN_LIGHT));
         }
     }
 
@@ -167,7 +168,7 @@ public class QnABoard extends JPanel {
         answersContainerScrollPane.getVerticalScrollBar().setUnitIncrement(8);
         answersContainer = new JPanel();
 
-        setBackground(ResourceManager.getColor("base"));
+        setBackground(ResourceManager.getColor(ByteBoardTheme.BASE));
         setMinimumSize(new Dimension(1280, 720));
         setPreferredSize(new Dimension(1280, 720));
         setLayout(new GridBagLayout());
@@ -201,13 +202,13 @@ public class QnABoard extends JPanel {
         gridBagConstraints.weighty = 0.4;
         add(optionsPanel, gridBagConstraints);
 
-        answersContainerHolder.setBackground(ResourceManager.getColor("main_dark"));
+        answersContainerHolder.setBackground(ResourceManager.getColor(ByteBoardTheme.MAIN_DARK));
         answersContainerHolder.setCornerRadius(90);
         answersContainerHolder.setMinimumSize(new Dimension(398, 120));
         answersContainerHolder.setLayout(new GridBagLayout());
 
-        noRespondersLabel.setBackground(ResourceManager.getColor("base"));
-        noRespondersLabel.setForeground(ResourceManager.getColor("disabled"));
+        noRespondersLabel.setBackground(ResourceManager.getColor(ByteBoardTheme.BASE));
+        noRespondersLabel.setForeground(ResourceManager.getColor(ByteBoardTheme.DISABLED));
         noRespondersLabel.setHorizontalAlignment(SwingConstants.CENTER);
         noRespondersLabel.setText("No Responds Yet!");
         gridBagConstraints = new GridBagConstraints();
@@ -227,7 +228,7 @@ public class QnABoard extends JPanel {
         answersContainerScrollPane.setPreferredSize(new Dimension(0, 150));
         answersContainerScrollPane.setViewportView(null);
 
-        answersContainer.setBackground(ResourceManager.getColor("main_dark"));
+        answersContainer.setBackground(ResourceManager.getColor(ByteBoardTheme.MAIN_DARK));
         answersContainer.setMinimumSize(new Dimension(0, 150));
         answersContainer.setOpaque(false);
         answersContainer.setLayout(new BoxLayout(answersContainer, BoxLayout.Y_AXIS));

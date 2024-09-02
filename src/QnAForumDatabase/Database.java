@@ -174,16 +174,16 @@ public class Database {
             }
 
             String query = queryBuilder.toString();
-            System.out.println(query);
+            //System.out.println(query);
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
                 ResultSet resultSet = preparedStatement.executeQuery();
                 ResultSetMetaData metaData = resultSet.getMetaData();
                 int columnCount = metaData.getColumnCount();
 
                 while (resultSet.next()) {
-                    System.out.println("next:");
+                    //System.out.println("next:");
                     for (int i = 1; i <= columnCount; i++) {
-                        System.out.println(metaData.getTableName(i) + ": " + metaData.getColumnName(i) + "=" + resultSet.getString(i));
+                        //System.out.println(metaData.getTableName(i) + ": " + metaData.getColumnName(i) + "=" + resultSet.getString(i));
                         String tableName = metaData.getTableName(i);
                         ArrayList<String> keyValues = result.get(tableName);
                         if (keyValues == null) {
@@ -222,7 +222,7 @@ public class Database {
             }
 
             String query = queryBuilder.toString();
-            System.out.println("UPDATEQUERY: " + query);
+            //System.out.println("UPDATEQUERY: " + query);
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
                 int parameterIndex = 1;
                 for (String val : vals) {
@@ -256,13 +256,13 @@ public class Database {
                 }
             }
             String query = queryBuilder.append(")").toString();
-            System.out.println(connection + ", " + query);
+            //System.out.println(connection + ", " + query);
             try (PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
                 for (int i = 0; i < vals.length; i++)
                     preparedStatement.setString(i + 1, vals[i]);
 
                 int rowsAffected = preparedStatement.executeUpdate();
-                System.out.println("Inserted " + rowsAffected + " rows into " + table + " table.");
+                //System.out.println("Inserted " + rowsAffected + " rows into " + table + " table.");
 
                 // Retrieve the auto-generated key
                 long generatedKey = 0;
@@ -272,7 +272,7 @@ public class Database {
                     }
                 }
 
-                System.out.println("Generated Key: " + generatedKey);
+                //System.out.println("Generated Key: " + generatedKey);
                 return generatedKey;
             } catch (SQLException e) {
                 System.err.println("Error connecting to the database: " + e.getMessage());
@@ -282,7 +282,7 @@ public class Database {
 
         public static String[] selectRow(String table, String selectCol, String col, String val, boolean removeDuplicate) {
             String query = "SELECT " + (removeDuplicate ? "DISTINCT " : "") + selectCol + " FROM " + table + " WHERE " + col + " = ?";
-            System.out.println("query: " + query);
+            //System.out.println("query: " + query);
 
             ArrayList<String> values = new ArrayList<>();
 
@@ -303,7 +303,7 @@ public class Database {
 
         public static String[] selectRow(String table, String selectCol, boolean removeDuplicate) {
             String query = "SELECT " + (removeDuplicate ? "DISTINCT " : "") + selectCol + " FROM " + table;
-            System.out.println("query: " + query);
+            //System.out.println("query: " + query);
 
             ArrayList<String> values = new ArrayList<>();
 
@@ -345,7 +345,7 @@ public class Database {
 
         public static DataObject[] selectRow(String table, String col, String val) {
             String query = "SELECT * FROM " + table + " WHERE " + col + " = ?";
-            System.out.println("query: " + query);
+            //System.out.println("query: " + query);
             ArrayList<String> valuesList = new ArrayList<>();
 
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -364,7 +364,7 @@ public class Database {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-            System.out.println("VALUESLISTLLLL: " + Arrays.toString(valuesList.toArray()));
+            //System.out.println("VALUESLISTLLLL: " + Arrays.toString(valuesList.toArray()));
             return parseDataObjects(valuesList, table);
         }
 
@@ -409,18 +409,18 @@ public class Database {
                 // Print column names
                 while (resultSet.next()) {
                     String columnName = resultSet.getString("Field");
-                    System.out.print(columnName + "\t");
+                    //System.out.print(columnName + "\t");
                 }
-                System.out.println();
+                //System.out.println();
 
                 // Execute query to select all data from table
                 try (ResultSet dataResultSet = statement.executeQuery("Select * FROM " + table)) {
                     // Print table data
                     while (dataResultSet.next()) {
                         for (int i = 1; i <= dataResultSet.getMetaData().getColumnCount(); i++) {
-                            System.out.print(dataResultSet.getString(i) + "\t");
+                            //System.out.print(dataResultSet.getString(i) + "\t");
                         }
-                        System.out.println();
+                        //System.out.println();
                     }
                 }
             } catch (SQLException e) {

@@ -5,6 +5,7 @@ import QnAForumInterface.InterfaceEventPackage.InterfaceEventManager;
 import QnAForumInterface.QnABoard;
 import QnAForumInterface.QnAForum;
 import QnAForumInterface.SearchBoard;
+import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
 
 import javax.swing.*;
@@ -21,7 +22,7 @@ public class UserProfileDisplayPanel extends JPanel {
     }
 
     private void init() {
-        setBackground(ResourceManager.getColor("base"));
+        setBackground(ResourceManager.getColor(ByteBoardTheme.BASE));
         setMinimumSize(new Dimension(640, 360));
         setPreferredSize(new Dimension(640, 360));
         setLayout(new GridBagLayout());
@@ -33,12 +34,12 @@ public class UserProfileDisplayPanel extends JPanel {
 
         username = new JLabel("Username");
         constraints.gridy = GridBagConstraints.RELATIVE;
-        username.setForeground(ResourceManager.getColor("text_fg_dark"));
+        username.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_DARK));
         username.setFont(ResourceManager.getFont("inter_bold.32"));
         add(username, constraints);
 
         userEmail = new JLabel("EmailID");
-        userEmail.setForeground(ResourceManager.getColor("text_fg_dark"));
+        userEmail.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_DARK));
         userEmail.setFont(ResourceManager.getFont("inter_semibold.22"));
         add(userEmail, constraints);
 

@@ -1,0 +1,11 @@
+base = 255, 250, 240
+main = 255, 69, 0
+main_light = 255, 140, 0
+main_dark = 204, 51, 0
+accent = 255, 215, 0
+accent_dark = 184, 134, 11
+error = 220, 20, 60
+disabled = 205, 92, 92
+text_fg_light = 255, 255, 255
+text_fg_dark = 0, 0, 0
+text_fg_main = 255, 69, 0

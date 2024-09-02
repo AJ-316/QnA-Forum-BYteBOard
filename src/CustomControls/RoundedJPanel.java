@@ -1,5 +1,6 @@
 package CustomControls;
 
+import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
 
 import javax.swing.*;
@@ -18,7 +19,7 @@ public class RoundedJPanel extends JPanel {
         initComponents();
         limitRadius = true;
         cornerRadius = 20;
-        borderColor = ResourceManager.getColor("base");
+        borderColor = ResourceManager.getColor(ByteBoardTheme.BASE);
         setForeground(borderColor);
         setOpaque(false);
     }

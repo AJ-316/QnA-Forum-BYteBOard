@@ -3,6 +3,7 @@ package QnAForumInterface.InformationBarPackage;
 import QnAForumInterface.ProfileBoardPackage.ProfileBoard;
 import QnAForumInterface.QnABoard;
 import QnAForumInterface.QnAForum;
+import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
 
 import javax.swing.*;
@@ -32,7 +33,7 @@ public class ActivityBar extends InformationBar {
     protected void addMouseListeners() {
         addMouseListener(new MouseAdapter() {
             public void mouseEntered(MouseEvent evt) {
-                setColor(ResourceManager.getColor("accent"));
+                setColor(ResourceManager.getColor(ByteBoardTheme.ACCENT));
             }
 
             public void mouseExited(MouseEvent evt) {
@@ -41,10 +42,10 @@ public class ActivityBar extends InformationBar {
 
             public void mouseReleased(MouseEvent evt) {
                 ActivityBar activityBar = (ActivityBar) evt.getComponent();
-                System.out.printf("%n%s, %s, %s%n",
+                /*/System.out.printf("%n%s, %s, %s%n",
                         activityBar.userName.getName(),
                         activityBar.userProfile.getName(),
-                        questionID);
+                        questionID);*/
                 QnAForum.setContent(QnABoard.init(ProfileBoard.getCurrentUser(),
                         activityBar.userName.getName(),
                         activityBar.userProfile.getName(),
@@ -63,7 +64,7 @@ public class ActivityBar extends InformationBar {
 
     private void initUserName() {
         userName = getLabel("Questioner", SwingConstants.CENTER);
-        System.out.println("Instantiated Username: " + this);
+        //System.out.println("Instantiated Username: " + this);
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 1.0;

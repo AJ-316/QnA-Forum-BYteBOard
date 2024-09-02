@@ -2,6 +2,7 @@ package QnAForumInterface.MainPanelPackage;
 
 import CustomControls.SimpleScrollPane;
 import CustomControls.RoundedJPanel;
+import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
 
 import javax.swing.*;
@@ -14,7 +15,7 @@ public class MainPanelBody extends JPanel {
     private JTextArea contentBody;
 
     public MainPanelBody() {
-        setBackground(ResourceManager.getColor("main"));
+        setBackground(ResourceManager.getColor(ByteBoardTheme.MAIN));
         setOpaque(false);
         setLayout(new GridBagLayout());
 
@@ -88,10 +89,9 @@ public class MainPanelBody extends JPanel {
         content.setEditable(false);
         content.setOpaque(false);
         content.setBorder(null);
-        content.setCaretColor(ResourceManager.getColor("base"));
+        content.setCaretColor(ResourceManager.getColor(ByteBoardTheme.BASE));
         content.setFont(ResourceManager.getFont(fontLabel));
-        System.out.println("\u001B[33m" + content.getFont() + "\u001B[0m");
-        content.setBackground(ResourceManager.getColor("main_light"));
+        content.setBackground(ResourceManager.getColor(ByteBoardTheme.MAIN_LIGHT));
         content.setForeground(content.getCaretColor());
 
         return content;
@@ -99,9 +99,9 @@ public class MainPanelBody extends JPanel {
 
     private RoundedJPanel getContainer() {
         RoundedJPanel container = new RoundedJPanel();
-        container.setBackground(ResourceManager.getColor("main_light"));
+        container.setBackground(ResourceManager.getColor(ByteBoardTheme.MAIN_LIGHT));
         container.setBorder(BorderFactory.createEmptyBorder(25, 25, 25, 25));
-        container.setBorderColor(ResourceManager.getColor("main"));
+        container.setBorderColor(ResourceManager.getColor(ByteBoardTheme.MAIN));
         container.setCornerRadius(90);
         container.setLimitRadius(false);
         container.setLayout(new BorderLayout());
