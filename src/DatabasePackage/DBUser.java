@@ -42,6 +42,13 @@ public class DBUser extends DBOperation {
         return ops.findValuesBy(ops.matchByValue(key, emailOrUsername), "*")[0];
     }
 
+    public static void updateBytescore(String userID, int score) {
+        DBDataObject userData = ops.findValuesBy(ops.matchByValue(K_USER_ID, userID), K_USER_BYTESCORE)[0];
+
+        int newBytescore = Integer.parseInt(userData.getValue(K_USER_BYTESCORE)) + score;
+        ops.updateValueBy(ops.matchByValue(K_USER_ID, userID), K_USER_BYTESCORE, String.valueOf(newBytescore));
+    }
+
     public static void updateUser(String oldUserName, String userName, String userPassword, String userEmail, String userProfileIndex) {
         Map<String, String> keyValueMap = new HashMap<>();
 

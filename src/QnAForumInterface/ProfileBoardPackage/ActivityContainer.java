@@ -1,6 +1,6 @@
 package QnAForumInterface.ProfileBoardPackage;
 
-import CustomControls.RoundedJPanel;
+import CustomControls.CustomJPanel;
 import CustomControls.SimpleScrollPane;
 import QnAForumInterface.InformationBarPackage.ActivityBar;
 import QnAForumInterface.InterfaceEventPackage.InterfaceEventManager;
@@ -10,7 +10,7 @@ import Resources.ResourceManager;
 import javax.swing.*;
 import java.awt.*;
 
-public class ActivityContainer extends RoundedJPanel {
+public class ActivityContainer extends CustomJPanel {
 
     private JLabel noActivityLabel;
     private JPanel activityContainer;

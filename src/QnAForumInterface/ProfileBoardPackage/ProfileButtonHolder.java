@@ -1,7 +1,6 @@
 package QnAForumInterface.ProfileBoardPackage;
 
-import CustomControls.RoundedJPanel;
-import QnAForumInterface.InterfaceEventPackage.InterfaceEventListener;
+import CustomControls.CustomJPanel;
 import QnAForumInterface.InterfaceEventPackage.InterfaceEventManager;
 import QnAForumInterface.QnAForum;
 import Resources.ByteBoardTheme;
@@ -10,10 +9,9 @@ import Resources.ResourceManager;
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class ProfileButtonHolder extends RoundedJPanel {
+public class ProfileButtonHolder extends CustomJPanel {
 
     private JButton hideActivityBtn;
     private JButton viewActivityBtn;

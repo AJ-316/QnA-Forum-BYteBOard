@@ -4,7 +4,8 @@
  */
 package QnAForumInterface;
 
-import CustomControls.RoundedJPanel;
+import CustomControls.CustomJPanel;
+import CustomControls.DEBUG;
 import DatabasePackage.DBDataObject;
 import DatabasePackage.DBQuestion;
 import DatabasePackage.DBTag;
@@ -27,11 +28,11 @@ public class SearchBoard extends JPanel {
 
     private JLabel noResultLabel;
     private JButton profileBtn;
-    private CustomControls.RoundedJPanel resultContainer;
+    private CustomJPanel resultContainer;
     private JComboBox<String> search;
-    private CustomControls.RoundedJPanel searchContainer;
+    private CustomJPanel searchContainer;
     private JLabel searchIcon;
-    private CustomControls.RoundedJPanel tagHolder;
+    private CustomJPanel tagHolder;
     private JLabel tagText;
     private JPanel tagsContainer;
     private JPanel userContainer;
@@ -65,14 +66,14 @@ public class SearchBoard extends JPanel {
         userProfile = new JLabel();
         userName = new JLabel();
         profileBtn = new JButton();
-        searchContainer = new CustomControls.RoundedJPanel();
+        searchContainer = new CustomJPanel();
         searchIcon = new JLabel();
         search = new JComboBox<>();
         tagsContainer = new JPanel();
-        tagHolder = new CustomControls.RoundedJPanel();
+        tagHolder = new CustomJPanel();
         tagText = new JLabel();
         noResultLabel = new JLabel();
-        resultContainer = new CustomControls.RoundedJPanel();
+        resultContainer = new CustomJPanel();
 
         setBackground(ResourceManager.getColor(ByteBoardTheme.BASE));
         setMinimumSize(new Dimension(1280, 720));
@@ -330,7 +331,7 @@ public class SearchBoard extends JPanel {
 
     private void createTag(String text) {
 
-        RoundedJPanel tagHolder = new RoundedJPanel();
+        CustomJPanel tagHolder = new CustomJPanel();
         tagHolder.setBackground(ResourceManager.getColor(ByteBoardTheme.MAIN));
         tagHolder.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         tagHolder.setCornerRadius(90);
@@ -357,7 +358,7 @@ public class SearchBoard extends JPanel {
         }
 
         for (Component tagComponent : tags) {
-            String tag = ((JLabel) ((RoundedJPanel) tagComponent).getComponent(0)).getText();
+            String tag = ((JLabel) ((CustomJPanel) tagComponent).getComponent(0)).getText();
 
             // get questions and the questioner's data by tags
             DBDataObject[] tagData = DBTag.ops.joinValuesBy(DBTag.ops.matchByValue(DBTag.K_TAG, tag),
@@ -379,13 +380,12 @@ public class SearchBoard extends JPanel {
 
 //                UserDataObject userObject = (UserDataObject) Database.getData(UserDataObject.TABLE,
 //                        UserDataObject.userIDKey(), questionObject.get(QuestionDataObject.userIDKey()))[0];
-                System.out.println("\u001B[32mRESULT_BAR: " + tagObject);
+                DEBUG.printlnYellow(questionID);
                 addResultBar(
                         tagObject.getValue(DBUser.K_USER_NAME),
                         tagObject.getValue(DBUser.K_USER_PROFILE),
                         tagObject.getValue(DBQuestion.K_QUESTION_HEAD), questionID);
             }
-            System.out.println("\u001B[0mExa");
         }
 
         revalidate();
@@ -416,7 +416,7 @@ public class SearchBoard extends JPanel {
         Component[] tagComponents = tagsContainer.getComponents();
 
         for (Component tagComponent : tagComponents) {
-            RoundedJPanel tagHolder = (RoundedJPanel) tagComponent;
+            CustomJPanel tagHolder = (CustomJPanel) tagComponent;
             if (((JLabel) tagHolder.getComponent(0)).getText().equals(tag)) {
                 return;
             }

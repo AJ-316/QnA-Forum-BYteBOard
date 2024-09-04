@@ -8,10 +8,11 @@ public abstract class DBOperation {
     public static final String TABLE_KEY_DELIMITER = ":";
     public static final String KEY_VALUE_DELIMITER = "=";
     public static final String KEYS_DELIMITER = ",";
+    public static final String AND = " AND ";
     protected String[] keys;
     private final String table;
 
-    private Map<String, String> keyValueMap;
+    protected final Map<String, String> keyValueMap;
 
     public DBOperation(Map<String, String> keyValueMap, String table, String... keys) {
         this.keyValueMap = keyValueMap;
@@ -26,17 +27,15 @@ public abstract class DBOperation {
     public static void main(String[] args) {
         DatabaseManager.init();
         System.out.println("\u001B[33m");
-        DBDataObject[] tagData = DBTag.ops.joinValuesBy(DBTag.ops.matchByValue(DBTag.K_TAG, "B2"),
-                new String[]{null, DBQuestion.ops.matchByKey(DBQuestion.K_USER_ID, DBUser.ops.appendKeys(DBUser.K_USER_ID))},
-                DBTag.ops.appendKeys("*"),
-                DBQuestion.ops.appendKeys(DBQuestion.K_QUESTION_HEAD),
-                DBUser.ops.appendKeys(DBUser.K_USER_NAME, DBUser.K_USER_PROFILE));
 
         System.out.println("\u001B[0m");
 
         DatabaseManager.close();
     }
 
+    /**
+     * @param updateKeysByNewValues array of alternate keys and new values
+     * */
     public void updateValueBy(String condition, String... updateKeysByNewValues) {
         String[] keyValuePairs = pairByKeyValue(updateKeysByNewValues);
         DatabaseManager.update(getTable(), keyValuePairs, condition);
@@ -89,12 +88,7 @@ public abstract class DBOperation {
     public DBDataObject[] findValuesBy(boolean isDistinct, String condition, String... selectKeys) {
         String selectKeysFromTable = appendKeys(selectKeys);
 
-        DBDataObject[] dataSet = DatabaseManager.get(new String[]{selectKeysFromTable}, null, condition, isDistinct);
-
-        if(dataSet == null)
-            throw new RuntimeException("Cannot fetch DB to find values by input: " + selectKeysFromTable);
-
-        return dataSet;
+        return DatabaseManager.get(new String[]{selectKeysFromTable}, null, condition, isDistinct);
     }
 
     /**
@@ -300,18 +294,5 @@ public abstract class DBOperation {
     public String getValue(String key) {
         if(keyValueMap == null) return null;
         return keyValueMap.get(key);
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder builder = new StringBuilder(super.toString());
-        if(keyValueMap == null) return builder.toString();
-
-        builder.append("=> [");
-        for (String key : keyValueMap.keySet()) {
-            builder.append(key).append("=").append(keyValueMap.get(key)).append(", ");
-        }
-
-        return builder.delete(builder.length()-2, builder.length()).append("]").toString();
     }
 }

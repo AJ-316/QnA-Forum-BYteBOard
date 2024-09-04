@@ -4,6 +4,7 @@
  */
 package QnAForumInterface;
 
+import CustomControls.CustomJPanel;
 import CustomControls.SimpleScrollPane;
 import DatabasePackage.DBAnswer;
 import DatabasePackage.DBQuestion;
@@ -27,25 +28,25 @@ public class AskBoard extends JPanel {
     private JPanel askContainer;
     private JButton backBtn;
     private JTextArea body;
-    private CustomControls.RoundedJPanel bodyContainer;
+    private CustomJPanel bodyContainer;
     private JLabel bodyLabel;
     private SimpleScrollPane bodyScrollPane;
     private JPanel buttonHolder;
-    private CustomControls.RoundedJPanel container;
+    private CustomJPanel container;
     private SimpleScrollPane containerScrollPane;
     private JTextArea head;
-    private CustomControls.RoundedJPanel headContainer;
+    private CustomJPanel headContainer;
     private JLabel headLabel;
     private SimpleScrollPane headScrollPane;
     private JButton searchBtn;
     private JButton submitBtn;
     private JComboBox<String> tag;
-    private CustomControls.RoundedJPanel tagContainer;
+    private CustomJPanel tagContainer;
     private JLabel tagText;
     private JPanel tagsDisplay;
     private JLabel tagsErrorLabel;
     private JLabel tagsLabel;
-    private CustomControls.RoundedJPanel tagsRoundedPanel;
+    private CustomJPanel tagsRoundedPanel;
     private JLabel titleLabel;
     private JPanel userHolder;
     private JLabel userName;
@@ -112,8 +113,21 @@ public class AskBoard extends JPanel {
     }
 
     public void addTag(String tag) {
+
         tag = tag.replaceAll(" ", "");
         String[] tags = tagText.getText().split(" \\| ");
+        if(tag.length() > 10) {
+            tagsErrorLabel.setText("Tag too long!");
+            tagsErrorLabel.setVisible(true);
+            return;
+        }
+
+        if(tags.length >= 5) {
+            tagsErrorLabel.setText("Maximum 5 Tags allowed!");
+            tagsErrorLabel.setVisible(true);
+            return;
+        }
+
         boolean containsTag = false;
 
         for (String checkTag : tags) {
@@ -141,7 +155,7 @@ public class AskBoard extends JPanel {
     private void initComponents() {
         GridBagConstraints gridBagConstraints;
 
-        container = new CustomControls.RoundedJPanel();
+        container = new CustomJPanel();
         userHolder = new JPanel();
         userProfile = new JLabel();
         userName = new JLabel();
@@ -154,21 +168,21 @@ public class AskBoard extends JPanel {
         containerScrollPane.getVerticalScrollBar().setUnitIncrement(10);
         askContainer = new JPanel();
         headLabel = new JLabel();
-        headContainer = new CustomControls.RoundedJPanel();
+        headContainer = new CustomJPanel();
         headScrollPane = new SimpleScrollPane();
         headScrollPane.getVerticalScrollBar().setUnitIncrement(2);
         head = new JTextArea();
         bodyLabel = new JLabel();
-        bodyContainer = new CustomControls.RoundedJPanel();
+        bodyContainer = new CustomJPanel();
         bodyScrollPane = new SimpleScrollPane(null);
         bodyScrollPane.getVerticalScrollBar().setUnitIncrement(5);
         body = new JTextArea();
         tagsErrorLabel = new JLabel();
         tagsDisplay = new JPanel();
         tagsLabel = new JLabel();
-        tagsRoundedPanel = new CustomControls.RoundedJPanel();
+        tagsRoundedPanel = new CustomJPanel();
         tagText = new JLabel();
-        tagContainer = new CustomControls.RoundedJPanel();
+        tagContainer = new CustomJPanel();
         tag = new JComboBox<>();
 
         setBackground(ResourceManager.getColor(ByteBoardTheme.BASE));
@@ -422,7 +436,6 @@ public class AskBoard extends JPanel {
         askContainer.add(bodyContainer, gridBagConstraints);
 
         tagsErrorLabel.setForeground(ResourceManager.getColor(ByteBoardTheme.ERROR));
-        tagsErrorLabel.setText("Add atleast 3 tags!");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
@@ -543,6 +556,7 @@ public class AskBoard extends JPanel {
                 tag.repaint();
                 revalidate();
                 repaint();
+                tagsErrorLabel.setVisible(false);
             }
         });
 
@@ -579,6 +593,7 @@ public class AskBoard extends JPanel {
     private void submitBtnActionPerformed(ActionEvent evt) {
         String[] tags = tagText.getText().split(" \\| ");
         if (isAskBoard() && tags.length < 3) {
+            tagsErrorLabel.setText("Add at least 3 Tags!");
             tagsErrorLabel.setVisible(true);
             return;
         }

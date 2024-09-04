@@ -4,25 +4,22 @@ import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
 
 import javax.swing.*;
-import javax.swing.border.AbstractBorder;
 import java.awt.*;
-import java.awt.geom.RoundRectangle2D;
-import java.awt.image.BufferedImage;
 
 /**
  * @author AJ
  */
-public class RoundedJPanel extends JPanel {
+public class CustomJPanel extends JPanel {
 
-    private static final int NONE = 0;
-    private static final int DROP_SHADOW = 1;
-    private static final int OFFSET_SHADOW = 2;
+    public static final int NONE = 0;
+    public static final int DROP_SHADOW = 1;
+    public static final int OFFSET_SHADOW = 2;
     private int cornerRadius;
     private boolean limitRadius;
     private int shadowState;
     private Color borderColor;
 
-    public RoundedJPanel() {
+    public CustomJPanel() {
         initComponents();
         limitRadius = true;
         shadowState = DROP_SHADOW;
@@ -46,7 +43,6 @@ public class RoundedJPanel extends JPanel {
         g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
         g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 
-//        g2d.setStroke(new BasicStroke(2));
         g2d.setColor(new Color(0, 0, 0, 15));
 
         int w = getWidth() - 1;
@@ -96,6 +92,10 @@ public class RoundedJPanel extends JPanel {
 
     public void setLimitRadius(boolean limitRadius) {
         this.limitRadius = limitRadius;
+    }
+
+    public void setShadowState(int shadowState) {
+        this.shadowState = shadowState;
     }
 
     private void initComponents() {

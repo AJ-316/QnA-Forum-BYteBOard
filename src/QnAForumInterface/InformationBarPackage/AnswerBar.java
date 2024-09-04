@@ -1,7 +1,6 @@
 package QnAForumInterface.InformationBarPackage;
 
 
-import CustomControls.RoundedJPanel;
 import QnAForumInterface.QnABoard;
 import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
@@ -20,6 +19,7 @@ public class AnswerBar extends InformationBar {
     private JLabel responderAnswer;
     private JLabel responderName;
     private JLabel responderProfile;
+    private String answerID;
     private Color defaultBackground;
 
     protected void init() {
@@ -87,7 +87,8 @@ public class AnswerBar extends InformationBar {
             public void mouseReleased(MouseEvent evt) {
                 if (isSelected()) return;
                 AnswerBar.setSelected(bar);
-                QnABoard.CurrentInstance.setAnswerPanelContent(responderName.getName(), responderProfile.getName(), responderAnswer.getText());
+                QnABoard.CurrentInstance.setAnswerPanelContent(responderName.getName(),
+                        responderProfile.getName(), responderAnswer.getText(), answerID);
             }
         });
     }
@@ -96,10 +97,11 @@ public class AnswerBar extends InformationBar {
         return SELECTED_ANSWER_BAR != null && SELECTED_ANSWER_BAR.equals(this);
     }
 
-    public void setContent(String responderName, String responderProfileIndex, String answerBody) {
+    public void setContent(String responderName, String responderProfileIndex, String answerBody, String answerID) {
         this.responderName.setText(responderName + ":");
         this.responderName.setName(responderName);
         this.responderAnswer.setText(answerBody);
+        this.answerID = answerID;
         ResourceManager.setProfileIcon(responderProfileIndex, responderProfile, ResourceManager.SMALL);
     }
 

@@ -4,9 +4,12 @@
  */
 package QnAForumInterface;
 
+import CustomControls.CustomJPanel;
+import CustomControls.DEBUG;
 import CustomControls.SimpleScrollPane;
 import DatabasePackage.*;
 import QnAForumInterface.InformationBarPackage.AnswerBar;
+import QnAForumInterface.InterfaceEventPackage.InterfaceEventManager;
 import QnAForumInterface.MainPanelPackage.MainPanel;
 import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
@@ -22,18 +25,30 @@ public class QnABoard extends JPanel {
     public static QnABoard CurrentInstance;
     private MainPanel answerPanel;
     private JPanel answersContainer;
-    private CustomControls.RoundedJPanel answersContainerHolder;
-    private SimpleScrollPane answersContainerScrollPane;
+    private CustomJPanel answersContainerHolder;
     private JLabel noRespondersLabel;
     private OptionsPanel optionsPanel;
     private MainPanel questionPanel;
     private String questionID;
+    private String answerID;
+    private String viewerUserID;
+    private String viewerUserName;
 
     public QnABoard() {
         initComponents();
         clearAnswerBoards();
         displayQuestionPanel();
         CurrentInstance = this;
+
+        InterfaceEventManager.addListener("Update." + MainPanel.CONTENT_QUESTION + "Vote", ec -> {
+            String bytescore = DBVote.ops.voteQuestion(questionID, viewerUserID, (String) ec[0]);
+            questionPanel.updateByteScore(bytescore);
+        });
+
+        InterfaceEventManager.addListener("Update." + MainPanel.CONTENT_ANSWER + "Vote", ec -> {
+            String bytescore = DBVote.ops.voteAnswer(answerID, viewerUserID, (String) ec[0]);
+            answerPanel.updateByteScore(bytescore);
+        });
     }
 
     public static QnABoard init(String username, String questioner, String questionerProfileIndex, String questionID) {
@@ -44,6 +59,11 @@ public class QnABoard extends JPanel {
         DBDataObject loggedUserData = DBUser.accessUser(username, false, true);
 
         QnABoard board = new QnABoard();
+        if(username.equals(questioner))
+            board.questionPanel.disableVotes();
+
+        board.viewerUserName = username;
+        board.viewerUserID = loggedUserData.getValue(DBUser.K_USER_ID);
         board.questionID = questionID;
         board.optionsPanel.setUserInfo(username, loggedUserData.getValue(DBUser.K_USER_PROFILE), !questioner.equals(username));
 
@@ -55,22 +75,32 @@ public class QnABoard extends JPanel {
             tags[i] = tagsData[i].getValue(DBTag.K_TAG);
         }
 
+        DBDataObject[] voteData = DBVote.ops.findVotesBy(DBVote.K_QUESTION_ID,
+                board.viewerUserID, questionID, DBVote.K_VOTE_TYPE);
+        String lastVoteType = DBVote.V_VOTE_NONE;
+
+        if(voteData.length != 0)
+            lastVoteType = voteData[0].getValue(DBVote.K_VOTE_TYPE);
+
         board.questionPanel.setContent(questioner, questionerProfileIndex, tags,
                 questionData.getValue(DBQuestion.K_QUESTION_HEAD),
-                questionData.getValue(DBQuestion.K_QUESTION_BODY));
+                questionData.getValue(DBQuestion.K_QUESTION_BODY),
+                questionData.getValue(DBQuestion.K_QUESTION_BYTESCORE), lastVoteType);
 
         // get all the answers of matching questionID
         DBDataObject[] answersOfQuestion = DBAnswer.ops.joinValuesBy(
                 DBAnswer.ops.matchByValue(DBAnswer.K_QUESTION_ID, questionID),
                 new String[] {DBAnswer.ops.matchByKey(DBAnswer.K_USER_ID, DBUser.ops.appendKeys(DBUser.K_USER_ID))},
-                DBAnswer.ops.appendKeys(DBAnswer.K_ANSWER), DBUser.ops.appendKeys(DBUser.K_USER_NAME, DBUser.K_USER_PROFILE));
+                DBAnswer.ops.appendKeys(DBAnswer.K_ANSWER, DBAnswer.K_ANSWER_ID),
+                DBUser.ops.appendKeys(DBUser.K_USER_NAME, DBUser.K_USER_PROFILE));
 
         if (answersOfQuestion != null) {
             for (DBDataObject answerData : answersOfQuestion) {
                 board.addAnswerBoard(
                         answerData.getValue(DBUser.K_USER_NAME),
                         answerData.getValue(DBUser.K_USER_PROFILE),
-                        answerData.getValue(DBAnswer.K_ANSWER));
+                        answerData.getValue(DBAnswer.K_ANSWER),
+                        answerData.getValue(DBAnswer.K_ANSWER_ID));
             }
         }
         System.out.println("\u001b[0m");
@@ -87,16 +117,31 @@ public class QnABoard extends JPanel {
                 CurrentInstance.questionID));
     }
 
-    public void setAnswerPanelContent(String responderName, String responderProfileIndex, String answerBody) {
+    public void setAnswerPanelContent(String responderName, String responderProfileIndex, String answerBody, String answerID) {
+        if(responderName.equals(viewerUserName)) {
+            answerPanel.disableVotes();
+        }
+
+        DBDataObject answerData = DBAnswer.ops.findValuesBy(
+                DBAnswer.ops.matchByValue(DBAnswer.K_ANSWER_ID, answerID), DBAnswer.K_ANSWER_BYTESCORE)[0];
+
+        DBDataObject[] voteData = DBVote.ops.findVotesBy(DBVote.K_ANSWER_ID, viewerUserID, answerID, DBVote.K_VOTE_TYPE);
+        String lastVotedType = DBVote.V_VOTE_NONE;
+        if (voteData.length != 0)
+            lastVotedType = voteData[0].getValue(DBVote.K_VOTE_TYPE);
+
         answerPanel.setVisible(true);
         questionPanel.setVisible(false);
-
-        answerPanel.setContent(responderName, responderProfileIndex, null, null, answerBody);
+        this.answerID = answerID;
+        answerPanel.setContent(responderName, responderProfileIndex,
+                null, null, answerBody, answerData.getValue(DBAnswer.K_ANSWER_BYTESCORE), lastVotedType);
     }
 
     public void displayQuestionPanel() {
         answerPanel.setVisible(false);
         questionPanel.setVisible(true);
+        revalidate();
+        repaint();
     }
 
     public void clearAnswerBoards() {
@@ -128,11 +173,11 @@ public class QnABoard extends JPanel {
         repaint();
     }
 
-    public void addAnswerBoard(String responderName, String responderProfileIndex, String answerBody) {
+    public void addAnswerBoard(String responderName, String responderProfileIndex, String answerBody, String answerID) {
         this.noRespondersLabel.setVisible(false);
 
         AnswerBar answerBar = new AnswerBar();
-        answerBar.setContent(responderName, responderProfileIndex, answerBody);
+        answerBar.setContent(responderName, responderProfileIndex, answerBody, answerID);
         this.answersContainer.add(answerBar);
 
         updateAnswerBoardColors();
@@ -158,14 +203,14 @@ public class QnABoard extends JPanel {
     private void initComponents() {
         GridBagConstraints gridBagConstraints;
 
-        questionPanel = new MainPanel();
-        questionPanel.setContentType(1);
-        answerPanel = new MainPanel();
-        answerPanel.setContentType(0);
+        questionPanel = new MainPanel(MainPanel.CONTENT_QUESTION);
+        questionPanel.setContentType(MainPanel.CONTENT_QUESTION);
+        answerPanel = new MainPanel(MainPanel.CONTENT_ANSWER);
+        answerPanel.setContentType(MainPanel.CONTENT_ANSWER);
         optionsPanel = new OptionsPanel();
-        answersContainerHolder = new CustomControls.RoundedJPanel();
+        answersContainerHolder = new CustomJPanel();
         noRespondersLabel = new JLabel();
-        answersContainerScrollPane = new SimpleScrollPane();
+        SimpleScrollPane answersContainerScrollPane = new SimpleScrollPane();
         answersContainerScrollPane.getVerticalScrollBar().setUnitIncrement(8);
         answersContainer = new JPanel();
 

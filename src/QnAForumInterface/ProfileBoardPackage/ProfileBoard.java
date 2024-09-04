@@ -85,6 +85,7 @@ public class ProfileBoard extends JPanel {
 
         CURRENT_USER = username;
         board.displayPanel.setUsername(username);
+        board.displayPanel.setUserBytescore(userDataObject.getValue(DBUser.K_USER_BYTESCORE));
         board.displayPanel.setUserEmail(userDataObject.getValue(DBUser.K_EMAIL));
         board.editPanel.getProfileChooser().getProfilePane(Integer.parseInt(userProfileIndex)).setSelected();
 
@@ -107,7 +108,7 @@ public class ProfileBoard extends JPanel {
 
         // get all questionIDs answered by matched user
         DBDataObject[] answeredQuestionsData = DBAnswer.ops.joinValuesBy(
-                DBAnswer.ops.matchByValue(DBAnswer.K_USER_ID, "7"),
+                DBAnswer.ops.matchByValue(DBAnswer.K_USER_ID, userID),
                 new String[] {
                         DBAnswer.ops.matchByKey(DBAnswer.K_QUESTION_ID, DBQuestion.ops.appendKeys(DBQuestion.K_QUESTION_ID)), // join on a.qid = q.qid
                         DBQuestion.ops.matchByKey(DBQuestion.K_USER_ID, DBUser.ops.appendKeys(DBUser.K_USER_ID))}, // join on q.uid = u.uid

@@ -177,7 +177,7 @@ public abstract class ByteBoardTheme {
             loadFontAttribute("Inter_Regular",  "14, 18, 20, 22, 24, 26");
             loadFontAttribute("Inter_SemiBold", "16, 20, 22, 24, 26, 32, 36, 48");
             loadFontAttribute("Inter_Thin",     "48");
-            loadFontAttribute("Inter_Bold",     "28, 32, 36");
+            loadFontAttribute("Inter_Bold",     "22, 24, 28, 32, 36");
             loadFontAttribute("Carltine_Bold",  "2 - 28, 32, 36");
         }
     };

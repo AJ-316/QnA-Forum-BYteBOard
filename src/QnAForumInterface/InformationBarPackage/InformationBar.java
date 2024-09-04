@@ -1,6 +1,6 @@
 package QnAForumInterface.InformationBarPackage;
 
-import CustomControls.RoundedJPanel;
+import CustomControls.CustomJPanel;
 import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
 
@@ -9,7 +9,7 @@ import java.awt.*;
 
 public abstract class InformationBar extends JPanel {
 
-    protected RoundedJPanel container;
+    protected CustomJPanel container;
 
     public InformationBar() {
         setBackground(ResourceManager.getColor(ByteBoardTheme.MAIN_LIGHT));
@@ -18,9 +18,10 @@ public abstract class InformationBar extends JPanel {
         setOpaque(false);
         setLayout(new BorderLayout());
 
-        container = new RoundedJPanel();
+        container = new CustomJPanel();
         container.setBackground(ResourceManager.getColor(ByteBoardTheme.MAIN));
         container.setBorderColor(ResourceManager.getColor(ByteBoardTheme.MAIN_DARK));
+        container.setShadowState(CustomJPanel.NONE);
         container.setCornerRadius(75);
         container.setLimitRadius(false);
         container.setLayout(new GridBagLayout());

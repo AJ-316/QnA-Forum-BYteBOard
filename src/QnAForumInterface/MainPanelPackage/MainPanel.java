@@ -1,6 +1,6 @@
 package QnAForumInterface.MainPanelPackage;
 
-import CustomControls.RoundedJPanel;
+import CustomControls.CustomJPanel;
 import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
 
@@ -9,18 +9,21 @@ import java.awt.*;
 
 public class MainPanel extends JPanel {
 
-    private final RoundedJPanel container;
+    public static final String CONTENT_QUESTION = "Question";
+    public static final String CONTENT_ANSWER = "Answer";
+
+    private final CustomJPanel container;
     private final MainPanelHeader mainHeader;
     private final MainPanelBody mainBody;
 
-    public MainPanel() {
-        container = new RoundedJPanel();
-        mainHeader = new MainPanelHeader();
+    public MainPanel(String contentType) {
+        container = new CustomJPanel();
+        mainHeader = new MainPanelHeader(contentType);
         mainBody = new MainPanelBody();
 
         init();
 
-        setContentType(0);
+        setContentType(MainPanel.CONTENT_ANSWER);
     }
 
     private void init() {
@@ -60,30 +63,34 @@ public class MainPanel extends JPanel {
         container.add(mainBody, gridBagConstraints);
     }
 
-    public void setContent(String contentUserName, String contentUserProfileIndex, String[] tags, String heading, String body) {
-        mainHeader.setContent(contentUserName, contentUserProfileIndex, tags);
+    public void setContent(String contentUserName, String contentUserProfileIndex, String[] tags,
+                           String heading, String body, String contentBytescore, String lastVoteType) {
+
+        mainHeader.setContent(contentUserName, contentUserProfileIndex, tags, contentBytescore, lastVoteType);
 
         mainBody.setContentBody(body);
         if (tags == null) {
-            setContentType(0);
+            setContentType(MainPanel.CONTENT_ANSWER);
             return;
         }
 
-        setContentType(1);
+        setContentType(MainPanel.CONTENT_QUESTION);
         mainBody.setContentHead(heading);
 
-        System.out.println("Setting content: name:" + contentUserName + ", dp:" + contentUserProfileIndex + ", heading:" + heading + ", body:"+body+"\u001b[0m");
+        System.out.println("Setting content: name:" + contentUserName + ", dp:" + contentUserProfileIndex + ", heading:" + heading + ", body:"+body+ ", contentScore: " + contentBytescore + ", lastVoteType: " + lastVoteType + "\u001b[0m");
     }
 
-    /**
-     * Sets visibility of tags and "view question" button
-     * depending on content type
-     *
-     * @param type 0 = Responder, 1 = Questioner
-     */
-    public void setContentType(int type) {
+    public void setContentType(String type) {
         mainHeader.setContentType(type);
         mainBody.setContentType(type);
+    }
+
+    public void updateByteScore(String bytescore) {
+        mainHeader.setContentBytescore(bytescore);
+    }
+
+    public void disableVotes() {
+        mainHeader.disableVotes();
     }
 
     public String getContentUser() {

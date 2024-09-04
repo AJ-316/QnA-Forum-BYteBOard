@@ -1,9 +1,8 @@
 package QnAForumInterface.ProfileBoardPackage;
 
-import CustomControls.RoundedJPanel;
+import CustomControls.CustomJPanel;
 import QnAForumInterface.AskBoard;
 import QnAForumInterface.InterfaceEventPackage.InterfaceEventManager;
-import QnAForumInterface.QnABoard;
 import QnAForumInterface.QnAForum;
 import QnAForumInterface.SearchBoard;
 import Resources.ByteBoardTheme;
@@ -32,10 +31,10 @@ public class UserProfileDisplayPanel extends JPanel {
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.gridx = 0;
         constraints.gridy = 0;
-        constraints.gridheight = 2;
+        constraints.gridheight = 1;
         add(userProfile = new JLabel(), constraints);
 
-        RoundedJPanel displayHolder = new RoundedJPanel();
+        CustomJPanel displayHolder = new CustomJPanel();
         displayHolder.setLayout(new BoxLayout(displayHolder, BoxLayout.Y_AXIS));
         displayHolder.setBackground(ResourceManager.getColor(ByteBoardTheme.MAIN));
         displayHolder.setCornerRadius(90);
@@ -46,22 +45,24 @@ public class UserProfileDisplayPanel extends JPanel {
         username.setBorder(BorderFactory.createEmptyBorder(40, 40, 10, 60));
         displayHolder.add(username, constraints);
 
-        userEmail = new JLabel("EmailID");
-        userEmail.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_MAIN_DARK));
-        userEmail.setFont(ResourceManager.getFont("inter_semibold.22"));
-        userEmail.setBorder(BorderFactory.createEmptyBorder(10, 40, 5, 60));
-        displayHolder.add(userEmail);
-
         int bytes = 0;
 
-        userBytescore = new JLabel(bytes + " BYtes");
-        userBytescore.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_MAIN_DARK));
-        userBytescore.setFont(ResourceManager.getFont("inter_semibold.22"));
-        userBytescore.setBorder(BorderFactory.createEmptyBorder(5, 40, 40, 60));
+        userBytescore = new JLabel(String.valueOf(bytes));
+        userBytescore.setIcon(ResourceManager.getIcon("bytescore_icon", ResourceManager.SMALL));
+        userBytescore.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_LIGHT));
+        userBytescore.setFont(ResourceManager.getFont("inter_semibold.20"));
+        userBytescore.setBorder(BorderFactory.createEmptyBorder(0, 40, 0, 60));
         displayHolder.add(userBytescore, constraints);
 
+        userEmail = new JLabel("EmailID");
+        userEmail.setIcon(ResourceManager.getColoredIcon("email",
+                ResourceManager.getColor(ByteBoardTheme.MAIN_DARK), null,ResourceManager.SMALL));
+        userEmail.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_LIGHT));
+        userEmail.setFont(ResourceManager.getFont("inter_semibold.20"));
+        userEmail.setBorder(BorderFactory.createEmptyBorder(0, 40, 40, 60));
+        displayHolder.add(userEmail);
+
         constraints.gridx = 1;
-        constraints.gridy = 1;
         constraints.insets = new Insets(25, 40, 25, 50);
         add(displayHolder, constraints);
 
@@ -85,6 +86,10 @@ public class UserProfileDisplayPanel extends JPanel {
 
     public void setUsername(String username) {
         this.username.setText(username);
+    }
+
+    public void setUserBytescore(String bytescore) {
+        this.userBytescore.setText(bytescore);
     }
 
     public void setUserEmail(String userEmail) {

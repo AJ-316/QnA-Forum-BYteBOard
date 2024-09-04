@@ -42,10 +42,6 @@ public class ActivityBar extends InformationBar {
 
             public void mouseReleased(MouseEvent evt) {
                 ActivityBar activityBar = (ActivityBar) evt.getComponent();
-                /*/System.out.printf("%n%s, %s, %s%n",
-                        activityBar.userName.getName(),
-                        activityBar.userProfile.getName(),
-                        questionID);*/
                 QnAForum.setContent(QnABoard.init(ProfileBoard.getCurrentUser(),
                         activityBar.userName.getName(),
                         activityBar.userProfile.getName(),

@@ -1,6 +1,6 @@
 package QnAForumInterface.ProfileBoardPackage;
 
-import CustomControls.RoundedJPanel;
+import CustomControls.CustomJPanel;
 import CustomControls.SimpleScrollPane;
 import DatabasePackage.DBUser;
 import DatabasePackage.EncryptionUtils;
@@ -251,7 +251,7 @@ public class UserProfileEditPanel extends JPanel {
         return button;
     }
 
-    public static class UserProfileChooser extends RoundedJPanel {
+    public static class UserProfileChooser extends CustomJPanel {
 
         private final JPanel profilesContainer = new JPanel();
 

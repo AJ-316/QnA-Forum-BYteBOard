@@ -5,7 +5,7 @@
 package QnAForumInterface;
 
 
-import CustomControls.RoundedJPanel;
+import CustomControls.CustomJPanel;
 import QnAForumInterface.ProfileBoardPackage.ProfileBoard;
 import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
@@ -59,7 +59,7 @@ public class AuthenticationForm extends JFrame {
         GridBagConstraints gridBagConstraints;
 
         JPanel contentPane = new JPanel();
-        RoundedJPanel roundedJPanel1 = new RoundedJPanel();
+        CustomJPanel customJPanel1 = new CustomJPanel();
         signupForm = new QnAForumInterface.SignupForm();
         loginForm = new QnAForumInterface.LoginForm();
 
@@ -70,9 +70,9 @@ public class AuthenticationForm extends JFrame {
         contentPane.setBackground(ResourceManager.getColor(ByteBoardTheme.BASE));
         contentPane.setLayout(new GridBagLayout());
 
-        roundedJPanel1.setBackground(ResourceManager.getColor(ByteBoardTheme.MAIN));
-        roundedJPanel1.setCornerRadius(120);
-        roundedJPanel1.setLayout(new BorderLayout());
+        customJPanel1.setBackground(ResourceManager.getColor(ByteBoardTheme.MAIN));
+        customJPanel1.setCornerRadius(120);
+        customJPanel1.setLayout(new BorderLayout());
 
         JLabel name = new JLabel();
         name.setBackground(ResourceManager.getColor(ByteBoardTheme.BASE));
@@ -81,14 +81,14 @@ public class AuthenticationForm extends JFrame {
         name.setIcon(ResourceManager.getIcon("byteboard/byteboard-logo-transparent", -384));
         name.setBorder(BorderFactory.createEmptyBorder(75, 75, 75, 75));
         name.setFont(ResourceManager.getFont("carltine_bold_italic.48"));
-        roundedJPanel1.add(name, BorderLayout.CENTER);
+        customJPanel1.add(name, BorderLayout.CENTER);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        contentPane.add(roundedJPanel1, gridBagConstraints);
+        contentPane.add(customJPanel1, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;

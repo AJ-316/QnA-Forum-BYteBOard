@@ -1,5 +1,6 @@
 package QnAForumInterface.ProfileBoardPackage;
 
+import CustomControls.CustomJPanel;
 import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
 
@@ -15,7 +16,7 @@ public class ProfilePane extends JPanel {
 
     private static ProfilePane SELECTED_PANE;
     private JLabel profileIcon;
-    private CustomControls.RoundedJPanel roundedPane;
+    private CustomJPanel roundedPane;
 
     public ProfilePane() {
         initComponents();
@@ -29,7 +30,7 @@ public class ProfilePane extends JPanel {
 
     private void initComponents() {
 
-        roundedPane = new CustomControls.RoundedJPanel();
+        roundedPane = new CustomJPanel();
         profileIcon = new JLabel();
 
         setOpaque(false);

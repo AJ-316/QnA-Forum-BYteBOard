@@ -9,6 +9,6 @@ public class Main {
     public static void main(String[] args) {
         ResourceManager.init();
         DatabaseManager.init();
-        AuthenticationForm.directAccess("Example1");
+        AuthenticationForm.init(true);
     }
 }

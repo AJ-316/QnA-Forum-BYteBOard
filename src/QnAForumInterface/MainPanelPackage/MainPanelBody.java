@@ -1,7 +1,7 @@
 package QnAForumInterface.MainPanelPackage;
 
 import CustomControls.SimpleScrollPane;
-import CustomControls.RoundedJPanel;
+import CustomControls.CustomJPanel;
 import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
 
@@ -10,7 +10,7 @@ import java.awt.*;
 
 public class MainPanelBody extends JPanel {
 
-    private RoundedJPanel containerHead;
+    private CustomJPanel containerHead;
     private JTextArea contentHead;
     private JTextArea contentBody;
 
@@ -72,7 +72,7 @@ public class MainPanelBody extends JPanel {
         contentHeadScrollPane.setViewportView(contentHead);
         contentHeadScrollPane.getViewport().setOpaque(false);
         contentHeadScrollPane.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));*/
-        RoundedJPanel containerBody = getContainer();
+        CustomJPanel containerBody = getContainer();
 
         contentBody = getContent("Body...", "inter_semibold.24");
         SimpleScrollPane contentScrollPane = getContentScrollPane(4, 480, 0, contentBody);
@@ -97,11 +97,12 @@ public class MainPanelBody extends JPanel {
         return content;
     }
 
-    private RoundedJPanel getContainer() {
-        RoundedJPanel container = new RoundedJPanel();
+    private CustomJPanel getContainer() {
+        CustomJPanel container = new CustomJPanel();
         container.setBackground(ResourceManager.getColor(ByteBoardTheme.MAIN_LIGHT));
         container.setBorder(BorderFactory.createEmptyBorder(25, 25, 25, 25));
         container.setBorderColor(ResourceManager.getColor(ByteBoardTheme.MAIN));
+        container.setShadowState(CustomJPanel.NONE);
         container.setCornerRadius(90);
         container.setLimitRadius(false);
         container.setLayout(new BorderLayout());
@@ -124,8 +125,8 @@ public class MainPanelBody extends JPanel {
         return contentScrollPane;
     }
 
-    public void setContentType(int type) {
-        containerHead.setVisible(type != 0);
+    public void setContentType(String type) {
+        containerHead.setVisible(type.equals(MainPanel.CONTENT_QUESTION));
     }
 
     public String getContentBody() {

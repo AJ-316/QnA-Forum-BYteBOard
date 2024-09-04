@@ -1,5 +1,7 @@
 package DatabasePackage;
 
+import CustomControls.DEBUG;
+
 import java.sql.*;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -100,14 +102,13 @@ public class DatabaseManager {
 
         if (condition != null) {
             query.append("WHERE ");
-            if (condition.contains(PARAMETER_VALUE)) {
-                parameterValues.put(paramIndex, getParameterValue(condition));
+            while (condition.contains(PARAMETER_VALUE)) {
+                parameterValues.put(paramIndex++, getParameterValue(condition));
                 condition = removeParameterValue(condition);
             }
             query.append(condition);
         }
 
-        System.out.println(query);
         try (PreparedStatement preparedStatement = connection.prepareStatement(query.toString())) {
 
             for (int i : parameterValues.keySet()) {
@@ -120,7 +121,7 @@ public class DatabaseManager {
             e.printStackTrace();
         }
 
-        System.out.println(query);
+        DEBUG.printlnBlue(("QUERY: " + query));
     }
 
     public static String add(String table, String[] keys, String[] values, String whereCondition) {
@@ -165,7 +166,7 @@ public class DatabaseManager {
             e.printStackTrace();
         }
 
-        System.out.println(query);
+        DEBUG.printlnBlue(("QUERY: " + query));
         return generatedKey;
     }
 
@@ -215,15 +216,13 @@ public class DatabaseManager {
         if (whereCondition != null) {
             query.append("WHERE ");
 
-            if (whereCondition.contains(PARAMETER_VALUE)) {
-                parameterValues.put(lastParamIndex + 1, getParameterValue(whereCondition));
+            while (whereCondition.contains(PARAMETER_VALUE)) {
+                parameterValues.put(++lastParamIndex, getParameterValue(whereCondition));
                 whereCondition = removeParameterValue(whereCondition);
             }
 
             query.append(whereCondition);
         }
-
-        System.out.println(query);
 
         DBDataObject[] dbObjects = null;
 
@@ -238,7 +237,6 @@ public class DatabaseManager {
                 ResultSetMetaData metaData = resultSet.getMetaData();
 
                 resultSet.last();
-                System.out.println("ROWS COUNT: " + resultSet.getRow());
                 dbObjects = new DBDataObject[resultSet.getRow()];
                 for (int i = 0; i < dbObjects.length; i++) {
                     dbObjects[i] = new DBDataObject();
@@ -249,21 +247,18 @@ public class DatabaseManager {
                 int dbPtr = 0;
                 int columnCount = metaData.getColumnCount();
                 while (resultSet.next()) {
-                    System.out.print("ADDING ROW:\n\t=> ");
                     for (int i = 1; i <= columnCount; i++) {
-                        System.out.print(metaData.getColumnName(i) + "=" + resultSet.getString(i) + ", ");
                         dbObjects[dbPtr].addKeyValue(metaData.getColumnName(i), resultSet.getString(i));
                     }
                     dbPtr++;
                 }
-                System.out.println();
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        System.out.println(query);
-        System.out.println(Arrays.toString(dbObjects));
+        DEBUG.printlnBlue(("QUERY: " + query));
+        // System.out.println(Arrays.toString(dbObjects));
         return dbObjects;
     }
 

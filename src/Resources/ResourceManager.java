@@ -21,7 +21,7 @@ public class ResourceManager {
 
     public static final int LARGE = 256;
     public static final int REGULAR = 128;
-    public static final int SMALL = 50;
+    public static final int SMALL = 48;
     public static final int MINI = 32;
     public static final int MICRO = 24;
 
@@ -111,8 +111,24 @@ public class ResourceManager {
         return icon;
     }
 
+    public static Icon getColoredIcon(String label, Color blackRecolor, Color whiteRecolor, int size) {
+        String key = "QnAForum.icon." + label + "_" +
+                (blackRecolor == null ? "" : ("_" + blackRecolor.getRGB())) +
+                (whiteRecolor == null ? "" : ("_" + whiteRecolor.getRGB())) + "." + size;
+
+        Icon icon = UIManager.getIcon(key);
+        if(icon != null)
+            return icon;
+
+        if((icon = IconLoader.getRecoloredIcon(label, blackRecolor, whiteRecolor, size)) == null)
+            return null;
+
+        UIManager.put(key, icon);
+        return icon;
+    }
+
     public static Icon getStateIcon(String label, int state, int size) {
-        String key = "QnAForum.icon." + label + state + "." + size;
+        String key = "QnAForum.icon." + label + "_" + state + "." + size;
 
         Icon icon = UIManager.getIcon(key);
         if(icon != null)
@@ -159,6 +175,19 @@ public class ResourceManager {
     public static void setProfileIcon(String userProfileIndex, JLabel userProfile, int size) {
         userProfile.setIcon(getProfileIcon(userProfileIndex, size));
         userProfile.setName(userProfileIndex);
+    }
+
+    public static void setButtonIcons(JButton button, String label, int size) {
+        setButtonIcons(button, label, DEFAULT, PRESSED, ROLLOVER, size);
+    }
+
+    public static void setButtonIcons(JButton button, String label, int defaultState, int pressedState, int rolloverState, int size) {
+        button.setIcon(ResourceManager.getStateIcon(label, defaultState, size));
+        button.setPressedIcon(ResourceManager.getStateIcon(label, pressedState, size));
+        button.setRolloverIcon(ResourceManager.getStateIcon(label, rolloverState, size));
+        button.setFocusPainted(false);
+        button.setContentAreaFilled(false);
+        button.setBorderPainted(false);
     }
 
     private static void initLookNFeel() {

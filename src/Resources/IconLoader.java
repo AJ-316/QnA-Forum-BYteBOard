@@ -34,6 +34,9 @@ public class IconLoader {
 
         float grayscale = (red * 0.299f + green * 0.587f + blue * 0.114f) / 255.0f;
 
+        if(blackRecolor == null) blackRecolor = Color.black;
+        if(whiteRecolor == null) whiteRecolor = Color.white;
+
         int newRed = (int) (blackRecolor.getRed() * (1 - grayscale) + whiteRecolor.getRed() * grayscale);
         int newGreen = (int) (blackRecolor.getGreen() * (1 - grayscale) + whiteRecolor.getGreen() * grayscale);
         int newBlue = (int) (blackRecolor.getBlue() * (1 - grayscale) + whiteRecolor.getBlue() * grayscale);
