@@ -1,12 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
 package QnAForumInterface;
 
-import DataObjects.UserDataObject;
-import QnAForumDatabase.Database;
-import QnAForumDatabase.EncryptionUtils;
+import DatabasePackage.DBDataObject;
+import DatabasePackage.DBUser;
+import DatabasePackage.EncryptionUtils;
 
 import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
@@ -175,13 +171,13 @@ public class LoginForm extends JPanel {
             return;
         }*/
 
-        UserDataObject userData = Database.getUserInfo(idField.getText(), isIDEmail);
+        DBDataObject userData = DBUser.accessUser(idField.getText(), false, false);
         if (userData == null) {
             loginErrorLabel.setText(isIDEmail ? "Invalid Email" : "Invalid Username");
             return;
         }
 
-        if (!EncryptionUtils.checkPwd(pwdField.getPassword(), userData.get("password"))) {
+        if (!EncryptionUtils.checkPwd(pwdField.getPassword(), userData.getValue(DBUser.K_PASSWORD))) {
             loginErrorLabel.setText("Incorrect Password");
             return;
         }
@@ -190,12 +186,7 @@ public class LoginForm extends JPanel {
 
         String id = idField.getText();
 
-        if (isIDEmail) {
-            id = Database.getData(UserDataObject.TABLE, UserDataObject.usernameKey(),
-                    UserDataObject.emailKey(), id, true)[0];
-        }
-
-        AuthenticationForm.authenticateUser(id);
+        AuthenticationForm.authenticateUser(userData.getValue(DBUser.K_USER_NAME));
     }
 
     private void signupBtnActionPerformed(ActionEvent evt) {

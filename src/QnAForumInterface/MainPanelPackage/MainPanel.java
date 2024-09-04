@@ -1,8 +1,6 @@
 package QnAForumInterface.MainPanelPackage;
 
 import CustomControls.RoundedJPanel;
-import DataObjects.UserDataObject;
-import QnAForumDatabase.Database;
 import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
 
@@ -73,6 +71,8 @@ public class MainPanel extends JPanel {
 
         setContentType(1);
         mainBody.setContentHead(heading);
+
+        System.out.println("Setting content: name:" + contentUserName + ", dp:" + contentUserProfileIndex + ", heading:" + heading + ", body:"+body+"\u001b[0m");
     }
 
     /**
@@ -84,11 +84,6 @@ public class MainPanel extends JPanel {
     public void setContentType(int type) {
         mainHeader.setContentType(type);
         mainBody.setContentType(type);
-    }
-
-    public String getContentUserID() {
-        return Database.getData(UserDataObject.TABLE, UserDataObject.userIDKey(),
-                UserDataObject.usernameKey(), mainHeader.getContentUserName(), true)[0];
     }
 
     public String getContentUser() {

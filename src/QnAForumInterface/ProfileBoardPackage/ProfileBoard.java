@@ -1,10 +1,9 @@
 package QnAForumInterface.ProfileBoardPackage;
 
-import DataObjects.AnswerDataObject;
-import DataObjects.QuestionDataObject;
-import DataObjects.UserDataObject;
-import QnAForumDatabase.Database;
-import QnAForumInterface.InformationBarPackage.ActivityBar;
+import DatabasePackage.DBAnswer;
+import DatabasePackage.DBDataObject;
+import DatabasePackage.DBQuestion;
+import DatabasePackage.DBUser;
 import QnAForumInterface.InterfaceEventPackage.InterfaceEventManager;
 import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
@@ -68,49 +67,63 @@ public class ProfileBoard extends JPanel {
     public static ProfileBoard init(String username) {
         ProfileBoard board = new ProfileBoard();
 
-        String userID = Database.getData(UserDataObject.TABLE, UserDataObject.userIDKey(),
-                UserDataObject.usernameKey(), username, true)[0];
+        // need - userID, userName, userEmail, userProfile by matching "username"
 
-        UserDataObject userData = (UserDataObject) Database.getData(UserDataObject.TABLE,
-                UserDataObject.usernameKey(), username)[0];
-        String userProfileIndex = userData.get(UserDataObject.profileKey());
+        //String userID = Database.getData(UserDataObject.TABLE, UserDataObject.userIDKey(),
+        //        UserDataObject.usernameKey(), username, true)[0];
+
+        //UserDataObject userData = (UserDataObject) Database.getData(UserDataObject.TABLE,
+        //        UserDataObject.usernameKey(), username)[0];
+        //String userProfileIndex = userData.get(UserDataObject.profileKey());
+
+        DBDataObject userDataObject = DBUser.ops.findValuesBy(DBUser.ops.matchByValue(DBUser.K_USER_NAME, username),
+                DBUser.K_USER_ID, DBUser.K_USER_NAME, DBUser.K_EMAIL,
+                DBUser.K_USER_PROFILE, DBUser.K_USER_BYTESCORE)[0];
+
+        String userID = userDataObject.getValue(DBUser.K_USER_ID);
+        String userProfileIndex = userDataObject.getValue(DBUser.K_USER_PROFILE);
 
         CURRENT_USER = username;
         board.displayPanel.setUsername(username);
-        board.displayPanel.setUserEmail(userData.get(UserDataObject.emailKey()));
+        board.displayPanel.setUserEmail(userDataObject.getValue(DBUser.K_EMAIL));
         board.editPanel.getProfileChooser().getProfilePane(Integer.parseInt(userProfileIndex)).setSelected();
 
         ResourceManager.setProfileIcon(userProfileIndex, board.displayPanel.getUserProfile(), ResourceManager.LARGE);
         ResourceManager.setProfileIcon(userProfileIndex, board.editPanel.getEditUserProfile(), ResourceManager.LARGE);
 
-        String[] questionIDList = Database.getData(QuestionDataObject.TABLE, QuestionDataObject.questionIDKey(),
-                QuestionDataObject.userIDKey(), userID, false);
+        // get all questions asked by matched user
+        DBDataObject[] questionsAskedByUser = DBQuestion.ops.findValuesBy(
+                DBQuestion.ops.matchByValue(DBQuestion.K_USER_ID, userID), "*");
 
-        for (String questionID : questionIDList) {
-            QuestionDataObject questionData = (QuestionDataObject) Database.getData(QuestionDataObject.TABLE,
-                    QuestionDataObject.questionIDKey(), questionID)[0];
+        for (DBDataObject questionData : questionsAskedByUser) {
             board.activityContainer.addActivityBar(
                     username,
                     userProfileIndex,
-                    questionData.get(QuestionDataObject.questionHeadKey()),
-                    questionData.get(QuestionDataObject.questionIDKey()));
+                    questionData.getValue(DBQuestion.K_QUESTION_HEAD),
+                    questionData.getValue(DBQuestion.K_QUESTION_ID));
         }
 
-        String[] allQuesAnsweredID = Database.getData(AnswerDataObject.TABLE, AnswerDataObject.questionIDKey(),
-                AnswerDataObject.userIDKey(), userID, true);
+        System.out.println("\u001B[33m");
 
-        for (String queAnsweredID : allQuesAnsweredID) {
-            QuestionDataObject queAnswered = (QuestionDataObject) Database.getData(QuestionDataObject.TABLE,
-                    QuestionDataObject.questionIDKey(), queAnsweredID)[0];
+        // get all questionIDs answered by matched user
+        DBDataObject[] answeredQuestionsData = DBAnswer.ops.joinValuesBy(
+                DBAnswer.ops.matchByValue(DBAnswer.K_USER_ID, "7"),
+                new String[] {
+                        DBAnswer.ops.matchByKey(DBAnswer.K_QUESTION_ID, DBQuestion.ops.appendKeys(DBQuestion.K_QUESTION_ID)), // join on a.qid = q.qid
+                        DBQuestion.ops.matchByKey(DBQuestion.K_USER_ID, DBUser.ops.appendKeys(DBUser.K_USER_ID))}, // join on q.uid = u.uid
 
-            UserDataObject userAsked = (UserDataObject) Database.getData(UserDataObject.TABLE, UserDataObject.userIDKey(),
-                    queAnswered.get(QuestionDataObject.userIDKey()))[0];
+                DBAnswer.ops.appendKeys(DBAnswer.K_ANSWER_ID),
+                DBQuestion.ops.appendKeys(DBQuestion.K_QUESTION_ID, DBQuestion.K_QUESTION_HEAD),
+                DBUser.ops.appendKeys(DBUser.K_USER_NAME, DBUser.K_USER_PROFILE));
 
+        System.out.println("\u001B[0m");
+
+        for (DBDataObject answeredQuestionData : answeredQuestionsData) {
             board.activityContainer.addActivityBar(
-                    userAsked.get(UserDataObject.usernameKey()),
-                    userAsked.get(UserDataObject.profileKey()),
-                    queAnswered.get(QuestionDataObject.questionHeadKey()),
-                    queAnswered.get(QuestionDataObject.questionIDKey()));
+                    answeredQuestionData.getValue(DBUser.K_USER_NAME),
+                    answeredQuestionData.getValue(DBUser.K_USER_PROFILE),
+                    answeredQuestionData.getValue(DBQuestion.K_QUESTION_HEAD),
+                    answeredQuestionData.getValue(DBQuestion.K_QUESTION_ID));
         }
 
         return board;

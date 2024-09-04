@@ -5,8 +5,7 @@
 package QnAForumInterface;
 
 import CustomControls.SimpleScrollPane;
-import DataObjects.*;
-import QnAForumDatabase.Database;
+import DatabasePackage.*;
 import QnAForumInterface.InformationBarPackage.AnswerBar;
 import QnAForumInterface.MainPanelPackage.MainPanel;
 import Resources.ByteBoardTheme;
@@ -38,41 +37,43 @@ public class QnABoard extends JPanel {
     }
 
     public static QnABoard init(String username, String questioner, String questionerProfileIndex, String questionID) {
-        // questionData can be null but should not be because the questionID passed must be a valid ID
-        System.out.println("questionID: " + questionID);
-        QuestionDataObject questionData = (QuestionDataObject) Database.getData(QuestionDataObject.TABLE, QuestionDataObject.questionIDKey(), questionID)[0];
+        // get question with matching questionID
+        DBDataObject questionData = DBQuestion.ops.findValuesBy(DBQuestion.ops.matchByValue(DBQuestion.K_QUESTION_ID, questionID), "*")[0];
 
-        String userData = Database.getData(UserDataObject.TABLE, UserDataObject.profileKey(),
-                UserDataObject.usernameKey(), username, true)[0];
+        // get logged user
+        DBDataObject loggedUserData = DBUser.accessUser(username, false, true);
 
         QnABoard board = new QnABoard();
         board.questionID = questionID;
-        board.optionsPanel.setUserInfo(username, userData, !questioner.equals(username));
+        board.optionsPanel.setUserInfo(username, loggedUserData.getValue(DBUser.K_USER_PROFILE), !questioner.equals(username));
 
-        DataObject[] tagObjects = Database.getData(TagDataObject.TABLE, TagDataObject.questionIDKey(), questionID);
-        String[] tags = new String[tagObjects.length];
+        // get tags associated with the question
+        DBDataObject[] tagsData = DBTag.ops.findValuesBy(DBTag.ops.matchByValue(DBTag.K_QUESTION_ID, questionID), "*");
+
+        String[] tags = new String[tagsData.length];
         for (int i = 0; i < tags.length; i++) {
-            tags[i] = tagObjects[i].get(TagDataObject.tagKey());
+            tags[i] = tagsData[i].getValue(DBTag.K_TAG);
         }
 
         board.questionPanel.setContent(questioner, questionerProfileIndex, tags,
-                questionData.get(QuestionDataObject.questionHeadKey()),
-                questionData.get(QuestionDataObject.questionBodyKey()));
+                questionData.getValue(DBQuestion.K_QUESTION_HEAD),
+                questionData.getValue(DBQuestion.K_QUESTION_BODY));
 
-        DataObject[] answersData = Database.getData(AnswerDataObject.TABLE, "question_id", questionID);
-        if (answersData != null) {
-            for (DataObject data : answersData) {
-                if (data instanceof AnswerDataObject) {
-                    AnswerDataObject answerData = (AnswerDataObject) data;
-                    UserDataObject userAnswered = (UserDataObject) Database.getData(UserDataObject.TABLE,
-                            UserDataObject.userIDKey(), answerData.get(AnswerDataObject.userIDKey()))[0];
-                    board.addAnswerBoard(
-                            userAnswered.get(UserDataObject.usernameKey()),
-                            userAnswered.get(UserDataObject.profileKey()),
-                            answerData.get(AnswerDataObject.answerKey()));
-                }
+        // get all the answers of matching questionID
+        DBDataObject[] answersOfQuestion = DBAnswer.ops.joinValuesBy(
+                DBAnswer.ops.matchByValue(DBAnswer.K_QUESTION_ID, questionID),
+                new String[] {DBAnswer.ops.matchByKey(DBAnswer.K_USER_ID, DBUser.ops.appendKeys(DBUser.K_USER_ID))},
+                DBAnswer.ops.appendKeys(DBAnswer.K_ANSWER), DBUser.ops.appendKeys(DBUser.K_USER_NAME, DBUser.K_USER_PROFILE));
+
+        if (answersOfQuestion != null) {
+            for (DBDataObject answerData : answersOfQuestion) {
+                board.addAnswerBoard(
+                        answerData.getValue(DBUser.K_USER_NAME),
+                        answerData.getValue(DBUser.K_USER_PROFILE),
+                        answerData.getValue(DBAnswer.K_ANSWER));
             }
         }
+        System.out.println("\u001b[0m");
         return board;
     }
 

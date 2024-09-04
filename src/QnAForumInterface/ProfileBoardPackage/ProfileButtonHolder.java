@@ -62,6 +62,7 @@ public class ProfileButtonHolder extends RoundedJPanel {
             hideActivityBtn.setVisible(display);
             viewActivityBtn.setVisible(!display);
         });
+
         viewActivityBtn = addButton("View Activity", e -> InterfaceEventManager.invokeEvent("Display.ActivityContainer", true),
                 "show", 4, 0, GridBagConstraints.VERTICAL, GridBagConstraints.SOUTHWEST, new Insets(5, 30, 5, 35));
 
@@ -94,7 +95,7 @@ public class ProfileButtonHolder extends RoundedJPanel {
                 JButton button = new JButton(){
                     @Override
                     public int getWidth() {
-                        return ResourceManager.MINI + 3;
+                        return ResourceManager.MICRO + 3;
                     }
 
                     @Override
@@ -103,9 +104,9 @@ public class ProfileButtonHolder extends RoundedJPanel {
                     }
                 };
                 button.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-                button.setIcon(ResourceManager.getStateIcon("arrowD", ResourceManager.DEFAULT, ResourceManager.MINI));
-                button.setPressedIcon(ResourceManager.getStateIcon("arrowD", ResourceManager.PRESSED, ResourceManager.MINI));
-                button.setRolloverIcon(ResourceManager.getStateIcon("arrowD", ResourceManager.ROLLOVER, ResourceManager.MINI));
+                button.setIcon(ResourceManager.getStateIcon("arrowD", ResourceManager.DEFAULT, ResourceManager.MICRO));
+                button.setPressedIcon(ResourceManager.getStateIcon("arrowD", ResourceManager.PRESSED, ResourceManager.MICRO));
+                button.setRolloverIcon(ResourceManager.getStateIcon("arrowD", ResourceManager.ROLLOVER, ResourceManager.MICRO));
 
                 button.setBorderPainted(false);
                 button.setFocusPainted(false);

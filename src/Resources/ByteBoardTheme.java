@@ -18,6 +18,8 @@ public abstract class ByteBoardTheme {
     public final static String TEXT_FG_LIGHT = "text_fg_light";
     public final static String TEXT_FG_DARK = "text_fg_dark";
     public final static String TEXT_FG_MAIN = "text_fg_main";
+    public final static String TEXT_FG_MAIN_LIGHT = "text_fg_main_light";
+    public final static String TEXT_FG_MAIN_DARK = "text_fg_main_dark";
 
     private static String[] keyList;
 
@@ -25,7 +27,7 @@ public abstract class ByteBoardTheme {
         if (keyList == null) {
             keyList = new String[]{
                     BASE, MAIN, MAIN_LIGHT, MAIN_DARK, ACCENT, ACCENT_DARK,
-                    ERROR, DISABLED, TEXT_FG_LIGHT, TEXT_FG_DARK, TEXT_FG_MAIN
+                    ERROR, DISABLED, TEXT_FG_LIGHT, TEXT_FG_DARK, TEXT_FG_MAIN, TEXT_FG_MAIN_LIGHT, TEXT_FG_MAIN_DARK
             };
         }
         return keyList;
@@ -168,6 +170,8 @@ public abstract class ByteBoardTheme {
             loadColorAttribute(TEXT_FG_LIGHT, "255, 255, 255");
             loadColorAttribute(TEXT_FG_DARK, "0, 0, 0");
             loadColorAttribute(TEXT_FG_MAIN, "0, 120, 120");
+            loadColorAttribute(TEXT_FG_MAIN_LIGHT, "10, 130, 130");
+            loadColorAttribute(TEXT_FG_MAIN_DARK, "0, 80, 80");
 
             // TODO: change font loading
             loadFontAttribute("Inter_Regular",  "14, 18, 20, 22, 24, 26");

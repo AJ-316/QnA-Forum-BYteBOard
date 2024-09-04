@@ -4,9 +4,8 @@
  */
 package QnAForumInterface;
 
-import DataObjects.UserDataObject;
-import QnAForumDatabase.Database;
-import QnAForumDatabase.EncryptionUtils;
+import DatabasePackage.DBUser;
+import DatabasePackage.EncryptionUtils;
 
 import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
@@ -238,7 +237,7 @@ public class SignupForm extends JPanel {
             return;
         }
 
-        if (!Database.isUsernameAvailable(username)) {
+        if (!DBUser.isValueAvailable(DBUser.K_USER_NAME, username)) {
             signupErrorLabel.setText("Username already taken");
             return;
         }
@@ -262,10 +261,10 @@ public class SignupForm extends JPanel {
             return;
         }
 
-        String password = EncryptionUtils.encryptPwd(pwdField.getPassword());
-        UserDataObject userData = new UserDataObject(username, password, email.toLowerCase());
-        Database.insertData(userData);
+        // UserDataObject userData = new UserDataObject(username, password, email.toLowerCase());
+        // DECRYPTED Database.insertData(userData);
 
+        DBUser.addUser(username, EncryptionUtils.encryptPwd(pwdField.getPassword()), email.toLowerCase());
         AuthenticationForm.authenticateUser(username);
     }
 

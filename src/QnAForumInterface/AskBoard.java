@@ -5,8 +5,10 @@
 package QnAForumInterface;
 
 import CustomControls.SimpleScrollPane;
-import DataObjects.*;
-import QnAForumDatabase.Database;
+import DatabasePackage.DBAnswer;
+import DatabasePackage.DBQuestion;
+import DatabasePackage.DBTag;
+import DatabasePackage.DBUser;
 
 import QnAForumInterface.ProfileBoardPackage.ProfileBoard;
 import Resources.ByteBoardTheme;
@@ -519,7 +521,7 @@ public class AskBoard extends JPanel {
 
                 if (e.getKeyCode() == KeyEvent.VK_ENTER ||
                         e.getKeyCode() == KeyEvent.VK_TAB) {
-                    addTag(textField.getText());
+                    addTag(textField.getText().toLowerCase());
                     textField.setText("");
                     revalidate();
                     repaint();
@@ -581,28 +583,24 @@ public class AskBoard extends JPanel {
             return;
         }
 
-        DataObject dataObject;
-        String userID = Database.getData(UserDataObject.TABLE, UserDataObject.userIDKey(),
-                UserDataObject.usernameKey(), userName.getText(), true)[0];
+        // get userID where username matches
+        String userID = DBUser.accessUser(userName.getText(), false, true).getValue(DBUser.K_USER_ID);
 
         if (isAskBoard()) {
             String headText = head.getText().trim();
             String bodyText = body.getText().trim();
 
             if (headText.isEmpty() || bodyText.isEmpty()) return;
-            dataObject = new QuestionDataObject(headText, bodyText, userID);
 
-            String questionID = Database.insertData(dataObject);
+            String questionID = DBQuestion.ops.addQuestion(headText, bodyText, userID);
+            for (String tag : tags)
+                DBTag.ops.addTag(tag, questionID);
 
-            for (String tag : tags) {
-                Database.insertData(new TagDataObject(tag, questionID));
-            }
         } else {
             String bodyText = body.getText().trim();
 
             if (bodyText.isEmpty()) return;
-            dataObject = new AnswerDataObject(body.getText().trim(), userID, questionID);
-            Database.insertData(dataObject);
+            DBAnswer.ops.addAnswer(body.getText().trim(), userID, questionID);
         }
 
         switchToProfile();

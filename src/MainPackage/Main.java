@@ -1,6 +1,6 @@
 package MainPackage;
 
-import QnAForumDatabase.Database;
+import DatabasePackage.DatabaseManager;
 import QnAForumInterface.AuthenticationForm;
 import Resources.ResourceManager;
 
@@ -8,7 +8,7 @@ public class Main {
 
     public static void main(String[] args) {
         ResourceManager.init();
-        Database.init();
-        AuthenticationForm.directAccess("Example");
+        DatabaseManager.init();
+        AuthenticationForm.directAccess("Example1");
     }
 }

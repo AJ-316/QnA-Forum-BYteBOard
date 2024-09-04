@@ -5,7 +5,7 @@ import DataObjects.AnswerDataObject;
 import DataObjects.QuestionDataObject;
 import DataObjects.UserDataObject;
 import QnAForumDatabase.Database;
-import QnAForumDatabase.EncryptionUtils;
+import DatabasePackage.EncryptionUtils;
 
 import QnAForumInterface.*;
 import QnAForumInterface.InformationBarPackage.ActivityBar;

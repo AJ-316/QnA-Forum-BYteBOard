@@ -5,11 +5,10 @@
 package QnAForumInterface;
 
 import CustomControls.RoundedJPanel;
-import DataObjects.DataObject;
-import DataObjects.QuestionDataObject;
-import DataObjects.TagDataObject;
-import DataObjects.UserDataObject;
-import QnAForumDatabase.Database;
+import DatabasePackage.DBDataObject;
+import DatabasePackage.DBQuestion;
+import DatabasePackage.DBTag;
+import DatabasePackage.DBUser;
 
 import QnAForumInterface.InformationBarPackage.ActivityBar;
 import QnAForumInterface.ProfileBoardPackage.ProfileBoard;
@@ -151,7 +150,7 @@ public class SearchBoard extends JPanel {
         gridBagConstraints.weightx = 1.0;
         searchContainer.add(search, gridBagConstraints);
         search.setFont(ResourceManager.getFont("inter_regular.24"));
-        search.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_DARK));
+        search.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_LIGHT));
 
         search.setUI(new BasicComboBoxUI() {
             @Override
@@ -185,13 +184,13 @@ public class SearchBoard extends JPanel {
                     return;
                 }
 
-                String text = textField.getText();
+                String text = textField.getText().toLowerCase();
                 search.removeAllItems();
                 search.addItem(text);
 
                 if (e.getKeyCode() == KeyEvent.VK_ENTER ||
                         e.getKeyCode() == KeyEvent.VK_TAB) {
-                    addTag(textField.getText());
+                    addTag(textField.getText().toLowerCase());
                     textField.setText("");
                     search.revalidate();
                     search.repaint();
@@ -200,7 +199,9 @@ public class SearchBoard extends JPanel {
                     return;
                 }
 
-                for (String suggestion : getTags()) {
+                for (DBDataObject suggestionTagData : getTags()) {
+                    String suggestion = suggestionTagData.getValue(DBTag.K_TAG);
+
                     if (suggestion.equalsIgnoreCase(text)) {
                         search.removeAllItems();
                         search.addItem(text);
@@ -357,21 +358,34 @@ public class SearchBoard extends JPanel {
 
         for (Component tagComponent : tags) {
             String tag = ((JLabel) ((RoundedJPanel) tagComponent).getComponent(0)).getText();
-            DataObject[] tagObjects = Database.getData(TagDataObject.TABLE, TagDataObject.tagKey(), tag);
-            for (DataObject tagObject : tagObjects) {
-                String questionID = tagObject.get(TagDataObject.questionIDKey());
+
+            // get questions and the questioner's data by tags
+            DBDataObject[] tagData = DBTag.ops.joinValuesBy(DBTag.ops.matchByValue(DBTag.K_TAG, tag),
+                    new String[]{
+                            DBTag.ops.matchByKey(DBTag.K_QUESTION_ID, DBQuestion.ops.appendKeys(DBQuestion.K_QUESTION_ID)),
+                            DBQuestion.ops.matchByKey(DBQuestion.K_USER_ID, DBUser.ops.appendKeys(DBUser.K_USER_ID))
+                    },
+                    DBTag.ops.appendKeys("*"),
+                    DBQuestion.ops.appendKeys(DBQuestion.K_QUESTION_HEAD),
+                    DBUser.ops.appendKeys(DBUser.K_USER_NAME, DBUser.K_USER_PROFILE));
+
+            for (DBDataObject tagObject : tagData) {
+                String questionID = tagObject.getValue(DBTag.K_QUESTION_ID);
+
                 if (resultContains(questionID)) continue;
-                DataObject questionObject = Database.getData(QuestionDataObject.TABLE,
-                        QuestionDataObject.questionIDKey(), questionID)[0];
 
-                UserDataObject userObject = (UserDataObject) Database.getData(UserDataObject.TABLE,
-                        UserDataObject.userIDKey(), questionObject.get(QuestionDataObject.userIDKey()))[0];
+//                DataObject questionObject = Database.getData(QuestionDataObject.TABLE,
+//                        QuestionDataObject.questionIDKey(), questionID)[0];
 
+//                UserDataObject userObject = (UserDataObject) Database.getData(UserDataObject.TABLE,
+//                        UserDataObject.userIDKey(), questionObject.get(QuestionDataObject.userIDKey()))[0];
+                System.out.println("\u001B[32mRESULT_BAR: " + tagObject);
                 addResultBar(
-                        userObject.get(UserDataObject.usernameKey()),
-                        userObject.get(UserDataObject.profileKey()),
-                        questionObject.get(QuestionDataObject.questionHeadKey()), questionID);
+                        tagObject.getValue(DBUser.K_USER_NAME),
+                        tagObject.getValue(DBUser.K_USER_PROFILE),
+                        tagObject.getValue(DBQuestion.K_QUESTION_HEAD), questionID);
             }
+            System.out.println("\u001B[0mExa");
         }
 
         revalidate();
@@ -387,8 +401,8 @@ public class SearchBoard extends JPanel {
         return false;
     }
 
-    private String[] getTags() {
-        return Database.getData(TagDataObject.TABLE, TagDataObject.tagKey(), true);
+    private DBDataObject[] getTags() {
+        return DBTag.ops.findValues(true, DBTag.K_TAG);
     }
 
     private void clearTag() {

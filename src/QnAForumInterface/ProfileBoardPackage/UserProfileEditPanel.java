@@ -2,9 +2,8 @@ package QnAForumInterface.ProfileBoardPackage;
 
 import CustomControls.RoundedJPanel;
 import CustomControls.SimpleScrollPane;
-import DataObjects.UserDataObject;
-import QnAForumDatabase.Database;
-import QnAForumDatabase.EncryptionUtils;
+import DatabasePackage.DBUser;
+import DatabasePackage.EncryptionUtils;
 import QnAForumInterface.InterfaceEventPackage.InterfaceEventManager;
 import QnAForumInterface.WrapLayout;
 import Resources.ByteBoardTheme;
@@ -177,7 +176,7 @@ public class UserProfileEditPanel extends JPanel {
         String currentUsername = (String) userProfileData[1];
 
         if (!currentUsername.equals(newUsername) &&
-                !Database.isUsernameAvailable(newUsername)) {
+                !DBUser.isValueAvailable(DBUser.K_USER_NAME, newUsername)) {
             saveErrorLabel.setText("Username already taken");
             return;
         }
@@ -216,11 +215,9 @@ public class UserProfileEditPanel extends JPanel {
             if(newEmail.equals(currentEmail) && newUsername.equals(currentUsername) && newProfileIndex.equals(currentProfileIndex)) {
                 return;
             }
-
         }
 
-        UserDataObject userData = new UserDataObject(newUsername, newPassword, newEmail.toLowerCase(), newProfileIndex);
-        Database.updateData(userData, UserDataObject.usernameKey(), currentUsername);
+        DBUser.updateUser(currentUsername, newUsername, newPassword, newEmail, newProfileIndex);
         InterfaceEventManager.invokeEvent("Update.ProfileBoard", newProfileIndex, newUsername, newEmail);
         InterfaceEventManager.invokeEvent("Edit.ProfileBoard", false);
     }
