@@ -241,9 +241,7 @@ public class UserProfileEditPanel extends JPanel {
 
         button.addActionListener(listener);
 
-        button.setIcon(ResourceManager.getStateIcon(iconLabel, ResourceManager.DEFAULT, ResourceManager.MINI));
-        button.setPressedIcon(ResourceManager.getStateIcon(iconLabel, ResourceManager.PRESSED, ResourceManager.MINI));
-        button.setRolloverIcon(ResourceManager.getStateIcon(iconLabel, ResourceManager.ROLLOVER, ResourceManager.MINI));
+        ResourceManager.setButtonIcons(button, iconLabel, ResourceManager.MINI);
 
         button.setBorderPainted(false);
         button.setContentAreaFilled(false);

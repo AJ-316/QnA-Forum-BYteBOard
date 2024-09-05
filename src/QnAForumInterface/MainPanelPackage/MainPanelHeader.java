@@ -261,9 +261,7 @@ public class MainPanelHeader extends JPanel {
         viewQuestionBtn.setFocusPainted(false);
         viewQuestionBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        viewQuestionBtn.setIcon(ResourceManager.getStateIcon("arrowL", ResourceManager.DEFAULT, ResourceManager.MINI));
-        viewQuestionBtn.setPressedIcon(ResourceManager.getStateIcon("arrowL", ResourceManager.PRESSED, ResourceManager.MINI));
-        viewQuestionBtn.setRolloverIcon(ResourceManager.getStateIcon("arrowL",ResourceManager.ROLLOVER, ResourceManager.MINI));
+        ResourceManager.setButtonIcons(viewQuestionBtn, "arrowL", ResourceManager.MINI);
         viewQuestionBtn.setFont(ResourceManager.getFont("inter_regular.22"));
 
         viewQuestionBtn.addMouseListener(new MouseAdapter() {

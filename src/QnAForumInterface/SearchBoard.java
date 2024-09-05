@@ -101,13 +101,11 @@ public class SearchBoard extends JPanel {
         userName.setFont(ResourceManager.getFont("inter_bold.36"));
         userName.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_DARK));
 
-        profileBtn.setIcon(ResourceManager.getStateIcon("home", ResourceManager.DEFAULT, ResourceManager.MINI));
         profileBtn.setText("Profile");
         profileBtn.setBorderPainted(false);
         profileBtn.setContentAreaFilled(false);
         profileBtn.setFocusPainted(false);
-        profileBtn.setPressedIcon(ResourceManager.getStateIcon("home", ResourceManager.PRESSED, ResourceManager.MINI));
-        profileBtn.setRolloverIcon(ResourceManager.getStateIcon("home", ResourceManager.ROLLOVER, ResourceManager.MINI));
+        ResourceManager.setButtonIcons(profileBtn, "home", ResourceManager.MINI);
         profileBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 profileBtnActionPerformed(evt);

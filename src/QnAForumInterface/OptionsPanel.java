@@ -86,14 +86,12 @@ public class OptionsPanel extends JPanel {
         buttonHolder.setLayout(new GridBagLayout());
 
         profileBtn.setBackground(getBackground());
-        profileBtn.setIcon(ResourceManager.getStateIcon("home", ResourceManager.DEFAULT, ResourceManager.MINI));
         profileBtn.setText("Profile");
         profileBtn.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         profileBtn.setBorderPainted(false);
         profileBtn.setContentAreaFilled(false);
         profileBtn.setFocusPainted(false);
-        profileBtn.setPressedIcon(ResourceManager.getStateIcon("home", ResourceManager.PRESSED, ResourceManager.MINI));
-        profileBtn.setRolloverIcon(ResourceManager.getStateIcon("home", ResourceManager.ROLLOVER, ResourceManager.MINI));
+        ResourceManager.setButtonIcons(profileBtn, "home", ResourceManager.MINI);
         profileBtn.addActionListener(evt -> profileBtnActionPerformed(evt));
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -103,14 +101,12 @@ public class OptionsPanel extends JPanel {
         profileBtn.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_DARK));
 
         searchBtn.setBackground(getBackground());
-        searchBtn.setIcon(ResourceManager.getStateIcon("search", ResourceManager.DEFAULT, ResourceManager.MINI));
         searchBtn.setText("Search");
         searchBtn.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         searchBtn.setBorderPainted(false);
         searchBtn.setContentAreaFilled(false);
         searchBtn.setFocusPainted(false);
-        searchBtn.setPressedIcon(ResourceManager.getStateIcon("search", ResourceManager.PRESSED, ResourceManager.MINI));
-        searchBtn.setRolloverIcon(ResourceManager.getStateIcon("search", ResourceManager.ROLLOVER, ResourceManager.MINI));
+        ResourceManager.setButtonIcons(searchBtn, "search", ResourceManager.MINI);
         searchBtn.addActionListener(evt -> searchBtnActionPerformed(evt));
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -120,14 +116,12 @@ public class OptionsPanel extends JPanel {
         searchBtn.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_DARK));
 
         askBtn.setBackground(getBackground());
-        askBtn.setIcon(ResourceManager.getStateIcon("question", ResourceManager.DEFAULT, ResourceManager.MINI));
         askBtn.setText("Ask");
         askBtn.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         askBtn.setBorderPainted(false);
         askBtn.setContentAreaFilled(false);
         askBtn.setFocusPainted(false);
-        askBtn.setPressedIcon(ResourceManager.getStateIcon("question", ResourceManager.PRESSED, ResourceManager.MINI));
-        askBtn.setRolloverIcon(ResourceManager.getStateIcon("question", ResourceManager.ROLLOVER, ResourceManager.MINI));
+        ResourceManager.setButtonIcons(askBtn, "question", ResourceManager.MINI);
         askBtn.addActionListener(evt -> askBtnActionPerformed(evt));
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -137,14 +131,12 @@ public class OptionsPanel extends JPanel {
         askBtn.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_DARK));
 
         answerButton.setBackground(getBackground());
-        answerButton.setIcon(ResourceManager.getStateIcon("answer", ResourceManager.DEFAULT, ResourceManager.MINI));
         answerButton.setText("Answer");
         answerButton.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         answerButton.setBorderPainted(false);
         answerButton.setContentAreaFilled(false);
         answerButton.setFocusPainted(false);
-        answerButton.setPressedIcon(ResourceManager.getStateIcon("answer", ResourceManager.PRESSED, ResourceManager.MINI));
-        answerButton.setRolloverIcon(ResourceManager.getStateIcon("answer", ResourceManager.ROLLOVER, ResourceManager.MINI));
+        ResourceManager.setButtonIcons(answerButton, "answer", ResourceManager.MINI);
         answerButton.addActionListener(evt -> answerButtonActionPerformed(evt));
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -162,14 +154,12 @@ public class OptionsPanel extends JPanel {
         add(buttonHolder, gridBagConstraints);
 
         displayAnswerBtn.setBackground(getBackground());
-        displayAnswerBtn.setIcon(ResourceManager.getStateIcon("arrowD", ResourceManager.DEFAULT, ResourceManager.MINI));
         displayAnswerBtn.setText("Hide Answers");
         displayAnswerBtn.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         displayAnswerBtn.setBorderPainted(false);
         displayAnswerBtn.setContentAreaFilled(false);
         displayAnswerBtn.setFocusPainted(false);
-        displayAnswerBtn.setPressedIcon(ResourceManager.getStateIcon("arrowD", ResourceManager.PRESSED, ResourceManager.MINI));
-        displayAnswerBtn.setRolloverIcon(ResourceManager.getStateIcon("arrowD", ResourceManager.ROLLOVER, ResourceManager.MINI));
+        ResourceManager.setButtonIcons(displayAnswerBtn, "arrowD", ResourceManager.MINI);
         displayAnswerBtn.addActionListener(evt -> displayAnswerBtnActionPerformed(evt));
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -197,17 +187,11 @@ public class OptionsPanel extends JPanel {
 
         if (isVisible) {
             displayAnswerBtn.setText("Hide Answers");
-            displayAnswerBtn.setIcon(ResourceManager.getStateIcon("arrowD", ResourceManager.DEFAULT, ResourceManager.MINI));
-            displayAnswerBtn.setPressedIcon(ResourceManager.getStateIcon("arrowD", ResourceManager.PRESSED, ResourceManager.MINI));
-            displayAnswerBtn.setRolloverIcon(ResourceManager.getStateIcon("arrowD", ResourceManager.ROLLOVER, ResourceManager.MINI));
-
+            ResourceManager.setButtonIcons(displayAnswerBtn, "arrowD", ResourceManager.MINI);
             return;
         }
-
         displayAnswerBtn.setText("Show Answers");
-        displayAnswerBtn.setIcon(ResourceManager.getStateIcon("arrowU", ResourceManager.DEFAULT, ResourceManager.MINI));
-        displayAnswerBtn.setPressedIcon(ResourceManager.getStateIcon("arrowU", ResourceManager.PRESSED, ResourceManager.MINI));
-        displayAnswerBtn.setRolloverIcon(ResourceManager.getStateIcon("arrowU", ResourceManager.ROLLOVER, ResourceManager.MINI));
+        ResourceManager.setButtonIcons(displayAnswerBtn, "arrowU", ResourceManager.MINI);
     }
 
     private void searchBtnActionPerformed(ActionEvent evt) {

@@ -102,9 +102,7 @@ public class ProfileButtonHolder extends CustomJPanel {
                     }
                 };
                 button.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-                button.setIcon(ResourceManager.getStateIcon("arrowD", ResourceManager.DEFAULT, ResourceManager.MICRO));
-                button.setPressedIcon(ResourceManager.getStateIcon("arrowD", ResourceManager.PRESSED, ResourceManager.MICRO));
-                button.setRolloverIcon(ResourceManager.getStateIcon("arrowD", ResourceManager.ROLLOVER, ResourceManager.MICRO));
+                ResourceManager.setButtonIcons(button, "arrowD", ResourceManager.MINI);
 
                 button.setBorderPainted(false);
                 button.setFocusPainted(false);
@@ -141,9 +139,7 @@ public class ProfileButtonHolder extends CustomJPanel {
         button.setFont(ResourceManager.getFont("inter_regular.22"));
         button.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_LIGHT));
 
-        button.setIcon(ResourceManager.getStateIcon(iconLabel, ResourceManager.DEFAULT, ResourceManager.MINI));
-        button.setPressedIcon(ResourceManager.getStateIcon(iconLabel, ResourceManager.PRESSED, ResourceManager.MINI));
-        button.setRolloverIcon(ResourceManager.getStateIcon(iconLabel, ResourceManager.ROLLOVER, ResourceManager.MINI));
+        ResourceManager.setButtonIcons(button, iconLabel, ResourceManager.MINI);
         button.addActionListener(listener);
 
         button.setBorderPainted(false);

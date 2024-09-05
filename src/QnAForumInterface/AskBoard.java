@@ -218,13 +218,11 @@ public class AskBoard extends JPanel {
         buttonHolder.setLayout(new GridBagLayout());
 
         searchBtn.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_LIGHT));
-        searchBtn.setIcon(ResourceManager.getStateIcon("search", ResourceManager.DEFAULT, ResourceManager.MINI));
         searchBtn.setText("Search");
         searchBtn.setBorderPainted(false);
         searchBtn.setContentAreaFilled(false);
         searchBtn.setFocusPainted(false);
-        searchBtn.setPressedIcon(ResourceManager.getStateIcon("search", ResourceManager.PRESSED, ResourceManager.MINI));
-        searchBtn.setRolloverIcon(ResourceManager.getStateIcon("search", ResourceManager.ROLLOVER, ResourceManager.MINI));
+        ResourceManager.setButtonIcons(searchBtn, "search", ResourceManager.MINI);
         searchBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 searchBtnActionPerformed(evt);
@@ -239,15 +237,11 @@ public class AskBoard extends JPanel {
         searchBtn.setFont(ResourceManager.getFont("inter_regular.22"));
 
         submitBtn.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_LIGHT));
-        submitBtn.setIcon(ResourceManager.getStateIcon("submit", ResourceManager.DEFAULT, ResourceManager.MINI));
         submitBtn.setText("Submit");
         submitBtn.setBorderPainted(false);
         submitBtn.setContentAreaFilled(false);
         submitBtn.setFocusPainted(false);
-        submitBtn.setPressedIcon(ResourceManager.getStateIcon("submit", ResourceManager.PRESSED, ResourceManager.MINI)
-        );
-        submitBtn.setRolloverIcon(ResourceManager.getStateIcon("submit", ResourceManager.ROLLOVER, ResourceManager.MINI)
-        );
+        ResourceManager.setButtonIcons(submitBtn, "submit", ResourceManager.MINI);
         submitBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 submitBtnActionPerformed(evt);
@@ -262,15 +256,11 @@ public class AskBoard extends JPanel {
         submitBtn.setFont(ResourceManager.getFont("inter_regular.22"));
 
         backBtn.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_LIGHT));
-        backBtn.setIcon(ResourceManager.getStateIcon("home", ResourceManager.DEFAULT, ResourceManager.MINI));
         backBtn.setText("Back");
         backBtn.setBorderPainted(false);
         backBtn.setContentAreaFilled(false);
         backBtn.setFocusPainted(false);
-        backBtn.setPressedIcon(ResourceManager.getStateIcon("home", ResourceManager.PRESSED, ResourceManager.MINI)
-        );
-        backBtn.setRolloverIcon(ResourceManager.getStateIcon("home", ResourceManager.ROLLOVER, ResourceManager.MINI)
-        );
+        ResourceManager.setButtonIcons(backBtn, "home", ResourceManager.MINI);
         backBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 backBtnActionPerformed(evt);

@@ -23,7 +23,7 @@ public class SignupForm extends JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private JTextField emailField;
     private JLabel emailLabel;
-    private JToggleButton loginBtn;
+    private JButton loginBtn;
     private JLabel loginInfoLabel;
     private JPasswordField pwdCheckField;
     private JLabel pwdCheckLabel;
@@ -63,7 +63,7 @@ public class SignupForm extends JPanel {
         signupErrorLabel = new JLabel();
         signupBtn = new JButton();
         loginInfoLabel = new JLabel();
-        loginBtn = new JToggleButton();
+        loginBtn = new JButton();
 
         setBackground(ResourceManager.getColor(ByteBoardTheme.BASE));
         setLayout(new GridBagLayout());
@@ -172,16 +172,11 @@ public class SignupForm extends JPanel {
         signupErrorLabel.setFont(ResourceManager.getFont("inter_regular.18"));
 
         signupBtn.setForeground(ResourceManager.getColor(ByteBoardTheme.MAIN));
-        signupBtn.setIcon(ResourceManager.getStateIcon("signup", ResourceManager.DEFAULT, ResourceManager.MINI)
-        );
         signupBtn.setText("Sign Up");
         signupBtn.setBorderPainted(false);
         signupBtn.setContentAreaFilled(false);
         signupBtn.setFocusPainted(false);
-        signupBtn.setPressedIcon(ResourceManager.getStateIcon("signup", ResourceManager.PRESSED, ResourceManager.MINI)
-        );
-        signupBtn.setRolloverIcon(ResourceManager.getStateIcon("signup", ResourceManager.ROLLOVER, ResourceManager.MINI)
-        );
+        ResourceManager.setButtonIcons(signupBtn, "signup", ResourceManager.MINI);
         signupBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 signupBtnActionPerformed(evt);
@@ -206,14 +201,11 @@ public class SignupForm extends JPanel {
         loginInfoLabel.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_DARK));
 
         loginBtn.setForeground(ResourceManager.getColor(ByteBoardTheme.MAIN_DARK));
-        loginBtn.setIcon(ResourceManager.getStateIcon("logout", ResourceManager.DEFAULT, ResourceManager.MINI)
-        );
         loginBtn.setText("Log In");
         loginBtn.setBorderPainted(false);
         loginBtn.setContentAreaFilled(false);
         loginBtn.setFocusPainted(false);
-        loginBtn.setPressedIcon(ResourceManager.getStateIcon("logout", ResourceManager.PRESSED, ResourceManager.MINI));
-        loginBtn.setRolloverIcon(ResourceManager.getStateIcon("logout", ResourceManager.ROLLOVER, ResourceManager.MINI));
+        ResourceManager.setButtonIcons(loginBtn, "login", ResourceManager.MINI);
         loginBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 loginBtnActionPerformed(evt);
