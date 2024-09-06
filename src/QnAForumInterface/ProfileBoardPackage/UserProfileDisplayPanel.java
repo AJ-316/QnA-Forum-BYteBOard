@@ -74,7 +74,7 @@ public class UserProfileDisplayPanel extends JPanel {
         InterfaceEventManager.addListener("Init.SearchBoard.ProfileBoard", ec -> QnAForum.setContent(SearchBoard.init(username.getText(), userProfile.getName())));
         InterfaceEventManager.addListener("UserData.ProfileBoard", () -> new Object[]{userProfile.getName(), username.getText(), userEmail.getText()});
         InterfaceEventManager.addListener("Update.ProfileBoard", ec -> {
-            ResourceManager.setProfileIcon((String) ec[0], userProfile, ResourceManager.LARGE);
+            ResourceManager.setProfileIndexIcon((String) ec[0], userProfile, ResourceManager.LARGE);
             username.setText((String) ec[1]);
             userEmail.setText((String) ec[2]);
         });

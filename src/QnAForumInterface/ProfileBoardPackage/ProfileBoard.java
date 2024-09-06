@@ -89,8 +89,8 @@ public class ProfileBoard extends JPanel {
         board.displayPanel.setUserEmail(userDataObject.getValue(DBUser.K_EMAIL));
         board.editPanel.getProfileChooser().getProfilePane(Integer.parseInt(userProfileIndex)).setSelected();
 
-        ResourceManager.setProfileIcon(userProfileIndex, board.displayPanel.getUserProfile(), ResourceManager.LARGE);
-        ResourceManager.setProfileIcon(userProfileIndex, board.editPanel.getEditUserProfile(), ResourceManager.LARGE);
+        ResourceManager.setProfileIndexIcon(userProfileIndex, board.displayPanel.getUserProfile(), ResourceManager.LARGE);
+        ResourceManager.setProfileIndexIcon(userProfileIndex, board.editPanel.getEditUserProfile(), ResourceManager.LARGE);
 
         // get all questions asked by matched user
         DBDataObject[] questionsAskedByUser = DBQuestion.ops.findValuesBy(

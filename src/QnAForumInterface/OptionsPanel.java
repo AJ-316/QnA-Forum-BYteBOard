@@ -36,7 +36,7 @@ public class OptionsPanel extends JPanel {
 
     public void setUserInfo(String username, String profileIndex, boolean isAnswerOptionVisible) {
         this.userName.setText(username);
-        ResourceManager.setProfileIcon(profileIndex, userProfile, ResourceManager.REGULAR);
+        ResourceManager.setProfileIndexIcon(profileIndex, userProfile, ResourceManager.REGULAR);
         this.answerButton.setVisible(isAnswerOptionVisible);
     }
 

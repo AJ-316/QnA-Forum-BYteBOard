@@ -21,6 +21,21 @@ public abstract class ByteBoardTheme {
     public final static String TEXT_FG_MAIN_LIGHT = "text_fg_main_light";
     public final static String TEXT_FG_MAIN_DARK = "text_fg_main_dark";
 
+    public final static String FONT_T_REGULAR = "_regular.";
+    public final static String FONT_T_BOLD = "_bold.";
+    public final static String FONT_T_SEMIBOLD = "_semibold.";
+    public final static String FONT_T_THIN = "_thin.";
+
+    private static final String FONT_K_PRIMARY = "primary";
+    private static final String FONT_K_SECONDARY = "secondary";
+
+    public static String FONT_PRIMARY(String type, int size) {
+        return UIManager.get("QnAForum.font." + FONT_K_PRIMARY) + type + size;
+    }
+    public static String FONT_SECONDARY(String type, int size) {
+        return UIManager.getString("QnAForum.font." + FONT_K_SECONDARY) + type + size;
+    }
+
     private static String[] keyList;
 
     private static String[] getKeyList() {
@@ -57,6 +72,24 @@ public abstract class ByteBoardTheme {
         }
     }
 
+    public void loadFontName(String key, String value) {
+        if (key.endsWith(FONT_K_PRIMARY))
+            UIManager.put("QnAForum.font." + FONT_K_PRIMARY, value);
+        else if (key.endsWith(FONT_K_SECONDARY))
+            UIManager.put("QnAForum.font." + FONT_K_SECONDARY, value);
+    }
+
+    public void loadFontAttributes(String key, String value) {
+        loadFontName(key, value);
+
+        // TODO: Loads all even font sizes from 12 to 40. Finalize required fonts later
+        String sizes = "12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40";
+        loadFontAttribute(value + FONT_T_REGULAR, sizes);
+        loadFontAttribute(value + FONT_T_SEMIBOLD, sizes);
+        loadFontAttribute(value + FONT_T_THIN, sizes);
+        loadFontAttribute(value + FONT_T_BOLD, sizes);
+    }
+
     public void loadFontAttribute(String key, String value) {
         if(key.isEmpty() || value.isEmpty()) return;
         fontAttributes.put(key, value);
@@ -74,13 +107,21 @@ public abstract class ByteBoardTheme {
             createFont(key, fontAttributes.get(key));
         }
 
+        UIManager.put("Label.foreground", ResourceManager.getColor(ByteBoardTheme.TEXT_FG_DARK));
+        UIManager.put("Button.foreground", ResourceManager.getColor(ByteBoardTheme.TEXT_FG_DARK));
+
         UIManager.put("ComboBox.selectionBackground", ResourceManager.getColor(ByteBoardTheme.ACCENT));
         UIManager.put("ComboBox.selectionForeground", ResourceManager.getColor(ByteBoardTheme.TEXT_FG_LIGHT));
         UIManager.put("ComboBox.background", ResourceManager.getColor(ByteBoardTheme.MAIN_DARK));
         UIManager.put("ComboBox.foreground", ResourceManager.getColor(ByteBoardTheme.TEXT_FG_LIGHT));
+
+        UIManager.put("TextField.foreground", ResourceManager.getColor(ByteBoardTheme.TEXT_FG_DARK));
+        UIManager.put("TextField.caretForeground", ResourceManager.getColor(ByteBoardTheme.TEXT_FG_DARK));
+
         UIManager.put("TextArea.selectionBackground", ResourceManager.getColor(ByteBoardTheme.TEXT_FG_DARK));
     }
 
+    // note: doesn't use the style consideration
     private void createFont(String key, String value) {
         String[] values = value.split("-");
         String[] sizesList = values[values.length == 1 ? 0 : 1].split(",");
@@ -92,7 +133,7 @@ public abstract class ByteBoardTheme {
                 sizes[i] = Integer.parseInt(sizesList[i].trim());
             }
 
-            addFont(values.length == 1 ? 0 : Integer.parseInt(values[0]), key, sizes);
+            addFont(values.length == 1 ? 0 : Integer.parseInt(values[0]), key.toLowerCase(), sizes);
         } catch (NumberFormatException ignored){}
 
     }
@@ -118,32 +159,13 @@ public abstract class ByteBoardTheme {
         UIManager.put("QnAForum.color." + label, new Color(r, g, b));
     }
 
-    private static void addFont(int type, String fontFile, int... sizes) {
+    private static void addFont(int type, String label, int... sizes) {
         if (sizes.length == 0) return;
-        String label = fontFile.toLowerCase();
 
-        switch (type) {
-            case Font.BOLD:
-                label += "_bold";
-                break;
-            case Font.ITALIC:
-                label += "_italic";
-                break;
-            case Font.PLAIN:
-                break;
-            default:
-                label += "_" + type;
-        }
-
-        Font font = FontLoader.getFont(fontFile, sizes[0], type);
+        Font font = FontLoader.getFont(label.replace(".", ""), sizes[0], type);
         for (int size : sizes) {
-            UIManager.put("QnAForum.font." + label + "." + size, font.deriveFont((float) size));
+            UIManager.put("QnAForum.font." + label + size, font.deriveFont((float) size));
         }
-
-    }
-
-    private static void addFont(String fontFile, int... sizes) {
-        addFont(Font.PLAIN, fontFile, sizes);
     }
 
     public String getName() {
@@ -173,12 +195,10 @@ public abstract class ByteBoardTheme {
             loadColorAttribute(TEXT_FG_MAIN_LIGHT, "10, 130, 130");
             loadColorAttribute(TEXT_FG_MAIN_DARK, "0, 80, 80");
 
-            // TODO: change font loading
-            loadFontAttribute("Inter_Regular",  "14, 18, 20, 22, 24, 26");
-            loadFontAttribute("Inter_SemiBold", "16, 20, 22, 24, 26, 32, 36, 48");
-            loadFontAttribute("Inter_Thin",     "48");
-            loadFontAttribute("Inter_Bold",     "22, 24, 28, 32, 36");
-            loadFontAttribute("Carltine_Bold",  "2 - 28, 32, 36");
+            loadFontAttributes(FONT_K_PRIMARY, "inter");
+            loadFontAttributes(FONT_K_SECONDARY, "carltine");
         }
     };
+
+
 }

@@ -244,7 +244,7 @@ public class SignupForm extends JPanel {
             return;
         }
 
-        if (!EncryptionUtils.isValidPassword(pwdField.getPassword())) {
+        if (EncryptionUtils.isInvalidPassword(pwdField.getPassword())) {
             if (pwdField.getPassword().length < 8 || pwdField.getPassword().length > 20) {
                 signupErrorLabel.setText("Password length must be 8-20");
                 return;

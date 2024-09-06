@@ -194,7 +194,7 @@ public class UserProfileEditPanel extends JPanel {
                 return;
             }
 
-            if (!EncryptionUtils.isValidPassword(editControlsContainer.getPassword())) {
+            if (EncryptionUtils.isInvalidPassword(editControlsContainer.getPassword())) {
                 if (editControlsContainer.getPassword().length < 8 || editControlsContainer.getPassword().length > 20) {
                     saveErrorLabel.setText("Password length must be 8-20");
                     return;
@@ -288,7 +288,7 @@ public class UserProfileEditPanel extends JPanel {
                         Component[] components = profilesContainer.getComponents();
                         for (int i = 0; i < components.length; i++) {
                             if (components[i].equals(e.getComponent())) {
-                                ResourceManager.setProfileIcon(Integer.toString(i), editUserProfile, ResourceManager.LARGE);
+                                ResourceManager.setProfileIndexIcon(Integer.toString(i), editUserProfile, ResourceManager.LARGE);
                                 break;
                             }
                         }

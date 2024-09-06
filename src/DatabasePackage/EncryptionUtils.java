@@ -21,14 +21,16 @@ public class EncryptionUtils {
         return matcher.matches();
     }
 
-    public static boolean isValidPassword(char[] passwordChar) {
+    public static boolean isInvalidPassword(char[] passwordChar) {
         String passwordRegex = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}";
 
         Pattern pattern = Pattern.compile(passwordRegex);
         String password = new String(passwordChar);
         Matcher matcher = pattern.matcher(password);
-        password = "";
-        return matcher.matches();
+        boolean isInvalid = !matcher.matches();
+        password = "overriding in memory";
+
+        return !matcher.matches();
     }
 
     public static String encryptPwd(char[] pwdChar) {

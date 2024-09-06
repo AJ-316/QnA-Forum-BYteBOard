@@ -1,6 +1,9 @@
 package Resources;
 
+import CustomControls.DEBUG;
+
 import java.io.*;
+import java.util.Arrays;
 
 public class ThemeLoader {
 
@@ -18,15 +21,23 @@ public class ThemeLoader {
         ByteBoardTheme theme = new ByteBoardTheme(){};
         theme.setName(file);
 
+        String key, value;
+
         try {
             while((line = reader.readLine()) != null) {
                 line = line.trim();
 
-                // right now only reads color attributes
                 String[] attribute = line.split("=");
                 if(line.startsWith("#") || attribute.length != 2) continue;
 
-                theme.loadColorAttribute(attribute[0].trim().toLowerCase(), attribute[1].trim());
+                key = attribute[0].trim().toLowerCase();
+                value = attribute[1].trim().toLowerCase();
+
+                if(line.startsWith("font_n_")) {
+                    theme.loadFontAttributes(key, value);
+                    continue;
+                }
+                theme.loadColorAttribute(key, value);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);

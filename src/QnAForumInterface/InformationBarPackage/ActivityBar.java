@@ -94,7 +94,7 @@ public class ActivityBar extends InformationBar {
         this.questionHead.setText(questionHead);
         this.questionID = questionID;
         
-        ResourceManager.setProfileIcon(userProfileIndex, userProfile, ResourceManager.SMALL);
+        ResourceManager.setProfileIndexIcon(userProfileIndex, userProfile, ResourceManager.SMALL);
     }
 
     public void setDefaultBackground(Color color) {

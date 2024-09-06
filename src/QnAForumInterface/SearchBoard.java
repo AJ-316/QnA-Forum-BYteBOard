@@ -50,7 +50,7 @@ public class SearchBoard extends JPanel {
         SearchBoard board = new SearchBoard();
 
         board.userName.setText(username);
-        ResourceManager.setProfileIcon(userProfileIndex, board.userProfile, ResourceManager.REGULAR);
+        ResourceManager.setProfileIndexIcon(userProfileIndex, board.userProfile, ResourceManager.REGULAR);
         board.tagText.setText("");
         board.tagsContainer.removeAll();
         board.resetQuestions(false);

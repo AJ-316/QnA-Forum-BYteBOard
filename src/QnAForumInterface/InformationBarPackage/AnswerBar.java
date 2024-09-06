@@ -102,7 +102,7 @@ public class AnswerBar extends InformationBar {
         this.responderName.setName(responderName);
         this.responderAnswer.setText(answerBody);
         this.answerID = answerID;
-        ResourceManager.setProfileIcon(responderProfileIndex, responderProfile, ResourceManager.SMALL);
+        ResourceManager.setProfileIndexIcon(responderProfileIndex, responderProfile, ResourceManager.SMALL);
     }
 
     public boolean isRespondent(String responderName) {

@@ -3,19 +3,16 @@ package QnAForumInterface.MainPanelPackage;
 import CustomControls.CustomJPanel;
 
 import CustomControls.DEBUG;
-import DatabasePackage.DBQuestion;
 import DatabasePackage.DBVote;
 import QnAForumInterface.InformationBarPackage.AnswerBar;
 import QnAForumInterface.InterfaceEventPackage.InterfaceEventManager;
 import QnAForumInterface.QnABoard;
 import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
-import javafx.scene.control.Tooltip;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -293,7 +290,7 @@ public class MainPanelHeader extends JPanel {
             downvote(false);
         else voteNone(false);
 
-        ResourceManager.setProfileIcon(contentUserProfileIndex, contentUserProfile, ResourceManager.REGULAR);
+        ResourceManager.setProfileIndexIcon(contentUserProfileIndex, contentUserProfile, ResourceManager.REGULAR);
 
         if(tags == null) return;
 

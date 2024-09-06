@@ -1,20 +1,15 @@
 package Resources;
 
-import QnAForumInterface.AuthenticationForm;
-import QnAForumInterface.InterfaceEventPackage.InterfaceEventManager;
-import QnAForumInterface.QnAForum;
-
 import javax.swing.*;
-import javax.xml.ws.spi.Invoker;
 import java.awt.*;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class ResourceManager {
 
+    public static final int NONE = -1;
     public static final int DEFAULT = 0;
     public static final int ROLLOVER = 1;
     public static final int PRESSED = 2;
@@ -172,7 +167,7 @@ public class ResourceManager {
         return icon;
     }
 
-    public static void setProfileIcon(String userProfileIndex, JLabel userProfile, int size) {
+    public static void setProfileIndexIcon(String userProfileIndex, JLabel userProfile, int size) {
         userProfile.setIcon(getProfileIcon(userProfileIndex, size));
         userProfile.setName(userProfileIndex);
     }
@@ -203,30 +198,4 @@ public class ResourceManager {
             System.err.print("Could not set L&F: " + ex.getMessage());
         }
     }
-
-    /*private static void createColor(String label, int r, int g, int b) {
-        UIManager.put("QnAForum.color." + label, new Color(r, g, b));
-    }
-
-    private static void createFont(int type, String fontFile, int... sizes) {
-        if (sizes.length == 0) return;
-        String label = fontFile.toLowerCase();
-
-        switch (type) {
-            case Font.BOLD: label += "_bold"; break;
-            case Font.ITALIC: label += "_italic"; break;
-            case Font.PLAIN: break;
-            default: label += "_" + type;
-        }
-
-        Font font = FontLoader.getFont(fontFile, sizes[0], type);
-        for (int size : sizes) {
-            UIManager.put("QnAForum.font." + label + "." + size, font.deriveFont((float) size));
-            System.out.println("Added Font: " + "QnAForum.font." + label + "." + size);
-        }
-    }
-
-    private static void createFont(String fontFile, int... sizes) {
-        createFont(Font.PLAIN, fontFile, sizes);
-    }*/
 }

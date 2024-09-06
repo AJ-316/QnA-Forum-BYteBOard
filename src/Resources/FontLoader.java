@@ -7,6 +7,7 @@ package Resources;
 import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Objects;
 
 /**
  * @author AJ
@@ -24,11 +25,13 @@ public class FontLoader {
         // Font not found, register a new font
         try {
             InputStream inputStream = FontLoader.class.getResourceAsStream("FontResource/" + fontName + ".ttf");
+            System.out.println(fontName);
+            Objects.requireNonNull(inputStream);
+
             Font customFont = Font.createFont(Font.TRUETYPE_FONT, inputStream).deriveFont(fontType, size);
             ge.registerFont(customFont);
             return customFont;
-        } catch (IOException | FontFormatException e) {
-            e.printStackTrace();
+        } catch (IOException | FontFormatException | NullPointerException e) {
             // Return a default font if custom font loading fails
             return new Font(Font.SANS_SERIF, Font.PLAIN, (int) size);
         }

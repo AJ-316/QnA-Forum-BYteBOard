@@ -153,7 +153,7 @@ public class LoginForm extends JPanel {
     private void loginBtnActionPerformed(ActionEvent evt) {
         boolean isIDEmail = EncryptionUtils.isValidEmail(idField.getText());
 
-        if (!EncryptionUtils.isValidPassword(pwdField.getPassword())) {
+        if (EncryptionUtils.isInvalidPassword(pwdField.getPassword())) {
             loginErrorLabel.setText("Incorrect Password");
         }
 

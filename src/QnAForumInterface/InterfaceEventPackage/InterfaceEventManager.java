@@ -26,10 +26,8 @@ public class InterfaceEventManager {
 
     public static Object[] invokeRequest(String request) {
         InterfaceRequestListener listener = interfaceRequestListeners.get(request);
-        if(listener == null) {
-            throw new NullPointerException("Invalid InterfaceRequest: " + request +
-                    " | Available Requests: " + Arrays.toString(interfaceRequestListeners.keySet().toArray()));
-        }
+        Objects.requireNonNull(listener, "Invalid InterfaceRequest: " + request +
+                " | Available Requests: " + Arrays.toString(interfaceRequestListeners.keySet().toArray()));
 
         return listener.onRequested();
     }

@@ -14,22 +14,26 @@ public class CustomJPanel extends JPanel {
     public static final int NONE = 0;
     public static final int DROP_SHADOW = 1;
     public static final int OFFSET_SHADOW = 2;
+
     private int cornerRadius;
-    private boolean limitRadius;
     private int shadowState;
-    private Color borderColor;
+    private boolean isRounded;
+    private boolean limitRadius;
 
     public CustomJPanel() {
-        initComponents();
-        limitRadius = true;
-        shadowState = DROP_SHADOW;
-        cornerRadius = 20;
-        borderColor = ResourceManager.getColor(ByteBoardTheme.BASE);
-        setForeground(borderColor);
         setOpaque(false);
+        isRounded = true;
+        limitRadius = true;
+        shadowState = NONE;
+        cornerRadius = 20;
     }
 
     protected void paintComponent(Graphics g) {
+        if(!isRounded) {
+            super.paintComponent(g);
+            return;
+        }
+
         int actualCornerRadius = cornerRadius;
 
         if (limitRadius)
@@ -62,9 +66,6 @@ public class CustomJPanel extends JPanel {
         g2d.setColor(getBackground());
         g2d.fillRoundRect(i, i, w - i*2, h - i*2, actualCornerRadius, actualCornerRadius);
 
-        //g2d.setColor(borderColor);
-        //g2d.drawRoundRect(i, i, w - i*2, h - i*2, actualCornerRadius, actualCornerRadius);
-
         super.paintComponent(g2d);
     }
 
@@ -77,12 +78,7 @@ public class CustomJPanel extends JPanel {
         repaint();
     }
 
-    public Color getBorderColor() {
-        return borderColor;
-    }
-
     public void setBorderColor(Color borderColor) {
-        this.borderColor = borderColor;
         repaint();
     }
 
@@ -98,17 +94,7 @@ public class CustomJPanel extends JPanel {
         this.shadowState = shadowState;
     }
 
-    private void initComponents() {
-
-        GroupLayout layout = new GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addGap(0, 400, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addGap(0, 300, Short.MAX_VALUE)
-        );
+    public void setTransparent(boolean isTransparent) {
+        isRounded = !isTransparent;
     }
 }

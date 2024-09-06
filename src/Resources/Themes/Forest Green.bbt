@@ -9,3 +9,6 @@ disabled = 169, 169, 169
 text_fg_light = 255, 255, 255
 text_fg_dark = 0, 0, 0
 text_fg_main = 34, 139, 34
+
+font_n_primary = inter
+font_n_secondary = carltine

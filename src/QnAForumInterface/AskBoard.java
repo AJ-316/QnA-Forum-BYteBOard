@@ -63,7 +63,7 @@ public class AskBoard extends JPanel {
         AskBoard board = new AskBoard();
 
         board.userName.setText(username);
-        ResourceManager.setProfileIcon(userProfileIndex, board.userProfile, ResourceManager.REGULAR);
+        ResourceManager.setProfileIndexIcon(userProfileIndex, board.userProfile, ResourceManager.REGULAR);
         board.headLabel.setText(questioner + ": " + questionHead);
         board.head.setText(questionBody);
         board.head.setEditable(false);
@@ -82,7 +82,7 @@ public class AskBoard extends JPanel {
         AskBoard board = new AskBoard();
 
         board.userName.setText(username);
-        ResourceManager.setProfileIcon(userProfileIndex, board.userProfile, ResourceManager.REGULAR);
+        ResourceManager.setProfileIndexIcon(userProfileIndex, board.userProfile, ResourceManager.REGULAR);
         board.headLabel.setText("Question Head - Keep it simple");
         board.bodyLabel.setText("Question Body - Elaborate your Question");
         board.submitBtn.setText("Ask a Question");
