@@ -8,7 +8,7 @@ public class GridBagBuilder {
     private final GridBagLayout layout;
     private final GridBagConstraints constraints;
     private final int cols;
-    private int currentCellPos;
+    public int currentCellPos;
 
     public GridBagBuilder(Container container) {
         this(container, -1);
@@ -55,8 +55,12 @@ public class GridBagBuilder {
         constraints.insets = insets;
     }
 
-    public void gridWidth(int w) {
-        constraints.gridwidth = w;
+    public void gridWeightX(double x) {
+        constraints.weightx = x;
+    }
+
+    public void gridWeightY(double y) {
+        constraints.weighty = y;
     }
 
     public void gridHeight(int h) {

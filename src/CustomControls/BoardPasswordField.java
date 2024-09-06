@@ -13,11 +13,12 @@ import java.awt.*;
 public class BoardPasswordField extends JPasswordField implements CustomControl {
 
     private final BoardPanel container;
+    private BoardLabel errorLabel;
 
     public BoardPasswordField(MainFrame main, Frame frame, String background, int cols) {
-        addInsets(0,0,0,0);
+        addInsets(0);
         setColumns(cols);
-        setMinimumSize(getPreferredSize());
+        setMinimumSize(new Dimension(getPreferredSize().width, getPreferredSize().height + 10));
         setEchoChar('•');
 
         container = new BoardPanel(main, frame, background);
@@ -29,6 +30,20 @@ public class BoardPasswordField extends JPasswordField implements CustomControl 
         setBackground(container.getBackground());
         if(!getBackground().equals(ResourceManager.getColor(ByteBoardTheme.BASE)))
             setFGLight();
+    }
+
+    public void setErrorLabel(String errorText) {
+        if(errorLabel == null) {
+            errorLabel = new BoardLabel();
+            errorLabel.setFontPrimary(ByteBoardTheme.FONT_T_SEMIBOLD, 16);
+            errorLabel.setFGError();
+            errorLabel.setAlignmentLeading();
+            container.add(errorLabel, BorderLayout.SOUTH);
+
+            addActionListener(e-> errorLabel.setText(""));
+        }
+
+        errorLabel.setText(errorText.length() > 28 ? errorText.substring(0, 28) : errorText);
     }
 
     public BoardPanel getTextFieldContainer() {

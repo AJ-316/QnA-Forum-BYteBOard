@@ -6,6 +6,8 @@ package DatabasePackage;
 
 import org.mindrot.jbcrypt.BCrypt;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,6 +33,30 @@ public class EncryptionUtils {
         password = "overriding in memory";
 
         return !matcher.matches();
+    }
+
+    public static String getPasswordFeedback(char[] passwordChar) {
+        Map<String, String> passwordCriteria = new LinkedHashMap<>();
+        passwordCriteria.put(".{8,}", "Length must be 8-20");
+        passwordCriteria.put(".*[0-9].*", "Include a Digit");
+        passwordCriteria.put(".*[a-z].*", "Include a Lowercase Character");
+        passwordCriteria.put(".*[A-Z].*", "Include an Uppercase Character");
+        passwordCriteria.put(".*[@#$%^&+=].*", "Include a Special Character");
+        passwordCriteria.put("\\S+", "No Whitespace Allowed");
+
+        String password = new String(passwordChar);
+
+        for (Map.Entry<String, String> entry : passwordCriteria.entrySet()) {
+            String regex = entry.getKey();
+            String feedback = entry.getValue();
+            if (!Pattern.matches(regex, password)) {
+                return feedback;
+            }
+        }
+
+        password = "overriding in memory";
+
+        return null;
     }
 
     public static String encryptPwd(char[] pwdChar) {

@@ -7,7 +7,9 @@ import javax.swing.*;
 
 public class BoardLabel extends JLabel implements CustomControl {
 
-    public BoardLabel() {}
+    public BoardLabel() {
+        this("");
+    }
 
     // just the text
     public BoardLabel(String text) {
@@ -82,6 +84,10 @@ public class BoardLabel extends JLabel implements CustomControl {
 
     public void setFGMain() {
         setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_MAIN));
+    }
+
+    public void setFGError() {
+        setForeground(ResourceManager.getColor(ByteBoardTheme.ERROR));
     }
 
     public void addInsets(int top, int left, int bottom, int right) {

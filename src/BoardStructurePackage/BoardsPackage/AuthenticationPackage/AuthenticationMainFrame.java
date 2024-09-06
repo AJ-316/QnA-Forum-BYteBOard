@@ -1,4 +1,4 @@
-package BoardStructurePackage.BoardsPackage;
+package BoardStructurePackage.BoardsPackage.AuthenticationPackage;
 
 import BoardStructurePackage.MainFrame;
 
@@ -17,8 +17,8 @@ public class AuthenticationMainFrame extends MainFrame {
             INSTANCE = new AuthenticationMainFrame("BYteBOard Authentication", isVisible);
             INSTANCE.setLayout(new BorderLayout());
 
-            new LoginBoardFrame(INSTANCE);
-            INSTANCE.setBoardFrame(LoginBoardFrame.class.getSimpleName(), null);
+            new AuthenticateBoardFrame(INSTANCE);
+            INSTANCE.setBoardFrame(AuthenticateBoardFrame.class.getSimpleName(), null);
         });
     }
 

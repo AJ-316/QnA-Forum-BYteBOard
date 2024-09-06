@@ -13,11 +13,12 @@ import java.awt.*;
 public class BoardTextField extends JTextField implements CustomControl {
 
     private final BoardPanel container;
+    private BoardLabel errorLabel;
 
     public BoardTextField(MainFrame main, Frame frame, String background, int cols) {
-        addInsets(0,0,0,0);
+        addInsets(0);
         setColumns(cols);
-        setMinimumSize(getPreferredSize());
+        setMinimumSize(new Dimension(getPreferredSize().width, getPreferredSize().height + 10));
 
         container = new BoardPanel(main, frame, background);
         container.setCornerRadius(60);
@@ -26,8 +27,23 @@ public class BoardTextField extends JTextField implements CustomControl {
         container.add(this);
 
         setBackground(container.getBackground());
+
         if(!getBackground().equals(ResourceManager.getColor(ByteBoardTheme.BASE)))
             setFGLight();
+    }
+
+    public void setErrorLabel(String errorText) {
+        if(errorLabel == null) {
+            errorLabel = new BoardLabel();
+            errorLabel.setFontPrimary(ByteBoardTheme.FONT_T_SEMIBOLD, 16);
+            errorLabel.setFGError();
+            errorLabel.setAlignmentLeading();
+            container.add(errorLabel, BorderLayout.SOUTH);
+
+            addActionListener(e-> errorLabel.setText(""));
+        }
+
+        errorLabel.setText(errorText.length() > 28 ? errorText.substring(0, 28) : errorText);
     }
 
     public BoardPanel getTextFieldContainer() {

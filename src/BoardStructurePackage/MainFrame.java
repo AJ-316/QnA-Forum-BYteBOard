@@ -1,6 +1,7 @@
 package BoardStructurePackage;
 
-import BoardStructurePackage.BoardsPackage.AuthenticationMainFrame;
+import BoardStructurePackage.BoardsPackage.AuthenticationPackage.AuthenticationMainFrame;
+import DatabasePackage.DatabaseManager;
 import Resources.ResourceManager;
 
 import javax.swing.*;
@@ -17,6 +18,7 @@ public abstract class MainFrame extends JFrame {
         setTitle(title);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new Dimension((int) (height*ratio), height));
+        setLocationRelativeTo(null);
         setVisible(isVisible);
 
         boardFrames = new HashMap<>();
@@ -45,6 +47,7 @@ public abstract class MainFrame extends JFrame {
 
     public static void main(String[] args) {
         ResourceManager.init();
+        DatabaseManager.init();
         AuthenticationMainFrame.init(true);
     }
 
