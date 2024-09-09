@@ -6,24 +6,22 @@ import java.awt.*;
 
 public class AuthenticationMainFrame extends MainFrame {
 
-    private static AuthenticationMainFrame INSTANCE;
+    public static final int ID = generateMainFrameID();
 
-    public AuthenticationMainFrame(String title, boolean isVisible) {
-        super(title, 720, 16/9f, isVisible);
+    public AuthenticationMainFrame(boolean isVisible) {
+        super("BYteBOard Authentication", 720, 16/9f, isVisible, ID);
     }
 
-    public static void init(boolean isVisible) {
-        EventQueue.invokeLater(() -> {
-            INSTANCE = new AuthenticationMainFrame("BYteBOard Authentication", isVisible);
-            INSTANCE.setLayout(new BorderLayout());
-
-            new AuthenticateBoardFrame(INSTANCE);
-            INSTANCE.setBoardFrame(AuthenticateBoardFrame.class.getSimpleName(), null);
-        });
+    protected void init() {
+        new AuthenticateBoardFrame(this);
     }
 
-    public static void authenticateUser(String userID) {
-        System.out.println("User authenticated: " + userID);
+    public void restartMainFrame() {
+        dispose();
+        new AuthenticationMainFrame(true);
     }
 
+    public void prepareMainFrame(String switchBoardFrameContext) {
+        setBoardFrame(AuthenticateBoardFrame.class.getSimpleName(), null);
+    }
 }

@@ -24,4 +24,12 @@ public abstract class Board extends CustomJPanel {
         addInsets(inset, inset, inset, inset);
     }
 
+    public void requestSwitchMainFrame(int id, String switchContext) {
+        main.switchMainFrame(id, switchContext);
+    }
+
+    public void restartMainFrame() {
+        main.restartMainFrame();
+    }
+
 }

@@ -176,7 +176,7 @@ public class UserProfileEditPanel extends JPanel {
         String currentUsername = (String) userProfileData[1];
 
         if (!currentUsername.equals(newUsername) &&
-                !DBUser.isValueAvailable(DBUser.K_USER_NAME, newUsername)) {
+                DBUser.isValueAvailable(DBUser.K_USER_NAME, newUsername)) {
             saveErrorLabel.setText("Username already taken");
             return;
         }

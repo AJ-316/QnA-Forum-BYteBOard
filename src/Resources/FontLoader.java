@@ -25,7 +25,6 @@ public class FontLoader {
         // Font not found, register a new font
         try {
             InputStream inputStream = FontLoader.class.getResourceAsStream("FontResource/" + fontName + ".ttf");
-            System.out.println(fontName);
             Objects.requireNonNull(inputStream);
 
             Font customFont = Font.createFont(Font.TRUETYPE_FONT, inputStream).deriveFont(fontType, size);

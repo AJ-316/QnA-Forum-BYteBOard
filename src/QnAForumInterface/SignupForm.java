@@ -229,7 +229,7 @@ public class SignupForm extends JPanel {
             return;
         }
 
-        if (!DBUser.isValueAvailable(DBUser.K_USER_NAME, username)) {
+        if (DBUser.isValueAvailable(DBUser.K_USER_NAME, username)) {
             signupErrorLabel.setText("Username already taken");
             return;
         }

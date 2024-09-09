@@ -9,27 +9,53 @@ import Resources.ResourceManager;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
 public class BoardTextField extends JTextField implements CustomControl {
 
     private final BoardPanel container;
     private BoardLabel errorLabel;
+    private String hintText;
 
     public BoardTextField(MainFrame main, Frame frame, String background, int cols) {
+        container = createContainer(main, frame, background);
+
         addInsets(0);
         setColumns(cols);
         setMinimumSize(new Dimension(getPreferredSize().width, getPreferredSize().height + 10));
+        setFontPrimary(ByteBoardTheme.FONT_T_REGULAR, 20);
+        setBackground(container.getBackground());
+        if(!getBackground().equals(ResourceManager.getColor(ByteBoardTheme.BASE)))
+            setFGLight();
+    }
 
-        container = new BoardPanel(main, frame, background);
+    private BoardPanel createContainer(MainFrame main, Frame frame, String background) {
+        BoardPanel container = new BoardPanel(main, frame, background) {
+            public void paint(Graphics g) {
+                super.paint(g);
+                if(BoardTextField.this.hasFocus()) {
+                    int radius = getActualCornerRadius();
+                    g.setColor(ResourceManager.getColor(ByteBoardTheme.ACCENT));
+                    g.drawRoundRect(0, 0, getWidth()-1, getHeight()-1, radius, radius);
+                }
+            }
+        };
         container.setCornerRadius(60);
         container.addInsets(10, 10, 10, 10);
         container.setLayout(new BorderLayout());
         container.add(this);
 
-        setBackground(container.getBackground());
+        addFocusListener(new FocusListener() {
+            public void focusGained(FocusEvent e) {
+                container.repaint();
+            }
+            public void focusLost(FocusEvent e) {
+                container.repaint();
+            }
+        });
 
-        if(!getBackground().equals(ResourceManager.getColor(ByteBoardTheme.BASE)))
-            setFGLight();
+        return container;
     }
 
     public void setErrorLabel(String errorText) {
@@ -39,11 +65,32 @@ public class BoardTextField extends JTextField implements CustomControl {
             errorLabel.setFGError();
             errorLabel.setAlignmentLeading();
             container.add(errorLabel, BorderLayout.SOUTH);
-
             addActionListener(e-> errorLabel.setText(""));
         }
 
         errorLabel.setText(errorText.length() > 28 ? errorText.substring(0, 28) : errorText);
+    }
+
+    @Override
+    public void paint(Graphics g) {
+        super.paint(g);
+        if(hintText == null) return;
+
+        if (getText().isEmpty()) {
+            int h = getHeight();
+            ((Graphics2D)g).setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+            Insets ins = getInsets();
+            FontMetrics fm = g.getFontMetrics();
+            int c0 = getBackground().getRGB();
+            int c1 = getForeground().getRGB();
+            int c = 0xfefefefe;
+            g.setColor(new Color(((c0 & c) >>> 1) + ((c1 & c) >>> 1), true));
+            g.drawString(hintText, ins.left, h / 2 + fm.getAscent() / 2 - 2);
+        }
+    }
+
+    public void setHintText(String text) {
+        this.hintText = text;
     }
 
     public BoardPanel getTextFieldContainer() {

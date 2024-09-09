@@ -1,38 +1,39 @@
 package BoardStructurePackage;
 
+import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BoardFrame extends Board implements Frame {
+public abstract class BoardFrame extends Board implements Frame {
 
     private final Map<String, Panel> boardPanels;
-    private final BoardFrameSwitchContext frameSwitchContext;
+    private final BoardFrameSwitchDelegate frameSwitchDelegate;
 
-    public BoardFrame(MainFrame main, BoardFrameSwitchContext.DataRetriever dataRetriever) {
+    public BoardFrame(MainFrame main, BoardFrameSwitchDelegate.DataRetriever dataRetriever) {
         super(main);
 
-        frameSwitchContext = new BoardFrameSwitchContext(dataRetriever);
+        frameSwitchDelegate = new BoardFrameSwitchDelegate(dataRetriever);
         boardPanels = new HashMap<>();
 
+        addInsets(10);
         setTransparent(true);
+        setLayout(new BorderLayout());
+
         init(main);
+
         main.addBoardFrame(this);
     }
 
-    public void refresh() {
-        frameSwitchContext.retrieveData(null);
-    }
-
-    public void addPanel(String panelName, Panel panel) {
+    public final void addPanel(String panelName, Panel panel) {
         boardPanels.put(panelName, panel);
     }
 
-    public void addPanel(String panelName, Panel panel, Object constraints) {
+    public final void addPanel(String panelName, Panel panel, Object constraints) {
         addPanel(panelName, panel);
         add(panel.getBoardPanel(), constraints);
     }
 
-    public Panel removePanel(String panelName) {
+    public final Panel removePanel(String panelName) {
         Panel panel = boardPanels.get(panelName);
         if(panel == null) return null;
 
@@ -42,11 +43,11 @@ public class BoardFrame extends Board implements Frame {
         return panel;
     }
 
-    public Panel getPanel(String panelName) {
+    public final Panel getPanel(String panelName) {
         return boardPanels.get(panelName);
     }
 
-    public void setPanelVisibility(String panelName, boolean isVisible) {
+    public final void setPanelVisibility(String panelName, boolean isVisible) {
         Panel panel = boardPanels.get(panelName);
         if(panel == null) return;
 
@@ -55,11 +56,19 @@ public class BoardFrame extends Board implements Frame {
 
     public void init(MainFrame main) {}
 
-    public void setContext(String context) {
-        frameSwitchContext.retrieveData(context);
+    public final void refresh() {
+        frameSwitchDelegate.retrieveData(null);
+        applyFrameSwitchContext(frameSwitchDelegate);
     }
 
-    public BoardFrame getBoardFrame() {
+    public final void setContext(String context) {
+        frameSwitchDelegate.retrieveData(context);
+        applyFrameSwitchContext(frameSwitchDelegate);
+    }
+
+    public abstract void applyFrameSwitchContext(BoardFrameSwitchDelegate frameSwitchDelegate);
+
+    public final BoardFrame getBoardFrame() {
         return this;
     }
 }

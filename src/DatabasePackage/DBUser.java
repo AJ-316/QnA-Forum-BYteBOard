@@ -25,13 +25,13 @@ public class DBUser extends DBOperation {
     }
 
     public static boolean isValueAvailable(String key, String value) {
-        return DatabaseManager.count(TABLE, "*", ops.matchByValue(key, value)) == 0;
+        return DatabaseManager.count(TABLE, "*", ops.matchByValue(key, value)) != 0;
     }
 
     public static DBDataObject accessUser(String emailOrUsername, boolean isEmail, boolean isLogged) {
         String key = isEmail ? K_EMAIL : K_USER_NAME;
 
-        if (isValueAvailable(key, emailOrUsername))
+        if (!isValueAvailable(key, emailOrUsername))
             return null;
 
         if(isLogged) {
@@ -40,6 +40,20 @@ public class DBUser extends DBOperation {
         }
 
         return ops.findValuesBy(ops.matchByValue(key, emailOrUsername), "*")[0];
+    }
+
+    public static DBDataObject getPK(String usernameOrID, boolean isID) {
+        String key = isID ? K_USER_ID : K_USER_NAME;
+
+        if (!isValueAvailable(key, usernameOrID))
+            return null;
+
+        return ops.findValuesBy(ops.matchByValue(key, usernameOrID), K_PASSWORD)[0];
+    }
+
+    public static DBDataObject getUser(String userID) {
+        return ops.findValuesBy(ops.matchByValue(K_USER_ID, userID),
+                K_USER_ID, K_USER_NAME, K_EMAIL, K_USER_PROFILE, K_USER_BYTESCORE)[0];
     }
 
     public static void updateBytescore(String userID, int score) {

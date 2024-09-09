@@ -25,30 +25,23 @@ public class BoardButton extends JButton implements CustomControl {
 
         ResourceManager.setButtonIcons(this, icon, defaultState, pressedState, rolloverState, size);
 
+        setFontPrimary(ByteBoardTheme.FONT_T_SEMIBOLD, 20);
         setBorderPainted(false);
         setFocusPainted(false);
         setContentAreaFilled(false);
         setFGDark();
+        addInsets(15);
 
         addFontColorUpdates();
     }
 
     public void setRounded(boolean isRounded) {
         this.isRounded = isRounded;
-        if(isRounded) {
-            addInsets(15);
+        if(isRounded)
             setBackground(ResourceManager.getColor(ByteBoardTheme.MAIN_LIGHT));
-        }
     }
 
     protected void paintComponent(Graphics g) {
-        if(!isRounded) {
-            super.paintComponent(g);
-            return;
-        }
-
-        int actualCornerRadius = Math.min(60, Math.min(getWidth(), getHeight()) / 2);
-
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -57,8 +50,18 @@ public class BoardButton extends JButton implements CustomControl {
         g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
         g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 
-        g2d.setColor(getBackground());
-        g2d.fillRoundRect(0, 0, getWidth()-1, getHeight()-1, actualCornerRadius, actualCornerRadius);
+        int actualCornerRadius = Math.min(60, Math.min(getWidth(), getHeight()) / 2);
+
+        if(isRounded) {
+            //g2d.setColor(hasFocus() ? ResourceManager.getColor(ByteBoardTheme.ACCENT_DARK) : getBackground());
+            g2d.setColor(getBackground());
+            g2d.fillRoundRect(0, 0, getWidth()-1, getHeight()-1, actualCornerRadius, actualCornerRadius);
+        }
+
+        if(hasFocus()) {
+            g2d.setColor(ResourceManager.getColor(ByteBoardTheme.ACCENT));
+            g2d.drawRoundRect(0, 0, getWidth()-1, getHeight()-1, actualCornerRadius, actualCornerRadius);
+        }
 
         super.paintComponent(g2d);
     }

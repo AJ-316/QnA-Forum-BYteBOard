@@ -23,7 +23,7 @@ public class BoardLabel extends JLabel implements CustomControl {
         this(text, icon, ResourceManager.NONE, ResourceManager.MINI);
     }
 
-    /** regular icon with size */
+    /** just the regular icon with size */
     public BoardLabel(String icon, int size) {
         this("", icon, ResourceManager.NONE, size);
     }
@@ -46,12 +46,28 @@ public class BoardLabel extends JLabel implements CustomControl {
     }
 
     private void init() {
+        setFontPrimary(ByteBoardTheme.FONT_T_REGULAR, 20);
         setAlignmentCenter();
     }
 
     public void setProfileIcon(String userProfileIndex, int size) {
         setIcon(ResourceManager.getProfileIcon(userProfileIndex, size));
         setName(userProfileIndex);
+    }
+
+    public void setProfileIcon(String userProfileIndex, String recolor, int size) {
+        setIcon(ResourceManager.getProfileIcon(userProfileIndex, ResourceManager.getColor(recolor), size));
+        setName(userProfileIndex);
+    }
+
+    public void setColoredIcon(String icon, String blackRecolor, String whiteRecolor, int size) {
+        setIcon(ResourceManager.getColoredIcon(icon,
+                blackRecolor == null ? null : ResourceManager.getColor(blackRecolor),
+                whiteRecolor == null ? null : ResourceManager.getColor(whiteRecolor), size));
+    }
+
+    public void setIcon(String icon, int state, int size) {
+        setIcon(ResourceManager.getStateIcon(icon, state, size));
     }
 
     public void setFontPrimary(String type, int size) {

@@ -16,6 +16,7 @@ import java.util.regex.Pattern;
  */
 public class EncryptionUtils {
 
+    // TODO: add username validation to only allow letters, numbers, underscore, fullstops in between
     public static boolean isValidEmail(String email) {
         String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:gmail\\.com|outlook\\.com|yahoo\\.com)$";
         Pattern pattern = Pattern.compile(emailRegex);
@@ -29,7 +30,6 @@ public class EncryptionUtils {
         Pattern pattern = Pattern.compile(passwordRegex);
         String password = new String(passwordChar);
         Matcher matcher = pattern.matcher(password);
-        boolean isInvalid = !matcher.matches();
         password = "overriding in memory";
 
         return !matcher.matches();
@@ -38,10 +38,10 @@ public class EncryptionUtils {
     public static String getPasswordFeedback(char[] passwordChar) {
         Map<String, String> passwordCriteria = new LinkedHashMap<>();
         passwordCriteria.put(".{8,}", "Length must be 8-20");
-        passwordCriteria.put(".*[0-9].*", "Include a Digit");
-        passwordCriteria.put(".*[a-z].*", "Include a Lowercase Character");
-        passwordCriteria.put(".*[A-Z].*", "Include an Uppercase Character");
-        passwordCriteria.put(".*[@#$%^&+=].*", "Include a Special Character");
+        passwordCriteria.put(".*[0-9].*", "Include Digit");
+        passwordCriteria.put(".*[a-z].*", "Include Lowercase Character");
+        passwordCriteria.put(".*[A-Z].*", "Include Uppercase Character");
+        passwordCriteria.put(".*[@#$%^&+=].*", "Include Special Character");
         passwordCriteria.put("\\S+", "No Whitespace Allowed");
 
         String password = new String(passwordChar);
@@ -57,6 +57,18 @@ public class EncryptionUtils {
         password = "overriding in memory";
 
         return null;
+    }
+
+    public static boolean isPasswordMatching(char[] password, char[] rePassword) {
+        if (password.length != rePassword.length)
+            return false;
+
+        for (int i = 0; i < password.length; i++) {
+            if (password[i] != rePassword[i])
+                return false;
+        }
+
+        return true;
     }
 
     public static String encryptPwd(char[] pwdChar) {

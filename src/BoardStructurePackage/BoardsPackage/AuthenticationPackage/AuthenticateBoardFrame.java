@@ -1,6 +1,7 @@
 package BoardStructurePackage.BoardsPackage.AuthenticationPackage;
 
 import BoardStructurePackage.BoardFrame;
+import BoardStructurePackage.BoardFrameSwitchDelegate;
 import BoardStructurePackage.BoardPanel;
 import BoardStructurePackage.MainFrame;
 import CustomControls.*;
@@ -11,11 +12,10 @@ import java.awt.*;
 public class AuthenticateBoardFrame extends BoardFrame {
 
     public AuthenticateBoardFrame(MainFrame main) {
-        super(main, (context) -> true);
+        super(main, (context, delegate) -> true);
     }
 
     public void init(MainFrame main) {
-        addInsets(20);
         GridBagBuilder builder = new GridBagBuilder(this, 2);
         builder.fill(GridBagConstraints.BOTH);
         builder.gridWeightY(1);
@@ -28,7 +28,6 @@ public class AuthenticateBoardFrame extends BoardFrame {
         BoardLabel titleIcon = new BoardLabel("byteboard/byteboard-logo-transparent", -512);
         titlePanel.add(titleIcon, BorderLayout.CENTER);
         builder.add(titlePanel);
-        addPanel("byteboard", titlePanel);
 
         builder.gridWeightX(1);
 
@@ -40,7 +39,10 @@ public class AuthenticateBoardFrame extends BoardFrame {
         signupFormPanel.setVisible(false);
         builder.skipCells(-1);
         builder.add(signupFormPanel);
-
         addPanel("signupForm", signupFormPanel);
+    }
+
+    public void applyFrameSwitchContext(BoardFrameSwitchDelegate frameSwitchDelegate) {
+
     }
 }

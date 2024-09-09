@@ -17,10 +17,6 @@ public class SimpleScrollPane extends JScrollPane {
     }
 
     public SimpleScrollPane(Component view) {
-        this(view, VERTICAL_SCROLLBAR_AS_NEEDED, HORIZONTAL_SCROLLBAR_AS_NEEDED);
-    }
-
-    public SimpleScrollPane(Component view, int vsbPolicy, int hsbPolicy) {
 
         setBorder(null);
 
@@ -34,8 +30,6 @@ public class SimpleScrollPane extends JScrollPane {
         horizontalScrollBar.setUI(new ModernScrollBarUI(this));
 
         setLayout(new ScrollPaneLayout() {
-            private static final long serialVersionUID = 5740408979909014146L;
-
             @Override
             public void layoutContainer(Container parent) {
                 Rectangle availR = parent.getBounds();

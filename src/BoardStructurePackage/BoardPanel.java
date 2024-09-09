@@ -1,8 +1,9 @@
 package BoardStructurePackage;
 
+import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
 
-import javax.swing.*;
+import java.awt.*;
 
 public class BoardPanel extends Board implements Panel {
 
@@ -16,12 +17,15 @@ public class BoardPanel extends Board implements Panel {
     public BoardPanel(MainFrame main, Frame frame, String bgColor) {
         super(main);
         this.frame = frame;
-        if(bgColor != null)
+        if(bgColor != null) {
             setBackground(ResourceManager.getColor(bgColor));
-        init(main);
+            if(bgColor.equals(ByteBoardTheme.MAIN))
+                setShadowState(OFFSET_SHADOW);
+        }
+        init(main, frame);
     }
 
-    public void init(MainFrame main) {}
+    public void init(MainFrame main, Frame frame) {}
 
     public void refresh() {
         frame.refresh();
@@ -43,11 +47,21 @@ public class BoardPanel extends Board implements Panel {
         frame.setPanelVisibility(panelName, isVisible);
     }
 
+    public boolean getPanelVisibility(String panelName) {
+        return ((BoardPanel) frame.getPanel(panelName)).isVisible();
+    }
+
     public Panel getPanel(String panelName) {
         return frame.getPanel(panelName);
     }
 
     public BoardPanel getBoardPanel() {
         return this;
+    }
+
+    @Override
+    public void setBackground(Color bg) {
+        super.setBackground(bg);
+        setTransparent(false);
     }
 }

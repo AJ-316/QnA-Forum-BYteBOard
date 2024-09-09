@@ -3,7 +3,6 @@ package DatabasePackage;
 import CustomControls.DEBUG;
 
 import java.sql.*;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -81,7 +80,7 @@ public class DatabaseManager {
             e.printStackTrace();
         }
 
-        System.out.println(query + " => " + retrievedValue);
+        DEBUG.printlnBlue("GENERATE_QUERY: " + query + " => " + retrievedValue);
 
         return Integer.parseInt(retrievedValue);
     }
@@ -184,6 +183,10 @@ public class DatabaseManager {
         // append select
         for (String selectKeysFromTable : selectKeysFromTables) {
             String[] tableKey = selectKeysFromTable.split(DBOperation.TABLE_KEY_DELIMITER);
+
+            if(tableKey[1].trim().isEmpty())
+                continue;
+
             String[] keys = tableKey[1].split(DBOperation.KEYS_DELIMITER);
 
             for (String key : keys) {
@@ -248,7 +251,7 @@ public class DatabaseManager {
                 int columnCount = metaData.getColumnCount();
                 while (resultSet.next()) {
                     for (int i = 1; i <= columnCount; i++) {
-                        dbObjects[dbPtr].addKeyValue(metaData.getColumnName(i), resultSet.getString(i));
+                        dbObjects[dbPtr].putKeyValue(metaData.getColumnName(i), resultSet.getString(i));
                     }
                     dbPtr++;
                 }

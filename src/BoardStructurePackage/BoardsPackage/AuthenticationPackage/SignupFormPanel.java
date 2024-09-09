@@ -1,13 +1,13 @@
 package BoardStructurePackage.BoardsPackage.AuthenticationPackage;
 
 import BoardStructurePackage.BoardPanel;
+import BoardStructurePackage.BoardsPackage.QnAForumPackage.QnAForumMainFrame;
 import BoardStructurePackage.Frame;
 import BoardStructurePackage.MainFrame;
 import CustomControls.*;
 import DatabasePackage.DBDataObject;
 import DatabasePackage.DBUser;
 import DatabasePackage.EncryptionUtils;
-import QnAForumInterface.AuthenticationForm;
 import Resources.ByteBoardTheme;
 
 import java.awt.*;
@@ -23,11 +23,13 @@ public class SignupFormPanel extends BoardPanel {
         super(main, frame);
 
         GridBagBuilder builder = new GridBagBuilder(this, 1);
-        builder.insets(new Insets(20, 20, 20, 20));
+        builder.insets(0, 0, 0, 0);
+        builder.gridWeightY(1);
 
         // Title
         BoardLabel signupTitle = new BoardLabel("Signup");
-        signupTitle.setFontPrimary(ByteBoardTheme.FONT_T_BOLD, 38);
+        signupTitle.addInsets(50, 0, 0, 0);
+        signupTitle.setFontPrimary(ByteBoardTheme.FONT_T_BOLD, 40);
         signupTitle.setFGMain();
         builder.add(signupTitle);
 
@@ -47,54 +49,40 @@ public class SignupFormPanel extends BoardPanel {
         String email = emailField.getText();
 
         if (username.length() <= 3) {
+            clearFieldErrors();
             usernameField.setErrorLabel("Username too small");
             return;
         }
 
-        if (!DBUser.isValueAvailable(DBUser.K_USER_NAME, username)) {
+        if (DBUser.isValueAvailable(DBUser.K_USER_NAME, username)) {
+            clearFieldErrors();
             usernameField.setErrorLabel("Username already taken");
             return;
         }
 
-        usernameField.setErrorLabel("");
-
         if (!EncryptionUtils.isValidEmail(email)) {
+            clearFieldErrors();
             emailField.setErrorLabel("Invalid Email");
             return;
         }
 
-        emailField.setErrorLabel("");
-
-        if (!isPasswordConfirmed()) {
+        if (!EncryptionUtils.isPasswordMatching(passwordField.getPassword(), rePasswordField.getPassword())) {
+            clearFieldErrors();
             rePasswordField.setErrorLabel("Passwords do not match");
             return;
         }
 
-        rePasswordField.setErrorLabel("");
-
         String passwordFeedback = EncryptionUtils.getPasswordFeedback(passwordField.getPassword());
         if (passwordFeedback != null) {
+            clearFieldErrors();
             passwordField.setErrorLabel(passwordFeedback);
             return;
         }
 
-        passwordField.setErrorLabel("");
-
-        // fixme - register and authenticate user
-        // DBUser.addUser(username, EncryptionUtils.encryptPwd(passwordField.getPassword()), email.toLowerCase());
-        // AuthenticationForm.authenticateUser(username);
-    }
-
-    private boolean isPasswordConfirmed() {
-        if (passwordField.getPassword().length != rePasswordField.getPassword().length)
-            return false;
-
-        for (int i = 0; i < passwordField.getPassword().length; i++) {
-            if (passwordField.getPassword()[i] != rePasswordField.getPassword()[i])
-                return false;
-        }
-
-        return true;
+        clearFieldErrors();
+        DBUser.addUser(username, EncryptionUtils.encryptPwd(passwordField.getPassword()), email.toLowerCase());
+        DBDataObject userData = DBUser.accessUser(username, false, true);
+        requestSwitchMainFrame(QnAForumMainFrame.ID, userData.getValue(DBUser.K_USER_ID));
     }
 
     private void initFields(MainFrame main, Frame frame, BoardPanel fieldsContainer) {
@@ -104,90 +92,88 @@ public class SignupFormPanel extends BoardPanel {
         GridBagBuilder builder = new GridBagBuilder(fieldsContainer, 2);
 
         builder.fill(GridBagConstraints.BOTH);
-        builder.insets(new Insets(5, 5, 5, 5));
+        builder.insets(5, 13, 5, 14);
 
         // Username Label
         BoardLabel usernameLabel = new BoardLabel("Username");
         usernameLabel.setFGLight();
         usernameLabel.setAlignmentTrailing();
-        usernameLabel.setFontPrimary(ByteBoardTheme.FONT_T_REGULAR, 20);
         usernameLabel.addInsets(10);
         builder.add(usernameLabel);
         // Username field
         usernameField = new BoardTextField(main, frame, ByteBoardTheme.MAIN_DARK, 20);
-        usernameField.setFontPrimary(ByteBoardTheme.FONT_T_REGULAR, 20);
+        usernameField.setHintText("Display Name");
         builder.add(usernameField.getTextFieldContainer());
 
         // Email Label
         BoardLabel emailLabel = new BoardLabel("Email");
         emailLabel.setFGLight();
         emailLabel.setAlignmentTrailing();
-        emailLabel.setFontPrimary(ByteBoardTheme.FONT_T_REGULAR, 20);
         emailLabel.addInsets(10);
         builder.add(emailLabel);
         // Email field
         emailField = new BoardTextField(main, frame, ByteBoardTheme.MAIN_DARK, 20);
-        emailField.setFontPrimary(ByteBoardTheme.FONT_T_REGULAR, 20);
+        emailField.setHintText("example@gmail.com");
         builder.add(emailField.getTextFieldContainer());
 
         // Password Label
         BoardLabel passwordLabel = new BoardLabel("Password");
         passwordLabel.setFGLight();
         passwordLabel.setAlignmentTrailing();
-        passwordLabel.setFontPrimary(ByteBoardTheme.FONT_T_REGULAR, 20);
         passwordLabel.addInsets(10);
         builder.add(passwordLabel);
         // Password field
         passwordField = new BoardPasswordField(main, frame, ByteBoardTheme.MAIN_DARK, 20);
-        passwordField.setFontPrimary(ByteBoardTheme.FONT_T_REGULAR, 20);
+        passwordField.setHintText("New Password");
         builder.add(passwordField.getTextFieldContainer());
 
         // RePassword Label
-        BoardLabel rePasswordLabel = new BoardLabel("Repeat Password");
+        BoardLabel rePasswordLabel = new BoardLabel("Re-Password");
         rePasswordLabel.setFGLight();
         rePasswordLabel.setAlignmentTrailing();
-        rePasswordLabel.setFontPrimary(ByteBoardTheme.FONT_T_REGULAR, 20);
         rePasswordLabel.addInsets(10);
         builder.add(rePasswordLabel);
         // RePassword field
         rePasswordField = new BoardPasswordField(main, frame, ByteBoardTheme.MAIN_DARK, 20);
-        rePasswordField.setFontPrimary(ByteBoardTheme.FONT_T_REGULAR, 20);
+        rePasswordField.setHintText("Repeat New Password");
         builder.add(rePasswordField.getTextFieldContainer());
 
-        // Login Button
+        // Signup Button
         BoardButton signupButton = new BoardButton("Signup", "signup");
-        signupButton.setFontPrimary(ByteBoardTheme.FONT_T_SEMIBOLD, 20);
         signupButton.setFGLight();
         signupButton.addActionListener(e -> initFormSubmission());
         builder.fill(GridBagConstraints.NONE);
-        builder.insets(new Insets(20, 10, 10, 10));
+        builder.insets(20, 10, 10, 10);
         builder.add(signupButton, 2, 1);
     }
 
     private BoardPanel getLoginOptionContainer(MainFrame main, Frame frame) {
         BoardPanel loginContainer = new BoardPanel(main, frame);
-        loginContainer.setLayout(new GridLayout(2, 1));
+        loginContainer.addInsets(0, 0, 50, 0);
 
-        // Signup Label
+        GridBagBuilder builder = new GridBagBuilder(loginContainer);
+
+        // Login Label
         BoardLabel loginLabel = new BoardLabel("Already a BYteBOard user?");
-        loginLabel.setFontPrimary(ByteBoardTheme.FONT_T_REGULAR, 20);
-        loginContainer.add(loginLabel);
+        loginLabel.addInsets(0, 0, 10, 0);
+        builder.add(loginLabel);
 
-        // Signup Button
+        // Login Button
         BoardButton loginButton = new BoardButton("Login", "login");
-        loginButton.setFontPrimary(ByteBoardTheme.FONT_T_SEMIBOLD, 20);
         loginButton.addActionListener(e -> {
             setPanelVisibility("loginForm", true);
             setVisible(false);
             clearFieldErrors();
         });
-        loginContainer.add(loginButton);
+        builder.add(loginButton);
         return loginContainer;
     }
 
     private void clearFieldErrors() {
         usernameField.setErrorLabel("");
-        passwordField.setErrorLabel("");
+        emailField.setErrorLabel("");
+        passwordField.clearError();
+        rePasswordField.clearError();
     }
 
 }

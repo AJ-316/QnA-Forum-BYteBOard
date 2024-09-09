@@ -32,9 +32,13 @@ public class GridBagBuilder {
 
     public void add(Component component, int gridWidth, int gridHeight) {
         skipCells(1);
-        constraints.gridwidth = gridWidth;
-        constraints.gridheight = gridHeight;
+        gridWidth(gridWidth);
+        gridHeight(gridHeight);
+
         container.add(component, constraints);
+
+        gridWidth(1);
+        gridHeight(1);
     }
 
     public void skipCells(int cells) {
@@ -51,8 +55,8 @@ public class GridBagBuilder {
         constraints.fill = fill;
     }
 
-    public void insets(Insets insets) {
-        constraints.insets = insets;
+    public void insets(int top, int left, int bottom, int right) {
+        constraints.insets = new Insets(top, left, bottom, right);
     }
 
     public void gridWeightX(double x) {
@@ -61,6 +65,10 @@ public class GridBagBuilder {
 
     public void gridWeightY(double y) {
         constraints.weighty = y;
+    }
+
+    public void gridWidth(int w) {
+        constraints.gridwidth = w;
     }
 
     public void gridHeight(int h) {

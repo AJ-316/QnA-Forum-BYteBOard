@@ -47,7 +47,7 @@ public class CustomJPanel extends JPanel {
         g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
         g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 
-        g2d.setColor(new Color(0, 0, 0, 15));
+        g2d.setColor(new Color(0, 0, 0, 25));
 
         int w = getWidth() - 1;
         int h = getHeight() - 1;
@@ -57,7 +57,7 @@ public class CustomJPanel extends JPanel {
         int size = 5;
 
         if (shadowState == DROP_SHADOW) offset = 0;
-        else size = 0;
+        else if (shadowState == NONE) size = 0;
 
         for (;i < size; i++) {
             g2d.fillRoundRect(i + offset, i + offset, w - i*2 - offset, h - i*2 - offset, actualCornerRadius, actualCornerRadius);
@@ -70,6 +70,13 @@ public class CustomJPanel extends JPanel {
     }
 
     public int getCornerRadius() {
+        return cornerRadius;
+    }
+
+    public int getActualCornerRadius() {
+        if (limitRadius)
+            return Math.min(cornerRadius, Math.min(getWidth(), getHeight()) / 2);
+
         return cornerRadius;
     }
 

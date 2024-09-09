@@ -67,14 +67,7 @@ public class ProfileBoard extends JPanel {
     public static ProfileBoard init(String username) {
         ProfileBoard board = new ProfileBoard();
 
-        // need - userID, userName, userEmail, userProfile by matching "username"
-
-        //String userID = Database.getData(UserDataObject.TABLE, UserDataObject.userIDKey(),
-        //        UserDataObject.usernameKey(), username, true)[0];
-
-        //UserDataObject userData = (UserDataObject) Database.getData(UserDataObject.TABLE,
-        //        UserDataObject.usernameKey(), username)[0];
-        //String userProfileIndex = userData.get(UserDataObject.profileKey());
+        // need userData by matched username
 
         DBDataObject userDataObject = DBUser.ops.findValuesBy(DBUser.ops.matchByValue(DBUser.K_USER_NAME, username),
                 DBUser.K_USER_ID, DBUser.K_USER_NAME, DBUser.K_EMAIL,

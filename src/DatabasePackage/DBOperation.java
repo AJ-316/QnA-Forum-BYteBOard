@@ -5,9 +5,9 @@ import java.util.Map;
 
 public abstract class DBOperation {
 
-    public static final String TABLE_KEY_DELIMITER = ":";
-    public static final String KEY_VALUE_DELIMITER = "=";
-    public static final String KEYS_DELIMITER = ",";
+    protected static final String TABLE_KEY_DELIMITER = ":";
+    protected static final String KEY_VALUE_DELIMITER = "=";
+    protected static final String KEYS_DELIMITER = ",";
     public static final String AND = " AND ";
     protected String[] keys;
     private final String table;
@@ -18,19 +18,6 @@ public abstract class DBOperation {
         this.keyValueMap = keyValueMap;
         this.table = table;
         this.keys = keys;
-    }
-
-    // ta.findValuesBy(ta.key1, ta.key3, tb.appendKeys(tb.key4), ta.createMatchCondition(ta.key1, tb.appendKeys(tb.key1)))
-    // createMatchConditionByKey() = ta.key1 = ta.key1
-    // createMatchConditionByValue() = ta.key1 = var_value
-
-    public static void main(String[] args) {
-        DatabaseManager.init();
-        System.out.println("\u001B[33m");
-
-        System.out.println("\u001B[0m");
-
-        DatabaseManager.close();
     }
 
     /**
@@ -265,15 +252,13 @@ public abstract class DBOperation {
         return getTable() + TABLE_KEY_DELIMITER + String.join(KEYS_DELIMITER, keys);
     }
 
-    /*public String[] appendKeys(String[]... keys) {
-        String[] selectKeysFromTables = new String[keys.length];
-        for (int i = 0; i < keys.length; i++) {
-            for (String selectKey : keys[i]) {
-                selectKeysFromTables[i] = appendKeys(selectKey);
-            }
-        }
-        return selectKeysFromTables;
-    }*/
+    /**
+     * Appends no key but a white space.
+     * Used when we want to JOIN table but not select column from it.
+     * */
+    public String appendEmptyKeys() {
+        return getTable() + TABLE_KEY_DELIMITER + " ";
+    }
 
     public String getTable() {
         return table;
@@ -283,7 +268,7 @@ public abstract class DBOperation {
         return keys;
     }
 
-    public void addKeyValue(String key, String value) {
+    public void putKeyValue(String key, String value) {
         keyValueMap.put(key, value);
     }
 
@@ -294,5 +279,10 @@ public abstract class DBOperation {
     public String getValue(String key) {
         if(keyValueMap == null) return null;
         return keyValueMap.get(key);
+    }
+
+    public void destroy() {
+        if(keyValueMap == null) return;
+        keyValueMap.clear();
     }
 }

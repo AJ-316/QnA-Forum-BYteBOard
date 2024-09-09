@@ -2,7 +2,7 @@ package BoardStructurePackage;
 
 public interface Panel {
 
-    void init(MainFrame main);
+    void init(MainFrame main, Frame frame);
 
     void refresh();
 
@@ -11,6 +11,8 @@ public interface Panel {
     void removePanel(String panelName);
 
     void setPanelVisibility(String panelName, boolean isVisible);
+
+    boolean getPanelVisibility(String panelName);
 
     Panel getPanel(String panelName);
 

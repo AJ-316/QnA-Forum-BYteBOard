@@ -153,14 +153,18 @@ public class ResourceManager {
     }
 
     public static Icon getProfileIcon(String userProfileIndex, int size) {
+        return getProfileIcon(userProfileIndex, ResourceManager.getColor(ByteBoardTheme.MAIN), size);
+    }
+
+    public static Icon getProfileIcon(String userProfileIndex, Color recolor, int size) {
         String label = "profiles/profile_" + userProfileIndex;
-        String key = "QnAForum.icon." + label + "." + size;
+        String key = "QnAForum.icon." + label + "_" + recolor.getRGB() + "." + size;
 
         Icon icon = UIManager.getIcon(key);
         if(icon != null)
            return icon;
 
-        if((icon = IconLoader.getRecoloredIconTargeted(label, ResourceManager.getColor(ByteBoardTheme.MAIN), Color.white, size)) == null)
+        if((icon = IconLoader.getRecoloredIconTargeted(label, recolor, Color.white, size)) == null)
             return null;
 
         UIManager.put(key, icon);
