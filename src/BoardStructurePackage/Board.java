@@ -32,4 +32,7 @@ public abstract class Board extends CustomJPanel {
         main.restartMainFrame();
     }
 
+    public MainFrame getMain() {
+        return main;
+    }
 }

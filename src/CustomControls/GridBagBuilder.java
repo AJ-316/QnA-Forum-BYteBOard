@@ -75,6 +75,11 @@ public class GridBagBuilder {
         constraints.gridheight = h;
     }
 
+    public void gridCell(int x, int y) {
+        constraints.gridx = x;
+        constraints.gridy = y;
+    }
+
     public GridBagConstraints getConstraints(Component component) {
         return layout.getConstraints(component);
     }

@@ -64,4 +64,8 @@ public class BoardPanel extends Board implements Panel {
         super.setBackground(bg);
         setTransparent(false);
     }
+
+    public Frame getFrame() {
+        return frame;
+    }
 }

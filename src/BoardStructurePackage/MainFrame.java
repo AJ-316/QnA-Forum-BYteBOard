@@ -64,8 +64,8 @@ public abstract class MainFrame extends JFrame {
             new AuthenticationMainFrame(false);
             new QnAForumMainFrame(false);
 
-            MAIN_FRAMES[AuthenticationMainFrame.ID].prepareMainFrame("1");
-            MAIN_FRAMES[AuthenticationMainFrame.ID].setVisible(true);
+            MAIN_FRAMES[QnAForumMainFrame.ID].prepareMainFrame("1");
+            MAIN_FRAMES[QnAForumMainFrame.ID].setVisible(true);
         });
     }
 

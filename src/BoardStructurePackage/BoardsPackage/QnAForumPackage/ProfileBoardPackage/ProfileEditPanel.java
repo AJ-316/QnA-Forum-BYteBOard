@@ -202,7 +202,8 @@ public class ProfileEditPanel extends BoardPanel {
         // Cancel Profile Edit
         cancelButton.addActionListener(e -> {
             setVisible(false);
-            setPanelVisibility(ProfileDisplayPanel.class.getSimpleName(), true);
+            setPanelVisibility(ProfileBoardButtonPanel.class.getSimpleName(), true);
+            setPanelVisibility(ProfileBoardUserDataPanel.class.getSimpleName(), true);
             setPanelVisibility(ProfileSelectionPanel.class.getSimpleName(), false);
         });
 

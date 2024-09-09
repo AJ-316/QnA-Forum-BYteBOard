@@ -35,6 +35,10 @@ public class BoardButton extends JButton implements CustomControl {
         addFontColorUpdates();
     }
 
+    public void setIcon(String icon) {
+        ResourceManager.setButtonIcons(this, icon, ResourceManager.MINI);
+    }
+
     public void setRounded(boolean isRounded) {
         this.isRounded = isRounded;
         if(isRounded)
@@ -53,7 +57,7 @@ public class BoardButton extends JButton implements CustomControl {
         int actualCornerRadius = Math.min(60, Math.min(getWidth(), getHeight()) / 2);
 
         if(isRounded) {
-            //g2d.setColor(hasFocus() ? ResourceManager.getColor(ByteBoardTheme.ACCENT_DARK) : getBackground());
+//            g2d.setColor(hasFocus() ? ResourceManager.getColor(ByteBoardTheme.ACCENT_DARK) : getBackground());
             g2d.setColor(getBackground());
             g2d.fillRoundRect(0, 0, getWidth()-1, getHeight()-1, actualCornerRadius, actualCornerRadius);
         }

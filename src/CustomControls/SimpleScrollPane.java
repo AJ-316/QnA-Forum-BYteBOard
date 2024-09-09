@@ -107,7 +107,7 @@ public class SimpleScrollPane extends JScrollPane {
             return new InvisibleScrollBarButton();
         }
 
-        @Override
+        /*@Override
         protected void paintTrack(Graphics g, JComponent c, Rectangle trackBounds) {
             boolean isVertical = scrollbar.getOrientation() == JScrollBar.VERTICAL;
 
@@ -137,18 +137,18 @@ public class SimpleScrollPane extends JScrollPane {
                     );
                 }
             }
-        }
+        }*/
 
+        @Override
+        protected void paintTrack(Graphics g, JComponent c, Rectangle trackBounds) {}
 
         @Override
         protected void paintThumb(Graphics g, JComponent c, Rectangle thumbBounds) {
             int alpha = isDragging ? SCROLL_BAR_ALPHA_ROLLOVER : SCROLL_BAR_ALPHA;
             int orientation = scrollbar.getOrientation();
-            int x = thumbBounds.x + 2;
-            int y = thumbBounds.y;
 
             int width = orientation == JScrollBar.VERTICAL ? THUMB_SIZE : thumbBounds.width;
-            width = Math.max(width, THUMB_SIZE) + 4;
+            width = Math.max(width, THUMB_SIZE);
 
             int height = orientation == JScrollBar.VERTICAL ? thumbBounds.height : THUMB_SIZE;
             height = Math.max(height, THUMB_SIZE);
@@ -157,8 +157,7 @@ public class SimpleScrollPane extends JScrollPane {
             graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             graphics2D.setColor(new Color(THUMB_COLOR.getRed(), THUMB_COLOR.getGreen(), THUMB_COLOR.getBlue(), alpha));
 
-            graphics2D.fillRect(x, y, width/2 - 3, height);
-            graphics2D.fillRect(x + width/2 - 1, y, width/2, height);
+            graphics2D.fillRoundRect(thumbBounds.x, thumbBounds.y, width, height, 8, 8);
         }
 
         @Override

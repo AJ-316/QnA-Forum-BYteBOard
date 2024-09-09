@@ -3,7 +3,6 @@ package BoardStructurePackage.BoardsPackage.QnAForumPackage.ProfileBoardPackage;
 import BoardStructurePackage.BoardPanel;
 import BoardStructurePackage.Frame;
 import BoardStructurePackage.MainFrame;
-import CustomControls.BoardButton;
 import CustomControls.BoardLabel;
 import CustomControls.GridBagBuilder;
 import Resources.ByteBoardTheme;
@@ -11,82 +10,31 @@ import Resources.ResourceManager;
 
 import java.awt.*;
 
-public class ProfileDisplayPanel extends BoardPanel {
-
-    private BoardButton searchButton;
-    private BoardButton askButton;
-    private BoardButton activityButton;
-    private BoardButton editProfileButton;
-    private BoardButton logoutButton;
+public class ProfileBoardUserDataPanel extends BoardPanel {
 
     private BoardLabel userProfileLabel;
-    private BoardLabel userBytesLabel;
     private BoardLabel usernameLabel;
+    private BoardLabel userBytesLabel;
     private BoardLabel userEmailLabel;
 
-    public ProfileDisplayPanel(MainFrame main, Frame frame) {
+    public ProfileBoardUserDataPanel(MainFrame main, Frame frame) {
         super(main, frame);
     }
 
     public void init(MainFrame main, Frame frame) {
-        GridBagBuilder builder = new GridBagBuilder(this, 3);
-        builder.gridWeightY(1);
-
-        BoardPanel buttonsPanel = getButtonsPanel(main, frame);
-        builder.fill(GridBagConstraints.BOTH);
-        builder.add(buttonsPanel);
-
-        BoardPanel userMainPanel = getUserMainPanel(main, frame);
-        builder.fill(GridBagConstraints.NONE);
-        builder.gridWeightX(1);
-        builder.add(userMainPanel);
-
-        addButtonListeners();
-    }
-
-    private BoardPanel getButtonsPanel(MainFrame main, Frame frame) {
-        BoardPanel panel = new BoardPanel(main, frame, ByteBoardTheme.MAIN);
-        panel.setCornerRadius(90);
-        panel.addInsets(30);
-
-        GridBagBuilder builder = new GridBagBuilder(panel, 1);
-        builder.anchor(GridBagConstraints.SOUTH);
-        builder.fill(GridBagConstraints.HORIZONTAL);
-        builder.insets(10, 10, 10, 10);
-
-        builder.gridWeightY(1);
-        builder.add(searchButton = createLightButton("    Search", "search"));
-
-        builder.gridWeightY(0);
-        builder.add(askButton = createLightButton("Ask Question", "question"));
-        builder.add(activityButton = createLightButton("View Activity", "show"));
-        builder.add(editProfileButton = createLightButton("  Edit Profile", "edit"));
-        builder.add(logoutButton = createLightButton("    Log Out", "logout"));
-        return panel;
-    }
-
-    private BoardButton createLightButton(String text, String icon) {
-        BoardButton button = new BoardButton(text, icon);
-        button.setFGLight();
-        button.setAlignmentLeading();
-        return button;
-    }
-
-    private BoardPanel getUserMainPanel(MainFrame main, Frame frame) {
-        BoardPanel panel = new BoardPanel(main, frame);
+        GridBagBuilder builder = new GridBagBuilder(this, 2);
 
         userProfileLabel = new BoardLabel();
         userProfileLabel.setProfileIcon("0", ResourceManager.LARGE);
         userProfileLabel.addInsets(0, 0, 0, 40);
 
         BoardPanel userDataPanel = new BoardPanel(main, frame, ByteBoardTheme.MAIN);
+        userDataPanel.setCornerRadius(90);
         userDataPanel.setShadowState(BoardPanel.DROP_SHADOW);
         createUserData(userDataPanel);
-        userDataPanel.setCornerRadius(90);
 
-        panel.add(userProfileLabel);
-        panel.addPanel("UserDataPanel", userDataPanel, null);
-        return panel;
+        builder.add(userProfileLabel);
+        builder.add(userDataPanel);
     }
 
     private void createUserData(BoardPanel panel) {
@@ -118,13 +66,6 @@ public class ProfileDisplayPanel extends BoardPanel {
         userEmailLabel.setFontPrimary(ByteBoardTheme.FONT_T_SEMIBOLD, 20);
         userEmailLabel.addInsets(10);
         builder.add(userEmailLabel);
-    }
-
-    private void addButtonListeners() {
-        editProfileButton.addActionListener(e -> {
-            setVisible(false);
-            setPanelVisibility(ProfileEditPanel.class.getSimpleName(), true);
-        });
     }
 
     protected void setProfile(String profileIcon) {

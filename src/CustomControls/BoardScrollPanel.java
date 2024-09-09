@@ -20,6 +20,10 @@ public class BoardScrollPanel extends BoardPanel {
         scrollPane.getViewport().setMinimumSize(new Dimension(width, height));
     }
 
+    public void setScrollSize(int width, int height) {
+        scrollPane.getViewport().setMaximumSize(new Dimension(width, height));
+    }
+
     public void setBackground(String bg) {
         super.setBackground(ResourceManager.getColor(bg));
         scrollPane.getViewport().setBackground(getBackground());
@@ -31,7 +35,7 @@ public class BoardScrollPanel extends BoardPanel {
             scrollPane.getViewport().setBackground(bg);
     }
 
-    public Component getComponent() {
+    public SimpleScrollPane getComponent() {
         return scrollPane;
     }
 }
