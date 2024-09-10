@@ -72,22 +72,18 @@ public abstract class ByteBoardTheme {
         }
     }
 
-    public void loadFontName(String key, String value) {
-        if (key.endsWith(FONT_K_PRIMARY))
-            UIManager.put("QnAForum.font." + FONT_K_PRIMARY, value);
-        else if (key.endsWith(FONT_K_SECONDARY))
-            UIManager.put("QnAForum.font." + FONT_K_SECONDARY, value);
-    }
-
     public void loadFontAttributes(String key, String value) {
-        loadFontName(key, value);
-
         // TODO: Loads all even font sizes from 12 to 40. Finalize required fonts later
         String sizes = "12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40";
         loadFontAttribute(value + FONT_T_REGULAR, sizes);
         loadFontAttribute(value + FONT_T_SEMIBOLD, sizes);
         loadFontAttribute(value + FONT_T_THIN, sizes);
         loadFontAttribute(value + FONT_T_BOLD, sizes);
+
+        key = key.endsWith(FONT_K_PRIMARY) ? FONT_K_PRIMARY : key.endsWith(FONT_K_SECONDARY) ? FONT_K_SECONDARY : null;
+
+        if(key != null)
+            loadFontAttribute(key, value);
     }
 
     public void loadFontAttribute(String key, String value) {
@@ -106,13 +102,13 @@ public abstract class ByteBoardTheme {
         for (String key : fontAttributes.keySet()) {
             createFont(key, fontAttributes.get(key));
         }
-
         UIManager.put("Label.foreground", ResourceManager.getColor(ByteBoardTheme.TEXT_FG_DARK));
         UIManager.put("Button.foreground", ResourceManager.getColor(ByteBoardTheme.TEXT_FG_DARK));
 
+        UIManager.put("ComboBox.focusedBackground", ResourceManager.getColor(ByteBoardTheme.ACCENT_DARK));
         UIManager.put("ComboBox.selectionBackground", ResourceManager.getColor(ByteBoardTheme.ACCENT));
         UIManager.put("ComboBox.selectionForeground", ResourceManager.getColor(ByteBoardTheme.TEXT_FG_LIGHT));
-        UIManager.put("ComboBox.background", ResourceManager.getColor(ByteBoardTheme.MAIN_DARK));
+        UIManager.put("ComboBox.background", ResourceManager.getColor(ByteBoardTheme.MAIN_LIGHT)); // _DARK
         UIManager.put("ComboBox.foreground", ResourceManager.getColor(ByteBoardTheme.TEXT_FG_LIGHT));
 
         UIManager.put("TextField.foreground", ResourceManager.getColor(ByteBoardTheme.TEXT_FG_DARK));
@@ -123,6 +119,11 @@ public abstract class ByteBoardTheme {
 
     // note: doesn't use the style consideration
     private void createFont(String key, String value) {
+        if(key.equals(FONT_K_PRIMARY) || key.equals(FONT_K_SECONDARY)) {
+            UIManager.put("QnAForum.font." + key, value);
+            return;
+        }
+
         String[] values = value.split("-");
         String[] sizesList = values[values.length == 1 ? 0 : 1].split(",");
 

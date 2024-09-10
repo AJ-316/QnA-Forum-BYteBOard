@@ -1,9 +1,6 @@
 package Resources;
 
-import CustomControls.DEBUG;
-
 import java.io.*;
-import java.util.Arrays;
 
 public class ThemeLoader {
 
@@ -22,7 +19,6 @@ public class ThemeLoader {
         theme.setName(file);
 
         String key, value;
-
         try {
             while((line = reader.readLine()) != null) {
                 line = line.trim();

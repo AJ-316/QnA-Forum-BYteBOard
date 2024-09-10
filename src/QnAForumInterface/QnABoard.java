@@ -5,9 +5,8 @@
 package QnAForumInterface;
 
 import CustomControls.CustomJPanel;
-import CustomControls.DEBUG;
 import CustomControls.SimpleScrollPane;
-import DatabasePackage.*;
+import BYteBOardDatabase.*;
 import QnAForumInterface.InformationBarPackage.AnswerBar;
 import QnAForumInterface.InterfaceEventPackage.InterfaceEventManager;
 import QnAForumInterface.MainPanelPackage.MainPanel;

@@ -1,8 +1,8 @@
 package QnAForumInterface;
 
-import DatabasePackage.DBDataObject;
-import DatabasePackage.DBUser;
-import DatabasePackage.EncryptionUtils;
+import BYteBOardDatabase.DBDataObject;
+import BYteBOardDatabase.DBUser;
+import BYteBOardDatabase.EncryptionUtils;
 
 import Resources.ByteBoardTheme;
 import Resources.ResourceManager;

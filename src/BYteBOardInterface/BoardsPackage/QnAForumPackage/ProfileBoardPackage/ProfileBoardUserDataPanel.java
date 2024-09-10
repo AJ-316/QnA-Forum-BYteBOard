@@ -1,0 +1,86 @@
+package BYteBOardInterface.BoardsPackage.QnAForumPackage.ProfileBoardPackage;
+
+import BYteBOardInterface.StructurePackage.BoardPanel;
+import BYteBOardInterface.StructurePackage.Frame;
+import BYteBOardInterface.StructurePackage.MainFrame;
+import CustomControls.BoardLabel;
+import CustomControls.GridBagBuilder;
+import Resources.ByteBoardTheme;
+import Resources.ResourceManager;
+
+import java.awt.*;
+
+public class ProfileBoardUserDataPanel extends BoardPanel {
+
+    private BoardLabel userProfileLabel;
+    private BoardLabel usernameLabel;
+    private BoardLabel userBytesLabel;
+    private BoardLabel userEmailLabel;
+
+    public ProfileBoardUserDataPanel(MainFrame main, Frame frame) {
+        super(main, frame);
+    }
+
+    public void init(MainFrame main, Frame frame) {
+        GridBagBuilder builder = new GridBagBuilder(this, 2);
+
+        userProfileLabel = new BoardLabel();
+        userProfileLabel.setProfileIcon("0", ResourceManager.LARGE);
+        userProfileLabel.addInsets(0, 0, 0, 40);
+
+        BoardPanel userDataPanel = new BoardPanel(main, frame, ByteBoardTheme.MAIN);
+        userDataPanel.setCornerRadius(90);
+        userDataPanel.setShadowState(BoardPanel.DROP_SHADOW);
+        createUserData(userDataPanel);
+
+        builder.add(userProfileLabel);
+        builder.add(userDataPanel);
+    }
+
+    private void createUserData(BoardPanel panel) {
+        panel.addInsets(40);
+
+        GridBagBuilder builder = new GridBagBuilder(panel, 1);
+        builder.fill(GridBagConstraints.BOTH);
+        builder.gridWeightX(1);
+
+        usernameLabel = new BoardLabel("Username");
+        usernameLabel.setFGLight();
+        usernameLabel.setAlignmentLeading();
+        usernameLabel.setFontPrimary(ByteBoardTheme.FONT_T_BOLD, 32);
+        usernameLabel.addInsets(10, 10, 30, 10);
+        builder.add(usernameLabel);
+
+        userBytesLabel = new BoardLabel("bytescore_icon", ResourceManager.SMALL);
+        userBytesLabel.setText("24536");
+        userBytesLabel.setFGLight();
+        userBytesLabel.setAlignmentLeading();
+        userBytesLabel.setFontPrimary(ByteBoardTheme.FONT_T_SEMIBOLD, 20);
+        userBytesLabel.addInsets(10);
+        builder.add(userBytesLabel);
+
+        userEmailLabel = new BoardLabel("user123@gmail.com");
+        userEmailLabel.setColoredIcon("email", ByteBoardTheme.MAIN_DARK, null, ResourceManager.SMALL);
+        userEmailLabel.setFGLight();
+        userEmailLabel.setAlignmentLeading();
+        userEmailLabel.setFontPrimary(ByteBoardTheme.FONT_T_SEMIBOLD, 20);
+        userEmailLabel.addInsets(10);
+        builder.add(userEmailLabel);
+    }
+
+    protected void setProfile(String profileIcon) {
+        userProfileLabel.setProfileIcon(profileIcon, ResourceManager.LARGE);
+    }
+
+    protected void setUsername(String username) {
+        usernameLabel.setText(username);
+    }
+
+    protected void setUserEmail(String email) {
+        userEmailLabel.setText(email);
+    }
+
+    protected void setUserBytes(String bytes) {
+        userBytesLabel.setText(bytes);
+    }
+}

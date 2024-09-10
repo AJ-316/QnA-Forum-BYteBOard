@@ -10,6 +10,7 @@ public class SimpleScrollPane extends JScrollPane {
     private static final int SCROLL_BAR_ALPHA = 100;
     private static final int THUMB_SIZE = 8;
     private static final int SB_SIZE = 10;
+    private static final int PADDING = 8;
     private static final Color THUMB_COLOR = Color.white;
 
     public SimpleScrollPane() {
@@ -41,6 +42,7 @@ public class SimpleScrollPane extends JScrollPane {
                 availR.y = insets.top;
                 availR.width -= insets.left + insets.right;
                 availR.height -= insets.top + insets.bottom;
+
                 if (viewport != null) {
                     viewport.setBounds(availR);
                 }
@@ -50,9 +52,9 @@ public class SimpleScrollPane extends JScrollPane {
 
                 // vertical scroll bar
                 Rectangle vsbR = new Rectangle();
-                vsbR.width = SB_SIZE;
+                vsbR.width = SB_SIZE + PADDING;
                 vsbR.height = availR.height - (hsbNeeded ? vsbR.width : 0);
-                vsbR.x = availR.x + availR.width - vsbR.width;
+                vsbR.x = availR.x + availR.width - vsbR.width + PADDING;
                 vsbR.y = availR.y;
                 if (vsb != null) {
                     vsb.setBounds(vsbR);
@@ -63,7 +65,7 @@ public class SimpleScrollPane extends JScrollPane {
                 hsbR.height = SB_SIZE;
                 hsbR.width = availR.width - (vsbNeeded ? hsbR.height : 0);
                 hsbR.x = availR.x;
-                hsbR.y = availR.y + availR.height - hsbR.height;
+                hsbR.y = availR.y + availR.height - hsbR.height + PADDING;
                 if (hsb != null) {
                     hsb.setBounds(hsbR);
                 }
@@ -77,6 +79,7 @@ public class SimpleScrollPane extends JScrollPane {
 
         viewport.setView(view);
     }
+
     private boolean isVerticalScrollBarfNecessary() {
         Rectangle viewRect = viewport.getViewRect();
         Dimension viewSize = viewport.getViewSize();
@@ -144,7 +147,7 @@ public class SimpleScrollPane extends JScrollPane {
 
         @Override
         protected void paintThumb(Graphics g, JComponent c, Rectangle thumbBounds) {
-            int alpha = isDragging ? SCROLL_BAR_ALPHA_ROLLOVER : SCROLL_BAR_ALPHA;
+            int alpha = isThumbRollover() ? SCROLL_BAR_ALPHA_ROLLOVER : SCROLL_BAR_ALPHA;
             int orientation = scrollbar.getOrientation();
 
             int width = orientation == JScrollBar.VERTICAL ? THUMB_SIZE : thumbBounds.width;
@@ -157,7 +160,10 @@ public class SimpleScrollPane extends JScrollPane {
             graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             graphics2D.setColor(new Color(THUMB_COLOR.getRed(), THUMB_COLOR.getGreen(), THUMB_COLOR.getBlue(), alpha));
 
-            graphics2D.fillRoundRect(thumbBounds.x, thumbBounds.y, width, height, 8, 8);
+            int offset = isThumbRollover() ? 0 : 2;
+
+            graphics2D.fillRoundRect(thumbBounds.x + offset, thumbBounds.y + offset,
+                    width - offset*2, height - offset*2, 8 - offset, 8 - offset);
         }
 
         @Override
@@ -168,8 +174,6 @@ public class SimpleScrollPane extends JScrollPane {
 
         private static class InvisibleScrollBarButton extends JButton {
 
-            private static final long serialVersionUID = 1552427919226628689L;
-
             private InvisibleScrollBarButton() {
                 setOpaque(false);
                 setFocusable(false);
@@ -179,5 +183,4 @@ public class SimpleScrollPane extends JScrollPane {
             }
         }
     }
-
 }

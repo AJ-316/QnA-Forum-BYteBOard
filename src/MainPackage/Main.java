@@ -1,6 +1,6 @@
 package MainPackage;
 
-import DatabasePackage.DatabaseManager;
+import BYteBOardDatabase.DatabaseManager;
 import QnAForumInterface.AuthenticationForm;
 import Resources.ResourceManager;
 

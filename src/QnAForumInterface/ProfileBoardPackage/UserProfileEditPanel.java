@@ -2,8 +2,8 @@ package QnAForumInterface.ProfileBoardPackage;
 
 import CustomControls.CustomJPanel;
 import CustomControls.SimpleScrollPane;
-import DatabasePackage.DBUser;
-import DatabasePackage.EncryptionUtils;
+import BYteBOardDatabase.DBUser;
+import BYteBOardDatabase.EncryptionUtils;
 import QnAForumInterface.InterfaceEventPackage.InterfaceEventManager;
 import QnAForumInterface.WrapLayout;
 import Resources.ByteBoardTheme;

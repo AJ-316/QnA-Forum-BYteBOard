@@ -79,9 +79,10 @@ public class ProfileButtonHolder extends CustomJPanel {
     private void initChangeThemeOption(JButton changeThemeBtn) {
         themeListBox.setVisible(false);
 
-        for (ByteBoardTheme theme : ResourceManager.getThemes()) {
-            themeListBox.addItem(theme.getName());
+        for (String theme : ResourceManager.getThemes()) {
+            themeListBox.addItem(theme);
         }
+
         themeListBox.setFocusable(false);
         themeListBox.setSelectedItem(ResourceManager.getCurrentTheme());
         themeListBox.setPreferredSize(changeThemeBtn.getPreferredSize());

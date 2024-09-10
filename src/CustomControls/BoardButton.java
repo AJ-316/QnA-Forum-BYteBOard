@@ -73,11 +73,19 @@ public class BoardButton extends JButton implements CustomControl {
     private void addFontColorUpdates() {
         MouseAdapter adapter = new MouseAdapter() {
             public void mouseEntered(MouseEvent e) {
+                if(!isEnabled()) return;
                 setFGColor(rolloverFGColor);
             }
 
             public void mouseExited(MouseEvent e) {
+                if(!isEnabled()) return;
                 setFGColor(defaultFGColor);
+            }
+
+            public void mouseReleased(MouseEvent e) {
+                if(isEnabled()) return;
+                setFGColor(ByteBoardTheme.DISABLED);
+                repaint();
             }
         };
 
@@ -107,6 +115,10 @@ public class BoardButton extends JButton implements CustomControl {
 
     public void setFGMain() {
         setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_MAIN));
+    }
+
+    private void setFGColor(String fgColor) {
+        super.setForeground(ResourceManager.getColor(fgColor));
     }
 
     private void setFGColor(Color fgColor) {

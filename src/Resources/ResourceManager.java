@@ -20,15 +20,16 @@ public class ResourceManager {
     public static final int MINI = 32;
     public static final int MICRO = 24;
 
-    public static List<ByteBoardTheme> themes = new ArrayList<>();
+    public static List<ByteBoardTheme> THEMES = new ArrayList<>();
     private static String CURRENT_THEME = "";
 
     public static void init() {
-        initLookNFeel();
-        themes.add(ByteBoardTheme.ByteBoardBaseTheme);
+        //initLookNFeel();
+        THEMES.add(ByteBoardTheme.ByteBoardBaseTheme);
         setTheme(ByteBoardTheme.ByteBoardBaseTheme.getName());
 
         loadAvailableThemes();
+        EventQueue.invokeLater(() -> setTheme("Dark Theme"));
     }
 
     private static void loadAvailableThemes() {
@@ -45,9 +46,11 @@ public class ResourceManager {
     }
 
     public static void setTheme(String name) {
+        if(CURRENT_THEME.equals(name)) return;
+
         CURRENT_THEME = name;
         deleteIconCache();
-        for (ByteBoardTheme theme : themes) {
+        for (ByteBoardTheme theme : THEMES) {
             if(theme.getName().equals(name)) {
                 theme.load();
                 return;
@@ -58,15 +61,23 @@ public class ResourceManager {
     public static void loadTheme(String file) {
         ByteBoardTheme theme = ThemeLoader.getTheme(file);
         if(theme == null) return;
-        themes.add(theme);
+        THEMES.add(theme);
     }
 
-    public static List<ByteBoardTheme> getThemes() {
-        return themes;
+    public static List<ByteBoardTheme> getByteBoardThemes() {
+        return THEMES;
     }
 
     public static String getCurrentTheme() {
         return CURRENT_THEME;
+    }
+
+    public static String[] getThemes() {
+        String[] themeNames = new String[THEMES.size()];
+        for(int i = 0; i < themeNames.length; i++)
+            themeNames[i] = THEMES.get(i).getName();
+
+        return themeNames;
     }
 
     public static Color getColor(String label) {
@@ -190,6 +201,7 @@ public class ResourceManager {
     }
 
     private static void initLookNFeel() {
+        System.out.println(UIManager.getLookAndFeel());
         try {
             for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
                 if ("Windows".equals(info.getName())) {

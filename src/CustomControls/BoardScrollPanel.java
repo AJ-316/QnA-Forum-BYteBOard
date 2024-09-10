@@ -1,8 +1,8 @@
 package CustomControls;
 
-import BoardStructurePackage.BoardPanel;
-import BoardStructurePackage.Frame;
-import BoardStructurePackage.MainFrame;
+import BYteBOardInterface.StructurePackage.BoardPanel;
+import BYteBOardInterface.StructurePackage.Frame;
+import BYteBOardInterface.StructurePackage.MainFrame;
 import Resources.ResourceManager;
 
 import java.awt.*;

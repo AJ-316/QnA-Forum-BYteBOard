@@ -1,9 +1,9 @@
 package QnAForumInterface.ProfileBoardPackage;
 
-import DatabasePackage.DBAnswer;
-import DatabasePackage.DBDataObject;
-import DatabasePackage.DBQuestion;
-import DatabasePackage.DBUser;
+import BYteBOardDatabase.DBAnswer;
+import BYteBOardDatabase.DBDataObject;
+import BYteBOardDatabase.DBQuestion;
+import BYteBOardDatabase.DBUser;
 import QnAForumInterface.InterfaceEventPackage.InterfaceEventManager;
 import Resources.ByteBoardTheme;
 import Resources.ResourceManager;

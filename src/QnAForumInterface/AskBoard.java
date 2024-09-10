@@ -6,10 +6,10 @@ package QnAForumInterface;
 
 import CustomControls.CustomJPanel;
 import CustomControls.SimpleScrollPane;
-import DatabasePackage.DBAnswer;
-import DatabasePackage.DBQuestion;
-import DatabasePackage.DBTag;
-import DatabasePackage.DBUser;
+import BYteBOardDatabase.DBAnswer;
+import BYteBOardDatabase.DBQuestion;
+import BYteBOardDatabase.DBTag;
+import BYteBOardDatabase.DBUser;
 
 import QnAForumInterface.ProfileBoardPackage.ProfileBoard;
 import Resources.ByteBoardTheme;

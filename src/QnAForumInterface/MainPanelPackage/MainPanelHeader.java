@@ -3,7 +3,7 @@ package QnAForumInterface.MainPanelPackage;
 import CustomControls.CustomJPanel;
 
 import CustomControls.DEBUG;
-import DatabasePackage.DBVote;
+import BYteBOardDatabase.DBVote;
 import QnAForumInterface.InformationBarPackage.AnswerBar;
 import QnAForumInterface.InterfaceEventPackage.InterfaceEventManager;
 import QnAForumInterface.QnABoard;
