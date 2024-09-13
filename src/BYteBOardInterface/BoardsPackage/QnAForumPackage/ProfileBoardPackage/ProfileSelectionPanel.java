@@ -27,7 +27,7 @@ public class ProfileSelectionPanel extends BoardPanel {
         setLayout(new BorderLayout());
 
         BoardScrollPanel profilesScrollPane = new BoardScrollPanel(main, frame);
-        profilesScrollPane.getComponent().getVerticalScrollBar().setUnitIncrement(8);
+        profilesScrollPane.setVerticalUnitIncrement(8);
 
         int layoutGap = 5;
         int size = ResourceManager.REGULAR * 2 + layoutGap * 8;

@@ -24,7 +24,7 @@ public class SignupFormPanel extends BoardPanel {
 
         GridBagBuilder builder = new GridBagBuilder(this, 1);
         builder.insets(0, 0, 0, 0);
-        builder.gridWeightY(1);
+        builder.weightY(1);
 
         // Title
         BoardLabel signupTitle = new BoardLabel("Signup");

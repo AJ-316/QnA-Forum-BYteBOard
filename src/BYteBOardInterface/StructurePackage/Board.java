@@ -1,8 +1,10 @@
 package BYteBOardInterface.StructurePackage;
 
 import CustomControls.CustomJPanel;
+import CustomControls.DEBUG;
 
 import javax.swing.*;
+import java.util.Arrays;
 
 public abstract class Board extends CustomJPanel {
 
@@ -12,7 +14,7 @@ public abstract class Board extends CustomJPanel {
         this.main = main;
     }
 
-    public void requestSwitchFrame(Class<?> frameClass, String switchContext) {
+    public void requestSwitchFrame(Class<?> frameClass, String... switchContext) {
         main.setBoardFrame(frameClass, switchContext);
     }
 
@@ -32,7 +34,9 @@ public abstract class Board extends CustomJPanel {
         addInsets(inset, inset, inset, inset);
     }
 
-    public void requestSwitchMainFrame(int id, String switchContext) {
+    public void requestSwitchMainFrame(int id, String... switchContext) {
+        DEBUG.printlnYellow("Requesting Main frame switch: " + id + ", context: " + Arrays.toString(switchContext));
+
         main.switchMainFrame(id, switchContext);
     }
 

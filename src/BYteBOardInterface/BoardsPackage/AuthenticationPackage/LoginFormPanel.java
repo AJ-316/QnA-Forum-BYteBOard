@@ -21,7 +21,7 @@ public class LoginFormPanel extends BoardPanel {
         super(main, frame);
 
         GridBagBuilder builder = new GridBagBuilder(this, 1);
-        builder.gridWeightY(1);
+        builder.weightY(1);
 
         // Title
         BoardLabel loginTitle = new BoardLabel("Login");

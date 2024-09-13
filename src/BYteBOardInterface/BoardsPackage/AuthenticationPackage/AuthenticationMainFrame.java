@@ -18,7 +18,7 @@ public class AuthenticationMainFrame extends MainFrame {
         super.restartMainFrame(AuthenticationMainFrame.ID, getBoardFrame(AuthenticateBoardFrame.class).recoverContext());
     }
 
-    public void prepareMainFrame(String switchBoardFrameContext) {
-        setBoardFrame(AuthenticateBoardFrame.class, null);
+    public void prepareMainFrame(String... switchBoardFrameContext) {
+        setBoardFrame(AuthenticateBoardFrame.class, switchBoardFrameContext);
     }
 }

@@ -26,7 +26,11 @@ public class DBAnswer extends DBOperation {
                 K_UPVOTES, String.valueOf(newUpvotes), K_DOWNVOTES, String.valueOf(newDownvotes));
     }
 
-    public void addAnswer(String answer, String userID, String questionID) {
-        insertValue(new String[]{K_ANSWER, K_USER_ID, K_QUESTION_ID}, new String[]{answer, userID, questionID});
+    public static DBDataObject getAnswer(String answerID) {
+        return ops.findValuesBy(ops.matchByValue(K_ANSWER_ID, answerID), "*")[0];
+    }
+
+    public static void addAnswer(String answer, String userID, String questionID) {
+        ops.insertValue(new String[]{K_ANSWER, K_USER_ID, K_QUESTION_ID}, new String[]{answer, userID, questionID});
     }
 }

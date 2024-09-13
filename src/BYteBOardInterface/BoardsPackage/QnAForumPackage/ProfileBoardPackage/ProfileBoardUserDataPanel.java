@@ -42,7 +42,7 @@ public class ProfileBoardUserDataPanel extends BoardPanel {
 
         GridBagBuilder builder = new GridBagBuilder(panel, 1);
         builder.fill(GridBagConstraints.BOTH);
-        builder.gridWeightX(1);
+        builder.weightX(1);
 
         usernameLabel = new BoardLabel("Username");
         usernameLabel.setFGLight();

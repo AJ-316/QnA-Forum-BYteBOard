@@ -4,11 +4,11 @@ public interface Frame {
 
     void init(MainFrame main);
 
-    void setContext(String context);
+    void setContext(String... context);
 
     String recoverContext();
 
-    void applyFrameSwitchContext(BoardFrameSwitchDelegate frameSwitchDelegate);
+    void applyFrameSwitchContext(BoardFrameSwitchDelegate delegate);
 
     BoardFrame getBoardFrame();
 }

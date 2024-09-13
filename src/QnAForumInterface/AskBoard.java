@@ -605,7 +605,7 @@ public class AskBoard extends JPanel {
             String bodyText = body.getText().trim();
 
             if (bodyText.isEmpty()) return;
-            DBAnswer.ops.addAnswer(body.getText().trim(), userID, questionID);
+            DBAnswer.addAnswer(body.getText().trim(), userID, questionID);
         }
 
         switchToProfile();

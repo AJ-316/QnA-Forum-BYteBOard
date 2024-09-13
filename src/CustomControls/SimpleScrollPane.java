@@ -65,7 +65,7 @@ public class SimpleScrollPane extends JScrollPane {
                 hsbR.height = SB_SIZE;
                 hsbR.width = availR.width - (vsbNeeded ? hsbR.height : 0);
                 hsbR.x = availR.x;
-                hsbR.y = availR.y + availR.height - hsbR.height + PADDING;
+                hsbR.y = availR.y + availR.height - hsbR.height;
                 if (hsb != null) {
                     hsb.setBounds(hsbR);
                 }
@@ -148,12 +148,12 @@ public class SimpleScrollPane extends JScrollPane {
         @Override
         protected void paintThumb(Graphics g, JComponent c, Rectangle thumbBounds) {
             int alpha = isThumbRollover() ? SCROLL_BAR_ALPHA_ROLLOVER : SCROLL_BAR_ALPHA;
-            int orientation = scrollbar.getOrientation();
+            boolean isVertical = scrollbar.getOrientation() == JScrollBar.VERTICAL;
 
-            int width = orientation == JScrollBar.VERTICAL ? THUMB_SIZE : thumbBounds.width;
+            int width = isVertical ? THUMB_SIZE : thumbBounds.width;
             width = Math.max(width, THUMB_SIZE);
 
-            int height = orientation == JScrollBar.VERTICAL ? thumbBounds.height : THUMB_SIZE;
+            int height = isVertical ? thumbBounds.height : THUMB_SIZE;
             height = Math.max(height, THUMB_SIZE);
 
             Graphics2D graphics2D = (Graphics2D) g;
@@ -162,8 +162,16 @@ public class SimpleScrollPane extends JScrollPane {
 
             int offset = isThumbRollover() ? 0 : 2;
 
-            graphics2D.fillRoundRect(thumbBounds.x + offset, thumbBounds.y + offset,
-                    width - offset*2, height - offset*2, 8 - offset, 8 - offset);
+            //graphics2D.fillRoundRect(thumbBounds.x + offset, thumbBounds.y + offset,
+            //        width - offset*2, height - offset*2, 8 - offset, 8 - offset);
+
+            if (isVertical) {
+                graphics2D.fillRoundRect(thumbBounds.x + offset, thumbBounds.y + offset,
+                        width - offset*2, height - offset*2, 8 - offset, 8 - offset);
+            } else {
+                graphics2D.fillRoundRect(thumbBounds.x + offset, thumbBounds.y + offset,
+                        width - offset*2, height - offset*2, 8 - offset, 8 - offset);
+            }
         }
 
         @Override

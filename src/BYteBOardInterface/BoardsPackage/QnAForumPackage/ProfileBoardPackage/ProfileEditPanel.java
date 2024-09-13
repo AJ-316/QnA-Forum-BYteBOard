@@ -43,7 +43,7 @@ public class ProfileEditPanel extends BoardPanel {
 
         BoardPanel buttonsPanel = getButtonsPanel(main, frame);
         builder.fill(GridBagConstraints.VERTICAL);
-        builder.gridWeightY(1);
+        builder.weightY(1);
         builder.add(buttonsPanel, 1, 3);
 
         builder.fill(GridBagConstraints.NONE);
@@ -57,7 +57,7 @@ public class ProfileEditPanel extends BoardPanel {
         builder.gridHeight(1);
 
         BoardPanel fieldsPanel = getFieldsPanel(main, frame);
-        builder.gridWeightX(1);
+        builder.weightX(1);
         builder.skipCells(1);
         builder.add(fieldsPanel);
     }
@@ -66,8 +66,8 @@ public class ProfileEditPanel extends BoardPanel {
         BoardPanel panel = new BoardPanel(main, frame);
         GridBagBuilder builder = new GridBagBuilder(panel);
         builder.fill(GridBagConstraints.BOTH);
-        builder.gridWeightX(1);
-        builder.gridWeightY(1);
+        builder.weightX(1);
+        builder.weightY(1);
 
         profileLabel.addInsets(20);
         profileLabel.setProfileIcon("0", ResourceManager.LARGE);
@@ -91,7 +91,7 @@ public class ProfileEditPanel extends BoardPanel {
         builder.insets(10, 10, 10, 10);
 
         BoardPanel profilePanel = getProfilePanel(main, frame);
-        builder.gridWeightY(0);
+        builder.weightY(0);
         builder.add(profilePanel, 3, 1);
         builder.skipCells(2);
 
@@ -162,13 +162,13 @@ public class ProfileEditPanel extends BoardPanel {
         builder.fill(GridBagConstraints.HORIZONTAL);
         builder.insets(10, 10, 10, 10);
 
-        builder.gridWeightY(1);
+        builder.weightY(1);
         saveButton = new BoardButton("Save Changes", "save");
         saveButton.setAlignmentLeading();
         saveButton.setFGLight();
         builder.add(saveButton);
 
-        builder.gridWeightY(0);
+        builder.weightY(0);
         cancelButton = new BoardButton("Cancel", "cancel");
         cancelButton.setAlignmentLeading();
         cancelButton.setFGLight();

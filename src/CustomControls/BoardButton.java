@@ -14,16 +14,22 @@ public class BoardButton extends JButton implements CustomControl {
     private Color defaultFGColor;
     private Color rolloverFGColor;
     private boolean isRounded;
+    private int iconSize;
+
+    // default state icons with size
+    public BoardButton(String icon, int iconSize) {
+        this("", icon, ResourceManager.DEFAULT, ResourceManager.PRESSED, ResourceManager.ROLLOVER, iconSize);
+    }
 
     // default state icons
     public BoardButton(String text, String icon) {
         this(text, icon, ResourceManager.DEFAULT, ResourceManager.PRESSED, ResourceManager.ROLLOVER, ResourceManager.MINI);
     }
 
-    public BoardButton(String text, String icon, int defaultState, int pressedState, int rolloverState, int size) {
+    public BoardButton(String text, String icon, int defaultState, int pressedState, int rolloverState, int iconSize) {
         super(text);
-
-        ResourceManager.setButtonIcons(this, icon, defaultState, pressedState, rolloverState, size);
+        this.iconSize = iconSize;
+        ResourceManager.setButtonIcons(this, icon, defaultState, pressedState, rolloverState, iconSize);
 
         setFontPrimary(ByteBoardTheme.FONT_T_SEMIBOLD, 20);
         setBorderPainted(false);
@@ -36,7 +42,15 @@ public class BoardButton extends JButton implements CustomControl {
     }
 
     public void setIcon(String icon) {
-        ResourceManager.setButtonIcons(this, icon, ResourceManager.MINI);
+        ResourceManager.setButtonIcons(this, icon, iconSize);
+    }
+
+    public void setIcon(String icon, int size) {
+        ResourceManager.setButtonIcons(this, icon, (iconSize = size));
+    }
+
+    public void setIcon(String icon, int defaultState, int pressedState, int rolloverState) {
+        ResourceManager.setButtonIcons(this, icon, defaultState, pressedState, rolloverState, iconSize);
     }
 
     public void setRounded(boolean isRounded) {
@@ -83,7 +97,10 @@ public class BoardButton extends JButton implements CustomControl {
             }
 
             public void mouseReleased(MouseEvent e) {
-                if(isEnabled()) return;
+                if(isEnabled()) {
+                    setFGColor(defaultFGColor);
+                    return;
+                }
                 setFGColor(ByteBoardTheme.DISABLED);
                 repaint();
             }

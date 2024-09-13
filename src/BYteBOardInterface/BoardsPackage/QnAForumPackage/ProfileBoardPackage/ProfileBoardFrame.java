@@ -3,6 +3,7 @@ package BYteBOardInterface.BoardsPackage.QnAForumPackage.ProfileBoardPackage;
 import BYteBOardInterface.StructurePackage.BoardFrame;
 import BYteBOardInterface.StructurePackage.BoardFrameSwitchDelegate;
 import BYteBOardInterface.StructurePackage.MainFrame;
+import CustomControls.DEBUG;
 import CustomControls.GridBagBuilder;
 import BYteBOardDatabase.*;
 
@@ -17,10 +18,12 @@ public class ProfileBoardFrame extends BoardFrame {
     private final ProfileBoardActivityPanel activityPanel;
 
     public ProfileBoardFrame(MainFrame main) {
-        super(main, (context, delegate) -> {
-            String userID = context;
+        super(main, (delegate, context) -> {
+            String userID;
+            DEBUG.printlnRed("ProfileBoardFrame Context received: " + Arrays.toString(context));
 
-            if (userID == null) {
+            if (context != null && context.length != 0) userID = context[0];
+            else {
                 DBDataObject loadedUserData = delegate.getContext(DBUser.TABLE);
                 if(loadedUserData == null) return null;
                 userID = loadedUserData.getValue(DBUser.K_USER_ID);
@@ -86,14 +89,14 @@ public class ProfileBoardFrame extends BoardFrame {
 
         GridBagBuilder builder = new GridBagBuilder(this, 3);
         builder.fill(GridBagConstraints.BOTH);
-        builder.gridWeightY(1);
+        builder.weightY(1);
 
         buttonPanel = new ProfileBoardButtonPanel(main, this);
         addPanel(ProfileBoardButtonPanel.class, buttonPanel, builder.getConstraints());
 
         userDataPanel = new ProfileBoardUserDataPanel(main, this);
         builder.skipCells(2);
-        builder.gridWeightX(1);
+        builder.weightX(1);
         addPanel(ProfileBoardUserDataPanel.class, userDataPanel, builder.getConstraints());
 
         editPanel = new ProfileEditPanel(main, this);
@@ -129,7 +132,7 @@ public class ProfileBoardFrame extends BoardFrame {
             String[] contentData = questionData.getValue(String.valueOf(i)).split(BoardFrameSwitchDelegate.DELIMITER);
 
             ActivityPane activityPane = activityPanel.addActivity();
-            activityPane.setUserData(contentData[0], contentData[1]);
+            activityPane.setUserData(contentData[0], contentData[1], userData.getValue(DBUser.K_USER_ID));
             activityPane.setContentData(contentData[3], contentData[2], contentData[4]);
         }
     }

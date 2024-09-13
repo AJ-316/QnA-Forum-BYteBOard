@@ -74,12 +74,9 @@ public class QnABoard extends JPanel {
             tags[i] = tagsData[i].getValue(DBTag.K_TAG);
         }
 
-        DBDataObject[] voteData = DBVote.ops.findVotesBy(DBVote.K_QUESTION_ID,
+        DBDataObject voteData = DBVote.findVotesBy(DBVote.K_QUESTION_ID,
                 board.viewerUserID, questionID, DBVote.K_VOTE_TYPE);
-        String lastVoteType = DBVote.V_VOTE_NONE;
-
-        if(voteData.length != 0)
-            lastVoteType = voteData[0].getValue(DBVote.K_VOTE_TYPE);
+        String lastVoteType = voteData != null ? voteData.getValue(DBVote.K_VOTE_TYPE) : DBVote.V_VOTE_NONE;
 
         board.questionPanel.setContent(questioner, questionerProfileIndex, tags,
                 questionData.getValue(DBQuestion.K_QUESTION_HEAD),
@@ -124,10 +121,8 @@ public class QnABoard extends JPanel {
         DBDataObject answerData = DBAnswer.ops.findValuesBy(
                 DBAnswer.ops.matchByValue(DBAnswer.K_ANSWER_ID, answerID), DBAnswer.K_ANSWER_BYTESCORE)[0];
 
-        DBDataObject[] voteData = DBVote.ops.findVotesBy(DBVote.K_ANSWER_ID, viewerUserID, answerID, DBVote.K_VOTE_TYPE);
-        String lastVotedType = DBVote.V_VOTE_NONE;
-        if (voteData.length != 0)
-            lastVotedType = voteData[0].getValue(DBVote.K_VOTE_TYPE);
+        DBDataObject voteData = DBVote.findVotesBy(DBVote.K_ANSWER_ID, viewerUserID, answerID, DBVote.K_VOTE_TYPE);
+        String lastVotedType = voteData != null ? voteData.getValue(DBVote.K_VOTE_TYPE) : DBVote.V_VOTE_NONE;
 
         answerPanel.setVisible(true);
         questionPanel.setVisible(false);

@@ -9,13 +9,7 @@ import CustomControls.GridBagBuilder;
 import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
 
-import javax.swing.*;
-import javax.swing.plaf.basic.BasicComboBoxUI;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 
 public class ProfileBoardButtonPanel extends BoardPanel {
 
@@ -47,10 +41,10 @@ public class ProfileBoardButtonPanel extends BoardPanel {
         builder.fill(GridBagConstraints.HORIZONTAL);
         builder.insets(10, 10, 10, 10);
 
-        builder.gridWeightY(1);
+        builder.weightY(1);
         builder.add(searchButton = createButton("    Search", "search"));
 
-        builder.gridWeightY(0);
+        builder.weightY(0);
         builder.add(themeComboBox.getComponent());
         builder.add(askButton = createButton("Ask Question", "question"));
         builder.add(activityButton = createButton("View Activity", "show"));

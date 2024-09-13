@@ -5,6 +5,7 @@ import BYteBOardInterface.BoardsPackage.QnAForumPackage.QnABoardPackage.QnABoard
 import BYteBOardInterface.StructurePackage.MainFrame;
 
 import java.awt.*;
+import java.util.Arrays;
 
 public class QnAForumMainFrame extends MainFrame {
 
@@ -23,7 +24,8 @@ public class QnAForumMainFrame extends MainFrame {
         super.restartMainFrame(QnAForumMainFrame.ID, getBoardFrame(ProfileBoardFrame.class).recoverContext());
     }
 
-    protected void prepareMainFrame(String switchBoardFrameContext) {
+    protected void prepareMainFrame(String... switchBoardFrameContext) {
+        System.out.println("Preparing Frame: " + Arrays.toString(switchBoardFrameContext));
         setBoardFrame(ProfileBoardFrame.class, switchBoardFrameContext);
     }
 }

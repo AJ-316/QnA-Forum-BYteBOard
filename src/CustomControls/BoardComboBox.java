@@ -68,9 +68,7 @@ public class BoardComboBox extends JComboBox<String> {
             }
         });
 
-        RoundedBorder roundedBorder = new RoundedBorder(40, 40);
-        roundedBorder.setBgColor(getBackground());
-        roundedBorder.setBorderColor(ResourceManager.getColor(ByteBoardTheme.ACCENT));
+        RoundedBorder roundedBorder = new RoundedBorder(40, 40, 12, getBackground(), ResourceManager.getColor(ByteBoardTheme.ACCENT));
 
         ((JComponent) getAccessibleContext().getAccessibleChild(0)).setBorder(roundedBorder);
     }

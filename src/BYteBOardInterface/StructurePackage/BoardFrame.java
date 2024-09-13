@@ -1,6 +1,9 @@
 package BYteBOardInterface.StructurePackage;
 
+import CustomControls.DEBUG;
+
 import java.awt.*;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -62,17 +65,25 @@ public abstract class BoardFrame extends Board implements Frame {
     public void init(MainFrame main) {}
 
     public final void refresh() {
-        recoverContext = frameSwitchDelegate.retrieveData(null);
+        DEBUG.printlnPurple("Setting context: (refresh)");
+
+        recoverContext = frameSwitchDelegate.retrieveData();
         applyFrameSwitchContext(frameSwitchDelegate);
     }
 
-    public final void setContext(String context) {
+    public final void setContext(String... context) {
+        DEBUG.printlnPurple("Setting context: " + Arrays.toString(context));
+
         recoverContext = frameSwitchDelegate.retrieveData(context);
         applyFrameSwitchContext(frameSwitchDelegate);
     }
 
     public String recoverContext() {
         return recoverContext;
+    }
+
+    protected BoardFrameSwitchDelegate requestFrameSwitchDelegate() {
+        return frameSwitchDelegate;
     }
 
     public final BoardFrame getBoardFrame() {

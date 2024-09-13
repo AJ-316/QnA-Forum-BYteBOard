@@ -1,6 +1,5 @@
 package BYteBOardInterface.BoardsPackage.QnAForumPackage.ProfileBoardPackage;
 
-import BYteBOardInterface.BoardsPackage.AuthenticationPackage.AuthenticateBoardFrame;
 import BYteBOardInterface.BoardsPackage.QnAForumPackage.QnABoardPackage.QnABoardFrame;
 import BYteBOardInterface.StructurePackage.BoardPanel;
 import BYteBOardInterface.StructurePackage.Frame;
@@ -35,7 +34,7 @@ public class ActivityPane extends BoardPanel {
         addInsets(20);
         GridBagBuilder builder = new GridBagBuilder(this, 2);
         builder.fill(GridBagConstraints.BOTH);
-        builder.gridWeightY(1);
+        builder.weightY(1);
 
         userProfileLabel = new BoardLabel();
         userProfileLabel.setProfileIcon("0", ResourceManager.SMALL);
@@ -43,12 +42,13 @@ public class ActivityPane extends BoardPanel {
         builder.add(userProfileLabel);
 
         BoardPanel contentPanel = getContentPanel(main, frame);
-        builder.gridWeightX(1);
+        builder.weightX(1);
         builder.add(contentPanel);
     }
 
     private BoardPanel getContentPanel(MainFrame main, Frame frame) {
         BoardPanel panel = new BoardPanel(main, frame);
+
         GridBagBuilder builder = new GridBagBuilder(panel, 2);
         builder.fill(GridBagConstraints.BOTH);
         builder.insets(4, 4, 4, 4);
@@ -57,7 +57,7 @@ public class ActivityPane extends BoardPanel {
         usernameLabel.setFGLight();
         usernameLabel.setFontPrimary(ByteBoardTheme.FONT_T_SEMIBOLD, 24);
         usernameLabel.setAlignmentLeading();
-        builder.gridWeightX(0.5);
+        builder.weightX(0.5);
         builder.add(usernameLabel);
 
         bytesLabel = new BoardLabel("517465", "bytescore_icon");
@@ -71,15 +71,17 @@ public class ActivityPane extends BoardPanel {
         questionHeadLabel.setFGLight();
         questionHeadLabel.setFontPrimary(ByteBoardTheme.FONT_T_REGULAR, 20);
         questionHeadLabel.setAlignmentLeading();
-        builder.gridWeightX(0);
+        questionHeadLabel.setPreferredSize(new Dimension(600, questionHeadLabel.getPreferredSize().height));
+        builder.weightX(0);
         builder.add(questionHeadLabel);
 
         return panel;
     }
 
-    public void setUserData(String userProfile, String username) {
+    public void setUserData(String userProfile, String username, String userID) {
         userProfileLabel.setProfileIcon(userProfile, ResourceManager.REGULAR);
         usernameLabel.setText(username);
+        usernameLabel.setName(userID);
     }
 
     public void setContentData(String contentText, String contentID, String bytes) {
@@ -92,7 +94,7 @@ public class ActivityPane extends BoardPanel {
         addMouseListener(new MouseAdapter() {
             public void mouseReleased(MouseEvent e) {
                 setBackground(ByteBoardTheme.ACCENT_DARK);
-                requestSwitchFrame(QnABoardFrame.class, getQuestionID());
+                requestSwitchFrame(QnABoardFrame.class, getQuestionID(), usernameLabel.getName());
             }
 
             public void mouseEntered(MouseEvent e) {

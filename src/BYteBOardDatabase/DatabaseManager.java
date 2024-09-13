@@ -70,8 +70,6 @@ public class DatabaseManager {
             if(parameterValue != null)
                 preparedStatement.setString(1, parameterValue);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                ResultSetMetaData metaData = resultSet.getMetaData();
-                int columnCount = metaData.getColumnCount();
                 while (resultSet.next()) {
                     retrievedValue = resultSet.getString(1);
                 }

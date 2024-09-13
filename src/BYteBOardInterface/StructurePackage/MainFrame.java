@@ -44,18 +44,21 @@ public abstract class MainFrame extends JFrame {
         boardFrames.put(frame.getClass().getSimpleName(), frame);
     }
 
-    public void setBoardFrame(Class<?> frameClass, String switchContext) {
+    public void setBoardFrame(Class<?> frameClass, String... switchContext) {
         Frame frame = boardFrames.get(frameClass.getSimpleName());
 
-        if (frame == null) return;
+        if (frame == null)
+            return;
 
         frame.setContext(switchContext);
 
-        contentPane.removeAll();
-        contentPane.add(frame.getBoardFrame(), BorderLayout.CENTER);
+        if(!contentPane.isAncestorOf(frame.getBoardFrame())) {
+            contentPane.removeAll();
+            contentPane.add(frame.getBoardFrame(), BorderLayout.CENTER);
 
-        contentPane.revalidate();
-        contentPane.repaint();
+            contentPane.revalidate();
+            contentPane.repaint();
+        }
 
         ((BoardFrame)frame).requestFocus();
     }
@@ -75,7 +78,7 @@ public abstract class MainFrame extends JFrame {
         });
     }
 
-    protected abstract void prepareMainFrame(String switchBoardFrameContext);
+    protected abstract void prepareMainFrame(String... switchBoardFrameContext);
     public abstract void restartMainFrame();
 
     public void restartMainFrame(int mainFrameID, String recoverContext) {
@@ -98,7 +101,7 @@ public abstract class MainFrame extends JFrame {
         new QnAForumMainFrame();
     }
 
-    public void switchMainFrame(int mainFrameID, String switchBoardFrameContext) {
+    public void switchMainFrame(int mainFrameID, String... switchBoardFrameContext) {
         this.setVisible(false);
         this.dispose();
 

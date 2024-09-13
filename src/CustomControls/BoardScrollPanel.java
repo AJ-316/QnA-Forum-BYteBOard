@@ -14,6 +14,7 @@ public class BoardScrollPanel extends BoardPanel {
     public BoardScrollPanel(MainFrame main, Frame frame) {
         super(main, frame);
         scrollPane = new SimpleScrollPane(this);
+        setVerticalUnitIncrement(15);
     }
 
     public void setScrollMinSize(int width, int height) {
@@ -33,6 +34,10 @@ public class BoardScrollPanel extends BoardPanel {
         super.setBackground(bg);
         if(scrollPane != null)
             scrollPane.getViewport().setBackground(bg);
+    }
+
+    public void setVerticalUnitIncrement(int i) {
+        scrollPane.getVerticalScrollBar().setUnitIncrement(i);
     }
 
     public SimpleScrollPane getComponent() {

@@ -32,6 +32,16 @@ public class DBQuestion extends DBOperation {
                 K_UPVOTES, String.valueOf(newUpvotes), K_DOWNVOTES, String.valueOf(newDownvotes));
     }
 
+    public DBDataObject getQuestion(String questionID) {
+        DBDataObject[] questions = DBQuestion.ops.findValuesBy(
+                DBQuestion.ops.matchByValue(DBQuestion.K_QUESTION_ID, questionID), "*");
+
+        if(questions == null || questions.length == 0)
+            throw new NullPointerException("Question Not Found: " + questionID);
+
+        return questions[0];
+    }
+
     /*public void voteQuestion(String questionID, String voterID, boolean isUpvote) {
         String key = isUpvote ? K_UPVOTES : K_DOWNVOTES;
         DBDataObject questionData = ops.findValuesBy(ops.matchByValue(K_QUESTION_ID, questionID), key)[0];

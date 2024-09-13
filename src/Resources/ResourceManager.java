@@ -29,7 +29,7 @@ public class ResourceManager {
         setTheme(ByteBoardTheme.ByteBoardBaseTheme.getName());
 
         loadAvailableThemes();
-        EventQueue.invokeLater(() -> setTheme("Dark Theme"));
+        //EventQueue.invokeLater(() -> setTheme("Dark Theme"));
     }
 
     private static void loadAvailableThemes() {

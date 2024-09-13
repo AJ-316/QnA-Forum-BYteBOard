@@ -8,6 +8,7 @@ import CustomControls.BoardScrollPanel;
 import CustomControls.GridBagBuilder;
 import Resources.ByteBoardTheme;
 
+import javax.swing.*;
 import java.awt.*;
 
 public class ProfileBoardActivityPanel extends BoardPanel {
@@ -29,15 +30,15 @@ public class ProfileBoardActivityPanel extends BoardPanel {
         GridBagBuilder builder = new GridBagBuilder(this);
 
         statusLabel = new BoardLabel();
-        statusLabel.setText("<html><div style='text-align: center;'>Lets get Started!<br>No Activity</div></html>");
+        statusLabel.setText("<html><div style='text-align: center;'>No Activity<br>Lets get Started!</div></html>");
         statusLabel.setName(statusLabel.getText());
         statusLabel.addInsets(30);
         statusLabel.setFGLight();
         statusLabel.setFontPrimary(ByteBoardTheme.FONT_T_THIN, 32);
 
         activitiesPanel = getActivityPanel(main, frame);
-        builder.gridWeightX(1);
-        builder.gridWeightY(1);
+        builder.weightX(1);
+        builder.weightY(1);
         builder.fill(GridBagConstraints.BOTH);
         add(activitiesPanel.getComponent(), builder.getConstraints());
 
@@ -46,11 +47,11 @@ public class ProfileBoardActivityPanel extends BoardPanel {
 
     private BoardScrollPanel getActivityPanel(MainFrame main, Frame frame) {
         BoardScrollPanel panel = new BoardScrollPanel(main, frame);
+        panel.getComponent().setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         panel.setBackground(getBackground());
-        panel.getComponent().getVerticalScrollBar().setUnitIncrement(15);
         activitiesLayoutBuilder = new GridBagBuilder(panel, 1);
         activitiesLayoutBuilder.fill(GridBagConstraints.HORIZONTAL);
-        activitiesLayoutBuilder.gridWeightX(1);
+        activitiesLayoutBuilder.weightX(1);
         activitiesLayoutBuilder.insets(10, 10, 10, 20);
         return panel;
     }
@@ -74,7 +75,7 @@ public class ProfileBoardActivityPanel extends BoardPanel {
 
     private void addActivityStatusLabel(String text) {
         activitiesLayoutBuilder.anchor(GridBagConstraints.CENTER);
-        activitiesLayoutBuilder.gridWeightY(1);
+        activitiesLayoutBuilder.weightY(1);
         activitiesLayoutBuilder.add(statusLabel);
         statusLabel.setText(text);
     }
@@ -85,7 +86,7 @@ public class ProfileBoardActivityPanel extends BoardPanel {
         statusLabel.setText("");
 
         activitiesLayoutBuilder.anchor(GridBagConstraints.CENTER);
-        activitiesLayoutBuilder.gridWeightY(0);
+        activitiesLayoutBuilder.weightY(0);
     }
 
 }

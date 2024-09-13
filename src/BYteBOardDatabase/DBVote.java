@@ -22,16 +22,6 @@ public class DBVote extends DBOperation {
     public static final String V_VOTE_DOWN = "down";
     public static final String V_VOTE_NONE = "none";
 
-    /*static {
-        SCORE_CHANGE_MAP = new HashMap<>();
-        SCORE_CHANGE_MAP.put(V_VOTE_UP + "_" + V_VOTE_DOWN, -2);
-        SCORE_CHANGE_MAP.put(V_VOTE_UP + "_" + V_VOTE_NONE, -1);
-        SCORE_CHANGE_MAP.put(V_VOTE_DOWN + "_" + V_VOTE_UP, 2);
-        SCORE_CHANGE_MAP.put(V_VOTE_DOWN + "_" + V_VOTE_NONE, 1);
-        SCORE_CHANGE_MAP.put(V_VOTE_NONE + "_" + V_VOTE_DOWN, -1);
-        SCORE_CHANGE_MAP.put(V_VOTE_NONE + "_" + V_VOTE_UP, 1);
-    }*/
-
     static {
         SCORE_CHANGE_MAP = new HashMap<>();
         SCORE_CHANGE_MAP.put(V_VOTE_UP + "_" + V_VOTE_DOWN,    new int[]{-1,  1});
@@ -65,6 +55,7 @@ public class DBVote extends DBOperation {
             String oldVoteType = voteData.getValue(K_VOTE_TYPE);
             updateAnswererBytescore(answerID, oldVoteType, voteType);
             DEBUG.printlnRed("updated anwerer's score: ");
+
             // if user has voted this answer then update it
             ops.updateValueBy(
                     ops.matchByValue(K_USER_ID, voterID) + DBOperation.AND +
@@ -168,7 +159,25 @@ public class DBVote extends DBOperation {
         return voteData[0];
     }
 
-    public DBDataObject[] findVotesBy(String contentKey, String userID, String contentID, String... keys) {
-        return ops.findValuesBy(ops.matchByValue(K_USER_ID, userID) + DBOperation.AND + ops.matchByValue(contentKey, contentID), keys);
+    public static DBDataObject findVotesBy(String contentKey, String userID, String contentID, String... keys) {
+
+        DBDataObject[] voteData = ops.findValuesBy(
+                ops.matchByValue(K_USER_ID, userID) + DBOperation.AND +
+                        ops.matchByValue(contentKey, contentID), keys);
+
+        if(voteData == null || voteData.length == 0) return null;
+
+        return voteData[0];
+    }
+
+    public static String getVoteType(String userID, String contentKey, String contentID) {
+
+        DBDataObject[] voteData = ops.findValuesBy(
+                ops.matchByValue(K_USER_ID, userID) + AND +
+                        ops.matchByValue(contentKey, contentID), K_VOTE_TYPE);
+
+        if(voteData == null || voteData.length == 0) return V_VOTE_NONE;
+
+        return voteData[0].getValue(K_VOTE_TYPE);
     }
 }
