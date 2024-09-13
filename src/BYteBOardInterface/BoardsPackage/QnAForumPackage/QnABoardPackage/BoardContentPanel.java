@@ -9,6 +9,7 @@ import CustomControls.CustomRendererPackage.RoundedBorder;
 import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
 
+import javax.swing.*;
 import java.awt.*;
 
 public class BoardContentPanel extends BoardPanel {
@@ -25,14 +26,11 @@ public class BoardContentPanel extends BoardPanel {
 
     private final UpdateVoteDatabase voteUpdate;
 
-    private BoardContentResponsePanel contentResponsePanel;
+    private BoardContentResponsePanel contentCommentPanel;
 
-    public BoardContentPanel(MainFrame main, Frame frame, boolean isVisible, UpdateVoteDatabase voteUpdate) {
+    public BoardContentPanel(MainFrame main, Frame frame, UpdateVoteDatabase voteUpdate) {
         super(main, frame);
         this.voteUpdate = voteUpdate;
-        setVisible(isVisible);
-
-        contentResponsePanel = new BoardContentResponsePanel(main, frame);
 
         addButtonListeners();
         setPreferredSize(new Dimension(900, getPreferredSize().height));
@@ -41,7 +39,7 @@ public class BoardContentPanel extends BoardPanel {
     }
 
     public void init(MainFrame main, Frame frame) {
-        initComponents();
+        initComponents(main, frame);
 
         BoardPanel headerPanel = getContentHeadPanel(main, frame);
         BoardPanel bodyPanel = getContentBodyPanel(main, frame);
@@ -77,7 +75,6 @@ public class BoardContentPanel extends BoardPanel {
         contentHeadPanel.setLayout(new BorderLayout());
         contentHeadPanel.add(contentHead);
 
-        // Adding to panel
         GridBagBuilder panelBuilder = new GridBagBuilder(panel, 2);
 
         panelBuilder.add(votePanel, 1, 2, 0, 1, GridBagConstraints.VERTICAL);
@@ -88,7 +85,10 @@ public class BoardContentPanel extends BoardPanel {
         return panel;
     }
 
-    private void initComponents() {
+    private void initComponents(MainFrame main, Frame frame) {
+        contentCommentPanel = new BoardContentResponsePanel(main, frame, ByteBoardTheme.MAIN);
+        contentCommentPanel.setTitle("Comments");
+
         upVoteButton = new VoteButton("upvote", ResourceManager.SMALL, DBVote.V_VOTE_UP);
         downVoteButton = new VoteButton("downvote", ResourceManager.SMALL, DBVote.V_VOTE_DOWN);
 
@@ -107,6 +107,7 @@ public class BoardContentPanel extends BoardPanel {
 
         contentBody = new BoardTextArea("Content Body goes here...");
         contentBody.setFontPrimary(ByteBoardTheme.FONT_T_REGULAR, 22);
+        contentBody.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 20));
     }
 
     private BoardPanel getContentBodyPanel(MainFrame main, Frame frame) {
@@ -119,6 +120,7 @@ public class BoardContentPanel extends BoardPanel {
         scrollPane.setOpaque(false);
         scrollPane.setBorder(new RoundedBorder(60, 60, 30,
                 ResourceManager.getColor(ByteBoardTheme.MAIN_LIGHT), null));
+
         scrollPane.getViewport().setBackground(ResourceManager.getColor(ByteBoardTheme.MAIN_LIGHT));
 
         panel.add(scrollPane);
@@ -141,25 +143,18 @@ public class BoardContentPanel extends BoardPanel {
     }
 
     public void setContentComments(DBDataObject[] commentsData, String userID) {
-        contentResponsePanel.clearComments();
-        for (int i = 0; i < commentsData.length; i++) {
-            contentResponsePanel.addComment(
-                    commentsData[i].getValue(DBUser.K_USER_NAME),
-                    commentsData[i].getValue(DBComment.K_COMMENT),
-                    commentsData[i].getValue(DBComment.K_COMMENT_ID), 
-                    DBCFeedback.isFeedbackUseful(commentsData[i].getValue(DBCFeedback.K_FEEDBACK)), userID
-            );
-        }
-    }
+        contentCommentPanel.clearContentCards();
 
-    public void setContentResponse(DBDataObject[] responseData) {
-        contentResponsePanel.clearAnswers();
-        for (int i = 0; i < responseData.length; i++) {
-            contentResponsePanel.addAnswer(
-                    responseData[i].getValue(DBUser.K_USER_NAME),
-                    responseData[i].getValue(DBAnswer.K_ANSWER),
-                    responseData[i].getValue(DBAnswer.K_ANSWER_ID)
-            );
+        for (DBDataObject commentsDatum : commentsData) {
+            BoardContentCard card = contentCommentPanel.addContentCard();
+
+            String commentID = commentsDatum.getValue(DBComment.K_COMMENT_ID);
+            card.setCardData(
+                    commentsDatum.getValue(DBUser.K_USER_NAME),
+                    commentsDatum.getValue(DBComment.K_COMMENT), commentID);
+
+            card.setContentAction(DBCFeedback.isFeedbackUseful(commentsDatum.getValue(DBCFeedback.K_FEEDBACK)),
+                    feedback -> DBCFeedback.giveFeedback(userID, commentID, feedback), "useful");
         }
     }
 
@@ -188,7 +183,7 @@ public class BoardContentPanel extends BoardPanel {
         contentUsername.setName(contentUserID);
     }
 
-    private String getContentID() {
+    public String getContentID() {
         return contentID;
     }
 
@@ -196,8 +191,8 @@ public class BoardContentPanel extends BoardPanel {
         voteContent(voteType, false);
     }
 
-    public BoardContentResponsePanel getContentResponsePanel() {
-        return contentResponsePanel;
+    public BoardContentResponsePanel getContentCommentPanel() {
+        return contentCommentPanel;
     }
 
     public String getContentHead() {

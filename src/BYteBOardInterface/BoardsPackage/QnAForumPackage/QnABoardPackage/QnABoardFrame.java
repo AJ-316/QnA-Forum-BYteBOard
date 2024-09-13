@@ -7,6 +7,7 @@ import BYteBOardInterface.StructurePackage.BoardFrameSwitchDelegate;
 import BYteBOardInterface.StructurePackage.BoardPanel;
 import BYteBOardInterface.StructurePackage.MainFrame;
 import CustomControls.*;
+import Resources.ByteBoardTheme;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -20,15 +21,15 @@ public class QnABoardFrame extends BoardFrame {
     private BoardButton viewQuestionButton;
     private BoardButton backButton;
 
+    private Map<String, BoardContentPanel> answerContentPanels;
     private BoardContentPanel questionContentPanel;
-    private Map<String, BoardContentPanel> answersContentPanel;
+    private BoardContentResponsePanel answerCardsPanel;
 
-    //private BoardPanel responsePanel;
     private BoardSplitPanel responseSplitPanel;
 
-    private BoardContentPanel currentAnswerPanel;
-    private BoardContentPanel.UpdateVoteDatabase updateVoteDatabase;
-    //private BoardContentResponsePanel[] contentResponsePanel;
+    private BoardContentPanel currentAnswerContentPanel;
+    private BoardContentPanel.UpdateVoteDatabase updateAnswerVoteDatabase;
+
 
     public QnABoardFrame(MainFrame main) {
         super(main, (delegate, context) -> {
@@ -40,7 +41,7 @@ public class QnABoardFrame extends BoardFrame {
                 userID = context[1];
             } else {
                 DBDataObject loadedQuestionData = delegate.getContext(DBQuestion.TABLE);
-                if(loadedQuestionData == null) return null;
+                if (loadedQuestionData == null) return null;
 
                 questionID = loadedQuestionData.getValue(DBQuestion.K_QUESTION_ID);
                 userID = delegate.getContext(DBUser.TABLE).getValue(DBUser.K_USER_ID);
@@ -58,12 +59,12 @@ public class QnABoardFrame extends BoardFrame {
             delegate.putContext(DBUser.TABLE, userData);
 
             DBDataObject[] answers = DBAnswer.ops.findValuesBy(DBAnswer.ops.matchByValue(DBAnswer.K_QUESTION_ID, questionID), "*");
-            for(DBDataObject answer : answers)
+            for (DBDataObject answer : answers)
                 answer.putKeyValue(DBUser.K_USER_NAME, DBUser.getUser(answer.getValue(DBAnswer.K_USER_ID)).getValue(DBUser.K_USER_NAME));
             delegate.putContextList(DBAnswer.TABLE, DBAnswer.K_ANSWER_ID, answers);
 
             DBDataObject[] questionComments = DBComment.ops.getComments(DBComment.K_QUESTION_ID, questionID);
-            for(DBDataObject comment : questionComments) {
+            for (DBDataObject comment : questionComments) {
                 comment.putKeyValue(DBUser.K_USER_NAME, DBUser.getUser(comment.getValue(DBComment.K_USER_ID)).getValue(DBUser.K_USER_NAME));
                 comment.putKeyValue(DBCFeedback.K_FEEDBACK, DBCFeedback.getFeedback(userID, comment.getValue(DBComment.K_COMMENT_ID)));
             }
@@ -72,33 +73,39 @@ public class QnABoardFrame extends BoardFrame {
             return null;
         });
 
-        answersContentPanel = new HashMap<>();
+        answerContentPanels = new HashMap<>();
+        displayQuestionContent(true);
     }
 
     public void init(MainFrame main) {
-        questionContentPanel = new BoardContentPanel(main, this, true,
+
+        // Create Instances
+        questionContentPanel = new BoardContentPanel(main, this,
                 (id, type) -> DBVote.ops.voteQuestion(id, getUserID(), type));
 
-        updateVoteDatabase = (id, type) -> DBVote.ops.voteAnswer(id, getUserID(), type);
-        /*answersContentPanel = new BoardContentPanel(main, this, false,
-                (id, type) -> DBVote.ops.voteAnswer(id, getUserID(), type));*/
+        updateAnswerVoteDatabase = (id, type) -> DBVote.ops.voteAnswer(id, getUserID(), type);
+
+        answerCardsPanel = new BoardContentResponsePanel(main, this, ByteBoardTheme.MAIN_DARK);
+        answerCardsPanel.setTitle("Answers");
 
         BoardPanel buttonsPanel = createButtons(main);
 
-        //contentResponsePanel = new BoardContentResponsePanel(main, this);
+        // Add Components
         GridBagBuilder builder = new GridBagBuilder(this, 2);
 
+        // cell(0, 0)
         builder.gridWidth(1);
         builder.gridHeight(2);
         builder.weightX(0.8);
         builder.weightY(1);
         builder.fill(GridBagConstraints.BOTH);
         add(questionContentPanel, builder.getConstraints());
-        // add(answersContentPanel, builder.getConstraints()); // added on cell(0, 0)
 
+        // cell(1, 0)
         builder.skipCells(1);
         builder.add(buttonsPanel, 1, 1, 1, 0, GridBagConstraints.BOTH);
 
+        // cell(1, 2)
         builder.skipCells(2);
         builder.gridWidth(1);
         builder.gridHeight(1);
@@ -106,83 +113,111 @@ public class QnABoardFrame extends BoardFrame {
         builder.weightY(1);
         builder.fill(GridBagConstraints.BOTH);
 
-        responseSplitPanel = new BoardSplitPanel(BoardSplitPanel.VERTICAL_SPLIT, answerPanel, commentsPanel);
-        responseSplitPanel.setLayout(new BorderLayout());
+        responseSplitPanel = new BoardSplitPanel(BoardSplitPanel.VERTICAL_SPLIT);
+        responseSplitPanel.setTopComponent(answerCardsPanel);
         add(responseSplitPanel, builder.getConstraints());
-        //add(contentResponsePanel, builder.getConstraints());
-        //builder.add(contentResponsePanel, 1, 1, 0.2, 1, GridBagConstraints.BOTH);
     }
 
-    private void setAnswer(String answerID) {
-        BoardContentPanel answerPanel = answersContentPanel.get(answerID);
-        if(answerPanel != null && answerPanel.equals(currentAnswerPanel))
-            return;
-
-        if(answerPanel == null) {
-            answerPanel = new BoardContentPanel(getMain(), this, true, updateVoteDatabase);
-            answersContentPanel.put(answerID, answerPanel);
-        } else {
-            remove(currentAnswerPanel);
+    /**
+     * @param answerID Pass null to update the already loaded answer
+     * */
+    private void setAnswerData(String answerID, boolean setVisibility) {
+        if (answerID == null) {
+            if (currentAnswerContentPanel == null) return;
+            answerID = currentAnswerContentPanel.getContentID();
         }
 
+        BoardContentPanel answerContentPanel = answerContentPanels.get(answerID);
+
+        if (answerContentPanel == null) {
+            // If the answer panel not created then create
+            answerContentPanel = new BoardContentPanel(getMain(), this, updateAnswerVoteDatabase);
+            answerContentPanels.put(answerID, answerContentPanel);
+            System.out.println("Loaded: " + answerID);
+        }
+
+        // Load and set the answer panel data
         DBDataObject answerData = DBAnswer.getAnswer(answerID);
 
-        answerPanel.setContentID(answerData.getValue(DBAnswer.K_ANSWER_ID));
-        answerPanel.setContentHead("Answering:\n", questionContentPanel.getContentHead());
-        answerPanel.setContentBody(answerData.getValue(DBAnswer.K_ANSWER));
-        answerPanel.setContentBytes(answerData.getValue(DBAnswer.K_ANSWER_BYTESCORE));
-        answerPanel.setContentUserID(answerData.getValue(DBAnswer.K_USER_ID));
+        answerContentPanel.setContentID(answerData.getValue(DBAnswer.K_ANSWER_ID));
+        answerContentPanel.setContentHead("Answering:\n", questionContentPanel.getContentHead());
+        answerContentPanel.setContentBody(answerData.getValue(DBAnswer.K_ANSWER));
+        answerContentPanel.setContentBytes(answerData.getValue(DBAnswer.K_ANSWER_BYTESCORE));
+        answerContentPanel.setContentUserID(answerData.getValue(DBAnswer.K_USER_ID));
 
-        answerPanel.setVoteType(DBVote.getVoteType(userID, DBVote.K_ANSWER_ID, answerID));
-        answerPanel.setContentUsername(DBUser.getUser(answerData.getValue(DBAnswer.K_USER_ID)).getValue(DBUser.K_USER_NAME));
+        answerContentPanel.setVoteType(DBVote.getVoteType(userID, DBVote.K_ANSWER_ID, answerID));
+        answerContentPanel.setContentUsername(DBUser.getUser(answerData.getValue(DBAnswer.K_USER_ID)).getValue(DBUser.K_USER_NAME));
 
         DBDataObject[] comments = DBComment.ops.getComments(DBComment.K_ANSWER_ID, answerID);
         for (DBDataObject comment : comments) {
             comment.putKeyValue(DBUser.K_USER_NAME, DBUser.getUser(comment.getValue(DBComment.K_USER_ID)).getValue(DBUser.K_USER_NAME));
             comment.putKeyValue(DBCFeedback.K_FEEDBACK, DBCFeedback.getFeedback(userID, comment.getValue(DBComment.K_COMMENT_ID)));
         }
-        answerPanel.setContentComments(comments, userID);
+        answerContentPanel.setContentComments(comments, userID);
 
+        // Add the answer panel at the position of question panel and hide question panel
         GridBagConstraints constraints = ((GridBagLayout) getLayout()).getConstraints(questionContentPanel);
-        add(currentAnswerPanel = answerPanel, constraints);
 
-        displayQuestionContent(false);
+        if (currentAnswerContentPanel != null) {
+            System.out.println("Removed Old: " + currentAnswerContentPanel.getContentID());
+            remove(currentAnswerContentPanel);
+        }
+
+        currentAnswerContentPanel = answerContentPanel;
+
+        System.out.println("Added New: " + answerID);
+        add(currentAnswerContentPanel, constraints);
+        revalidate();
+        repaint();
+
+        if(setVisibility) {
+            displayQuestionContent(false);
+        }
     }
 
     private BoardPanel createButtons(MainFrame main) {
         viewQuestionButton = new BoardButton("View Question", "question");
-        backButton = new BoardButton("Profile", "home");
+        viewQuestionButton.setVisible(false);
+        viewQuestionButton.setAlignmentLeading();
+        viewQuestionButton.addActionListener(e -> displayQuestionContent(true));
 
-        backButton.addActionListener(e -> requestSwitchFrame(ProfileBoardFrame.class));
-        viewQuestionButton.addActionListener(e -> {
+        backButton = new BoardButton("Profile", "home");
+        backButton.setAlignmentLeading();
+        backButton.addActionListener(e -> {
+            requestSwitchFrame(ProfileBoardFrame.class);
             displayQuestionContent(true);
-            viewQuestionButton.setVisible(false);
         });
 
         BoardPanel panel = new BoardPanel(main, this);
         GridBagBuilder builder = new GridBagBuilder(panel, 1);
+        builder.fill(GridBagConstraints.BOTH);
+        builder.weightX(1);
+        builder.weightY(1);
+        builder.anchor(GridBagConstraints.WEST);
         builder.add(viewQuestionButton);
         builder.add(backButton);
         return panel;
     }
 
     private void displayQuestionContent(boolean isVisible) {
-        if (isVisible) {
-            questionContentPanel.setVisible(true);
-            if(currentAnswerPanel != null)
-                currentAnswerPanel.setVisible(false);
+        questionContentPanel.setVisible(isVisible);
+        backButton.setVisible(isVisible);
+        viewQuestionButton.setVisible(!isVisible);
 
-            responseSplitPanel.removeAll();
-            responseSplitPanel.add(questionContentPanel.getContentResponsePanel());
+        if(isVisible) BoardContentCard.selectCard(false, null);
+
+        if (currentAnswerContentPanel == null) {
+            responseSplitPanel.setBottomComponent(questionContentPanel.getContentCommentPanel());
             return;
         }
 
-        questionContentPanel.setVisible(false);
-        if(currentAnswerPanel != null) {
-            currentAnswerPanel.setVisible(true);
-            responseSplitPanel.removeAll();
-            responseSplitPanel.add(currentAnswerPanel.getContentResponsePanel());
-        }
+        currentAnswerContentPanel.setVisible(!isVisible);
+
+        BoardContentResponsePanel commentsPanel = isVisible ?
+                questionContentPanel.getContentCommentPanel() :
+                currentAnswerContentPanel.getContentCommentPanel();
+
+        responseSplitPanel.setBottomComponent(commentsPanel);
     }
 
     protected String getUserID() {
@@ -203,11 +238,40 @@ public class QnABoardFrame extends BoardFrame {
         questionContentPanel.setContentUsername(questionData.getValue(DBUser.K_USER_NAME));
 
         List<DBDataObject> questionResponseData = new ArrayList<>();
-        questionContentPanel.setContentResponse(delegate.getContextList(DBAnswer.TABLE, questionResponseData));
         questionContentPanel.setContentComments(delegate.getContextList(DBComment.TABLE, questionResponseData), userID);
 
-        //displayQuestionContent(true);
+        createAnswerCards(delegate.getContextList(DBAnswer.TABLE, questionResponseData));
 
-        setAnswer("1");
+        setAnswerData(null, false);
+    }
+
+    private void createAnswerCards(DBDataObject[] answersData) {
+        answerCardsPanel.clearContentCards();
+        final BoardContentCard.CardSelectListener listener = contentID -> {
+            if(contentID == null) {
+                displayQuestionContent(true);
+                return;
+            }
+
+            setAnswerData(contentID, true);
+        };
+
+        for (DBDataObject answerData : answersData) {
+            BoardContentCard card = answerCardsPanel.addContentCard();
+            card.addMouseListeners(listener);
+
+            String answer = answerData.getValue(DBAnswer.K_ANSWER);
+            if (answer.length() > 100) {
+                String trimmedAnswer = answer.substring(0, 100).trim();
+
+                int lastWordIndex = trimmedAnswer.lastIndexOf(' ');
+
+                answer = lastWordIndex != -1 ? answer.substring(0, lastWordIndex) : trimmedAnswer;
+                answer += "...";
+            }
+
+            card.setCardData(answerData.getValue(DBUser.K_USER_NAME),
+                    answer, answerData.getValue(DBAnswer.K_ANSWER_ID));
+        }
     }
 }

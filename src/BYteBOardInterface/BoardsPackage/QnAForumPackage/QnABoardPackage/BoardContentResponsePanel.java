@@ -1,8 +1,5 @@
 package BYteBOardInterface.BoardsPackage.QnAForumPackage.QnABoardPackage;
 
-import BYteBOardDatabase.DBCFeedback;
-import BYteBOardDatabase.DBComment;
-import BYteBOardDatabase.DBDataObject;
 import BYteBOardInterface.StructurePackage.BoardPanel;
 import BYteBOardInterface.StructurePackage.Frame;
 import BYteBOardInterface.StructurePackage.MainFrame;
@@ -14,74 +11,42 @@ import java.awt.*;
 
 public class BoardContentResponsePanel extends BoardPanel {
 
-    private GridBagBuilder commentsBuilder;
-    private GridBagBuilder answersBuilder;
+    private GridBagBuilder layoutBuilder;
+    private BoardLabel statusLabel;
+    private BoardLabel titleLabel;
 
-    private BoardLabel answersStatusLabel;
-    private BoardLabel commentsStatusLabel;
+    public BoardContentResponsePanel(MainFrame main, Frame frame, String bgColor) {
+        super(main, frame, bgColor);
+    }
 
-    public BoardContentResponsePanel(MainFrame main, Frame frame) {
-        super(main, frame);
+    public void setTitle(String title) {
+        titleLabel.setText(title);
     }
 
     public void init(MainFrame main, Frame frame) {
+        setShadowState(BoardPanel.OFFSET_SHADOW);
         setLayout(new BorderLayout());
+        setCornerRadius(30);
+        addInsets(10);
 
-        BoardPanel commentsPanel = getCommentsPanel(main, frame);
-        BoardPanel answerPanel = getAnswersPanel(main, frame);
-
-        BoardSplitPanel splitPanel = new BoardSplitPanel(BoardSplitPanel.VERTICAL_SPLIT, answerPanel, commentsPanel);
-        add(splitPanel);
-
-        clearContentCards(commentsBuilder, commentsStatusLabel);
-        clearContentCards(answersBuilder, answersStatusLabel);
-
-        /*for (int i = 0; i < 2; i++)
-            addContentCard(commentsBuilder, commentsStatusLabel).setContentAction(e -> System.out.println("Selected: " + e), "search");
-
-        for (int i = 0; i < 10; i++)
-            addContentCard(answersBuilder, answersStatusLabel);*/
-    }
-
-    private BoardPanel getCommentsPanel(MainFrame main, Frame frame) {
-        BoardScrollPanel commentsScrollPanel = new BoardScrollPanel(main, frame);
-        BoardPanel commentsPanel = createContentResponsePanel(main, frame, "Comments",
-                commentsScrollPanel, ByteBoardTheme.MAIN);
-
-        commentsBuilder = createResponseLayoutBuilder(commentsScrollPanel);
-        commentsStatusLabel = createResponseStatusLabel("<html><div style='text-align: center;'>No Comments<br>Yet</div></html>");
-        return commentsPanel;
-    }
-
-    private BoardPanel getAnswersPanel(MainFrame main, Frame frame) {
-        BoardScrollPanel answersScrollPanel = new BoardScrollPanel(main, frame);
-        BoardPanel answersPanel = createContentResponsePanel(main, frame, "Answers",
-                answersScrollPanel, ByteBoardTheme.MAIN_DARK);
-
-        answersBuilder = createResponseLayoutBuilder(answersScrollPanel);
-        answersStatusLabel = createResponseStatusLabel("<html><div style='text-align: center;'>No Answers<br>Yet</div></html>");
-        return answersPanel;
-    }
-
-    private BoardPanel createContentResponsePanel(MainFrame main, Frame frame, String title, BoardScrollPanel scrollPanel, String bgColor) {
-        BoardPanel panel = new BoardPanel(main, frame, bgColor);
-        panel.setShadowState(BoardPanel.OFFSET_SHADOW);
-        panel.setLayout(new BorderLayout());
-        panel.setCornerRadius(30);
-        panel.addInsets(10);
-
-        BoardLabel titleLabel = new BoardLabel(title);
+        titleLabel = new BoardLabel("Response Title");
         titleLabel.addInsets(8);
         titleLabel.setAlignmentLeading();
         titleLabel.setFGLight();
         titleLabel.setFontPrimary(ByteBoardTheme.FONT_T_SEMIBOLD, 22);
 
-        scrollPanel.setBackground(panel.getBackground());
+        BoardScrollPanel scrollPanel = new BoardScrollPanel(main, frame);
+        scrollPanel.setAutoscrolls(false);
+        scrollPanel.setBackground(getBackground());
         scrollPanel.getComponent().setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        panel.add(titleLabel, BorderLayout.NORTH);
-        panel.add(scrollPanel.getComponent(), BorderLayout.CENTER);
 
-        return panel;
+        layoutBuilder = createResponseLayoutBuilder(scrollPanel);
+        statusLabel = createResponseStatusLabel("<html><div style='text-align: center;'>No Comments<br>Yet</div></html>");
+
+        add(titleLabel, BorderLayout.NORTH);
+        add(scrollPanel.getComponent(), BorderLayout.CENTER);
+
+        clearContentCards();
     }
 
     private GridBagBuilder createResponseLayoutBuilder(Container container) {
@@ -104,53 +69,31 @@ public class BoardContentResponsePanel extends BoardPanel {
         return statusLabel;
     }
 
-    public void clearAnswers() {
-        clearContentCards(answersBuilder, answersStatusLabel);
-    }
-
-    public void clearComments() {
-        clearContentCards(commentsBuilder, commentsStatusLabel);
-    }
-
-    public void addAnswer(String username, String answer, String answerID) {
-        BoardContentCard card = addContentCard(answersBuilder, answersStatusLabel);
-        card.setCardData(username, answer, answerID);
-    }
-
-    public void addComment(String username, String comment, String commentID, boolean isFeedbackUseful, String userID) {
-        BoardContentCard card = addContentCard(commentsBuilder, commentsStatusLabel);
-        card.setCardData(username, comment, commentID);
-        card.setContentAction(isFeedbackUseful, isActionSelect -> DBCFeedback.giveFeedback(userID, commentID, isActionSelect), "upvote");
-    }
-
-    // todo: on select answer -> load all its data and comments in DBDataObjects of ContentPanel (question/answer).
-    //  and make a list of answerPanels to save loading and unloading.
-
-    private void clearContentCards(GridBagBuilder layoutBuilder, BoardLabel statusLabel) {
+    public void clearContentCards() {
         layoutBuilder.getContainer().removeAll();
         layoutBuilder.gridCell(0, 0);
-        addStatusLabel(layoutBuilder, statusLabel, statusLabel.getName());
+        addStatusLabel(statusLabel.getName());
     }
 
-    private BoardContentCard addContentCard(GridBagBuilder layoutBuilder, BoardLabel statusLabel) {
-        removeStatusLabel(layoutBuilder, statusLabel);
+    public BoardContentCard addContentCard() {
+        removeStatusLabel();
 
-        BoardContentCard pane = new BoardContentCard(getMain(), getFrame());
-        layoutBuilder.add(pane);
+        BoardContentCard card = new BoardContentCard(getMain(), getFrame());
+        layoutBuilder.add(card);
 
-        addStatusLabel(layoutBuilder, statusLabel, "");
+        addStatusLabel("");
 
-        return pane;
+        return card;
     }
 
-    private void addStatusLabel(GridBagBuilder layoutBuilder, BoardLabel statusLabel, String text) {
+    private void addStatusLabel(String text) {
         layoutBuilder.anchor(GridBagConstraints.CENTER);
         layoutBuilder.weightY(1);
         layoutBuilder.add(statusLabel);
         statusLabel.setText(text);
     }
 
-    private void removeStatusLabel(GridBagBuilder layoutBuilder, BoardLabel statusLabel) {
+    private void removeStatusLabel() {
         layoutBuilder.skipCells(-1);
         layoutBuilder.getContainer().remove(statusLabel);
         statusLabel.setText("");

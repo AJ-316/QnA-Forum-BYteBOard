@@ -20,7 +20,6 @@ public class ProfileBoardFrame extends BoardFrame {
     public ProfileBoardFrame(MainFrame main) {
         super(main, (delegate, context) -> {
             String userID;
-            DEBUG.printlnRed("ProfileBoardFrame Context received: " + Arrays.toString(context));
 
             if (context != null && context.length != 0) userID = context[0];
             else {

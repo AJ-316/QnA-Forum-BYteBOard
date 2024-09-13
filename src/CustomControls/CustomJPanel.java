@@ -15,6 +15,7 @@ public class CustomJPanel extends JPanel {
     public static final int DROP_SHADOW = 1;
     public static final int OFFSET_SHADOW = 2;
 
+    private Color borderColor;
     private int cornerRadius;
     private int shadowState;
     private boolean isRounded;
@@ -66,6 +67,11 @@ public class CustomJPanel extends JPanel {
         g2d.setColor(getBackground());
         g2d.fillRoundRect(i, i, w - i*2, h - i*2, actualCornerRadius, actualCornerRadius);
 
+        if (borderColor != null) {
+            g2d.setColor(borderColor);
+            g2d.drawRoundRect(i, i, w - i*2, h - i*2, actualCornerRadius, actualCornerRadius);
+        }
+
         super.paintComponent(g2d);
     }
 
@@ -99,6 +105,10 @@ public class CustomJPanel extends JPanel {
 
     public void setShadowState(int shadowState) {
         this.shadowState = shadowState;
+    }
+
+    public void setBorderColor(String borderColor) {
+        this.borderColor = ResourceManager.getColor(borderColor);
     }
 
     public void setTransparent(boolean isTransparent) {

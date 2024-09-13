@@ -25,23 +25,21 @@ public class DBCFeedback extends DBOperation {
         return commentData.getValue(K_FEEDBACK);
     }
 
-    public static void giveFeedback(String feedbackUserID, String commentID, boolean feedback) {
+    public static void giveFeedback(String feedbackUserID, String commentID, String feedback) {
         DBDataObject commentData = fetchCommentData(feedbackUserID, commentID);
-
-        String feedbackValue = feedback ? V_FEEDBACK_USEFUL : V_FEEDBACK_NONE;
 
         if(commentData == null) {
 
             // user has never given feedback to this comment; insert new
             ops.insertValue(new String[]{K_USER_ID, K_COMMENT_ID, K_FEEDBACK},
-                    new String[]{feedbackUserID, commentID, feedbackValue});
+                    new String[]{feedbackUserID, commentID, feedback});
 
             return;
         }
 
         // user has given feedback to this comment; update it
         ops.updateValueBy(ops.matchByValue(K_COMMENT_ID, commentID) +
-                AND + ops.matchByValue(K_USER_ID, feedbackUserID), K_FEEDBACK, feedbackValue);
+                AND + ops.matchByValue(K_USER_ID, feedbackUserID), K_FEEDBACK, feedback);
     }
 
     private static DBDataObject fetchCommentData(String userID, String commentID) {

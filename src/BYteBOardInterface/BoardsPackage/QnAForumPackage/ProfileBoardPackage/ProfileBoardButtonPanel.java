@@ -29,7 +29,7 @@ public class ProfileBoardButtonPanel extends BoardPanel {
 
     public void init(MainFrame main, Frame frame) {
         themeComboBox = new BoardComboBox(main, frame, ResourceManager.getThemes(), ResourceManager.getCurrentTheme());
-        themeComboBox.setLabel("Themes");
+        themeComboBox.setLabel("Themes", "theme");
         themeComboBox.setBackground(ByteBoardTheme.MAIN_LIGHT);
 
         //////////////////////
@@ -37,15 +37,16 @@ public class ProfileBoardButtonPanel extends BoardPanel {
         addInsets(30);
 
         GridBagBuilder builder = new GridBagBuilder(this, 1);
-        builder.anchor(GridBagConstraints.SOUTH);
         builder.fill(GridBagConstraints.HORIZONTAL);
         builder.insets(10, 10, 10, 10);
 
         builder.weightY(1);
-        builder.add(searchButton = createButton("    Search", "search"));
+        builder.anchor(GridBagConstraints.NORTH);
+        builder.add(themeComboBox.getComponent());
 
         builder.weightY(0);
-        builder.add(themeComboBox.getComponent());
+        builder.anchor(GridBagConstraints.SOUTH);
+        builder.add(searchButton = createButton("    Search", "search"));
         builder.add(askButton = createButton("Ask Question", "question"));
         builder.add(activityButton = createButton("View Activity", "show"));
         builder.add(editProfileButton = createButton("  Edit Profile", "edit"));

@@ -73,13 +73,15 @@ public class BoardComboBox extends JComboBox<String> {
         ((JComponent) getAccessibleContext().getAccessibleChild(0)).setBorder(roundedBorder);
     }
 
-    public void setLabel(String text) {
+    public void setLabel(String text, String icon) {
         if (label == null) {
             label = new BoardLabel(text);
             label.addInsets(5);
             label.setFGLight();
-            label.setFont(ResourceManager.getFont(ByteBoardTheme.FONT_PRIMARY(ByteBoardTheme.FONT_T_SEMIBOLD, 20)));
             label.setAlignmentLeading();
+            label.setIcon(icon, ResourceManager.DEFAULT, ResourceManager.MINI);
+            label.setFont(ResourceManager.getFont(ByteBoardTheme.FONT_PRIMARY(ByteBoardTheme.FONT_T_SEMIBOLD, 20)));
+
             container.addInsets(10);
             container.add(label, BorderLayout.NORTH);
         }

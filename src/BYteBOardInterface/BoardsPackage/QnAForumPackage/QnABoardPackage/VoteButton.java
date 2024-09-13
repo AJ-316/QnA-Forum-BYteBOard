@@ -56,7 +56,7 @@ public class VoteButton extends BoardButton {
         }
 
         setColors(ByteBoardTheme.MAIN, ByteBoardTheme.BASE, ByteBoardTheme.ACCENT);
-        setIcon(icon);
+        setIcon(icon, ResourceManager.DEFAULT_SECONDARY, ResourceManager.PRESSED, ResourceManager.ROLLOVER);
         setName(voteType);
     }
 }

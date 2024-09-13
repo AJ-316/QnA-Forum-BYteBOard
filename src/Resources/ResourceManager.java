@@ -13,6 +13,7 @@ public class ResourceManager {
     public static final int DEFAULT = 0;
     public static final int ROLLOVER = 1;
     public static final int PRESSED = 2;
+    public static final int DEFAULT_SECONDARY = 3;
 
     public static final int LARGE = 256;
     public static final int REGULAR = 128;
@@ -154,6 +155,11 @@ public class ResourceManager {
             case ResourceManager.PRESSED:
                 iconFg = ResourceManager.getColor(ByteBoardTheme.ACCENT_DARK);
                 iconBg = ResourceManager.getColor(ByteBoardTheme.BASE);
+            break;
+            case ResourceManager.DEFAULT_SECONDARY:
+                iconFg = ResourceManager.getColor(ByteBoardTheme.BASE);
+                iconBg = ResourceManager.getColor(ByteBoardTheme.MAIN_LIGHT);
+            break;
         }
 
         if((icon = IconLoader.getRecoloredIcon(label, iconFg, iconBg, size)) == null)

@@ -283,7 +283,6 @@ public class MainPanelHeader extends JPanel {
         this.contentUserName.setText(contentUserName);
         this.contentBytescore.setText(contentBytescore);
 
-        DEBUG.printlnRed(lastVoteType + ": " + contentType);
         if(lastVoteType.equals(DBVote.V_VOTE_UP))
             upvote(false);
         else if(lastVoteType.equals(DBVote.V_VOTE_DOWN))

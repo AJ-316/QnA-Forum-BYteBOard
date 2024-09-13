@@ -37,7 +37,6 @@ public class DBVote extends DBOperation {
     }
 
     public String voteAnswer(String answerID, String voterID, String voteType) {
-        DEBUG.printlnRed("vote answer: ");
         DBDataObject voteData = fetchAnswerVoteData(voterID, answerID);
 
         if(voteData == null || voteData.getValue(K_ANSWER_ID) == null) {
@@ -48,19 +47,16 @@ public class DBVote extends DBOperation {
 
             // update the answerer's bytescore by considering the user's last vote was "none"
             updateAnswererBytescore(answerID, V_VOTE_NONE, voteType);
-            DEBUG.printlnRed("created new voter: ");
         } else if (voteData.getValue(K_ANSWER_ID) != null) {
 
             // update the answerer's bytescore based on the last vote cast and current vote by the user
             String oldVoteType = voteData.getValue(K_VOTE_TYPE);
             updateAnswererBytescore(answerID, oldVoteType, voteType);
-            DEBUG.printlnRed("updated anwerer's score: ");
 
             // if user has voted this answer then update it
             ops.updateValueBy(
                     ops.matchByValue(K_USER_ID, voterID) + DBOperation.AND +
                             ops.matchByValue(K_ANSWER_ID, answerID), K_VOTE_TYPE, voteType);
-            DEBUG.printlnRed("updated voter: ");
         }
 
         DBDataObject answerData = DBAnswer.ops.findValuesBy(
@@ -68,12 +64,10 @@ public class DBVote extends DBOperation {
                 DBAnswer.K_ANSWER_BYTESCORE)[0];
 
         String score = answerData.getValue(DBAnswer.K_ANSWER_BYTESCORE);
-        DEBUG.printlnRed("\tscore: " + score);
         return score;
     }
 
     public String voteQuestion(String questionID, String voterID, String voteType) {
-        DEBUG.printlnRed("vote question: ");
         DBDataObject voteData = fetchQuestionVoteData(voterID, questionID);
 
         if(voteData == null || voteData.getValue(K_QUESTION_ID) == null) {
@@ -102,9 +96,7 @@ public class DBVote extends DBOperation {
                 DBQuestion.ops.matchByValue(DBQuestion.K_QUESTION_ID, questionID),
                 DBQuestion.K_QUESTION_BYTESCORE)[0];
 
-        String score = questionData.getValue(DBQuestion.K_QUESTION_BYTESCORE);
-        DEBUG.printlnRed("\tscore: " + score);
-        return score;
+        return questionData.getValue(DBQuestion.K_QUESTION_BYTESCORE);
     }
 
     private void updateQuestionerBytescore(String questionID, String oldVoteType, String newVoteType) {
@@ -131,16 +123,12 @@ public class DBVote extends DBOperation {
     private int getByteScore(String oldVoteType, String newVoteType) {
         String key = oldVoteType + "_" + newVoteType;
         int[] score = SCORE_CHANGE_MAP.getOrDefault(key, new int[] {0, 0});
-        int s = score[0] + score[1] * -1;
-        DEBUG.printlnRed(oldVoteType + ", " + newVoteType + ": bytescore = " + s);
-        return s;
+        return score[0] + score[1] * -1;
     }
 
     private int[] getVotes(String oldVoteType, String newVoteType) {
         String key = oldVoteType + "_" + newVoteType;
-        int[] s = SCORE_CHANGE_MAP.getOrDefault(key, new int[] {0, 0});
-        DEBUG.printlnRed(oldVoteType + ", " + newVoteType + ": votes = " + Arrays.toString(s));
-        return s;
+        return SCORE_CHANGE_MAP.getOrDefault(key, new int[] {0, 0});
     }
 
     private DBDataObject fetchQuestionVoteData(String userID, String questionID) {

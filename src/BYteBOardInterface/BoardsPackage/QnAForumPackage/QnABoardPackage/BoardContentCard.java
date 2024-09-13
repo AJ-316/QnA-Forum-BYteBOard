@@ -1,16 +1,15 @@
 package BYteBOardInterface.BoardsPackage.QnAForumPackage.QnABoardPackage;
 
+import BYteBOardDatabase.DBCFeedback;
 import BYteBOardInterface.StructurePackage.BoardPanel;
 import BYteBOardInterface.StructurePackage.Frame;
 import BYteBOardInterface.StructurePackage.MainFrame;
 import CustomControls.BoardLabel;
 import CustomControls.BoardTextArea;
-import CustomControls.DEBUG;
 import CustomControls.GridBagBuilder;
 import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -19,11 +18,14 @@ import java.awt.event.MouseEvent;
 
 public class BoardContentCard extends BoardPanel {
 
+    private static BoardContentCard lastSelectedCard;
+
     private BoardTextArea contentText;
     private BoardLabel contentUsername;
     private BoardLabel contentAction;
     private MouseAdapter contentActionAdapter;
     private final Dimension preferredSize;
+    private static final Rectangle checkBounds = new Rectangle(0, 0, 0, 0);
 
     public BoardContentCard(MainFrame main, Frame frame) {
         super(main, frame, ByteBoardTheme.MAIN_LIGHT);
@@ -67,13 +69,92 @@ public class BoardContentCard extends BoardPanel {
         builder.add(contentUsername, 1, 0, GridBagConstraints.BOTH);
     }
 
-    public void setContentAction(boolean isFeedbackUseful, ContentActionListener action, String icon) {
+    public void setContentAction(boolean isFeedbackGiven, ContentActionListener action, String icon) {
         contentAction.removeMouseListener(contentActionAdapter);
         contentAction.addMouseListener(contentActionAdapter = getContentActionAdapter(action, icon));
+        contentAction.setToolTipText("Comment adds something Useful to the Post");
 
-        setActionSelected(isFeedbackUseful);
+        setActionSelected(isFeedbackGiven);
         contentAction.setVisible(true);
         contentActionAdapter.mouseExited(null);
+    }
+
+    public void setCardData(String contentUsername, String contentText, String contentID) {
+        this.contentUsername.setText(contentUsername);
+        this.contentText.setText(contentText);
+        this.contentText.setName(contentID);
+    }
+
+    public void addMouseListeners(CardSelectListener cardSelectListener) {
+
+        MouseAdapter adapter = new MouseAdapter() {
+            public void mouseEntered(MouseEvent e) {
+                if(isSelected()) return;
+                highlightCard(true);
+            }
+
+            public void mouseExited(MouseEvent e) {
+                if(isSelected()) return;
+                highlightCard(false);
+            }
+
+            public void mouseReleased(MouseEvent e) {
+                checkBounds.width = BoardContentCard.this.getBounds().width;
+                checkBounds.height = BoardContentCard.this.getBounds().height;
+
+                if(!checkBounds.contains(e.getPoint()))
+                    return;
+
+                selectCard(!isSelected(), BoardContentCard.this);
+                cardSelectListener.invoke(isSelected() ? getContentID() : null);
+            }
+        };
+        addMouseListener(adapter);
+        contentText.addMouseListener(adapter);
+    }
+
+    private boolean isSelected() {
+        return lastSelectedCard != null && lastSelectedCard.equals(this);
+    }
+
+    private void highlightCard(boolean isHighlighted) {
+        setBackground(isHighlighted ? ByteBoardTheme.ACCENT : ByteBoardTheme.MAIN_LIGHT);
+        setBorderColor(isHighlighted ? ByteBoardTheme.ACCENT : null);
+    }
+
+    public static void selectCard(boolean isSelect, BoardContentCard contentCard) {
+        if(!isSelect) {
+            if(lastSelectedCard != null)
+                lastSelectedCard.highlightCard(false);
+            lastSelectedCard = null;
+            return;
+        }
+
+        if (lastSelectedCard != null)
+            lastSelectedCard.highlightCard(false);
+
+        contentCard.highlightCard(true);
+        contentCard.setBackground(ByteBoardTheme.ACCENT_DARK);
+        lastSelectedCard = contentCard;
+    }
+
+    private void selectCard(boolean isSelect) {
+        if(!isSelect) {
+            lastSelectedCard.highlightCard(false);
+            lastSelectedCard = null;
+            return;
+        }
+
+        if (lastSelectedCard != null)
+            lastSelectedCard.highlightCard(false);
+
+        highlightCard(true);
+        setBackground(ByteBoardTheme.ACCENT_DARK);
+        lastSelectedCard = this;
+    }
+
+    private void setActionSelected(boolean isSelected) {
+        contentAction.setName(isSelected ? DBCFeedback.V_FEEDBACK_USEFUL : DBCFeedback.V_FEEDBACK_NONE);
     }
 
     private MouseAdapter getContentActionAdapter(ContentActionListener action, String icon) {
@@ -85,7 +166,7 @@ public class BoardContentCard extends BoardPanel {
 
             public void mouseExited(MouseEvent e) {
                 contentAction.setColoredIcon(icon,
-                        isActionSelected() ? ByteBoardTheme.MAIN_LIGHT : ByteBoardTheme.BASE,
+                        isActionSelected() ? ByteBoardTheme.ACCENT : ByteBoardTheme.BASE,
                         isActionSelected() ? ByteBoardTheme.BASE : ByteBoardTheme.MAIN_LIGHT, ResourceManager.MICRO);
             }
 
@@ -93,26 +174,16 @@ public class BoardContentCard extends BoardPanel {
                 setActionSelected(!isActionSelected());
 
                 contentAction.setColoredIcon(icon,
-                        isActionSelected() ? ByteBoardTheme.MAIN_LIGHT : ByteBoardTheme.BASE,
+                        isActionSelected() ? ByteBoardTheme.ACCENT : ByteBoardTheme.BASE,
                         isActionSelected() ? ByteBoardTheme.BASE : ByteBoardTheme.MAIN_LIGHT, ResourceManager.MICRO);
 
-                action.invoke(isActionSelected());
+                action.invoke(contentAction.getName());
             }
         };
     }
 
     private boolean isActionSelected() {
-        return contentAction.getName().equals("1");
-    }
-
-    private void setActionSelected(boolean isSelected) {
-        contentAction.setName(isSelected ? "1" : "0");
-    }
-
-    public void setCardData(String contentUsername, String contentText, String contentID) {
-        this.contentUsername.setText(contentUsername);
-        this.contentText.setText(contentText);
-        this.contentText.setName(contentID);
+        return contentAction.getName().equals(DBCFeedback.V_FEEDBACK_USEFUL);
     }
 
     public String getContentID() {
@@ -120,7 +191,11 @@ public class BoardContentCard extends BoardPanel {
     }
 
     public interface ContentActionListener {
-        void invoke(boolean isActionSelect);
+        void invoke(String feedback);
+    }
+
+    public interface CardSelectListener {
+        void invoke(String contentID);
     }
 
 }
