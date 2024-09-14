@@ -6,6 +6,7 @@ import BYteBOardInterface.StructurePackage.Frame;
 import BYteBOardInterface.StructurePackage.MainFrame;
 import CustomControls.BoardLabel;
 import CustomControls.BoardTextArea;
+import CustomControls.DEBUG;
 import CustomControls.GridBagBuilder;
 import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
@@ -52,35 +53,42 @@ public class BoardContentCard extends BoardPanel {
         contentText.setFontPrimary(ByteBoardTheme.FONT_T_REGULAR, 20);
 
         contentAction = new BoardLabel();
+        contentAction.setHorizontalTextPosition(BoardLabel.RIGHT);
         contentAction.setAlignmentLeading();
         contentAction.setVisible(false);
+        contentAction.setFGLight();
+        contentAction.setFontPrimary(ByteBoardTheme.FONT_T_REGULAR, 18);
 
         contentUsername = new BoardLabel("Username");
+        contentUsername.setHorizontalTextPosition(BoardLabel.LEFT);
         contentUsername.setAlignmentTrailing();
         contentUsername.setFGLight();
         contentUsername.setFontPrimary(ByteBoardTheme.FONT_T_SEMIBOLD, 18);
 
         GridBagBuilder builder = new GridBagBuilder(this, 2);
-        builder.insets(5, 5, 5, 5);
 
-        builder.add(contentText, 2, 1, 0, 1, GridBagConstraints.BOTH);
-        builder.skipCells(1);
-        builder.add(contentAction, 1, 0, GridBagConstraints.BOTH);
-        builder.add(contentUsername, 1, 0, GridBagConstraints.BOTH);
+        builder.insets(5).gridWidth(2).weightY(1).fillBoth()
+                .addToNextCell(contentText).skipCells(1);
+
+        builder.gridWidth(1).weight(1, 0)
+                .addToNextCell(contentAction)
+                .addToNextCell(contentUsername);
     }
 
-    public void setContentAction(boolean isFeedbackGiven, ContentActionListener action, String icon) {
+    public void setContentAction(boolean isFeedbackGiven, ContentActionListener action, String contentActionText, String icon) {
         contentAction.removeMouseListener(contentActionAdapter);
         contentAction.addMouseListener(contentActionAdapter = getContentActionAdapter(action, icon));
         contentAction.setToolTipText("Comment adds something Useful to the Post");
 
         setActionSelected(isFeedbackGiven);
         contentAction.setVisible(true);
+        contentAction.setText(contentActionText);
         contentActionAdapter.mouseExited(null);
     }
 
-    public void setCardData(String contentUsername, String contentText, String contentID) {
+    public void setCardData(String contentUsername, String contentUserprofile, String contentText, String contentID) {
         this.contentUsername.setText(contentUsername);
+        this.contentUsername.setProfileIcon(contentUserprofile, ResourceManager.MINI);
         this.contentText.setText(contentText);
         this.contentText.setName(contentID);
     }
@@ -107,6 +115,7 @@ public class BoardContentCard extends BoardPanel {
 
                 selectCard(!isSelected(), BoardContentCard.this);
                 cardSelectListener.invoke(isSelected() ? getContentID() : null);
+                refresh();
             }
         };
         addMouseListener(adapter);
@@ -120,6 +129,16 @@ public class BoardContentCard extends BoardPanel {
     private void highlightCard(boolean isHighlighted) {
         setBackground(isHighlighted ? ByteBoardTheme.ACCENT : ByteBoardTheme.MAIN_LIGHT);
         setBorderColor(isHighlighted ? ByteBoardTheme.ACCENT : null);
+    }
+
+    public void restoreCardSelection() {
+        if(lastSelectedCard == null) return;
+        System.out.println("restored: " + lastSelectedCard.getContentID() + ", " + getContentID());
+
+        if(lastSelectedCard.getContentID().equals(getContentID()))
+            selectCard(true, this);
+
+        System.out.println(isSelected());
     }
 
     public static void selectCard(boolean isSelect, BoardContentCard contentCard) {
@@ -136,21 +155,6 @@ public class BoardContentCard extends BoardPanel {
         contentCard.highlightCard(true);
         contentCard.setBackground(ByteBoardTheme.ACCENT_DARK);
         lastSelectedCard = contentCard;
-    }
-
-    private void selectCard(boolean isSelect) {
-        if(!isSelect) {
-            lastSelectedCard.highlightCard(false);
-            lastSelectedCard = null;
-            return;
-        }
-
-        if (lastSelectedCard != null)
-            lastSelectedCard.highlightCard(false);
-
-        highlightCard(true);
-        setBackground(ByteBoardTheme.ACCENT_DARK);
-        lastSelectedCard = this;
     }
 
     private void setActionSelected(boolean isSelected) {

@@ -8,6 +8,7 @@ import java.util.Map;
 
 public class DatabaseManager {
 
+    public static boolean PRINT_QUERY = false;
     public static final String PARAMETER_VALUE = "<?P_V?>";
     private static Connection connection;
 
@@ -78,7 +79,8 @@ public class DatabaseManager {
             e.printStackTrace();
         }
 
-        DEBUG.printlnBlue("GENERATE_QUERY: " + query + " => " + retrievedValue);
+        if(PRINT_QUERY)
+            DEBUG.printlnBlue("GENERATE_QUERY: " + query + " => " + retrievedValue);
 
         return Integer.parseInt(retrievedValue);
     }
@@ -118,7 +120,8 @@ public class DatabaseManager {
             e.printStackTrace();
         }
 
-        DEBUG.printlnBlue(("QUERY: " + query));
+        if(PRINT_QUERY)
+            DEBUG.printlnBlue(("QUERY: " + query));
     }
 
     public static String add(String table, String[] keys, String[] values, String whereCondition) {
@@ -163,7 +166,8 @@ public class DatabaseManager {
             e.printStackTrace();
         }
 
-        DEBUG.printlnBlue(("QUERY: " + query));
+        if(PRINT_QUERY)
+            DEBUG.printlnBlue(("QUERY: " + query));
         return generatedKey;
     }
 
@@ -258,7 +262,8 @@ public class DatabaseManager {
             e.printStackTrace();
         }
 
-        DEBUG.printlnBlue(("QUERY: " + query));
+        if(PRINT_QUERY)
+            DEBUG.printlnBlue(("QUERY: " + query));
         // System.out.println(Arrays.toString(dbObjects));
         return dbObjects;
     }

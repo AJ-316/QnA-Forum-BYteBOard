@@ -32,25 +32,20 @@ public class ProfileBoardButtonPanel extends BoardPanel {
         themeComboBox.setLabel("Themes", "theme");
         themeComboBox.setBackground(ByteBoardTheme.MAIN_LIGHT);
 
-        //////////////////////
         setCornerRadius(90);
         addInsets(30);
 
         GridBagBuilder builder = new GridBagBuilder(this, 1);
-        builder.fill(GridBagConstraints.HORIZONTAL);
-        builder.insets(10, 10, 10, 10);
+        builder.weightY(1).insets(10).fillHorizontal()
+                .anchor(GridBagBuilder.NORTH)
+                .addToNextCell(themeComboBox.getComponent());
 
-        builder.weightY(1);
-        builder.anchor(GridBagConstraints.NORTH);
-        builder.add(themeComboBox.getComponent());
-
-        builder.weightY(0);
-        builder.anchor(GridBagConstraints.SOUTH);
-        builder.add(searchButton = createButton("    Search", "search"));
-        builder.add(askButton = createButton("Ask Question", "question"));
-        builder.add(activityButton = createButton("View Activity", "show"));
-        builder.add(editProfileButton = createButton("  Edit Profile", "edit"));
-        builder.add(logoutButton = createButton("    Log Out", "logout"));
+        builder.weightY(0).anchor(GridBagBuilder.SOUTH)
+                .addToNextCell(searchButton = createButton("    Search", "search"))
+                .addToNextCell(askButton = createButton("Ask Question", "question"))
+                .addToNextCell(activityButton = createButton("View Activity", "show"))
+                .addToNextCell(editProfileButton = createButton("  Edit Profile", "edit"))
+                .addToNextCell(logoutButton = createButton("    Log Out", "logout"));
     }
 
     private BoardButton createButton(String text, String icon) {

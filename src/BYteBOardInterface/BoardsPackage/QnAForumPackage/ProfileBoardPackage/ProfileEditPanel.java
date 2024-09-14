@@ -39,46 +39,59 @@ public class ProfileEditPanel extends BoardPanel {
     }
 
     public void init(MainFrame main, Frame frame) {
-        GridBagBuilder builder = new GridBagBuilder(this, 3);
-
         BoardPanel buttonsPanel = getButtonsPanel(main, frame);
-        builder.fill(GridBagConstraints.VERTICAL);
-        builder.weightY(1);
-        builder.add(buttonsPanel, 1, 3);
-
-        builder.fill(GridBagConstraints.NONE);
-        builder.insets(10, 5, 10, 5);
-
         profileLabel = new BoardLabel();
         ProfileSelectionPanel profileSelectionPanel = new ProfileSelectionPanel(main, frame, profileLabel);
-        builder.skipCells(2);
-        builder.gridHeight(3);
-        addPanel(ProfileSelectionPanel.class, profileSelectionPanel, builder.getConstraints());
-        builder.gridHeight(1);
-
         BoardPanel fieldsPanel = getFieldsPanel(main, frame);
-        builder.weightX(1);
-        builder.skipCells(1);
-        builder.add(fieldsPanel);
+//        builder.fill(GridBagConstraints.VERTICAL);
+//        builder.weightY(1);
+//        builder.addToNextCell(buttonsPanel, 1, 3);
+//
+//        builder.fill(GridBagConstraints.NONE);
+//        builder.insets(10, 5, 10, 5);
+//        builder.skipCells(2);
+//        builder.gridHeight(3);
+//        addPanel(ProfileSelectionPanel.class, profileSelectionPanel, builder.getConstraints());
+//        builder.gridHeight(1);
+//
+//        builder.weightX(1);
+//        builder.skipCells(1);
+//        builder.addToNextCell(fieldsPanel);
+        GridBagBuilder builder = new GridBagBuilder(this, 3);
+
+        builder.gridHeight(3).weightY(1).fillVertical()
+                .addToNextCell(buttonsPanel).skipCells(2);
+
+        builder.insets(10, 5,10, 5).fillNone();
+        addPanel(ProfileSelectionPanel.class, profileSelectionPanel, builder);
+
+        builder.gridHeight(1).weightX(1).skipCells(1)
+                .addToNextCell(fieldsPanel);
     }
 
     public BoardPanel getProfilePanel(MainFrame main, Frame frame) {
         BoardPanel panel = new BoardPanel(main, frame);
-        GridBagBuilder builder = new GridBagBuilder(panel);
-        builder.fill(GridBagConstraints.BOTH);
-        builder.weightX(1);
-        builder.weightY(1);
-
         profileLabel.addInsets(20);
         profileLabel.setProfileIcon("0", ResourceManager.LARGE);
 
         editIconLabel = new BoardLabel();
         editIconLabel.setName("edit_profile");
 
-        panel.add(editIconLabel, builder.getConstraints());
-        panel.add(profileLabel, builder.getConstraints());
+        GridBagBuilder builder = new GridBagBuilder(panel);
+        builder.weight(1, 1).fillBoth();
+
+        builder.addToCurrentCell(editIconLabel);
+        builder.addToCurrentCell(profileLabel);
 
         return panel;
+    }
+
+    private BoardLabel getLabel(String text) {
+        BoardLabel label = new BoardLabel(text);
+        label.setFGLight();
+        label.setAlignmentTrailing();
+        label.addInsets(10);
+        return label;
     }
 
     public BoardPanel getFieldsPanel(MainFrame main, Frame frame) {
@@ -86,69 +99,40 @@ public class ProfileEditPanel extends BoardPanel {
         panel.addInsets(25);
         panel.setCornerRadius(90);
 
-        GridBagBuilder builder = new GridBagBuilder(panel, 3);
-        builder.fill(GridBagConstraints.BOTH);
-        builder.insets(10, 10, 10, 10);
-
         BoardPanel profilePanel = getProfilePanel(main, frame);
-        builder.weightY(0);
-        builder.add(profilePanel, 3, 1);
-        builder.skipCells(2);
 
-        // New Username Label
-        BoardLabel usernameLabel = new BoardLabel("New Username");
-        usernameLabel.setFGLight();
-        usernameLabel.setAlignmentTrailing();
-        usernameLabel.addInsets(10);
-        builder.add(usernameLabel);
-        // New Username field
+        BoardLabel usernameLabel = getLabel("New Username");
         usernameField = new BoardTextField(main, frame, ByteBoardTheme.MAIN_DARK, 20);
-        builder.skipCells(1);
-        builder.add(usernameField.getTextFieldContainer());
 
-        // New Email Label
-        BoardLabel emailLabel = new BoardLabel("New Email");
-        emailLabel.setFGLight();
-        emailLabel.setAlignmentTrailing();
-        emailLabel.addInsets(10);
-        builder.add(emailLabel);
-        // New Email field
+        BoardLabel emailLabel = getLabel("New Email");
         emailField = new BoardTextField(main, frame, ByteBoardTheme.MAIN_DARK, 20);
-        builder.skipCells(1);
-        builder.add(emailField.getTextFieldContainer());
 
-        // Password Label
-        BoardLabel oldPasswordLabel = new BoardLabel("Old Password");
-        oldPasswordLabel.setFGLight();
-        oldPasswordLabel.setAlignmentTrailing();
-        oldPasswordLabel.addInsets(10);
-        builder.add(oldPasswordLabel);
-        // Password field
+        BoardLabel oldPasswordLabel = getLabel("Old Password");
         oldPasswordField = new BoardPasswordField(main, frame, ByteBoardTheme.MAIN_DARK, 20);
-        builder.skipCells(1);
-        builder.add(oldPasswordField.getTextFieldContainer());
 
-        // Password Label
-        BoardLabel newPasswordLabel = new BoardLabel("New Password");
-        newPasswordLabel.setFGLight();
-        newPasswordLabel.setAlignmentTrailing();
-        newPasswordLabel.addInsets(10);
-        builder.add(newPasswordLabel);
-        // Password field
+        BoardLabel newPasswordLabel = getLabel("New Password");
         newPasswordField = new BoardPasswordField(main, frame, ByteBoardTheme.MAIN_DARK, 20);
-        builder.skipCells(1);
-        builder.add(newPasswordField.getTextFieldContainer());
 
-        // RePassword Label
-        BoardLabel rePasswordLabel = new BoardLabel("Repeat Password");
-        rePasswordLabel.setFGLight();
-        rePasswordLabel.setAlignmentTrailing();
-        rePasswordLabel.addInsets(10);
-        builder.add(rePasswordLabel);
-        // RePassword field
+        BoardLabel rePasswordLabel = getLabel("Repeat Password");
         rePasswordField = new BoardPasswordField(main, frame, ByteBoardTheme.MAIN_DARK, 20);
-        builder.skipCells(1);
-        builder.add(rePasswordField.getTextFieldContainer());
+
+        GridBagBuilder builder = new GridBagBuilder(panel, 3);
+
+        builder.gridWidth(3).weightY(0).insets(10).fillBoth()
+                .addToNextCell(profilePanel).skipCells(2);
+
+        builder.gridWidth(1)
+                .addToNextCell(usernameLabel).skipCells(1)
+                .addToNextCell(usernameField.getTextFieldContainer())
+                .addToNextCell(emailLabel).skipCells(1)
+                .addToNextCell(emailField.getTextFieldContainer())
+                .addToNextCell(oldPasswordLabel).skipCells(1)
+                .addToNextCell(oldPasswordField.getTextFieldContainer())
+                .addToNextCell(newPasswordLabel).skipCells(1)
+                .addToNextCell(newPasswordField.getTextFieldContainer())
+                .addToNextCell(rePasswordLabel).skipCells(1)
+                .addToNextCell(rePasswordField.getTextFieldContainer());
+
         return panel;
     }
 
@@ -157,22 +141,20 @@ public class ProfileEditPanel extends BoardPanel {
         panel.setCornerRadius(90);
         panel.addInsets(30);
 
-        GridBagBuilder builder = new GridBagBuilder(panel, 1);
-        builder.anchor(GridBagConstraints.SOUTH);
-        builder.fill(GridBagConstraints.HORIZONTAL);
-        builder.insets(10, 10, 10, 10);
-
-        builder.weightY(1);
         saveButton = new BoardButton("Save Changes", "save");
         saveButton.setAlignmentLeading();
         saveButton.setFGLight();
-        builder.add(saveButton);
 
-        builder.weightY(0);
         cancelButton = new BoardButton("Cancel", "cancel");
         cancelButton.setAlignmentLeading();
         cancelButton.setFGLight();
-        builder.add(cancelButton);
+
+        GridBagBuilder builder = new GridBagBuilder(panel, 1);
+        builder.weightY(1).insets(10).fillHorizontal()
+                .anchor(GridBagBuilder.SOUTH)
+                .addToNextCell(saveButton);
+
+        builder.weightY(0).addToNextCell(cancelButton);
 
         return panel;
     }
@@ -266,7 +248,6 @@ public class ProfileEditPanel extends BoardPanel {
         updatedValues.clear();
         updatedValues = null;
 
-        System.out.println("Changed");
         refresh();
 
         return true;

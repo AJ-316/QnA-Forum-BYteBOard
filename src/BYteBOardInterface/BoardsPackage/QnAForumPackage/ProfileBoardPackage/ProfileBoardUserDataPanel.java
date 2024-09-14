@@ -33,23 +33,18 @@ public class ProfileBoardUserDataPanel extends BoardPanel {
         userDataPanel.setShadowState(BoardPanel.DROP_SHADOW);
         createUserData(userDataPanel);
 
-        builder.add(userProfileLabel);
-        builder.add(userDataPanel);
+        builder.addToNextCell(userProfileLabel);
+        builder.addToNextCell(userDataPanel);
     }
 
     private void createUserData(BoardPanel panel) {
         panel.addInsets(40);
-
-        GridBagBuilder builder = new GridBagBuilder(panel, 1);
-        builder.fill(GridBagConstraints.BOTH);
-        builder.weightX(1);
 
         usernameLabel = new BoardLabel("Username");
         usernameLabel.setFGLight();
         usernameLabel.setAlignmentLeading();
         usernameLabel.setFontPrimary(ByteBoardTheme.FONT_T_BOLD, 32);
         usernameLabel.addInsets(10, 10, 30, 10);
-        builder.add(usernameLabel);
 
         userBytesLabel = new BoardLabel("bytescore_icon", ResourceManager.SMALL);
         userBytesLabel.setText("24536");
@@ -57,7 +52,6 @@ public class ProfileBoardUserDataPanel extends BoardPanel {
         userBytesLabel.setAlignmentLeading();
         userBytesLabel.setFontPrimary(ByteBoardTheme.FONT_T_SEMIBOLD, 20);
         userBytesLabel.addInsets(10);
-        builder.add(userBytesLabel);
 
         userEmailLabel = new BoardLabel("user123@gmail.com");
         userEmailLabel.setColoredIcon("email", ByteBoardTheme.MAIN_DARK, null, ResourceManager.SMALL);
@@ -65,7 +59,12 @@ public class ProfileBoardUserDataPanel extends BoardPanel {
         userEmailLabel.setAlignmentLeading();
         userEmailLabel.setFontPrimary(ByteBoardTheme.FONT_T_SEMIBOLD, 20);
         userEmailLabel.addInsets(10);
-        builder.add(userEmailLabel);
+
+        GridBagBuilder builder = new GridBagBuilder(panel, 1);
+        builder.weightX(1).fillBoth()
+                .addToNextCell(usernameLabel)
+                .addToNextCell(userBytesLabel)
+                .addToNextCell(userEmailLabel);
     }
 
     protected void setProfile(String profileIcon) {

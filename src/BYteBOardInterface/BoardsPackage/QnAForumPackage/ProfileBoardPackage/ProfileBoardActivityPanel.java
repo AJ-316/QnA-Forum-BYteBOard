@@ -37,10 +37,9 @@ public class ProfileBoardActivityPanel extends BoardPanel {
         statusLabel.setFontPrimary(ByteBoardTheme.FONT_T_THIN, 32);
 
         activitiesPanel = getActivityPanel(main, frame);
-        builder.weightX(1);
-        builder.weightY(1);
-        builder.fill(GridBagConstraints.BOTH);
-        add(activitiesPanel.getComponent(), builder.getConstraints());
+
+        builder.weight(1, 1).fillBoth();
+        builder.addToCurrentCell(activitiesPanel.getComponent());
 
         clearActivities();
     }
@@ -50,9 +49,8 @@ public class ProfileBoardActivityPanel extends BoardPanel {
         panel.getComponent().setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         panel.setBackground(getBackground());
         activitiesLayoutBuilder = new GridBagBuilder(panel, 1);
-        activitiesLayoutBuilder.fill(GridBagConstraints.HORIZONTAL);
-        activitiesLayoutBuilder.weightX(1);
-        activitiesLayoutBuilder.insets(10, 10, 10, 20);
+        activitiesLayoutBuilder.weightX(1).fillHorizontal()
+                .insets(10, 10, 10, 20).anchor(GridBagConstraints.CENTER);
         return panel;
     }
 
@@ -66,7 +64,7 @@ public class ProfileBoardActivityPanel extends BoardPanel {
         removeActivityStatusLabel();
 
         ActivityPane pane = new ActivityPane(getMain(), getFrame());
-        activitiesLayoutBuilder.add(pane);
+        activitiesLayoutBuilder.addToNextCell(pane);
 
         addActivityStatusLabel("");
 
@@ -74,9 +72,8 @@ public class ProfileBoardActivityPanel extends BoardPanel {
     }
 
     private void addActivityStatusLabel(String text) {
-        activitiesLayoutBuilder.anchor(GridBagConstraints.CENTER);
-        activitiesLayoutBuilder.weightY(1);
-        activitiesLayoutBuilder.add(statusLabel);
+        activitiesLayoutBuilder.weightY(1)
+                .addToNextCell(statusLabel);
         statusLabel.setText(text);
     }
 
@@ -85,7 +82,6 @@ public class ProfileBoardActivityPanel extends BoardPanel {
         activitiesPanel.remove(statusLabel);
         statusLabel.setText("");
 
-        activitiesLayoutBuilder.anchor(GridBagConstraints.CENTER);
         activitiesLayoutBuilder.weightY(0);
     }
 

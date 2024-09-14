@@ -92,6 +92,21 @@ public class SimpleScrollPane extends JScrollPane {
         return viewSize.getWidth() > viewRect.getWidth();
     }
 
+    public void resetScroll() {
+        SwingUtilities.invokeLater(() -> {
+            getVerticalScrollBar().setValue(0);
+            getHorizontalScrollBar().setValue(0);
+        });
+    }
+
+    public void setVerticalScroll(int value) {
+        SwingUtilities.invokeLater(() -> getVerticalScrollBar().setValue(value));
+    }
+
+    public void setHorizontalScroll(int value) {
+        SwingUtilities.invokeLater(() -> getHorizontalScrollBar().setValue(value));
+    }
+
     private static class ModernScrollBarUI extends BasicScrollBarUI {
 
         private final JScrollPane sp;

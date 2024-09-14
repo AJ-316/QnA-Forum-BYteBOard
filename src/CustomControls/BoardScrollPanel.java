@@ -17,6 +17,23 @@ public class BoardScrollPanel extends BoardPanel {
         setVerticalUnitIncrement(15);
     }
 
+    public Component add(Component comp) {
+        Component c = super.add(comp);
+        scrollPane.resetScroll();
+        return c;
+    }
+
+    public Component add(Component comp, int index) {
+        Component c = super.add(comp, index);
+        scrollPane.resetScroll();
+        return c;
+    }
+
+    public void add(Component comp, Object constraints) {
+        super.add(comp, constraints);
+        scrollPane.resetScroll();
+    }
+
     public void setScrollMinSize(int width, int height) {
         scrollPane.getViewport().setMinimumSize(new Dimension(width, height));
     }

@@ -11,6 +11,8 @@ import java.awt.*;
 
 public class BoardContentResponsePanel extends BoardPanel {
 
+    private SimpleScrollPane scrollPane;
+    private int lastScroll;
     private GridBagBuilder layoutBuilder;
     private BoardLabel statusLabel;
     private BoardLabel titleLabel;
@@ -19,8 +21,9 @@ public class BoardContentResponsePanel extends BoardPanel {
         super(main, frame, bgColor);
     }
 
-    public void setTitle(String title) {
+    public void setTitle(String title, String statusLabel) {
         titleLabel.setText(title);
+        this.statusLabel.setText(statusLabel);
     }
 
     public void init(MainFrame main, Frame frame) {
@@ -35,32 +38,24 @@ public class BoardContentResponsePanel extends BoardPanel {
         titleLabel.setFGLight();
         titleLabel.setFontPrimary(ByteBoardTheme.FONT_T_SEMIBOLD, 22);
 
-        BoardScrollPanel scrollPanel = new BoardScrollPanel(main, frame);
-        scrollPanel.setAutoscrolls(false);
-        scrollPanel.setBackground(getBackground());
-        scrollPanel.getComponent().setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        BoardScrollPanel scrollPanePanel = new BoardScrollPanel(main, frame);
+        scrollPanePanel.setAutoscrolls(false);
+        scrollPanePanel.setBackground(getBackground());
+        scrollPanePanel.getComponent().setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        this.scrollPane = scrollPanePanel.getComponent();
 
-        layoutBuilder = createResponseLayoutBuilder(scrollPanel);
-        statusLabel = createResponseStatusLabel("<html><div style='text-align: center;'>No Comments<br>Yet</div></html>");
+        layoutBuilder = new GridBagBuilder(scrollPanePanel, 1).weightX(1).insets(10).fillHorizontal();
+        statusLabel = createResponseStatusLabel();
 
         add(titleLabel, BorderLayout.NORTH);
-        add(scrollPanel.getComponent(), BorderLayout.CENTER);
+        add(scrollPanePanel.getComponent(), BorderLayout.CENTER);
 
         clearContentCards();
     }
 
-    private GridBagBuilder createResponseLayoutBuilder(Container container) {
-        GridBagBuilder builder = new GridBagBuilder(container, 1);
-        builder.insets(10, 10, 10, 20);
-        builder.weightX(1);
-        builder.fill(GridBagConstraints.HORIZONTAL);
-
-        return builder;
-    }
-
-    private BoardLabel createResponseStatusLabel(String text) {
+    private BoardLabel createResponseStatusLabel() {
         BoardLabel statusLabel = new BoardLabel();
-        statusLabel.setText(text);
+        statusLabel.setText("<html><div style='text-align: center;'>No Comments<br>Yet</div></html>");
         statusLabel.setName(statusLabel.getText());
         statusLabel.addInsets(10);
         statusLabel.setFGLight();
@@ -70,6 +65,7 @@ public class BoardContentResponsePanel extends BoardPanel {
     }
 
     public void clearContentCards() {
+        lastScroll = scrollPane.getVerticalScrollBar().getValue();
         layoutBuilder.getContainer().removeAll();
         layoutBuilder.gridCell(0, 0);
         addStatusLabel(statusLabel.getName());
@@ -79,8 +75,7 @@ public class BoardContentResponsePanel extends BoardPanel {
         removeStatusLabel();
 
         BoardContentCard card = new BoardContentCard(getMain(), getFrame());
-        layoutBuilder.add(card);
-
+        layoutBuilder.addToNextCell(card);
         addStatusLabel("");
 
         return card;
@@ -89,7 +84,7 @@ public class BoardContentResponsePanel extends BoardPanel {
     private void addStatusLabel(String text) {
         layoutBuilder.anchor(GridBagConstraints.CENTER);
         layoutBuilder.weightY(1);
-        layoutBuilder.add(statusLabel);
+        layoutBuilder.addToNextCell(statusLabel);
         statusLabel.setText(text);
     }
 
@@ -100,6 +95,14 @@ public class BoardContentResponsePanel extends BoardPanel {
 
         layoutBuilder.anchor(GridBagConstraints.CENTER);
         layoutBuilder.weightY(0);
+    }
+
+    public void resetScrolls() {
+        scrollPane.resetScroll();
+    }
+
+    public void restoreScrolls() {
+        scrollPane.setVerticalScroll(lastScroll);
     }
 
 }

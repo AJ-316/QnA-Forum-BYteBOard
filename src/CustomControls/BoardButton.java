@@ -6,8 +6,7 @@ import Resources.ResourceManager;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 
 public class BoardButton extends JButton implements CustomControl {
 
@@ -39,6 +38,16 @@ public class BoardButton extends JButton implements CustomControl {
         addInsets(15);
 
         addFontColorUpdates();
+        addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if(e.getKeyCode() == KeyEvent.VK_ENTER)
+                    fireActionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED,
+                            getActionCommand(),
+                            EventQueue.getMostRecentEventTime(),
+                            ((KeyEvent) EventQueue.getCurrentEvent()).getModifiers()));
+            }
+        });
     }
 
     public void setIcon(String icon) {

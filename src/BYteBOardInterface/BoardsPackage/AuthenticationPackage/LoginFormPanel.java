@@ -28,17 +28,17 @@ public class LoginFormPanel extends BoardPanel {
         loginTitle.addInsets(50, 0, 0, 0);
         loginTitle.setFontPrimary(ByteBoardTheme.FONT_T_BOLD, 40);
         loginTitle.setFGMain();
-        builder.add(loginTitle);
+        builder.addToNextCell(loginTitle);
 
         // Container for all input fields
         BoardPanel fieldsContainer = new BoardPanel(main, frame, ByteBoardTheme.MAIN);
         initFields(main, frame, fieldsContainer);
-        builder.add(fieldsContainer);
+        builder.addToNextCell(fieldsContainer);
 
         // Signup Option
         BoardPanel signupContainer = getSignupOptionContainer(main, frame);
         builder.anchor(GridBagConstraints.SOUTH);
-        builder.add(signupContainer);
+        builder.addToNextCell(signupContainer);
     }
 
     private void initFormSubmission() {
@@ -73,42 +73,51 @@ public class LoginFormPanel extends BoardPanel {
         fieldsContainer.addInsets(40);
         fieldsContainer.setCornerRadius(90);
 
-        GridBagBuilder builder = new GridBagBuilder(fieldsContainer, 2);
 
-        builder.fill(GridBagConstraints.BOTH);
-        builder.insets(10, 10, 10, 10);
+//
+//        builder.fill(GridBagConstraints.BOTH);
+//        builder.insets(10, 10, 10, 10);
 
         // Username Email Label
         BoardLabel usernameOrEmailLabel = new BoardLabel("Username");
         usernameOrEmailLabel.setFGLight();
         usernameOrEmailLabel.setAlignmentTrailing();
         usernameOrEmailLabel.addInsets(10);
-        builder.add(usernameOrEmailLabel);
+//        builder.addToNextCell(usernameOrEmailLabel);
 
         // Username Email field
         usernameOrEmailField = new BoardTextField(main, frame, ByteBoardTheme.MAIN_DARK, 20);
         usernameOrEmailField.setHintText("Username or Email");
-        builder.add(usernameOrEmailField.getTextFieldContainer());
+//        builder.addToNextCell(usernameOrEmailField.getTextFieldContainer());
 
         // Password Label
         BoardLabel passwordLabel = new BoardLabel("Password");
         passwordLabel.setFGLight();
         passwordLabel.setAlignmentTrailing();
         passwordLabel.addInsets(10);
-        builder.add(passwordLabel);
+//        builder.addToNextCell(passwordLabel);
 
         // Password field
         passwordField = new BoardPasswordField(main, frame, ByteBoardTheme.MAIN_DARK, 20);
         passwordField.setHintText("********");
-        builder.add(passwordField.getTextFieldContainer());
+//        builder.addToNextCell(passwordField.getTextFieldContainer());
 
         // Login Button
         BoardButton loginButton = new BoardButton("Login", "login");
         loginButton.setFGLight();
         loginButton.addActionListener(e -> initFormSubmission());
-        builder.fill(GridBagConstraints.NONE);
-        builder.insets(40, 10, 10, 10);
-        builder.add(loginButton, 2, 1);
+//        builder.fill(GridBagConstraints.NONE);
+//        builder.insets(40, 10, 10, 10);
+//        builder.addToNextCell(loginButton, 2, 1);
+
+        GridBagBuilder builder = new GridBagBuilder(fieldsContainer, 2);
+
+        builder.insets(10).fillBoth()
+                .addToNextCell(usernameOrEmailLabel).addToNextCell(usernameOrEmailField.getTextFieldContainer())
+                .addToNextCell(passwordLabel).addToNextCell(passwordField.getTextFieldContainer());
+
+        builder.gridSize(2, 1).fillNone().insets(40, 10, 10, 10)
+                .addToNextCell(loginButton);
     }
 
     private BoardPanel getSignupOptionContainer(MainFrame main, Frame frame) {
@@ -120,7 +129,7 @@ public class LoginFormPanel extends BoardPanel {
         // Signup Label
         BoardLabel signupLabel = new BoardLabel("Don't have an account?");
         signupLabel.addInsets(0, 0, 10, 0);
-        builder.add(signupLabel);
+        builder.addToNextCell(signupLabel);
 
         // Signup Button
         BoardButton signUpButton = new BoardButton("Signup", "signup");
@@ -129,7 +138,7 @@ public class LoginFormPanel extends BoardPanel {
             setVisible(false);
             clearFieldErrors();
         });
-        builder.add(signUpButton);
+        builder.addToNextCell(signUpButton);
         return signupContainer;
     }
 

@@ -30,50 +30,46 @@ public class ActivityPane extends BoardPanel {
     public void init(MainFrame main, Frame frame) {
         setCornerRadius(80);
         setLimitRadius(false);
-
         addInsets(20);
-        GridBagBuilder builder = new GridBagBuilder(this, 2);
-        builder.fill(GridBagConstraints.BOTH);
-        builder.weightY(1);
 
         userProfileLabel = new BoardLabel();
         userProfileLabel.setProfileIcon("0", ResourceManager.SMALL);
         userProfileLabel.addInsets(5);
-        builder.add(userProfileLabel);
-
         BoardPanel contentPanel = getContentPanel(main, frame);
-        builder.weightX(1);
-        builder.add(contentPanel);
+
+        GridBagBuilder builder = new GridBagBuilder(this, 2);
+        builder.weightY(1).fillBoth()
+                .addToNextCell(userProfileLabel)
+                .weightX(1)
+                .addToNextCell(contentPanel);
     }
 
     private BoardPanel getContentPanel(MainFrame main, Frame frame) {
         BoardPanel panel = new BoardPanel(main, frame);
 
-        GridBagBuilder builder = new GridBagBuilder(panel, 2);
-        builder.fill(GridBagConstraints.BOTH);
-        builder.insets(4, 4, 4, 4);
-
         usernameLabel = new BoardLabel("Username");
         usernameLabel.setFGLight();
         usernameLabel.setFontPrimary(ByteBoardTheme.FONT_T_SEMIBOLD, 24);
         usernameLabel.setAlignmentLeading();
-        builder.weightX(0.5);
-        builder.add(usernameLabel);
 
         bytesLabel = new BoardLabel("517465", "bytescore_icon");
         bytesLabel.setFGLight();
         bytesLabel.setFontPrimary(ByteBoardTheme.FONT_T_SEMIBOLD, 24);
         bytesLabel.setAlignmentTrailing();
         bytesLabel.setHorizontalTextPosition(SwingConstants.LEFT);
-        builder.add(bytesLabel);
 
         questionHeadLabel = new BoardLabel("Content goes here, and it could be very long one so test it before moving on.");
         questionHeadLabel.setFGLight();
         questionHeadLabel.setFontPrimary(ByteBoardTheme.FONT_T_REGULAR, 20);
         questionHeadLabel.setAlignmentLeading();
         questionHeadLabel.setPreferredSize(new Dimension(600, questionHeadLabel.getPreferredSize().height));
-        builder.weightX(0);
-        builder.add(questionHeadLabel);
+
+        GridBagBuilder builder = new GridBagBuilder(panel, 2);
+        builder.weightX(0.5).fillBoth().insets(4)
+                .addToNextCell(usernameLabel)
+                .addToNextCell(bytesLabel)
+                .weightX(0)
+                .addToNextCell(questionHeadLabel);
 
         return panel;
     }

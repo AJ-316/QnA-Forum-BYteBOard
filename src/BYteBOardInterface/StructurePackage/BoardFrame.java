@@ -65,15 +65,11 @@ public abstract class BoardFrame extends Board implements Frame {
     public void init(MainFrame main) {}
 
     public final void refresh() {
-        DEBUG.printlnPurple("Setting context: (refresh)");
-
         recoverContext = frameSwitchDelegate.retrieveData();
         applyFrameSwitchContext(frameSwitchDelegate);
     }
 
     public final void setContext(String... context) {
-        DEBUG.printlnPurple("Setting context: " + Arrays.toString(context));
-
         recoverContext = frameSwitchDelegate.retrieveData(context);
         applyFrameSwitchContext(frameSwitchDelegate);
     }

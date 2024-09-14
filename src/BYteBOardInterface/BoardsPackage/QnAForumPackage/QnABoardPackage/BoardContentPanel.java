@@ -23,6 +23,7 @@ public class BoardContentPanel extends BoardPanel {
     private BoardLabel contentBytes;
     private BoardTextArea contentHead;
     private BoardTextArea contentBody;
+    private SimpleScrollPane bodyScrollPane;
 
     private final UpdateVoteDatabase voteUpdate;
 
@@ -45,8 +46,10 @@ public class BoardContentPanel extends BoardPanel {
         BoardPanel bodyPanel = getContentBodyPanel(main, frame);
 
         GridBagBuilder builder = new GridBagBuilder(this, 1);
-        builder.add(headerPanel, 1, 0, GridBagConstraints.BOTH);
-        builder.add(bodyPanel, 1, 1, GridBagConstraints.BOTH);
+        builder.weightX(1).fillBoth()
+                .addToNextCell(headerPanel)
+                .weightY(1)
+                .addToNextCell(bodyPanel);
     }
 
     private BoardPanel getContentHeadPanel(MainFrame main, Frame frame) {
@@ -57,17 +60,16 @@ public class BoardContentPanel extends BoardPanel {
         BoardPanel votePanel = new BoardPanel(main, frame);
         votePanel.addInsets(10);
         GridBagBuilder votePanelBuilder = new GridBagBuilder(votePanel, 1);
-        votePanelBuilder.insets(10, 20, 10, 20);
-        votePanelBuilder.add(upVoteButton);
-        votePanelBuilder.add(downVoteButton);
+        votePanelBuilder.insets(10, 20, 10, 20)
+                .addToNextCell(upVoteButton)
+                .addToNextCell(downVoteButton);
 
         BoardPanel userBottomPanel = new BoardPanel(main, frame);
         userBottomPanel.addInsets(10);
         GridBagBuilder userBottomPanelBuilder = new GridBagBuilder(userBottomPanel, 2);
-        userBottomPanelBuilder.weightX(1);
-        userBottomPanelBuilder.fill(GridBagConstraints.BOTH);
-        userBottomPanelBuilder.add(contentBytes);
-        userBottomPanelBuilder.add(contentUsername);
+        userBottomPanelBuilder.weightX(1).fillBoth()
+                .addToNextCell(contentBytes)
+                .addToNextCell(contentUsername);
 
         BoardPanel contentHeadPanel = new BoardPanel(main, frame, ByteBoardTheme.MAIN_LIGHT);
         contentHeadPanel.setCornerRadius(90);
@@ -77,17 +79,21 @@ public class BoardContentPanel extends BoardPanel {
 
         GridBagBuilder panelBuilder = new GridBagBuilder(panel, 2);
 
-        panelBuilder.add(votePanel, 1, 2, 0, 1, GridBagConstraints.VERTICAL);
-        panelBuilder.add(contentHeadPanel, 1, 1, GridBagConstraints.HORIZONTAL);
-        panelBuilder.skipCells(1);
-        panelBuilder.add(userBottomPanel, 1, 0, GridBagConstraints.BOTH);
+        panelBuilder.gridHeight(2).weightY(1).fillVertical()
+                .addToNextCell(votePanel);
+
+        panelBuilder.gridHeight(1).weightX(1).fillHorizontal()
+                .addToNextCell(contentHeadPanel).skipCells(1);
+
+        panelBuilder.weight(1, 0).fillBoth()
+                .addToNextCell(userBottomPanel);
 
         return panel;
     }
 
     private void initComponents(MainFrame main, Frame frame) {
         contentCommentPanel = new BoardContentResponsePanel(main, frame, ByteBoardTheme.MAIN);
-        contentCommentPanel.setTitle("Comments");
+        contentCommentPanel.setTitle("Comments", "No Comments!");
 
         upVoteButton = new VoteButton("upvote", ResourceManager.SMALL, DBVote.V_VOTE_UP);
         downVoteButton = new VoteButton("downvote", ResourceManager.SMALL, DBVote.V_VOTE_DOWN);
@@ -98,6 +104,8 @@ public class BoardContentPanel extends BoardPanel {
         contentBytes.setFontPrimary(ByteBoardTheme.FONT_T_SEMIBOLD, 20);
 
         contentUsername = new BoardLabel("Username");
+        contentUsername.addInsets(0, 0, 0, 20);
+        contentUsername.setHorizontalTextPosition(BoardLabel.LEFT);
         contentUsername.setAlignmentTrailing();
         contentUsername.setFGLight();
         contentUsername.setFontPrimary(ByteBoardTheme.FONT_T_SEMIBOLD, 20);
@@ -116,14 +124,14 @@ public class BoardContentPanel extends BoardPanel {
         panel.setCornerRadius(90);
         panel.addInsets(40);
 
-        SimpleScrollPane scrollPane = new SimpleScrollPane(contentBody);
-        scrollPane.setOpaque(false);
-        scrollPane.setBorder(new RoundedBorder(60, 60, 30,
+        bodyScrollPane = new SimpleScrollPane(contentBody);
+        bodyScrollPane.setOpaque(false);
+        bodyScrollPane.setBorder(new RoundedBorder(60, 60, 30,
                 ResourceManager.getColor(ByteBoardTheme.MAIN_LIGHT), null));
 
-        scrollPane.getViewport().setBackground(ResourceManager.getColor(ByteBoardTheme.MAIN_LIGHT));
+        bodyScrollPane.getViewport().setBackground(ResourceManager.getColor(ByteBoardTheme.MAIN_LIGHT));
 
-        panel.add(scrollPane);
+        panel.add(bodyScrollPane);
         return panel;
     }
 
@@ -142,20 +150,27 @@ public class BoardContentPanel extends BoardPanel {
         }
     }
 
-    public void setContentComments(DBDataObject[] commentsData, String userID) {
+    public void setContentComments(DBDataObject[] commentDataObjects, String userID) {
         contentCommentPanel.clearContentCards();
 
-        for (DBDataObject commentsDatum : commentsData) {
+        for (DBDataObject commentData : commentDataObjects) {
             BoardContentCard card = contentCommentPanel.addContentCard();
 
-            String commentID = commentsDatum.getValue(DBComment.K_COMMENT_ID);
+            String commentID = commentData.getValue(DBComment.K_COMMENT_ID);
             card.setCardData(
-                    commentsDatum.getValue(DBUser.K_USER_NAME),
-                    commentsDatum.getValue(DBComment.K_COMMENT), commentID);
-
-            card.setContentAction(DBCFeedback.isFeedbackUseful(commentsDatum.getValue(DBCFeedback.K_FEEDBACK)),
-                    feedback -> DBCFeedback.giveFeedback(userID, commentID, feedback), "useful");
+                    commentData.getValue(DBUser.K_USER_NAME),
+                    commentData.getValue(DBUser.K_USER_PROFILE),
+                    commentData.getValue(DBComment.K_COMMENT), commentID);
+            card.setContentAction(
+                    DBCFeedback.isFeedbackUseful(commentData.getValue(DBCFeedback.K_FEEDBACK)),
+                    feedback -> {
+                        DEBUG.printlnRed("Liked: " + feedback);
+                        DBCFeedback.giveFeedback(userID, commentID, feedback);
+                        refresh();
+                    }, commentData.getValue(DBComment.K_COMMENT_SCORE), "useful");
         }
+
+        contentCommentPanel.resetScrolls();
     }
 
     public void setContentID(String contentID) {
@@ -169,10 +184,12 @@ public class BoardContentPanel extends BoardPanel {
 
     public void setContentBody(String contentBody) {
         this.contentBody.setText(contentBody);
+        bodyScrollPane.resetScroll();
     }
 
-    public void setContentUsername(String contentUsername) {
-        this.contentUsername.setText(contentUsername);
+    public void setContentUsername(String title, String contentUsername, String contentUserprofile) {
+        this.contentUsername.setText(title + contentUsername);
+        this.contentUsername.setProfileIcon(contentUserprofile, ResourceManager.MINI);
     }
 
     public void setContentBytes(String contentBytes) {

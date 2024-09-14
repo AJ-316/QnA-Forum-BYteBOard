@@ -2,11 +2,10 @@ package CustomControls;
 
 import java.awt.*;
 
-public class GridBagBuilder {
+public class GridBagBuilder extends GridBagConstraints {
 
     private final Container container;
     private final GridBagLayout layout;
-    private final GridBagConstraints constraints;
     private final int cols;
     public int currentCellPos;
 
@@ -17,25 +16,31 @@ public class GridBagBuilder {
     public GridBagBuilder(Container container, int cols) {
         this.container = container;
         this.layout = new GridBagLayout();
-        this.constraints = new GridBagConstraints();
         this.cols = cols;
 
-        constraints.gridx = 0;
-        constraints.gridy = 0;
+        gridx = 0;
+        gridy = 0;
         container.setLayout(layout);
     }
 
-    public void add(Component component) {
-        skipCells(1);
-        container.add(component, constraints);
+    public GridBagBuilder addToCurrentCell(Component component) {
+        if(component != null)
+            container.add(component, this);
+
+        return this;
     }
 
-    public void add(Component component, int gridWidth, int gridHeight) {
+    public GridBagBuilder addToNextCell(Component component) {
+        skipCells(1);
+        return addToCurrentCell(component);
+    }
+
+    /*public void add(Component component, int gridWidth, int gridHeight) {
         skipCells(1);
         gridWidth(gridWidth);
         gridHeight(gridHeight);
 
-        container.add(component, constraints);
+        container.add(component, this);
 
         gridWidth(1);
         gridHeight(1);
@@ -43,13 +48,13 @@ public class GridBagBuilder {
 
     public void add(Component component, double weightX, double weightY, int fill) {
         skipCells(1);
-        int lastFill = constraints.fill;
+        int lastFill = this.fill;
 
         weightX(weightX);
         weightY(weightY);
         fill(fill);
 
-        container.add(component, constraints);
+        container.add(component, this);
 
         weightX(0);
         weightY(0);
@@ -58,7 +63,7 @@ public class GridBagBuilder {
 
     public void add(Component component, int width, int height, double weightX, double weightY, int fill) {
         skipCells(1);
-        int lastFill = constraints.fill;
+        int lastFill = this.fill;
 
         gridWidth(width);
         gridHeight(height);
@@ -66,60 +71,97 @@ public class GridBagBuilder {
         weightY(weightY);
         fill(fill);
 
-        container.add(component, constraints);
+        container.add(component, this);
 
         gridWidth(1);
         gridHeight(1);
         weightX(0);
         weightY(0);
         fill(lastFill);
-    }
+    }*/
 
-    public void skipCells(int cells) {
+    public GridBagBuilder skipCells(int cells) {
         currentCellPos += cells;
-        constraints.gridx = (currentCellPos-1) % cols;
-        constraints.gridy = (currentCellPos-1) / cols;
+        gridx = (currentCellPos-1) % cols;
+        gridy = (currentCellPos-1) / cols;
+
+        return this;
     }
 
-    public void anchor(int anchor) {
-        constraints.anchor = anchor;
+    public GridBagBuilder anchor(int anchor) {
+        this.anchor = anchor;
+        return this;
     }
 
-    public void fill(int fill) {
-        constraints.fill = fill;
+    public GridBagBuilder weight(double weightX, double weightY) {
+        weightX(weightX);
+        weightY(weightY);
+        return this;
     }
 
-    public void insets(int top, int left, int bottom, int right) {
-        constraints.insets = new Insets(top, left, bottom, right);
+    public GridBagBuilder fillBoth() {
+        this.fill = BOTH;
+        return this;
     }
 
-    public void weightX(double x) {
-        constraints.weightx = x;
+    public GridBagBuilder fillVertical() {
+        this.fill = VERTICAL;
+        return this;
     }
 
-    public void weightY(double y) {
-        constraints.weighty = y;
+    public GridBagBuilder fillHorizontal() {
+        this.fill = HORIZONTAL;
+        return this;
     }
 
-    public void gridWidth(int w) {
-        constraints.gridwidth = w;
+    public GridBagBuilder fillNone() {
+        this.fill = NONE;
+        return this;
     }
 
-    public void gridHeight(int h) {
-        constraints.gridheight = h;
+    public GridBagBuilder insets(int top, int left, int bottom, int right) {
+        this.insets = new Insets(top, left, bottom, right);
+        return this;
     }
 
-    public void gridCell(int x, int y) {
-        constraints.gridx = x;
-        constraints.gridy = y;
+    public GridBagBuilder insets(int size) {
+        return insets(size, size, size, size);
+    }
+
+    public GridBagBuilder weightX(double x) {
+        this.weightx = x;
+        return this;
+    }
+
+    public GridBagBuilder weightY(double y) {
+        this.weighty = y;
+        return this;
+    }
+
+    public GridBagBuilder gridSize(int w, int h) {
+        gridWidth(w);
+        gridHeight(h);
+        return this;
+    }
+
+    public GridBagBuilder gridWidth(int w) {
+        this.gridwidth = w;
+        return this;
+    }
+
+    public GridBagBuilder gridHeight(int h) {
+        this.gridheight = h;
+        return this;
+    }
+
+    public GridBagBuilder gridCell(int x, int y) {
+        this.gridx = x;
+        this.gridy = y;
+        return this;
     }
 
     public GridBagConstraints getConstraints(Component component) {
         return layout.getConstraints(component);
-    }
-
-    public GridBagConstraints getConstraints() {
-        return constraints;
     }
 
     public Container getContainer() {

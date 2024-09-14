@@ -3,10 +3,7 @@ package BYteBOardInterface.StructurePackage;
 import BYteBOardDatabase.DBAnswer;
 import BYteBOardDatabase.DBDataObject;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class BoardFrameSwitchDelegate {
 
@@ -27,12 +24,16 @@ public class BoardFrameSwitchDelegate {
     }
 
     public void putContextList(String keyPrefix, DBDataObject[] values) {
+        getMap().keySet().removeIf(key -> key.startsWith(keyPrefix));
+
         for(int i = 0; i < values.length; i++) {
             putContext(keyPrefix + "_" + i, values[i]);
         }
     }
 
     public void putContextList(String keyPrefix, String idKey, DBDataObject[] values) {
+        getMap().keySet().removeIf(key -> key.startsWith(keyPrefix));
+
         for (DBDataObject value : values) {
             putContext(keyPrefix + "_" + value.getValue(idKey), value);
         }

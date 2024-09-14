@@ -25,7 +25,6 @@ public class QnAForumMainFrame extends MainFrame {
     }
 
     protected void prepareMainFrame(String... switchBoardFrameContext) {
-        System.out.println("Preparing Frame: " + Arrays.toString(switchBoardFrameContext));
         setBoardFrame(ProfileBoardFrame.class, switchBoardFrameContext);
     }
 }

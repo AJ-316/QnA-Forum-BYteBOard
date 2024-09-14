@@ -86,25 +86,37 @@ public class ProfileBoardFrame extends BoardFrame {
             return userID;
         });
 
-        GridBagBuilder builder = new GridBagBuilder(this, 3);
-        builder.fill(GridBagConstraints.BOTH);
-        builder.weightY(1);
 
         buttonPanel = new ProfileBoardButtonPanel(main, this);
+        userDataPanel = new ProfileBoardUserDataPanel(main, this);
+        editPanel = new ProfileEditPanel(main, this);
+        activityPanel = new ProfileBoardActivityPanel(main, this);
+
+        GridBagBuilder builder = new GridBagBuilder(this, 3);
+
+        builder.weightY(1).fillBoth();
+        addPanel(ProfileBoardButtonPanel.class, buttonPanel, builder);
+
+        builder.weightX(1).skipCells(2);
+        addPanel(ProfileBoardUserDataPanel.class, userDataPanel, builder);
+        addPanel(ProfileEditPanel.class, editPanel, builder);
+
+        builder.skipCells(1);
+        addPanel(ProfileBoardActivityPanel.class, activityPanel, builder);
+        /*GridBagBuilder builder = new GridBagBuilder(this, 3);
+        builder.fill(GridBagConstraints.BOTH);
+        builder.weightY(1);
         addPanel(ProfileBoardButtonPanel.class, buttonPanel, builder.getConstraints());
 
-        userDataPanel = new ProfileBoardUserDataPanel(main, this);
         builder.skipCells(2);
         builder.weightX(1);
         addPanel(ProfileBoardUserDataPanel.class, userDataPanel, builder.getConstraints());
 
-        editPanel = new ProfileEditPanel(main, this);
         builder.anchor(GridBagConstraints.CENTER);
         addPanel(ProfileEditPanel.class, editPanel, builder.getConstraints());
 
         builder.skipCells(1);
-        activityPanel = new ProfileBoardActivityPanel(main, this);
-        addPanel(ProfileBoardActivityPanel.class, activityPanel, builder.getConstraints());
+        addPanel(ProfileBoardActivityPanel.class, activityPanel, builder.getConstraints());*/
     }
 
     public void applyFrameSwitchContext(BoardFrameSwitchDelegate frameSwitchDelegate) {
