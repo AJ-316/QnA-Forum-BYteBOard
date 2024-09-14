@@ -5,6 +5,7 @@ import BYteBOardInterface.StructurePackage.Frame;
 import BYteBOardInterface.StructurePackage.MainFrame;
 import CustomControls.*;
 import Resources.ByteBoardTheme;
+import Resources.ResourceManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,12 +18,14 @@ public class BoardContentResponsePanel extends BoardPanel {
     private BoardLabel statusLabel;
     private BoardLabel titleLabel;
 
-    public BoardContentResponsePanel(MainFrame main, Frame frame, String bgColor) {
-        super(main, frame, bgColor);
+    public BoardContentResponsePanel(MainFrame main, Frame frame) {
+        super(main, frame, ByteBoardTheme.MAIN_DARK);
     }
 
-    public void setTitle(String title, String statusLabel) {
+    public void setTitle(String title, String icon, String statusLabel) {
         titleLabel.setText(title);
+        titleLabel.setColoredIcon(icon, ByteBoardTheme.MAIN_LIGHT, ByteBoardTheme.MAIN_DARK, ResourceManager.MINI);
+
         this.statusLabel.setText(statusLabel);
     }
 
@@ -35,8 +38,8 @@ public class BoardContentResponsePanel extends BoardPanel {
         titleLabel = new BoardLabel("Response Title");
         titleLabel.addInsets(8);
         titleLabel.setAlignmentLeading();
-        titleLabel.setFGLight();
         titleLabel.setFontPrimary(ByteBoardTheme.FONT_T_SEMIBOLD, 22);
+        titleLabel.setForeground(ResourceManager.getColor(ByteBoardTheme.MAIN_LIGHT));
 
         BoardScrollPanel scrollPanePanel = new BoardScrollPanel(main, frame);
         scrollPanePanel.setAutoscrolls(false);

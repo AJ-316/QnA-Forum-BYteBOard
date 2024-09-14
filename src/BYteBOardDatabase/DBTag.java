@@ -12,6 +12,10 @@ public class DBTag extends DBOperation {
         super(null, TABLE, K_QUESTION_ID, K_TAG_ID, K_TAG);
     }
 
+    public static DBDataObject[] getTags(String questionID) {
+        return ops.findValuesBy(ops.matchByValue(K_QUESTION_ID, questionID), "*");
+    }
+
     public void addTag(String tag, String questionID) {
         ops.insertValue(new String[]{K_TAG, K_QUESTION_ID}, new String[]{tag, questionID});
     }

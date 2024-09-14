@@ -7,7 +7,6 @@ import BYteBOardInterface.StructurePackage.BoardFrameSwitchDelegate;
 import BYteBOardInterface.StructurePackage.BoardPanel;
 import BYteBOardInterface.StructurePackage.MainFrame;
 import CustomControls.*;
-import Resources.ByteBoardTheme;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -46,34 +45,37 @@ public class QnABoardFrame extends BoardFrame {
                 userID = delegate.getContext(DBUser.TABLE).getValue(DBUser.K_USER_ID);
             }
 
-            DBDataObject questionData = DBQuestion.ops.getQuestion(questionID);
-            questionData.putKeyValue(DBVote.V_VOTE_UP, DBVote.getVoteType(userID, DBVote.K_QUESTION_ID, questionID));
+            DBDataObject questionDataObject = DBQuestion.ops.getQuestion(questionID);
+            questionDataObject.putKeyValue(DBVote.V_VOTE_UP, DBVote.getVoteType(userID, DBVote.K_QUESTION_ID, questionID));
 
-            DBDataObject questionUserData = DBUser.getUser(questionData.getValue(DBQuestion.K_USER_ID));
-            questionData.putKeyValue(DBUser.K_USER_NAME, questionUserData.getValue(DBUser.K_USER_NAME));
-            questionData.putKeyValue(DBUser.K_USER_PROFILE, questionUserData.getValue(DBUser.K_USER_PROFILE));
-            delegate.putContext(DBQuestion.TABLE, questionData);
+            DBDataObject questionUserData = DBUser.getUser(questionDataObject.getValue(DBQuestion.K_USER_ID));
+            questionDataObject.putKeyValue(DBUser.K_USER_NAME, questionUserData.getValue(DBUser.K_USER_NAME));
+            questionDataObject.putKeyValue(DBUser.K_USER_PROFILE, questionUserData.getValue(DBUser.K_USER_PROFILE));
+            delegate.putContext(DBQuestion.TABLE, questionDataObject);
 
-            DBDataObject userData = new DBDataObject();
-            userData.putKeyValue(DBUser.K_USER_ID, userID);
-            delegate.putContext(DBUser.TABLE, userData);
+            DBDataObject userDataObject = new DBDataObject();
+            userDataObject.putKeyValue(DBUser.K_USER_ID, userID);
+            delegate.putContext(DBUser.TABLE, userDataObject);
 
-            DBDataObject[] answers = DBAnswer.ops.findValuesBy(DBAnswer.ops.matchByValue(DBAnswer.K_QUESTION_ID, questionID), "*");
-            for (DBDataObject answer : answers) {
+            DBDataObject[] answerDataObjectList = DBAnswer.ops.findValuesBy(DBAnswer.ops.matchByValue(DBAnswer.K_QUESTION_ID, questionID), "*");
+            for (DBDataObject answer : answerDataObjectList) {
                 DBDataObject answerUserData = DBUser.getUser(answer.getValue(DBAnswer.K_USER_ID));
                 answer.putKeyValue(DBUser.K_USER_NAME, answerUserData.getValue(DBUser.K_USER_NAME));
                 answer.putKeyValue(DBUser.K_USER_PROFILE, answerUserData.getValue(DBUser.K_USER_PROFILE));
             }
-            delegate.putContextList(DBAnswer.TABLE, DBAnswer.K_ANSWER_ID, answers);
+            delegate.putContextList(DBAnswer.TABLE, DBAnswer.K_ANSWER_ID, answerDataObjectList);
 
-            DBDataObject[] questionComments = DBComment.ops.getComments(DBComment.K_QUESTION_ID, questionID);
-            for (DBDataObject comment : questionComments) {
-                DBDataObject commentUserData = DBUser.getUser(comment.getValue(DBComment.K_USER_ID));
-                comment.putKeyValue(DBUser.K_USER_NAME, commentUserData.getValue(DBUser.K_USER_NAME));
-                comment.putKeyValue(DBUser.K_USER_PROFILE, commentUserData.getValue(DBUser.K_USER_PROFILE));
+            DBDataObject[] commentQueDataObjectList = DBComment.getComments(DBComment.K_QUESTION_ID, questionID);
+            for (DBDataObject comment : commentQueDataObjectList) {
+                DBDataObject commentUserDataObject = DBUser.getUser(comment.getValue(DBComment.K_USER_ID));
+                comment.putKeyValue(DBUser.K_USER_NAME, commentUserDataObject.getValue(DBUser.K_USER_NAME));
+                comment.putKeyValue(DBUser.K_USER_PROFILE, commentUserDataObject.getValue(DBUser.K_USER_PROFILE));
                 comment.putKeyValue(DBCFeedback.K_FEEDBACK, DBCFeedback.getFeedback(userID, comment.getValue(DBComment.K_COMMENT_ID)));
             }
-            delegate.putContextList(DBComment.TABLE, DBComment.K_COMMENT_ID, questionComments);
+            delegate.putContextList(DBComment.TABLE, DBComment.K_COMMENT_ID, commentQueDataObjectList);
+
+            DBDataObject[] tagDataObjectList = DBTag.getTags(questionID);
+            delegate.putContextList(DBTag.TABLE, DBTag.K_TAG_ID, tagDataObjectList);
 
             return null;
         });
@@ -86,8 +88,8 @@ public class QnABoardFrame extends BoardFrame {
         // Create Instances
         updateAnswerVoteDatabase = (id, type) -> DBVote.ops.voteAnswer(id, getUserID(), type);
 
-        answerCardsPanel = new BoardContentResponsePanel(main, this, ByteBoardTheme.MAIN_DARK);
-        answerCardsPanel.setTitle("Answers", "No Answers!");
+        answerCardsPanel = new BoardContentResponsePanel(main, this);
+        answerCardsPanel.setTitle("Answers", "answer", "No Answers!");
 
         responseSplitPanel = new BoardSplitPanel(BoardSplitPanel.VERTICAL_SPLIT);
         responseSplitPanel.setTopComponent(answerCardsPanel);
@@ -133,6 +135,7 @@ public class QnABoardFrame extends BoardFrame {
         answerContentPanel.setContentBody(answerData.getValue(DBAnswer.K_ANSWER));
         answerContentPanel.setContentBytes(answerData.getValue(DBAnswer.K_ANSWER_BYTESCORE));
         answerContentPanel.setContentUserID(answerData.getValue(DBAnswer.K_USER_ID));
+        answerContentPanel.setSelfViewer(answerData.getValue(DBAnswer.K_USER_ID).equals(userID));
 
         answerContentPanel.setVoteType(DBVote.getVoteType(userID, DBVote.K_ANSWER_ID, answerID));
 
@@ -181,10 +184,12 @@ public class QnABoardFrame extends BoardFrame {
         backButton.setFGLight();
         backButton.setMinimumSize(buttonSize);
         backButton.addActionListener(e -> {
-            answerContentPanels.clear();
             requestSwitchFrame(ProfileBoardFrame.class);
             displayQuestionContent(true);
-            questionContentPanel.setContentID("-1");
+            answerContentPanels.clear();
+            if(currentAnswerContentPanel != null)
+                remove(currentAnswerContentPanel);
+            currentAnswerContentPanel = null;
         });
 
         BoardPanel panel = new BoardPanel(main, this);
@@ -227,22 +232,22 @@ public class QnABoardFrame extends BoardFrame {
         DBDataObject userData = delegate.getContext(DBUser.TABLE);
         userID = userData.getValue(DBUser.K_USER_ID);
 
-        DBDataObject questionData = delegate.getContext(DBQuestion.TABLE);
-        String lastQuestionID = questionContentPanel.getContentID();
+        DBDataObject questionDataObject = delegate.getContext(DBQuestion.TABLE);
 
-        questionContentPanel.setVoteType(questionData.getValue(DBVote.V_VOTE_UP));
-        questionContentPanel.setContentID(questionData.getValue(DBQuestion.K_QUESTION_ID));
-        questionContentPanel.setContentHead("Question:\n", questionData.getValue(DBQuestion.K_QUESTION_HEAD));
-        questionContentPanel.setContentBody(questionData.getValue(DBQuestion.K_QUESTION_BODY));
-        questionContentPanel.setContentBytes(questionData.getValue(DBQuestion.K_QUESTION_BYTESCORE));
-        questionContentPanel.setContentUserID(questionData.getValue(DBQuestion.K_USER_ID));
-        questionContentPanel.setContentUsername("Questioned By - ", questionData.getValue(DBUser.K_USER_NAME),
-                questionData.getValue(DBUser.K_USER_PROFILE));
+        questionContentPanel.setVoteType(questionDataObject.getValue(DBVote.V_VOTE_UP));
+        questionContentPanel.setContentID(questionDataObject.getValue(DBQuestion.K_QUESTION_ID));
+        questionContentPanel.setContentHead("Question:\n", questionDataObject.getValue(DBQuestion.K_QUESTION_HEAD));
+        questionContentPanel.setContentBody(questionDataObject.getValue(DBQuestion.K_QUESTION_BODY));
+        questionContentPanel.setContentBytes(questionDataObject.getValue(DBQuestion.K_QUESTION_BYTESCORE));
+        questionContentPanel.setContentUserID(questionDataObject.getValue(DBQuestion.K_USER_ID));
+        questionContentPanel.setContentUsername("Questioned By - ", questionDataObject.getValue(DBUser.K_USER_NAME),
+                questionDataObject.getValue(DBUser.K_USER_PROFILE));
+        questionContentPanel.setSelfViewer(questionDataObject.getValue(DBQuestion.K_USER_ID).equals(userID));
 
-        List<DBDataObject> questionResponseData = new ArrayList<>();
-
-        questionContentPanel.setContentComments(delegate.getContextList(DBComment.TABLE, questionResponseData), userID);
-        createAnswerCards(delegate.getContextList(DBAnswer.TABLE, questionResponseData));
+        List<DBDataObject> questionDataList = new ArrayList<>();
+        questionContentPanel.setContentComments(delegate.getContextList(DBComment.TABLE, questionDataList), userID);
+        questionContentPanel.setContentTags(delegate.getContextList(DBTag.TABLE, questionDataList));
+        createAnswerCards(delegate.getContextList(DBAnswer.TABLE, questionDataList));
 
         setAnswerData(null, false);
     }
@@ -253,11 +258,9 @@ public class QnABoardFrame extends BoardFrame {
         final BoardContentCard.CardSelectListener listener = contentID -> {
             if(contentID == null) {
                 displayQuestionContent(true);
-                System.out.println("contentID null");
                 return;
             }
 
-            System.out.println("Setting answer: " + contentID);
             setAnswerData(contentID, true);
         };
 

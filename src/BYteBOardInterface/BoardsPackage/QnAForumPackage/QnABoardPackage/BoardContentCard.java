@@ -32,6 +32,8 @@ public class BoardContentCard extends BoardPanel {
         super(main, frame, ByteBoardTheme.MAIN_LIGHT);
         preferredSize = new Dimension(200, 0);
 
+        setBorderColor(ByteBoardTheme.MAIN_DARK);
+
         addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent e) {
                 setPreferredSize(null);
@@ -78,12 +80,16 @@ public class BoardContentCard extends BoardPanel {
     public void setContentAction(boolean isFeedbackGiven, ContentActionListener action, String contentActionText, String icon) {
         contentAction.removeMouseListener(contentActionAdapter);
         contentAction.addMouseListener(contentActionAdapter = getContentActionAdapter(action, icon));
-        contentAction.setToolTipText("Comment adds something Useful to the Post");
 
         setActionSelected(isFeedbackGiven);
+        setContentText(contentActionText);
+        contentActionAdapter.mouseExited(null);
+    }
+
+    public void setContentText(String contentActionText) {
+        contentAction.setToolTipText("Comment adds something Useful to the Post");
         contentAction.setVisible(true);
         contentAction.setText(contentActionText);
-        contentActionAdapter.mouseExited(null);
     }
 
     public void setCardData(String contentUsername, String contentUserprofile, String contentText, String contentID) {
@@ -94,6 +100,7 @@ public class BoardContentCard extends BoardPanel {
     }
 
     public void addMouseListeners(CardSelectListener cardSelectListener) {
+        setBorderColor(ByteBoardTheme.ACCENT);
 
         MouseAdapter adapter = new MouseAdapter() {
             public void mouseEntered(MouseEvent e) {
@@ -118,6 +125,7 @@ public class BoardContentCard extends BoardPanel {
                 refresh();
             }
         };
+
         addMouseListener(adapter);
         contentText.addMouseListener(adapter);
     }
@@ -128,17 +136,14 @@ public class BoardContentCard extends BoardPanel {
 
     private void highlightCard(boolean isHighlighted) {
         setBackground(isHighlighted ? ByteBoardTheme.ACCENT : ByteBoardTheme.MAIN_LIGHT);
-        setBorderColor(isHighlighted ? ByteBoardTheme.ACCENT : null);
+        setBorderColor(isHighlighted ? ByteBoardTheme.BASE : ByteBoardTheme.ACCENT);
     }
 
     public void restoreCardSelection() {
         if(lastSelectedCard == null) return;
-        System.out.println("restored: " + lastSelectedCard.getContentID() + ", " + getContentID());
 
         if(lastSelectedCard.getContentID().equals(getContentID()))
             selectCard(true, this);
-
-        System.out.println(isSelected());
     }
 
     public static void selectCard(boolean isSelect, BoardContentCard contentCard) {

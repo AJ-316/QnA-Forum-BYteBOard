@@ -18,7 +18,9 @@ public class BoardContentPanel extends BoardPanel {
 
     private VoteButton upVoteButton;
     private VoteButton downVoteButton;
+    private BoardPanel voteButtonsPanel;
 
+    private BoardTagsDisplayPanel tagsDisplayPanel;
     private BoardLabel contentUsername;
     private BoardLabel contentBytes;
     private BoardTextArea contentHead;
@@ -57,48 +59,54 @@ public class BoardContentPanel extends BoardPanel {
         panel.setCornerRadius(90);
         panel.addInsets(20);
 
-        BoardPanel votePanel = new BoardPanel(main, frame);
-        votePanel.addInsets(10);
-        GridBagBuilder votePanelBuilder = new GridBagBuilder(votePanel, 1);
-        votePanelBuilder.insets(10, 20, 10, 20)
+        voteButtonsPanel = new BoardPanel(main, frame);
+        GridBagBuilder votePanelBuilder = new GridBagBuilder(voteButtonsPanel, 1);
+        votePanelBuilder.insets(10, 5, 10, 5)
                 .addToNextCell(upVoteButton)
                 .addToNextCell(downVoteButton);
 
-        BoardPanel userBottomPanel = new BoardPanel(main, frame);
-        userBottomPanel.addInsets(10);
-        GridBagBuilder userBottomPanelBuilder = new GridBagBuilder(userBottomPanel, 2);
-        userBottomPanelBuilder.weightX(1).fillBoth()
-                .addToNextCell(contentBytes)
+        BoardPanel headerPane = new BoardPanel(main, frame);
+        GridBagBuilder headerPaneLayout = new GridBagBuilder(headerPane, 3);
+        headerPaneLayout.fillBoth().insets(10)
+                .addToNextCell(contentBytes).weight(1, 1)
+                .addToNextCell(tagsDisplayPanel.getComponent()).weight(0, 0)
                 .addToNextCell(contentUsername);
 
         BoardPanel contentHeadPanel = new BoardPanel(main, frame, ByteBoardTheme.MAIN_LIGHT);
-        contentHeadPanel.setCornerRadius(90);
-        contentHeadPanel.addInsets(20);
         contentHeadPanel.setLayout(new BorderLayout());
+        contentHeadPanel.addInsets(20);
+        contentHeadPanel.setCornerRadius(90);
+        contentHeadPanel.setBorderColor(ByteBoardTheme.BASE);
         contentHeadPanel.add(contentHead);
 
-        GridBagBuilder panelBuilder = new GridBagBuilder(panel, 2);
+        BoardPanel footerPane = new BoardPanel(main, frame);
+        GridBagBuilder footerPaneLayout = new GridBagBuilder(footerPane, 2);
+        footerPaneLayout.insets(10)
+                .addToNextCell(voteButtonsPanel);
+        footerPaneLayout.weight(1, 1).fillBoth()
+                .addToNextCell(contentHeadPanel);
 
-        panelBuilder.gridHeight(2).weightY(1).fillVertical()
-                .addToNextCell(votePanel);
-
-        panelBuilder.gridHeight(1).weightX(1).fillHorizontal()
-                .addToNextCell(contentHeadPanel).skipCells(1);
-
-        panelBuilder.weight(1, 0).fillBoth()
-                .addToNextCell(userBottomPanel);
-
+        panel.setLayout(new BorderLayout());
+        panel.add(headerPane, BorderLayout.NORTH);
+        panel.add(footerPane, BorderLayout.CENTER);
         return panel;
     }
 
     private void initComponents(MainFrame main, Frame frame) {
-        contentCommentPanel = new BoardContentResponsePanel(main, frame, ByteBoardTheme.MAIN);
-        contentCommentPanel.setTitle("Comments", "No Comments!");
+        tagsDisplayPanel = new BoardTagsDisplayPanel(main, frame);
+        tagsDisplayPanel.setHorizontalDisplay();
+
+
+        contentCommentPanel = new BoardContentResponsePanel(main, frame);
+        contentCommentPanel.setTitle("Comments", "comment", "No Comments!");
 
         upVoteButton = new VoteButton("upvote", ResourceManager.SMALL, DBVote.V_VOTE_UP);
+        upVoteButton.addInsets(0);
         downVoteButton = new VoteButton("downvote", ResourceManager.SMALL, DBVote.V_VOTE_DOWN);
+        downVoteButton.addInsets(0);
 
         contentBytes = new BoardLabel("123456", "bytescore_icon");
+        contentBytes.addInsets(10);
         contentBytes.setAlignmentLeading();
         contentBytes.setFGLight();
         contentBytes.setFontPrimary(ByteBoardTheme.FONT_T_SEMIBOLD, 20);
@@ -150,10 +158,18 @@ public class BoardContentPanel extends BoardPanel {
         }
     }
 
-    public void setContentComments(DBDataObject[] commentDataObjects, String userID) {
+    public void setContentTags(DBDataObject[] tagDataObjectList) {
+        tagsDisplayPanel.clearTags();
+
+        for (DBDataObject tagDataObject : tagDataObjectList) {
+            tagsDisplayPanel.addTag(tagDataObject.getValue(DBTag.K_TAG));
+        }
+    }
+
+    public void setContentComments(DBDataObject[] commentDataObjectList, String userID) {
         contentCommentPanel.clearContentCards();
 
-        for (DBDataObject commentData : commentDataObjects) {
+        for (DBDataObject commentData : commentDataObjectList) {
             BoardContentCard card = contentCommentPanel.addContentCard();
 
             String commentID = commentData.getValue(DBComment.K_COMMENT_ID);
@@ -161,10 +177,15 @@ public class BoardContentPanel extends BoardPanel {
                     commentData.getValue(DBUser.K_USER_NAME),
                     commentData.getValue(DBUser.K_USER_PROFILE),
                     commentData.getValue(DBComment.K_COMMENT), commentID);
+
+            if(commentData.getValue(DBComment.K_USER_ID).equals(userID)) {
+                card.setContentText(commentData.getValue(DBComment.K_COMMENT_SCORE));
+                continue;
+            }
+
             card.setContentAction(
                     DBCFeedback.isFeedbackUseful(commentData.getValue(DBCFeedback.K_FEEDBACK)),
                     feedback -> {
-                        DEBUG.printlnRed("Liked: " + feedback);
                         DBCFeedback.giveFeedback(userID, commentID, feedback);
                         refresh();
                     }, commentData.getValue(DBComment.K_COMMENT_SCORE), "useful");
@@ -215,6 +236,15 @@ public class BoardContentPanel extends BoardPanel {
     public String getContentHead() {
         return this.contentHead.getName();
     }
+
+    public void setSelfViewer(boolean isSelfViewer) {
+        voteButtonsPanel.setVisible(!isSelfViewer);
+    }
+
+    /*public void setSelfViewer(boolean isSelfViewer) {
+        upVoteButton.setEnabled(!isSelfViewer);
+        downVoteButton.setEnabled(!isSelfViewer);
+    }*/
 
     @FunctionalInterface
     public interface UpdateVoteDatabase {

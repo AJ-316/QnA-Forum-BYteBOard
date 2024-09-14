@@ -37,6 +37,14 @@ public class RoundedBorder extends AbstractBorder {
         g2.dispose();
     }
 
+    public void setBgColor(Color bgColor) {
+        this.bgColor = bgColor;
+    }
+
+    public void setBorderColor(Color borderColor) {
+        this.borderColor = borderColor;
+    }
+
     public Insets getBorderInsets(Component c) {
         return insets;
     }

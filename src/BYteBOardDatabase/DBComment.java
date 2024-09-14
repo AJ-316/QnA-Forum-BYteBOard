@@ -20,7 +20,7 @@ public class DBComment extends DBOperation {
                 new String[]{commenterID, comment, contentID});
     }
 
-    public DBDataObject[] getComments(String contentKey, String contentID) {
+    public static DBDataObject[] getComments(String contentKey, String contentID) {
         return ops.findValuesBy(ops.matchByValue(contentKey, contentID), "*");
     }
 }

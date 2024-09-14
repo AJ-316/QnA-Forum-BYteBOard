@@ -9,7 +9,7 @@ import java.awt.*;
 
 public class BoardScrollPanel extends BoardPanel {
 
-    private final SimpleScrollPane scrollPane;
+    protected final SimpleScrollPane scrollPane;
 
     public BoardScrollPanel(MainFrame main, Frame frame) {
         super(main, frame);
@@ -55,6 +55,10 @@ public class BoardScrollPanel extends BoardPanel {
 
     public void setVerticalUnitIncrement(int i) {
         scrollPane.getVerticalScrollBar().setUnitIncrement(i);
+    }
+
+    public void setHorizontalUnitIncrement(int i) {
+        scrollPane.getHorizontalScrollBar().setUnitIncrement(i);
     }
 
     public SimpleScrollPane getComponent() {

@@ -180,10 +180,10 @@ public class SimpleScrollPane extends JScrollPane {
             //graphics2D.fillRoundRect(thumbBounds.x + offset, thumbBounds.y + offset,
             //        width - offset*2, height - offset*2, 8 - offset, 8 - offset);
 
-            if (isVertical) {
+            if (isVertical && sp.getVerticalScrollBarPolicy() != VERTICAL_SCROLLBAR_NEVER) {
                 graphics2D.fillRoundRect(thumbBounds.x + offset, thumbBounds.y + offset,
                         width - offset*2, height - offset*2, 8 - offset, 8 - offset);
-            } else {
+            } else if (sp.getHorizontalScrollBarPolicy() != HORIZONTAL_SCROLLBAR_NEVER) {
                 graphics2D.fillRoundRect(thumbBounds.x + offset, thumbBounds.y + offset,
                         width - offset*2, height - offset*2, 8 - offset, 8 - offset);
             }

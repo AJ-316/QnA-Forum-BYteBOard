@@ -35,8 +35,6 @@ public abstract class Board extends CustomJPanel {
     }
 
     public void requestSwitchMainFrame(int id, String... switchContext) {
-        DEBUG.printlnYellow("Requesting Main frame switch: " + id + ", context: " + Arrays.toString(switchContext));
-
         main.switchMainFrame(id, switchContext);
     }
 

@@ -15,6 +15,10 @@ public class BoardButton extends JButton implements CustomControl {
     private boolean isRounded;
     private int iconSize;
 
+    public BoardButton() {
+        this("", null, 0, 0, 0, 0);
+    }
+
     // default state icons with size
     public BoardButton(String icon, int iconSize) {
         this("", icon, ResourceManager.DEFAULT, ResourceManager.PRESSED, ResourceManager.ROLLOVER, iconSize);
@@ -28,7 +32,8 @@ public class BoardButton extends JButton implements CustomControl {
     public BoardButton(String text, String icon, int defaultState, int pressedState, int rolloverState, int iconSize) {
         super(text);
         this.iconSize = iconSize;
-        ResourceManager.setButtonIcons(this, icon, defaultState, pressedState, rolloverState, iconSize);
+        if(icon != null)
+            ResourceManager.setButtonIcons(this, icon, defaultState, pressedState, rolloverState, iconSize);
 
         setFontPrimary(ByteBoardTheme.FONT_T_SEMIBOLD, 20);
         setBorderPainted(false);
@@ -77,7 +82,7 @@ public class BoardButton extends JButton implements CustomControl {
         g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
         g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 
-        int actualCornerRadius = Math.min(60, Math.min(getWidth(), getHeight()) / 2);
+        int actualCornerRadius = getActualRadius();
 
         if(isRounded) {
 //            g2d.setColor(hasFocus() ? ResourceManager.getColor(ByteBoardTheme.ACCENT_DARK) : getBackground());
@@ -91,6 +96,10 @@ public class BoardButton extends JButton implements CustomControl {
         }
 
         super.paintComponent(g2d);
+    }
+
+    protected int getActualRadius() {
+        return Math.min(60, Math.min(getWidth(), getHeight()) / 2);
     }
 
     private void addFontColorUpdates() {
