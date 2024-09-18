@@ -15,7 +15,7 @@ public class DBComment extends DBOperation {
         super(null, TABLE, K_COMMENT_ID, K_COMMENT, K_QUESTION_ID, K_ANSWER_ID, K_USER_ID, K_COMMENT_SCORE);
     }
 
-    public void addComment(String commenterID, String comment, String contentKey, String contentID) {
+    public static void addComment(String commenterID, String comment, String contentKey, String contentID) {
         ops.insertValue(new String[]{K_USER_ID, K_COMMENT, contentKey},
                 new String[]{commenterID, comment, contentID});
     }

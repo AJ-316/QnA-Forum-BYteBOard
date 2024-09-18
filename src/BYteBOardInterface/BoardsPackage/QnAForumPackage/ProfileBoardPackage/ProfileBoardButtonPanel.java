@@ -57,36 +57,36 @@ public class ProfileBoardButtonPanel extends BoardPanel {
 
     private void addButtonListeners() {
 
-        activityButton.addActionListener(e -> {
-            boolean isVisible = e == null || getPanelVisibility(ProfileBoardActivityPanel.class);
-
-            if(isVisible) {
-                activityButton.setText("View Activity");
-                activityButton.setIcon("show");
-            } else {
-                activityButton.setText("Hide Activity");
-                activityButton.setIcon("hide");
-            }
-
-            setPanelVisibility(ProfileBoardActivityPanel.class, !isVisible);
-            setPanelVisibility(ProfileBoardUserDataPanel.class, isVisible);
-        });
-
-        editProfileButton.addActionListener(e -> {
-            activityButton.getActionListeners()[0].actionPerformed(null);
-
-            setPanelVisibility(ProfileEditPanel.class, true);
-            setPanelVisibility(ProfileBoardButtonPanel.class, false);
-            setPanelVisibility(ProfileBoardUserDataPanel.class, false);
-        });
+        activityButton.addActionListener(e -> setActivitiesVisible(!getPanelVisibility(ProfileBoardActivityPanel.class)));
+        editProfileButton.addActionListener(e -> setEditProfileVisible(true));
 
         searchButton.addActionListener(e -> searchButton.setEnabled(false));
         askButton.addActionListener(e -> askButton.setEnabled(false));
-        logoutButton.addActionListener(e -> requestSwitchMainFrame(0, null));
+
+        logoutButton.addActionListener(e -> {
+            requestSwitchMainFrame(0);
+            setActivitiesVisible(false);
+            setEditProfileVisible(false);
+        });
 
         themeComboBox.addItemListener(e -> {
             ResourceManager.setTheme(e.getItem().toString());
             restartMainFrame();
         });
+    }
+
+    private void setEditProfileVisible(boolean isVisible) {
+        setActivitiesVisible(false);
+
+        setPanelVisibility(ProfileEditPanel.class, isVisible);
+        setPanelVisibility(ProfileBoardButtonPanel.class, !isVisible);
+        setPanelVisibility(ProfileBoardUserDataPanel.class, !isVisible);
+    }
+
+    private void setActivitiesVisible(boolean isVisible) {
+        activityButton.setText((isVisible ? "Hide" : "View") + " Activity");
+        activityButton.setIcon(isVisible ? "hide" : "show");
+        setPanelVisibility(ProfileBoardActivityPanel.class, isVisible);
+        setPanelVisibility(ProfileBoardUserDataPanel.class, !isVisible);
     }
 }

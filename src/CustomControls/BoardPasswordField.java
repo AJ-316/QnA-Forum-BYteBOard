@@ -129,7 +129,7 @@ public class BoardPasswordField extends JPasswordField implements CustomControl 
 
     public void addDocumentListener(CustomDocumentListener documentListener) {
         getDocument().addDocumentListener(documentListener);
-        documentListener.setTextField(this);
+        documentListener.setTextComponent(this);
     }
 
     public BoardLabel getErrorLabel() {

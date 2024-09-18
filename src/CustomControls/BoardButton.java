@@ -15,8 +15,8 @@ public class BoardButton extends JButton implements CustomControl {
     private boolean isRounded;
     private int iconSize;
 
-    public BoardButton() {
-        this("", null, 0, 0, 0, 0);
+    public BoardButton(String text) {
+        this(text, null, 0, 0, 0, 0);
     }
 
     // default state icons with size
@@ -164,9 +164,12 @@ public class BoardButton extends JButton implements CustomControl {
         super.setForeground(fg);
         defaultFGColor = fg;
 
-        rolloverFGColor = ResourceManager.getColor(
-                fg.equals(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_DARK)) ?
-                        ByteBoardTheme.ACCENT_DARK : ByteBoardTheme.ACCENT);
+        setRolloverFGColor(fg.equals(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_DARK)) ?
+                ByteBoardTheme.ACCENT_DARK : ByteBoardTheme.ACCENT);
+    }
+
+    public void setRolloverFGColor(String fgColor) {
+        rolloverFGColor = ResourceManager.getColor(fgColor);
     }
 
     public void setAlignmentLeading() {

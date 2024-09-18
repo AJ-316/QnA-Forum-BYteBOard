@@ -4,16 +4,18 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.JTextComponent;
 
 public abstract class CustomDocumentListener implements DocumentListener {
 
-    protected JTextField textField;
+    protected JTextComponent textComponent;
 
-    public void setTextField(JTextField textField) {
-        this.textField = textField;
+    public CustomDocumentListener setTextComponent(JTextComponent textComponent) {
+        this.textComponent = textComponent;
+        return this;
     }
 
-    protected abstract boolean validateTextInput(String text);
+    protected abstract boolean validateTextInput(String text) throws StringIndexOutOfBoundsException;
 
     public void insertUpdate(DocumentEvent e) {
         try {

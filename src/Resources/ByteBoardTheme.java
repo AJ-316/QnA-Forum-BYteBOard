@@ -116,6 +116,7 @@ public abstract class ByteBoardTheme {
 
         UIManager.put("TextArea.selectionBackground", ResourceManager.getColor(ByteBoardTheme.ACCENT_DARK));
         UIManager.put("TextArea.selectionForeground", ResourceManager.getColor(ByteBoardTheme.TEXT_FG_LIGHT));
+        UIManager.put("TextArea.caretForeground", ResourceManager.getColor(ByteBoardTheme.TEXT_FG_LIGHT));
     }
 
     // note: doesn't use the style consideration

@@ -11,6 +11,9 @@ import java.awt.*;
 
 public class AuthenticateBoardFrame extends BoardFrame {
 
+    private LoginFormPanel loginFormPanel;
+    private SignupFormPanel signupFormPanel;
+
     public AuthenticateBoardFrame(MainFrame main) {
         super(main, (delegate, context) -> null);
     }
@@ -24,8 +27,8 @@ public class AuthenticateBoardFrame extends BoardFrame {
         BoardLabel titleIcon = new BoardLabel("byteboard/byteboard-logo-transparent2", -512);
         titlePanel.add(titleIcon, BorderLayout.CENTER);
 
-        LoginFormPanel loginFormPanel = new LoginFormPanel(main, this);
-        SignupFormPanel signupFormPanel = new SignupFormPanel(main, this);
+        loginFormPanel = new LoginFormPanel(main, this);
+        signupFormPanel = new SignupFormPanel(main, this);
         signupFormPanel.setVisible(false);
 
         GridBagBuilder builder = new GridBagBuilder(this, 2);
@@ -38,6 +41,7 @@ public class AuthenticateBoardFrame extends BoardFrame {
     }
 
     public void applyFrameSwitchContext(BoardFrameSwitchDelegate frameSwitchDelegate) {
-
+        loginFormPanel.clearFields();
+        signupFormPanel.clearFields();
     }
 }

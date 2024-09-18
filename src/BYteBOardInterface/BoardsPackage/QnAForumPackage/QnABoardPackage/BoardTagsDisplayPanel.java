@@ -1,6 +1,5 @@
 package BYteBOardInterface.BoardsPackage.QnAForumPackage.QnABoardPackage;
 
-import BYteBOardInterface.StructurePackage.BoardPanel;
 import BYteBOardInterface.StructurePackage.Frame;
 import BYteBOardInterface.StructurePackage.MainFrame;
 import CustomControls.BoardScrollPanel;
@@ -33,6 +32,7 @@ public class BoardTagsDisplayPanel extends BoardScrollPanel {
                 scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
                 repaint();
             }
+
             public void mouseExited(MouseEvent e) {
                 scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
                 repaint();
@@ -58,7 +58,7 @@ public class BoardTagsDisplayPanel extends BoardScrollPanel {
         tagButton.setTag(tag);
         add(tagButton);
 
-        if(visibleScrollBarAdapter != null) {
+        if (visibleScrollBarAdapter != null) {
             tagButton.addMouseListener(visibleScrollBarAdapter);
             tagButton.addMouseWheelListener(scrollListener);
         }

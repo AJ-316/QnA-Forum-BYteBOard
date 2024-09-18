@@ -75,7 +75,7 @@ public class ProfileEditPanel extends BoardPanel {
         profileLabel.setProfileIcon("0", ResourceManager.LARGE);
 
         editIconLabel = new BoardLabel();
-        editIconLabel.setName("edit_profile");
+        editIconLabel.setName("edit_transparent");
 
         GridBagBuilder builder = new GridBagBuilder(panel);
         builder.weight(1, 1).fillBoth();

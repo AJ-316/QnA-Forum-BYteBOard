@@ -17,20 +17,19 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class BoardContentCard extends BoardPanel {
+public class BoardResponseCard extends BoardPanel {
 
-    private static BoardContentCard lastSelectedCard;
-
-    private BoardTextArea contentText;
-    private BoardLabel contentUsername;
-    private BoardLabel contentAction;
-    private MouseAdapter contentActionAdapter;
-    private final Dimension preferredSize;
     private static final Rectangle checkBounds = new Rectangle(0, 0, 0, 0);
+    private boolean isSelected;
+    protected final int hashCode = hashCode();
+    protected BoardTextArea contentText;
+    protected BoardLabel contentUsername;
+    protected BoardLabel contentAction;
+    private MouseAdapter contentActionAdapter;
 
-    public BoardContentCard(MainFrame main, Frame frame) {
-        super(main, frame, ByteBoardTheme.MAIN_LIGHT);
-        preferredSize = new Dimension(200, 0);
+    public BoardResponseCard(MainFrame main, Frame frame) {
+        super(main, frame, ByteBoardTheme.MAIN_DARK);
+        Dimension preferredSize = new Dimension(200, 0);
 
         setBorderColor(ByteBoardTheme.MAIN_DARK);
 
@@ -45,13 +44,20 @@ public class BoardContentCard extends BoardPanel {
         });
     }
 
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+        highlightCard(selected, selected);
+    }
+
     public void init(MainFrame main, Frame frame) {
         setCornerRadius(20);
         addInsets(5);
 
-        contentText = new BoardTextArea("Content Response goes here...Content Response goes here...Content Response goes here...Content Response goes here...Content Response goes here...");
+        contentText = new BoardTextArea("");
+        contentText.setHintText("Content Response goes here...");
         contentText.setLineWrap(true);
-        contentText.setFocusable(false);
+        contentText.setFocusable(true);
+        contentText.setEditable(false);
         contentText.setFontPrimary(ByteBoardTheme.FONT_T_REGULAR, 20);
 
         contentAction = new BoardLabel();
@@ -77,9 +83,9 @@ public class BoardContentCard extends BoardPanel {
                 .addToNextCell(contentUsername);
     }
 
-    public void setContentAction(boolean isFeedbackGiven, ContentActionListener action, String contentActionText, String icon) {
+    public void setContentAction(boolean isFeedbackGiven, ContentActionListener action, String contentActionText) {
         contentAction.removeMouseListener(contentActionAdapter);
-        contentAction.addMouseListener(contentActionAdapter = getContentActionAdapter(action, icon));
+        contentAction.addMouseListener(contentActionAdapter = getContentActionAdapter(action, "useful"));
 
         setActionSelected(isFeedbackGiven);
         setContentText(contentActionText);
@@ -90,6 +96,9 @@ public class BoardContentCard extends BoardPanel {
         contentAction.setToolTipText("Comment adds something Useful to the Post");
         contentAction.setVisible(true);
         contentAction.setText(contentActionText);
+
+        contentAction.setColoredIcon("useful", ByteBoardTheme.ACCENT,
+                ByteBoardTheme.MAIN_DARK, ResourceManager.MICRO);
     }
 
     public void setCardData(String contentUsername, String contentUserprofile, String contentText, String contentID) {
@@ -99,30 +108,28 @@ public class BoardContentCard extends BoardPanel {
         this.contentText.setName(contentID);
     }
 
-    public void addMouseListeners(CardSelectListener cardSelectListener) {
+    public void addMouseListeners(BoardResponseCardPanel cardPanel) {
         setBorderColor(ByteBoardTheme.ACCENT);
 
         MouseAdapter adapter = new MouseAdapter() {
             public void mouseEntered(MouseEvent e) {
-                if(isSelected()) return;
-                highlightCard(true);
+                if (isSelected()) return;
+                highlightCard(true, false);
             }
 
             public void mouseExited(MouseEvent e) {
-                if(isSelected()) return;
-                highlightCard(false);
+                if (isSelected()) return;
+                highlightCard(false, false);
             }
 
             public void mouseReleased(MouseEvent e) {
-                checkBounds.width = BoardContentCard.this.getBounds().width;
-                checkBounds.height = BoardContentCard.this.getBounds().height;
+                checkBounds.width = BoardResponseCard.this.getBounds().width;
+                checkBounds.height = BoardResponseCard.this.getBounds().height;
 
-                if(!checkBounds.contains(e.getPoint()))
+                if (!checkBounds.contains(e.getPoint()))
                     return;
 
-                selectCard(!isSelected(), BoardContentCard.this);
-                cardSelectListener.invoke(isSelected() ? getContentID() : null);
-                refresh();
+                cardPanel.selectCard(BoardResponseCard.this);
             }
         };
 
@@ -130,40 +137,20 @@ public class BoardContentCard extends BoardPanel {
         contentText.addMouseListener(adapter);
     }
 
-    private boolean isSelected() {
-        return lastSelectedCard != null && lastSelectedCard.equals(this);
+    protected boolean isSelected() {
+        return isSelected;
     }
 
-    private void highlightCard(boolean isHighlighted) {
-        setBackground(isHighlighted ? ByteBoardTheme.ACCENT : ByteBoardTheme.MAIN_LIGHT);
-        setBorderColor(isHighlighted ? ByteBoardTheme.BASE : ByteBoardTheme.ACCENT);
-    }
-
-    public void restoreCardSelection() {
-        if(lastSelectedCard == null) return;
-
-        if(lastSelectedCard.getContentID().equals(getContentID()))
-            selectCard(true, this);
-    }
-
-    public static void selectCard(boolean isSelect, BoardContentCard contentCard) {
-        if(!isSelect) {
-            if(lastSelectedCard != null)
-                lastSelectedCard.highlightCard(false);
-            lastSelectedCard = null;
+    /*cardSelectListener.invoke(isSelected ? getContentID() : null);*/
+    private void highlightCard(boolean isHighlighted, boolean isSelected) {
+        if(isHighlighted) {
+            setBackground(isSelected ? ByteBoardTheme.ACCENT_DARK : ByteBoardTheme.ACCENT);
+            setBorderColor(ByteBoardTheme.BASE);
             return;
         }
 
-        if (lastSelectedCard != null)
-            lastSelectedCard.highlightCard(false);
-
-        contentCard.highlightCard(true);
-        contentCard.setBackground(ByteBoardTheme.ACCENT_DARK);
-        lastSelectedCard = contentCard;
-    }
-
-    private void setActionSelected(boolean isSelected) {
-        contentAction.setName(isSelected ? DBCFeedback.V_FEEDBACK_USEFUL : DBCFeedback.V_FEEDBACK_NONE);
+        setBackground(ByteBoardTheme.MAIN_DARK);
+        setBorderColor(ByteBoardTheme.ACCENT);
     }
 
     private MouseAdapter getContentActionAdapter(ContentActionListener action, String icon) {
@@ -176,7 +163,7 @@ public class BoardContentCard extends BoardPanel {
             public void mouseExited(MouseEvent e) {
                 contentAction.setColoredIcon(icon,
                         isActionSelected() ? ByteBoardTheme.ACCENT : ByteBoardTheme.BASE,
-                        isActionSelected() ? ByteBoardTheme.BASE : ByteBoardTheme.MAIN_LIGHT, ResourceManager.MICRO);
+                        isActionSelected() ? ByteBoardTheme.BASE : ByteBoardTheme.MAIN_DARK, ResourceManager.MICRO);
             }
 
             public void mouseReleased(MouseEvent e) {
@@ -184,7 +171,7 @@ public class BoardContentCard extends BoardPanel {
 
                 contentAction.setColoredIcon(icon,
                         isActionSelected() ? ByteBoardTheme.ACCENT : ByteBoardTheme.BASE,
-                        isActionSelected() ? ByteBoardTheme.BASE : ByteBoardTheme.MAIN_LIGHT, ResourceManager.MICRO);
+                        isActionSelected() ? ByteBoardTheme.BASE : ByteBoardTheme.MAIN_DARK, ResourceManager.MICRO);
 
                 action.invoke(contentAction.getName());
             }
@@ -195,6 +182,10 @@ public class BoardContentCard extends BoardPanel {
         return contentAction.getName().equals(DBCFeedback.V_FEEDBACK_USEFUL);
     }
 
+    private void setActionSelected(boolean isSelected) {
+        contentAction.setName(isSelected ? DBCFeedback.V_FEEDBACK_USEFUL : DBCFeedback.V_FEEDBACK_NONE);
+    }
+
     public String getContentID() {
         return contentText.getName();
     }
@@ -202,9 +193,4 @@ public class BoardContentCard extends BoardPanel {
     public interface ContentActionListener {
         void invoke(String feedback);
     }
-
-    public interface CardSelectListener {
-        void invoke(String contentID);
-    }
-
 }

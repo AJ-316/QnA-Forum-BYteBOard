@@ -103,20 +103,6 @@ public class ProfileBoardFrame extends BoardFrame {
 
         builder.skipCells(1);
         addPanel(ProfileBoardActivityPanel.class, activityPanel, builder);
-        /*GridBagBuilder builder = new GridBagBuilder(this, 3);
-        builder.fill(GridBagConstraints.BOTH);
-        builder.weightY(1);
-        addPanel(ProfileBoardButtonPanel.class, buttonPanel, builder.getConstraints());
-
-        builder.skipCells(2);
-        builder.weightX(1);
-        addPanel(ProfileBoardUserDataPanel.class, userDataPanel, builder.getConstraints());
-
-        builder.anchor(GridBagConstraints.CENTER);
-        addPanel(ProfileEditPanel.class, editPanel, builder.getConstraints());
-
-        builder.skipCells(1);
-        addPanel(ProfileBoardActivityPanel.class, activityPanel, builder.getConstraints());*/
     }
 
     public void applyFrameSwitchContext(BoardFrameSwitchDelegate frameSwitchDelegate) {

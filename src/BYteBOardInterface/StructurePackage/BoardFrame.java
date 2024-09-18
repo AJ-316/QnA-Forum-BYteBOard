@@ -49,17 +49,28 @@ public abstract class BoardFrame extends Board implements Frame {
     }
 
     public boolean getPanelVisibility(Class<?> panelClass) {
-        return getPanel(panelClass).getBoardPanel().isVisible();
+        Panel panel = getPanel(panelClass);
+        if(panel == null) return false;
+
+        return panel.getBoardPanel().isVisible();
     }
 
-    public final Panel removePanel(String panelName) {
+    public final void removePanel(String panelName) {
         Panel panel = boardPanels.get(panelName);
-        if(panel == null) return null;
+        if(panel == null) return;
 
         boardPanels.remove(panelName);
         remove(panel.getBoardPanel());
+    }
 
-        return panel;
+    public final void removePanel(Component panel) {
+        remove(panel);
+        for (String panelName : boardPanels.keySet()) {
+            if(boardPanels.get(panelName).equals(panel)) {
+                boardPanels.remove(panelName);
+                return;
+            }
+        }
     }
 
     public void init(MainFrame main) {}

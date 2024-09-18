@@ -15,8 +15,8 @@ public class VoteButton extends BoardButton {
     private Color rolloverColor;
     private Color pressedColor;
 
-    private String icon;
-    private String voteType;
+    private final String icon;
+    private final String voteType;
 
     public VoteButton(String icon, int iconSize, String voteType) {
         super(icon, iconSize);
@@ -30,10 +30,12 @@ public class VoteButton extends BoardButton {
                 setBackground(rolloverColor);
                 repaint();
             }
+
             public void mouseExited(MouseEvent e) {
                 setBackground(defaultColor);
                 repaint();
             }
+
             public void mousePressed(MouseEvent e) {
                 setBackground(pressedColor);
                 repaint();

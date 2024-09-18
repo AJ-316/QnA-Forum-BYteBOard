@@ -179,11 +179,19 @@ public class SignupFormPanel extends BoardPanel {
         return loginContainer;
     }
 
-    private void clearFieldErrors() {
+    public void clearFieldErrors() {
         usernameField.setErrorLabel("");
         emailField.setErrorLabel("");
         passwordField.clearError();
         rePasswordField.clearError();
+    }
+
+    public void clearFields() {
+        clearFieldErrors();
+        usernameField.setText("");
+        emailField.setText("");
+        passwordField.setText("");
+        rePasswordField.setText("");
     }
 
 }

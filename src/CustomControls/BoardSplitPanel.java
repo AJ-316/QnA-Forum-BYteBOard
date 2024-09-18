@@ -3,6 +3,7 @@ package CustomControls;
 import CustomControls.CustomRendererPackage.BoardSplitPaneUI;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class BoardSplitPanel extends JSplitPane {
 
@@ -19,11 +20,9 @@ public class BoardSplitPanel extends JSplitPane {
     private void init() {
         setOpaque(false);
         setDividerSize(30);
-        setDividerLocation(0.5);
-        setResizeWeight(0.5);
+        setDividerLocation(0.8);
+        setResizeWeight(0.8);
         setBorder(BorderFactory.createEmptyBorder());
-
         setUI(new BoardSplitPaneUI());
     }
-
 }

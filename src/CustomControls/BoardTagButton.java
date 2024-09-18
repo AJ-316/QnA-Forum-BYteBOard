@@ -12,6 +12,7 @@ public class BoardTagButton extends BoardButton {
         setAlignmentCenter();
         addInsets(5);
         setFontPrimary(ByteBoardTheme.FONT_T_SEMIBOLD, 18);
+        setRolloverFGColor(ByteBoardTheme.TEXT_FG_LIGHT);
     }
 
     public void setTag(String tag) {

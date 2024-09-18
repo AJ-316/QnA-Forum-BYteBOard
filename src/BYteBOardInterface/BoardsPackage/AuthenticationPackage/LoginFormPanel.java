@@ -14,7 +14,7 @@ import java.awt.*;
 
 public class LoginFormPanel extends BoardPanel {
 
-    private BoardTextField usernameOrEmailField;
+    protected BoardTextField usernameOrEmailField;
     private BoardPasswordField passwordField;
 
     public LoginFormPanel(MainFrame main, Frame frame) {
@@ -142,9 +142,15 @@ public class LoginFormPanel extends BoardPanel {
         return signupContainer;
     }
 
-    private void clearFieldErrors() {
+    public void clearFieldErrors() {
         usernameOrEmailField.setErrorLabel("");
         passwordField.clearError();
+    }
+
+    public void clearFields() {
+        clearFieldErrors();
+        usernameOrEmailField.setText("");
+        passwordField.setText("");
     }
 
 }

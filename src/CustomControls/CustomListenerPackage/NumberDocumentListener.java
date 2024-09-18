@@ -19,7 +19,7 @@ public class NumberDocumentListener extends CustomDocumentListener {
         boolean isDeleted = false;
         if (!text.matches("[0-9]+") || Integer.parseInt(text) > maxInput) {
             SwingUtilities.invokeLater(() -> {
-                int lastCaretPosition = textField.getCaretPosition();
+                int lastCaretPosition = textComponent.getCaretPosition();
 
                 System.out.print("Removed: "+ text);
                 String newText = text.substring(0, lastCaretPosition - 1) + text.substring(lastCaretPosition);
@@ -30,8 +30,8 @@ public class NumberDocumentListener extends CustomDocumentListener {
                 }
                 System.out.println(", New: " + newText);
 
-                textField.setText(newText);
-                textField.setCaretPosition(lastCaretPosition - 1);
+                textComponent.setText(newText);
+                textComponent.setCaretPosition(lastCaretPosition - 1);
             });
             isDeleted = true;
         }
@@ -42,7 +42,7 @@ public class NumberDocumentListener extends CustomDocumentListener {
 
                 String newText = text.substring(1);
                 if(!validateTextInput(newText)) {
-                    textField.setText(newText);
+                    textComponent.setText(newText);
                 }
             }
         });
@@ -52,8 +52,8 @@ public class NumberDocumentListener extends CustomDocumentListener {
 
     public void removeUpdate(DocumentEvent e) {
         SwingUtilities.invokeLater(() -> {
-            if (textField.getText().trim().isEmpty())
-                textField.setText("0");
+            if (textComponent.getText().trim().isEmpty())
+                textComponent.setText("0");
         });
     }
 }
