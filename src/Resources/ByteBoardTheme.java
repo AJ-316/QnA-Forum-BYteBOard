@@ -109,7 +109,7 @@ public abstract class ByteBoardTheme {
         UIManager.put("ComboBox.selectionBackground", ResourceManager.getColor(ByteBoardTheme.ACCENT));
         UIManager.put("ComboBox.selectionForeground", ResourceManager.getColor(ByteBoardTheme.TEXT_FG_LIGHT));
         UIManager.put("ComboBox.background", ResourceManager.getColor(ByteBoardTheme.MAIN_LIGHT)); // _DARK
-        UIManager.put("ComboBox.foreground", ResourceManager.getColor(ByteBoardTheme.TEXT_FG_LIGHT));
+        UIManager.put("ComboBox.foreground", ResourceManager.getColor(ByteBoardTheme.MAIN_DARK));
 
         UIManager.put("TextField.foreground", ResourceManager.getColor(ByteBoardTheme.TEXT_FG_DARK));
         UIManager.put("TextField.caretForeground", ResourceManager.getColor(ByteBoardTheme.TEXT_FG_DARK));

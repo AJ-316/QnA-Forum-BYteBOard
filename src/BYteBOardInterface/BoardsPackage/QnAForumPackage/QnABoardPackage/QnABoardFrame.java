@@ -34,19 +34,12 @@ public class QnABoardFrame extends BoardFrame {
 
     public QnABoardFrame(MainFrame main) {
         super(main, (delegate, context) -> {
-            String questionID;
-            String userID;
+            context = delegate.getContextOrDefault(context,
+                    DBQuestion.TABLE, DBQuestion.K_QUESTION_ID,
+                    DBUser.TABLE, DBUser.K_USER_ID);
 
-            if (context != null && context.length != 0) {
-                questionID = context[0];
-                userID = context[1];
-            } else {
-                DBDataObject loadedQuestionData = delegate.getContext(DBQuestion.TABLE);
-                if (loadedQuestionData == null) return null;
-
-                questionID = loadedQuestionData.getValue(DBQuestion.K_QUESTION_ID);
-                userID = delegate.getContext(DBUser.TABLE).getValue(DBUser.K_USER_ID);
-            }
+            String questionID = context[0];
+            String userID = context[1];
 
             DBDataObject questionDataObject = DBQuestion.ops.getQuestion(questionID);
             questionDataObject.putKeyValue(DBVote.V_VOTE_UP, DBVote.getVoteType(userID, DBVote.K_QUESTION_ID, questionID));
@@ -75,9 +68,8 @@ public class QnABoardFrame extends BoardFrame {
             }
             delegate.putContextList(DBComment.TABLE, DBComment.K_COMMENT_ID, commentQueDataObjectList);
 
-            DBDataObject[] tagDataObjectList = DBTag.getTags(questionID);
-            delegate.putContextList(DBTag.TABLE, DBTag.K_TAG_ID, tagDataObjectList);
-
+            DBDataObject[] tagDataObjectList = DBQueTag.getQueTags(questionID);
+            delegate.putContextList(DBQueTag.TABLE, DBQueTag.K_QUE_TAG_ID, tagDataObjectList);
             return null;
         });
 
@@ -236,7 +228,7 @@ public class QnABoardFrame extends BoardFrame {
 
         questionPanel.setData(questionDataObject,
                 delegate.getContextList(DBComment.TABLE, questionDataList),
-                delegate.getContextList(DBTag.TABLE, questionDataList), userID);
+                delegate.getContextList(DBQueTag.TABLE, questionDataList), userID);
 
         answerCardEditContentPanel.setUserID(userID);
         answerCardEditContentPanel.setContentID(questionPanel.getContentID());

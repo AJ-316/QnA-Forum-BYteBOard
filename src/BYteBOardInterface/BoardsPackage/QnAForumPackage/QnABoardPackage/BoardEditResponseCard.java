@@ -39,9 +39,8 @@ public class BoardEditResponseCard extends BoardResponseCard {
 
         LimitCharacterDocumentListener listener = new LimitCharacterDocumentListener(
                 255, len -> maxLengthLabel.setText(len + "/255"));
-        listener.setTextComponent(contentText);
+        contentText.addDocumentListener(listener);
         contentText.setHintText("Add Comment...");
-        contentText.getDocument().addDocumentListener(listener);
         contentText.setFocusable(true);
         contentText.setEditable(true);
 

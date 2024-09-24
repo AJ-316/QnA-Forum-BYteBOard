@@ -139,7 +139,7 @@ public class SignupFormPanel extends BoardPanel {
 //        builder.addToNextCell(rePasswordField.getTextFieldContainer());
 
         // Signup Button
-        BoardButton signupButton = new BoardButton("Signup", "signup");
+        BoardButton signupButton = new BoardButton("Signup", "add");
         signupButton.setFGLight();
         signupButton.addActionListener(e -> initFormSubmission());
 //        builder.fill(GridBagConstraints.NONE);

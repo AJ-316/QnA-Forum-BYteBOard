@@ -6,6 +6,8 @@ import BYteBOardInterface.StructurePackage.MainFrame;
 import Resources.ResourceManager;
 
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 public class BoardScrollPanel extends BoardPanel {
 
@@ -39,7 +41,16 @@ public class BoardScrollPanel extends BoardPanel {
     }
 
     public void setScrollSize(int width, int height) {
-        scrollPane.getViewport().setMaximumSize(new Dimension(width, height));
+        scrollPane.addComponentListener(new ComponentAdapter() {
+            public void componentResized(ComponentEvent e) {
+                Dimension viewSize = scrollPane.getViewport().getPreferredSize();
+                viewSize.width = width != 0 ? width : viewSize.width;
+                viewSize.height = height != 0 ? height : viewSize.height;
+                scrollPane.getViewport().setPreferredSize(viewSize);
+                scrollPane.setPreferredSize(viewSize);
+                revalidate();
+            }
+        });
     }
 
     public void setBackground(String bg) {

@@ -16,7 +16,17 @@ public class DBQuestion extends DBOperation {
         super(null, TABLE, K_QUESTION_ID, K_QUESTION_HEAD, K_QUESTION_BODY, K_USER_ID, K_UPVOTES, K_DOWNVOTES, K_QUESTION_BYTESCORE);
     }
 
-    public String addQuestion(String questionHead, String questionBody, String userID) {
+    public static DBDataObject[] searchByQuestionHead(String question, String... selectKeys) {
+        return ops.ftSearchValueBy(question,
+                ops.likeMatchContains(K_QUESTION_HEAD, getLastCharAndWord(question)),
+                new String[]{K_QUESTION_HEAD}, selectKeys);
+    }
+
+    public static DBDataObject[] searchByQuestion(String question, String... selectKeys) {
+        return ops.ftSearchValue(question, new String[]{K_QUESTION_HEAD, K_QUESTION_BODY}, selectKeys);
+    }
+
+    public static String addQuestion(String questionHead, String questionBody, String userID) {
         String[] keys = new String[]{K_QUESTION_HEAD, K_QUESTION_BODY, K_USER_ID};
         String[] values = new String[]{questionHead, questionBody, userID};
         return ops.insertValue(keys, values);
@@ -32,7 +42,7 @@ public class DBQuestion extends DBOperation {
                 K_UPVOTES, String.valueOf(newUpvotes), K_DOWNVOTES, String.valueOf(newDownvotes));
     }
 
-    public DBDataObject getQuestion(String questionID) {
+    public static DBDataObject getQuestion(String questionID) {
         DBDataObject[] questions = DBQuestion.ops.findValuesBy(
                 DBQuestion.ops.matchByValue(DBQuestion.K_QUESTION_ID, questionID), "*");
 

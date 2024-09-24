@@ -67,7 +67,7 @@ public class QnABoard extends JPanel {
         board.optionsPanel.setUserInfo(username, loggedUserData.getValue(DBUser.K_USER_PROFILE), !questioner.equals(username));
 
         // get tags associated with the question
-        DBDataObject[] tagsData = DBTag.ops.findValuesBy(DBTag.ops.matchByValue(DBTag.K_QUESTION_ID, questionID), "*");
+        DBDataObject[] tagsData = DBTag.getTags(questionID);
 
         String[] tags = new String[tagsData.length];
         for (int i = 0; i < tags.length; i++) {

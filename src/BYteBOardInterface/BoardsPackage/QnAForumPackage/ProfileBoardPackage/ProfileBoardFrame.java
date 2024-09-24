@@ -12,21 +12,14 @@ import java.util.Arrays;
 
 public class ProfileBoardFrame extends BoardFrame {
 
-    private final ProfileBoardButtonPanel buttonPanel;
-    private final ProfileBoardUserDataPanel userDataPanel;
-    private final ProfileEditPanel editPanel;
-    private final ProfileBoardActivityPanel activityPanel;
+    private ProfileBoardButtonPanel buttonPanel;
+    private ProfileBoardUserDataPanel userDataPanel;
+    private ProfileEditPanel editPanel;
+    private ProfileBoardActivityPanel activityPanel;
 
     public ProfileBoardFrame(MainFrame main) {
         super(main, (delegate, context) -> {
-            String userID;
-
-            if (context != null && context.length != 0) userID = context[0];
-            else {
-                DBDataObject loadedUserData = delegate.getContext(DBUser.TABLE);
-                if(loadedUserData == null) return null;
-                userID = loadedUserData.getValue(DBUser.K_USER_ID);
-            }
+            String userID = delegate.getContextOrDefault(context, DBUser.TABLE, DBUser.K_USER_ID)[0];
 
             DBDataObject userData = DBUser.getUser(userID);
 
@@ -85,8 +78,9 @@ public class ProfileBoardFrame extends BoardFrame {
             delegate.putContext(DBQuestion.TABLE, questionData);
             return userID;
         });
+    }
 
-
+    public void init(MainFrame main) {
         buttonPanel = new ProfileBoardButtonPanel(main, this);
         userDataPanel = new ProfileBoardUserDataPanel(main, this);
         editPanel = new ProfileEditPanel(main, this);
@@ -120,6 +114,8 @@ public class ProfileBoardFrame extends BoardFrame {
         userDataPanel.setUsername(username);
         userDataPanel.setUserEmail(userEmail);
         userDataPanel.setUserBytes(userData.getValue(DBUser.K_USER_BYTESCORE));
+
+        buttonPanel.setUserID(userData.getValue(DBUser.K_USER_ID));
 
         DBDataObject questionData = frameSwitchDelegate.getContext(DBQuestion.TABLE);
 

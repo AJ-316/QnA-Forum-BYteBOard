@@ -2,6 +2,7 @@ package BYteBOardInterface.BoardsPackage.QnAForumPackage;
 
 import BYteBOardInterface.BoardsPackage.QnAForumPackage.ProfileBoardPackage.ProfileBoardFrame;
 import BYteBOardInterface.BoardsPackage.QnAForumPackage.QnABoardPackage.QnABoardFrame;
+import BYteBOardInterface.BoardsPackage.QnAForumPackage.SearchBoardPackage.SearchBoardFrame;
 import BYteBOardInterface.StructurePackage.MainFrame;
 
 import java.awt.*;
@@ -18,6 +19,7 @@ public class QnAForumMainFrame extends MainFrame {
     protected void init() {
         new ProfileBoardFrame(this);
         new QnABoardFrame(this);
+        new SearchBoardFrame(this);
     }
 
     public void restartMainFrame() {

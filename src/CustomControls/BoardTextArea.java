@@ -1,5 +1,6 @@
 package CustomControls;
 
+import CustomControls.CustomListenerPackage.CustomDocumentListener;
 import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
 
@@ -52,6 +53,11 @@ public class BoardTextArea extends JTextArea implements CustomControl {
             g.setColor(new Color(((c0 & c) >>> 1) + ((c1 & c) >>> 1), true));
             g.drawString(hintText, ins.left, fm.getAscent() - 2);
         }
+    }
+
+    public void addDocumentListener(CustomDocumentListener documentListener) {
+        getDocument().addDocumentListener(documentListener);
+        documentListener.setTextComponent(this);
     }
 
     public void setFontPrimary(String type, int size) {

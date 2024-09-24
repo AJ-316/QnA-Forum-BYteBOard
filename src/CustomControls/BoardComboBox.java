@@ -8,51 +8,65 @@ import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
+import javax.swing.plaf.basic.BasicComboBoxEditor;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.plaf.basic.BasicComboPopup;
 import javax.swing.plaf.basic.ComboPopup;
 import java.awt.*;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
+import java.awt.event.*;
 
 public class BoardComboBox extends JComboBox<String> {
 
-    private final BoardPanel container;
+    private JButton dropDownButton;
+    private BoardPanel container;
     private BoardLabel label;
 
     public BoardComboBox(MainFrame main, Frame frame, String[] itemsList, String selectedItem) {
         super(itemsList);
-        container = createContainer(main, frame);
+        setForeground(ByteBoardTheme.MAIN_DARK);
 
+        init(main, frame, 16);
         setSelectedItem(selectedItem);
-        setForeground(ResourceManager.getColor(ByteBoardTheme.MAIN_DARK));
-        setFont(ResourceManager.getFont(ByteBoardTheme.FONT_PRIMARY(ByteBoardTheme.FONT_T_BOLD, 16)));
-        setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+    }
+
+    public BoardComboBox(MainFrame main, Frame frame, String bg, int columns) {
+        setBackground(bg);
+        setForeground(ByteBoardTheme.TEXT_FG_LIGHT);
+
+        init(main, frame, 22);
+        getTextField().setColumns(columns);
+    }
+
+    private void init(MainFrame main, Frame frame, int fontSize) {
+        container = createContainer(main, frame);
+        setFont(ResourceManager.getFont(ByteBoardTheme.FONT_PRIMARY(ByteBoardTheme.FONT_T_BOLD, fontSize)));
+        addInsets(10);
         createPopupUI();
+        getTextField().setBackground(ByteBoardTheme.MAIN);
+    }
+
+    public void setForeground(String fg) {
+        super.setForeground(ResourceManager.getColor(fg));
+    }
+
+    public BoardTextField getTextField() {
+        return (BoardTextField) getEditor().getEditorComponent();
     }
 
     private void createPopupUI() {
         setRenderer(new RoundedComboBoxRenderer(20, 20));
         setUI(new BasicComboBoxUI() {
-            protected JButton createArrowButton() {
-                JButton button = new JButton(){
-                    public int getWidth() {
-                        return ResourceManager.MICRO*2;
-                    }
-                    public Dimension getSize(Dimension rv) {
-                        return getPreferredSize();
+            protected ComboBoxEditor createEditor() {
+                return new BasicComboBoxEditor.UIResource()  {
+                    protected JTextField createEditorComponent() {
+                        return new BoardTextField(BoardComboBox.this.container.getMain(),
+                                BoardComboBox.this.container.getFrame(), BoardComboBox.this.container.getBackground());
                     }
                 };
-                button.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-                ResourceManager.setButtonIcons(button, "arrowD", ResourceManager.MINI);
+            }
 
-                button.setBorderPainted(false);
-                button.setFocusPainted(false);
-                button.setContentAreaFilled(false);
-                return button;
+            protected JButton createArrowButton() {
+                return createDropDownButton();
             }
 
             protected ComboPopup createPopup() {
@@ -91,7 +105,9 @@ public class BoardComboBox extends JComboBox<String> {
 
     public void setBackground(String bg) {
         super.setBackground(ResourceManager.getColor(bg));
-        container.setBackground(getBackground());
+
+        if(container != null)
+            container.setBackground(getBackground());
     }
 
     private BoardPanel createContainer(MainFrame main, Frame frame) {
@@ -106,6 +122,40 @@ public class BoardComboBox extends JComboBox<String> {
 
     public BoardPanel getComponent() {
         return container;
+    }
+
+    public JButton getDropDownButton() {
+        return dropDownButton;
+    }
+
+    protected JButton createDropDownButton() {
+        dropDownButton = new JButton(){
+            public int getWidth() {
+                return ResourceManager.MICRO*2;
+            }
+            public Dimension getSize(Dimension rv) {
+                return getPreferredSize();
+            }
+        };
+        dropDownButton.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        ResourceManager.setButtonIcons(dropDownButton, "arrowD", ResourceManager.MINI);
+
+        dropDownButton.setBorderPainted(false);
+        dropDownButton.setFocusPainted(false);
+        dropDownButton.setContentAreaFilled(false);
+
+        return dropDownButton;
+    }
+
+    public void removeDropButtonActions() {
+        EventQueue.invokeLater(() -> {
+            dropDownButton.removeMouseListener(dropDownButton.getMouseListeners()[1]);
+            dropDownButton.removeMouseMotionListener(dropDownButton.getMouseMotionListeners()[1]);
+        });
+    }
+
+    public void setIcon(String icon, int iconSize) {
+        ResourceManager.setButtonIcons(dropDownButton, icon, iconSize);
     }
 
     private static class RoundedComboBoxRenderer extends JLabel implements ListCellRenderer<Object> {
@@ -144,5 +194,13 @@ public class BoardComboBox extends JComboBox<String> {
             g2.fillRoundRect(0, 0, getWidth(), getHeight(), arcWidth, arcHeight);
             super.paintComponent(g2);
         }
+    }
+
+    public void addInsets(int insets) {
+        addInsets(insets, insets, insets, insets);
+    }
+
+    public void addInsets(int top, int left, int bottom, int right) {
+        setBorder(BorderFactory.createEmptyBorder(top, left, bottom, right));
     }
 }

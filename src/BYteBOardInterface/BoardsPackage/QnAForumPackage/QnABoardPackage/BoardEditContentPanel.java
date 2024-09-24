@@ -53,7 +53,7 @@ public class BoardEditContentPanel extends BoardContentPanel {
         contentBytes.setVisible(false);
 
         LimitCharacterDocumentListener listener = new LimitCharacterDocumentListener(LimitCharacterDocumentListener.MAX_TEXT_LENGTH, null);
-        contentBody.getDocument().addDocumentListener(listener);
+        contentBody.addDocumentListener(listener);
         contentBody.setHintText("Type your answer here...");
         contentBody.setEditable(true);
         resetAddAnswer();

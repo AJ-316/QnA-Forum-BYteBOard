@@ -4,12 +4,9 @@
  */
 package QnAForumInterface;
 
+import BYteBOardDatabase.*;
 import CustomControls.CustomJPanel;
 import CustomControls.DEBUG;
-import BYteBOardDatabase.DBDataObject;
-import BYteBOardDatabase.DBQuestion;
-import BYteBOardDatabase.DBTag;
-import BYteBOardDatabase.DBUser;
 
 import QnAForumInterface.InformationBarPackage.ActivityBar;
 import QnAForumInterface.ProfileBoardPackage.ProfileBoard;
@@ -358,18 +355,33 @@ public class SearchBoard extends JPanel {
         for (Component tagComponent : tags) {
             String tag = ((JLabel) ((CustomJPanel) tagComponent).getComponent(0)).getText();
 
+            // select DBTag.*, DBQuestion.question_head, DBUser.user_name, DBUser.user_profile
+            // from DBTag
+            // Join DBQuestion on DBTag.question_id = DBQuestion.question_id
+            // Join DBUser on DBQuestion.user_id = DUser.user_id
+            // where tag.tag = 'tag'
+
+            // select DBTag.tag, (join:DBQueTag), DBQuestion.question_head, DBUser.user_name, DBUser.user_profile
+            // from DBTag
+            // Join DBQueTag on DBTag.tag_id = DBQueTag.qt_tag_id
+            // Join DBQuestion on DBQueTag.qt_question_id = DBQuestion.question_id
+            // Join DBUser on DBQuestion.user_id = DUser.user_id
+            // where tag.tag = 'tag'
+
             // get questions and the questioner's data by tags
             DBDataObject[] tagData = DBTag.ops.joinValuesBy(DBTag.ops.matchByValue(DBTag.K_TAG, tag),
                     new String[]{
-                            DBTag.ops.matchByKey(DBTag.K_QUESTION_ID, DBQuestion.ops.appendKeys(DBQuestion.K_QUESTION_ID)),
+                            DBTag.ops.matchByKey(DBTag.K_TAG_ID, DBQueTag.ops.appendKeys(DBQueTag.K_TAG_ID)),
+                            DBQueTag.ops.matchByKey(DBQueTag.K_QUESTION_ID, DBQuestion.ops.appendKeys(DBQuestion.K_QUESTION_ID)),
                             DBQuestion.ops.matchByKey(DBQuestion.K_USER_ID, DBUser.ops.appendKeys(DBUser.K_USER_ID))
                     },
-                    DBTag.ops.appendKeys("*"),
+                    DBTag.ops.appendKeys(DBTag.K_TAG),
+                    DBQueTag.ops.appendEmptyKeys(),
                     DBQuestion.ops.appendKeys(DBQuestion.K_QUESTION_HEAD),
                     DBUser.ops.appendKeys(DBUser.K_USER_NAME, DBUser.K_USER_PROFILE));
 
             for (DBDataObject tagObject : tagData) {
-                String questionID = tagObject.getValue(DBTag.K_QUESTION_ID);
+                String questionID = tagObject.getValue(DBQueTag.K_QUESTION_ID);
 
                 if (resultContains(questionID)) continue;
 

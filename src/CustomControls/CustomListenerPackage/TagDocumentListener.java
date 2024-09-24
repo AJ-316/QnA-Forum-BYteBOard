@@ -3,6 +3,7 @@ package CustomControls.CustomListenerPackage;
 import javax.swing.*;
 
 public class TagDocumentListener extends CustomDocumentListener {
+
     protected boolean validateTextInput(String text) {
         if (!text.matches("^[a-zA-Z0-9]+$")) {
             SwingUtilities.invokeLater(() -> {

@@ -132,7 +132,7 @@ public class LoginFormPanel extends BoardPanel {
         builder.addToNextCell(signupLabel);
 
         // Signup Button
-        BoardButton signUpButton = new BoardButton("Signup", "signup");
+        BoardButton signUpButton = new BoardButton("Signup", "add");
         signUpButton.addActionListener(e -> {
             setPanelVisibility(SignupFormPanel.class, true);
             setVisible(false);

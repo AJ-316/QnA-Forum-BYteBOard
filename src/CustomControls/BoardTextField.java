@@ -8,26 +8,69 @@ import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
 
 import javax.swing.*;
+import javax.swing.event.UndoableEditEvent;
+import javax.swing.event.UndoableEditListener;
+import javax.swing.undo.UndoManager;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
 
 public class BoardTextField extends JTextField implements CustomControl {
 
-    private final BoardPanel container;
+    private BoardPanel container;
     private BoardLabel errorLabel;
     private String hintText;
 
+    public BoardTextField(MainFrame main, Frame frame, Color background) {
+        init(main, frame, background, 9);
+    }
+
     public BoardTextField(MainFrame main, Frame frame, String background, int cols) {
-        container = createContainer(main, frame, background);
+        init(main, frame, ResourceManager.getColor(background), cols);
+    }
+
+    private void init(MainFrame main, Frame frame, Color background, int cols) {
+        container = createContainer(main, frame, ByteBoardTheme.MAIN_LIGHT);
 
         addInsets(0);
         setColumns(cols);
         setMinimumSize(new Dimension(getPreferredSize().width, getPreferredSize().height + 10));
         setFontPrimary(ByteBoardTheme.FONT_T_REGULAR, 20);
-        setBackground(container.getBackground());
-        if(!getBackground().equals(ResourceManager.getColor(ByteBoardTheme.BASE)))
+        setBackground(background);
+        if (!getBackground().equals(ResourceManager.getColor(ByteBoardTheme.BASE)))
             setFGLight();
+
+        addUndoableListener();
+    }
+
+    private void addUndoableListener() {
+        UndoManager undoManager = new UndoManager();
+
+        getDocument().addUndoableEditListener(e -> undoManager.addEdit(e.getEdit()));
+
+        // Ctrl+Z to undo
+        getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.CTRL_DOWN_MASK), "Undo");
+        getActionMap().put("Undo", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (undoManager.canUndo()) {
+                    undoManager.undo();
+                }
+            }
+        });
+
+        // Ctrl+Y to redo
+        getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke(KeyEvent.VK_Y, KeyEvent.CTRL_DOWN_MASK), "Redo");
+        getActionMap().put("Redo", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (undoManager.canRedo()) {
+                    undoManager.redo();
+                }
+            }
+        });
     }
 
     private BoardPanel createContainer(MainFrame main, Frame frame, String background) {
@@ -87,6 +130,17 @@ public class BoardTextField extends JTextField implements CustomControl {
             g.setColor(new Color(((c0 & c) >>> 1) + ((c1 & c) >>> 1), true));
             g.drawString(hintText, ins.left, h / 2 + fm.getAscent() / 2 - 2);
         }
+    }
+
+    @Override
+    public void setBackground(Color bg) {
+        super.setBackground(bg);
+        if(container != null)
+            container.setBackground(bg);
+    }
+
+    public void setBackground(String bg) {
+        this.setBackground(ResourceManager.getColor(bg));
     }
 
     public void setHintText(String text) {

@@ -42,7 +42,6 @@ public class BoardButton extends JButton implements CustomControl {
         setFGDark();
         addInsets(15);
 
-        addFontColorUpdates();
         addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -53,6 +52,21 @@ public class BoardButton extends JButton implements CustomControl {
                             ((KeyEvent) EventQueue.getCurrentEvent()).getModifiers()));
             }
         });
+    }
+
+    public Icon getIcon() {
+        setFGColor(defaultFGColor);
+        return super.getIcon();
+    }
+
+    public Icon getPressedIcon() {
+        setFGColor(defaultFGColor);
+        return super.getPressedIcon();
+    }
+
+    public Icon getRolloverIcon() {
+        setFGColor(rolloverFGColor);
+        return super.getRolloverIcon();
     }
 
     public void setIcon(String icon) {
@@ -100,31 +114,6 @@ public class BoardButton extends JButton implements CustomControl {
 
     protected int getActualRadius() {
         return Math.min(60, Math.min(getWidth(), getHeight()) / 2);
-    }
-
-    private void addFontColorUpdates() {
-        MouseAdapter adapter = new MouseAdapter() {
-            public void mouseEntered(MouseEvent e) {
-                if(!isEnabled()) return;
-                setFGColor(rolloverFGColor);
-            }
-
-            public void mouseExited(MouseEvent e) {
-                if(!isEnabled()) return;
-                setFGColor(defaultFGColor);
-            }
-
-            public void mouseReleased(MouseEvent e) {
-                if(isEnabled()) {
-                    setFGColor(defaultFGColor);
-                    return;
-                }
-                setFGColor(ByteBoardTheme.DISABLED);
-                repaint();
-            }
-        };
-
-        addMouseListener(adapter);
     }
 
     public void addInterfaceEventInvokeOnClick(String event, Object... eventConstraints) {

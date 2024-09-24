@@ -21,7 +21,6 @@ public class BoardResponseCard extends BoardPanel {
 
     private static final Rectangle checkBounds = new Rectangle(0, 0, 0, 0);
     private boolean isSelected;
-    protected final int hashCode = hashCode();
     protected BoardTextArea contentText;
     protected BoardLabel contentUsername;
     protected BoardLabel contentAction;

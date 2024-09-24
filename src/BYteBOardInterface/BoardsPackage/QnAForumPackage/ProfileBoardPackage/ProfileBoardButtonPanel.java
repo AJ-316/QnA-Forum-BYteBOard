@@ -1,5 +1,6 @@
 package BYteBOardInterface.BoardsPackage.QnAForumPackage.ProfileBoardPackage;
 
+import BYteBOardInterface.BoardsPackage.QnAForumPackage.SearchBoardPackage.SearchBoardFrame;
 import BYteBOardInterface.StructurePackage.BoardPanel;
 import BYteBOardInterface.StructurePackage.Frame;
 import BYteBOardInterface.StructurePackage.MainFrame;
@@ -13,6 +14,7 @@ import java.awt.*;
 
 public class ProfileBoardButtonPanel extends BoardPanel {
 
+    private String userID;
     private BoardButton searchButton;
     private BoardButton askButton;
     private BoardButton activityButton;
@@ -56,11 +58,10 @@ public class ProfileBoardButtonPanel extends BoardPanel {
     }
 
     private void addButtonListeners() {
-
         activityButton.addActionListener(e -> setActivitiesVisible(!getPanelVisibility(ProfileBoardActivityPanel.class)));
         editProfileButton.addActionListener(e -> setEditProfileVisible(true));
 
-        searchButton.addActionListener(e -> searchButton.setEnabled(false));
+        searchButton.addActionListener(e -> requestSwitchFrame(SearchBoardFrame.class, getUserID()));
         askButton.addActionListener(e -> askButton.setEnabled(false));
 
         logoutButton.addActionListener(e -> {
@@ -88,5 +89,13 @@ public class ProfileBoardButtonPanel extends BoardPanel {
         activityButton.setIcon(isVisible ? "hide" : "show");
         setPanelVisibility(ProfileBoardActivityPanel.class, isVisible);
         setPanelVisibility(ProfileBoardUserDataPanel.class, !isVisible);
+    }
+
+    protected String getUserID() {
+        return userID;
+    }
+
+    protected void setUserID(String userID) {
+        this.userID = userID;
     }
 }

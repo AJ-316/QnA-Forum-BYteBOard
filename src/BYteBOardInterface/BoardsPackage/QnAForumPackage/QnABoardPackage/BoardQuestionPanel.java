@@ -26,7 +26,7 @@ public class BoardQuestionPanel extends BoardContentPanel {
         setSelfViewer(questionDataObject.getValue(DBQuestion.K_USER_ID).equals(userID));
 
         setContentResponseCards(commentDataObjects, DBComment.K_COMMENT_ID);
-        setContentTags(tagDataObjects);
+        setContentTags(tagDataObjects, userID);
     }
 
     protected void createAddCommentCard(BoardResponseCardPanel commentsPanel) {

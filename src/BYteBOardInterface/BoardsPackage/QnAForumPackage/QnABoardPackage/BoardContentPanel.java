@@ -11,6 +11,7 @@ import Resources.ResourceManager;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Arrays;
 import java.util.Map;
 
 public class BoardContentPanel extends BoardPanel {
@@ -166,11 +167,11 @@ public class BoardContentPanel extends BoardPanel {
         }
     }
 
-    public void setContentTags(DBDataObject[] tagDataObjectList) {
+    public void setContentTags(DBDataObject[] tagDataObjectList, String userID) {
         tagsDisplayPanel.clearTags();
 
         for (DBDataObject tagDataObject : tagDataObjectList) {
-            tagsDisplayPanel.addTag(tagDataObject.getValue(DBTag.K_TAG));
+            tagsDisplayPanel.addTag(tagDataObject.getValue(DBTag.K_TAG), userID);
         }
     }
 

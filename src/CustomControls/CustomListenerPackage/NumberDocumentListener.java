@@ -55,5 +55,6 @@ public class NumberDocumentListener extends CustomDocumentListener {
             if (textComponent.getText().trim().isEmpty())
                 textComponent.setText("0");
         });
+        super.removeUpdate(e);
     }
 }

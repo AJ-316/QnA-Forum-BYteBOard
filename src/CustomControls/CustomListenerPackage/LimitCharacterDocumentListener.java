@@ -28,22 +28,22 @@ public class LimitCharacterDocumentListener extends CustomDocumentListener {
             isDeleted = true;
         }
 
-        updateListener();
+        updateCharacterLengthListener();
 
         return isDeleted;
     }
 
-    private void updateListener() {
-        SwingUtilities.invokeLater(() -> {
-            if(listener != null)
-                listener.invoke(textComponent.getText().length());
-        });
-    }
-
     public void removeUpdate(DocumentEvent e) {
-        updateListener();
+        updateCharacterLengthListener();
+        super.removeUpdate(e);
     }
 
+    private void updateCharacterLengthListener() {
+        if(listener == null) return;
+        SwingUtilities.invokeLater(() -> listener.invoke(textComponent.getText().length()));
+    }
+
+    @FunctionalInterface
     public interface CharacterLengthListener {
         void invoke(int length);
     }
