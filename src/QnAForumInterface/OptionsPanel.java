@@ -27,6 +27,7 @@ public class OptionsPanel extends JPanel {
     private JButton searchBtn;
     private JLabel userName;
     private JLabel userProfile;
+
     /**
      * Creates new form OptionsPanel
      */

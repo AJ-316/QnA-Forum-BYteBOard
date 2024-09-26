@@ -15,10 +15,10 @@ public class ProfileBoard extends JPanel {
 
     private static String CURRENT_USER;
 
-    private ProfileButtonHolder buttonContainer;
-    private UserProfileEditPanel editPanel;
-    private UserProfileDisplayPanel displayPanel;
-    private ActivityContainer activityContainer;
+    private final ProfileButtonHolder buttonContainer;
+    private final UserProfileEditPanel editPanel;
+    private final UserProfileDisplayPanel displayPanel;
+    private final ActivityContainer activityContainer;
 
     public ProfileBoard() {
         setBackground(ResourceManager.getColor(ByteBoardTheme.BASE));
@@ -102,7 +102,7 @@ public class ProfileBoard extends JPanel {
         // get all questionIDs answered by matched user
         DBDataObject[] answeredQuestionsData = DBAnswer.ops.joinValuesBy(
                 DBAnswer.ops.matchByValue(DBAnswer.K_USER_ID, userID),
-                new String[] {
+                new String[]{
                         DBAnswer.ops.matchByKey(DBAnswer.K_QUESTION_ID, DBQuestion.ops.appendKeys(DBQuestion.K_QUESTION_ID)), // join on a.qid = q.qid
                         DBQuestion.ops.matchByKey(DBQuestion.K_USER_ID, DBUser.ops.appendKeys(DBUser.K_USER_ID))}, // join on q.uid = u.uid
 

@@ -2,10 +2,10 @@ package CustomControls.CustomListenerPackage;
 
 import javax.swing.*;
 
-public class TagListener extends CustomDocumentListener{
+public class TagListener extends CustomDocumentListener {
 
     protected boolean validateTextInput(String text) {
-        if(!text.startsWith("#") || text.length() < 2) return false;
+        if (!text.startsWith("#") || text.length() < 2) return false;
 
         String tagText = text.substring(1);
 

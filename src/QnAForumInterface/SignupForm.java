@@ -6,7 +6,6 @@ package QnAForumInterface;
 
 import BYteBOardDatabase.DBUser;
 import BYteBOardDatabase.EncryptionUtils;
-
 import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
 
@@ -34,6 +33,7 @@ public class SignupForm extends JPanel {
     private JLabel titleLabel;
     private JTextField usernameField;
     private JLabel usernameLabel;
+
     /**
      * Creates new form LoginForm
      */

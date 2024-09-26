@@ -3,7 +3,6 @@ package CustomControls;
 import CustomControls.CustomRendererPackage.BoardSplitPaneUI;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class BoardSplitPanel extends JSplitPane {
 

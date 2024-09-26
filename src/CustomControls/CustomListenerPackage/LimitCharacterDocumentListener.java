@@ -39,7 +39,7 @@ public class LimitCharacterDocumentListener extends CustomDocumentListener {
     }
 
     private void updateCharacterLengthListener() {
-        if(listener == null) return;
+        if (listener == null) return;
         SwingUtilities.invokeLater(() -> listener.invoke(textComponent.getText().length()));
     }
 

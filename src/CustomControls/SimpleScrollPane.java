@@ -158,7 +158,8 @@ public class SimpleScrollPane extends JScrollPane {
         }*/
 
         @Override
-        protected void paintTrack(Graphics g, JComponent c, Rectangle trackBounds) {}
+        protected void paintTrack(Graphics g, JComponent c, Rectangle trackBounds) {
+        }
 
         @Override
         protected void paintThumb(Graphics g, JComponent c, Rectangle thumbBounds) {
@@ -182,10 +183,10 @@ public class SimpleScrollPane extends JScrollPane {
 
             if (isVertical && sp.getVerticalScrollBarPolicy() != VERTICAL_SCROLLBAR_NEVER) {
                 graphics2D.fillRoundRect(thumbBounds.x + offset, thumbBounds.y + offset,
-                        width - offset*2, height - offset*2, 8 - offset, 8 - offset);
+                        width - offset * 2, height - offset * 2, 8 - offset, 8 - offset);
             } else if (sp.getHorizontalScrollBarPolicy() != HORIZONTAL_SCROLLBAR_NEVER) {
                 graphics2D.fillRoundRect(thumbBounds.x + offset, thumbBounds.y + offset,
-                        width - offset*2, height - offset*2, 8 - offset, 8 - offset);
+                        width - offset * 2, height - offset * 2, 8 - offset, 8 - offset);
             }
         }
 

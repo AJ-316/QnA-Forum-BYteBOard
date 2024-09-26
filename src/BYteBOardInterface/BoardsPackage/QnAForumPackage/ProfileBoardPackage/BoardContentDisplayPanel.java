@@ -11,14 +11,14 @@ import Resources.ByteBoardTheme;
 import javax.swing.*;
 import java.awt.*;
 
-public class ProfileBoardActivityPanel extends BoardPanel {
+public class BoardContentDisplayPanel extends BoardPanel {
 
     private BoardLabel statusLabel;
-    private BoardScrollPanel activitiesPanel;
-    private GridBagBuilder activitiesLayoutBuilder;
+    private BoardScrollPanel contentsPanel;
+    private GridBagBuilder layoutBuilder;
 
-    public ProfileBoardActivityPanel(MainFrame main, Frame frame) {
-        super(main, frame, ByteBoardTheme.MAIN);
+    public BoardContentDisplayPanel(MainFrame main, Frame frame) {
+        super(main, frame, ByteBoardTheme.MAIN_DARK);
 
         setVisible(false);
     }
@@ -30,59 +30,76 @@ public class ProfileBoardActivityPanel extends BoardPanel {
         GridBagBuilder builder = new GridBagBuilder(this);
 
         statusLabel = new BoardLabel();
-        statusLabel.setText("<html><div style='text-align: center;'>No Activity<br>Lets get Started!</div></html>");
         statusLabel.setName(statusLabel.getText());
         statusLabel.addInsets(30);
         statusLabel.setFGLight();
         statusLabel.setFontPrimary(ByteBoardTheme.FONT_T_THIN, 32);
 
-        activitiesPanel = getActivityPanel(main, frame);
+        contentsPanel = getActivityPanel(main, frame);
 
         builder.weight(1, 1).fillBoth();
-        builder.addToCurrentCell(activitiesPanel.getComponent());
+        builder.addToCurrentCell(contentsPanel.getComponent());
 
-        clearActivities();
+        clearQuestions();
     }
 
     private BoardScrollPanel getActivityPanel(MainFrame main, Frame frame) {
         BoardScrollPanel panel = new BoardScrollPanel(main, frame);
         panel.getComponent().setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         panel.setBackground(getBackground());
-        activitiesLayoutBuilder = new GridBagBuilder(panel, 1);
-        activitiesLayoutBuilder.weightX(1).fillHorizontal()
+        layoutBuilder = new GridBagBuilder(panel, 1);
+        layoutBuilder.weightX(1).fillHorizontal()
                 .insets(10, 10, 10, 20).anchor(GridBagConstraints.CENTER);
         return panel;
     }
 
-    public void clearActivities() {
-        activitiesPanel.removeAll();
-        activitiesLayoutBuilder.gridCell(0, 0);
+    public void clearQuestions() {
+        contentsPanel.removeAll();
+        layoutBuilder.gridCell(0, 0);
         addActivityStatusLabel(statusLabel.getName());
     }
 
-    public ActivityPane addActivity() {
+    public void setStatusLabel(String labelText) {
+        String[] lines = labelText.split("\n");
+
+        StringBuilder labelBuilder = new StringBuilder("<html><div style='text-align: center;'>");
+
+        for (int i = 0; i < lines.length; i++) {
+            if (i != 0) labelBuilder.append("<br>");
+            labelBuilder.append(lines[i]);
+        }
+
+        labelBuilder.append("</div></html>");
+        statusLabel.setText(labelBuilder.toString());
+    }
+
+    public ContentDisplayPane addActivity() {
         removeActivityStatusLabel();
 
-        ActivityPane pane = new ActivityPane(getMain(), getFrame());
-        activitiesLayoutBuilder.addToNextCell(pane);
+        ContentDisplayPane pane = new ContentDisplayPane(getMain(), getFrame());
+        layoutBuilder.addToNextCell(pane);
 
         addActivityStatusLabel("");
 
         return pane;
     }
 
+    public void resetScrolls() {
+        EventQueue.invokeLater(() -> contentsPanel.getComponent().getVerticalScrollBar().setValue(0));
+    }
+
     private void addActivityStatusLabel(String text) {
-        activitiesLayoutBuilder.weightY(1)
+        layoutBuilder.weightY(1)
                 .addToNextCell(statusLabel);
         statusLabel.setText(text);
     }
 
     private void removeActivityStatusLabel() {
-        activitiesLayoutBuilder.skipCells(-1);
-        activitiesPanel.remove(statusLabel);
+        layoutBuilder.skipCells(-1);
+        contentsPanel.remove(statusLabel);
         statusLabel.setText("");
 
-        activitiesLayoutBuilder.weightY(0);
+        layoutBuilder.weightY(0);
     }
 
 }

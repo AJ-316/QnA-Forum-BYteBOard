@@ -1,6 +1,5 @@
 package CustomControls;
 
-import BYteBOardInterface.BoardsPackage.QnAForumPackage.SearchBoardPackage.SearchBoardFrame;
 import BYteBOardInterface.StructurePackage.Frame;
 import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
@@ -32,12 +31,12 @@ public class BoardTagButton extends BoardButton {
         addActionListener(e -> container.remove(this));
     }
 
-    public void setTagID(String id) {
-        setName(id);
-    }
-
     public String getTagID() {
         return getName();
+    }
+
+    public void setTagID(String id) {
+        setName(id);
     }
 
     public String getTag() {

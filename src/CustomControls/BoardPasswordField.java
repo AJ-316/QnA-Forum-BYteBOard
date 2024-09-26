@@ -28,7 +28,7 @@ public class BoardPasswordField extends JPasswordField implements CustomControl 
         setMinimumSize(new Dimension(getPreferredSize().width, getPreferredSize().height + 10));
         setFontPrimary(ByteBoardTheme.FONT_T_REGULAR, 20);
         setBackground(container.getBackground());
-        if(!getBackground().equals(ResourceManager.getColor(ByteBoardTheme.BASE)))
+        if (!getBackground().equals(ResourceManager.getColor(ByteBoardTheme.BASE)))
             setFGLight();
     }
 
@@ -36,10 +36,10 @@ public class BoardPasswordField extends JPasswordField implements CustomControl 
         BoardPanel container = new BoardPanel(main, frame, background) {
             public void paint(Graphics g) {
                 super.paint(g);
-                if(BoardPasswordField.this.hasFocus()) {
+                if (BoardPasswordField.this.hasFocus()) {
                     int radius = getActualCornerRadius();
                     g.setColor(ResourceManager.getColor(ByteBoardTheme.ACCENT));
-                    g.drawRoundRect(0, 0, getWidth()-1, getHeight()-1, radius, radius);
+                    g.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, radius, radius);
                 }
             }
         };
@@ -52,6 +52,7 @@ public class BoardPasswordField extends JPasswordField implements CustomControl 
             public void focusGained(FocusEvent e) {
                 container.repaint();
             }
+
             public void focusLost(FocusEvent e) {
                 container.repaint();
             }
@@ -60,27 +61,14 @@ public class BoardPasswordField extends JPasswordField implements CustomControl 
         return container;
     }
 
-    public void setErrorLabel(String errorText) {
-        if(errorLabel == null) {
-            errorLabel = new BoardLabel();
-            errorLabel.setFontPrimary(ByteBoardTheme.FONT_T_SEMIBOLD, 16);
-            errorLabel.setFGError();
-            errorLabel.setAlignmentLeading();
-            container.add(errorLabel, BorderLayout.SOUTH);
-            addActionListener(e-> errorLabel.setText(""));
-        }
-
-        errorLabel.setText(errorText.length() > 28 ? errorText.substring(0, 28) : errorText);
-    }
-
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        if(hintText == null) return;
+        if (hintText == null) return;
 
         if (getPassword().length == 0) {
             int h = getHeight();
-            ((Graphics2D)g).setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+            ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
             Insets ins = getInsets();
             FontMetrics fm = g.getFontMetrics();
             int c0 = getBackground().getRGB();
@@ -134,6 +122,19 @@ public class BoardPasswordField extends JPasswordField implements CustomControl 
 
     public BoardLabel getErrorLabel() {
         return errorLabel;
+    }
+
+    public void setErrorLabel(String errorText) {
+        if (errorLabel == null) {
+            errorLabel = new BoardLabel();
+            errorLabel.setFontPrimary(ByteBoardTheme.FONT_T_SEMIBOLD, 16);
+            errorLabel.setFGError();
+            errorLabel.setAlignmentLeading();
+            container.add(errorLabel, BorderLayout.SOUTH);
+            addActionListener(e -> errorLabel.setText(""));
+        }
+
+        errorLabel.setText(errorText.length() > 28 ? errorText.substring(0, 28) : errorText);
     }
 
     @Override

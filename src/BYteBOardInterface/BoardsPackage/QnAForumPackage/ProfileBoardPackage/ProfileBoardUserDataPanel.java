@@ -8,8 +8,6 @@ import CustomControls.GridBagBuilder;
 import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
 
-import java.awt.*;
-
 public class ProfileBoardUserDataPanel extends BoardPanel {
 
     private BoardLabel userProfileLabel;

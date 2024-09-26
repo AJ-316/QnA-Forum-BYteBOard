@@ -17,15 +17,16 @@ public class BoardPanel extends Board implements Panel {
     public BoardPanel(MainFrame main, Frame frame, String bgColor) {
         super(main);
         this.frame = frame;
-        if(bgColor != null) {
+        if (bgColor != null) {
             setBackground(ResourceManager.getColor(bgColor));
-            if(bgColor.equals(ByteBoardTheme.MAIN))
+            if (bgColor.equals(ByteBoardTheme.MAIN))
                 setShadowState(OFFSET_SHADOW);
         }
         init(main, frame);
     }
 
-    public void init(MainFrame main, Frame frame) {}
+    public void init(MainFrame main, Frame frame) {
+    }
 
     public void refresh() {
         frame.getBoardFrame().refresh();

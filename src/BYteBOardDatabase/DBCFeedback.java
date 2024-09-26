@@ -19,7 +19,7 @@ public class DBCFeedback extends DBOperation {
     public static String getFeedback(String feedbackUserID, String commentID) {
         DBDataObject commentData = fetchCommentData(feedbackUserID, commentID);
 
-        if(commentData == null)
+        if (commentData == null)
             return V_FEEDBACK_NONE;
 
         return commentData.getValue(K_FEEDBACK);
@@ -28,7 +28,7 @@ public class DBCFeedback extends DBOperation {
     public static void giveFeedback(String feedbackUserID, String commentID, String feedback) {
         DBDataObject commentData = fetchCommentData(feedbackUserID, commentID);
 
-        if(commentData == null) {
+        if (commentData == null) {
 
             // user has never given feedback to this comment; insert new
             ops.insertValue(new String[]{K_USER_ID, K_COMMENT_ID, K_FEEDBACK},
@@ -46,7 +46,7 @@ public class DBCFeedback extends DBOperation {
         DBDataObject[] voteData = ops.findValuesBy(
                 ops.matchByValue(K_USER_ID, userID) + DBOperation.AND +
                         ops.matchByValue(K_COMMENT_ID, commentID), "*");
-        if(voteData.length == 0) return null;
+        if (voteData.length == 0) return null;
         return voteData[0];
     }
 

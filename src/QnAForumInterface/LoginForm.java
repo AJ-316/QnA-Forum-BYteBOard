@@ -3,7 +3,6 @@ package QnAForumInterface;
 import BYteBOardDatabase.DBDataObject;
 import BYteBOardDatabase.DBUser;
 import BYteBOardDatabase.EncryptionUtils;
-
 import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
 
@@ -26,6 +25,7 @@ public class LoginForm extends JPanel {
     private JButton signupBtn;
     private JLabel signupInfoLabel;
     private JLabel titleLabel;
+
     public LoginForm() {
         initComponents();
     }

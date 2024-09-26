@@ -1,16 +1,15 @@
 package BYteBOardInterface.BoardsPackage.QnAForumPackage.ProfileBoardPackage;
 
+import BYteBOardDatabase.DBDataObject;
+import BYteBOardDatabase.DBUser;
+import BYteBOardDatabase.EncryptionUtils;
 import BYteBOardInterface.StructurePackage.BoardPanel;
 import BYteBOardInterface.StructurePackage.Frame;
 import BYteBOardInterface.StructurePackage.MainFrame;
 import CustomControls.*;
-import BYteBOardDatabase.DBDataObject;
-import BYteBOardDatabase.DBUser;
-import BYteBOardDatabase.EncryptionUtils;
 import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
 
-import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -62,7 +61,7 @@ public class ProfileEditPanel extends BoardPanel {
         builder.gridHeight(3).weightY(1).fillVertical()
                 .addToNextCell(buttonsPanel).skipCells(2);
 
-        builder.insets(10, 5,10, 5).fillNone();
+        builder.insets(10, 5, 10, 5).fillNone();
         addPanel(ProfileSelectionPanel.class, profileSelectionPanel, builder);
 
         builder.gridHeight(1).weightX(1).skipCells(1)
@@ -191,7 +190,7 @@ public class ProfileEditPanel extends BoardPanel {
 
         // Save Profile Edit
         saveButton.addActionListener(e -> {
-            if(saveEditedProfile())
+            if (saveEditedProfile())
                 cancelButton.getActionListeners()[0].actionPerformed(null);
         });
     }
@@ -210,27 +209,27 @@ public class ProfileEditPanel extends BoardPanel {
         updatedValues.add(profileLabel.getName());
 
         if (changedUsername) {
-            if(isInvalidOldPassword(usernameField)) return false;
+            if (isInvalidOldPassword(usernameField)) return false;
 
-            if(isValidUsername(newUsername)) {
+            if (isValidUsername(newUsername)) {
                 updatedValues.add(DBUser.K_USER_NAME);
                 updatedValues.add(newUsername);
             } else return false;
         }
 
         if (changedEmail) {
-            if(isInvalidOldPassword(emailField)) return false;
+            if (isInvalidOldPassword(emailField)) return false;
 
-            if(isValidEmail(newEmail)) {
+            if (isValidEmail(newEmail)) {
                 updatedValues.add(DBUser.K_EMAIL);
                 updatedValues.add(newEmail);
             } else return false;
         }
 
         if (changedPassword) {
-            if(isInvalidOldPassword(null)) return false;
+            if (isInvalidOldPassword(null)) return false;
 
-            if(isValidNewPassword()) {
+            if (isValidNewPassword()) {
                 updatedValues.add(DBUser.K_PASSWORD);
                 updatedValues.add(EncryptionUtils.encryptPwd(newPasswordField.getPassword()));
             } else return false;
@@ -254,7 +253,7 @@ public class ProfileEditPanel extends BoardPanel {
     }
 
     private boolean isValidEmail(String newEmail) {
-        if(!EncryptionUtils.isValidEmail(newEmail)) {
+        if (!EncryptionUtils.isValidEmail(newEmail)) {
             clearFieldErrors();
             emailField.setErrorLabel("Invalid Email");
             return false;
@@ -300,7 +299,7 @@ public class ProfileEditPanel extends BoardPanel {
         if (!EncryptionUtils.checkPwd(oldPasswordField.getPassword(), userData.getValue(DBUser.K_PASSWORD))) {
             clearFieldErrors();
             oldPasswordField.setErrorLabel("Incorrect Password");
-            if(textField == null) {
+            if (textField == null) {
                 newPasswordField.setErrorLabel("Verify Old Password");
             } else textField.setErrorLabel("Verify Old Password");
             return true;

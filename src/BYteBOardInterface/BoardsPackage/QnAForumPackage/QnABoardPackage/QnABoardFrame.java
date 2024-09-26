@@ -8,7 +8,6 @@ import BYteBOardInterface.StructurePackage.BoardPanel;
 import BYteBOardInterface.StructurePackage.MainFrame;
 import CustomControls.BoardButton;
 import CustomControls.BoardSplitPanel;
-import CustomControls.DEBUG;
 import CustomControls.GridBagBuilder;
 
 import java.awt.*;
@@ -41,7 +40,7 @@ public class QnABoardFrame extends BoardFrame {
             String questionID = context[0];
             String userID = context[1];
 
-            DBDataObject questionDataObject = DBQuestion.ops.getQuestion(questionID);
+            DBDataObject questionDataObject = DBQuestion.getQuestion(questionID);
             questionDataObject.putKeyValue(DBVote.V_VOTE_UP, DBVote.getVoteType(userID, DBVote.K_QUESTION_ID, questionID));
 
             DBDataObject questionUserData = DBUser.getUser(questionDataObject.getValue(DBQuestion.K_USER_ID));
@@ -74,8 +73,12 @@ public class QnABoardFrame extends BoardFrame {
         });
 
         addKeyListener(new KeyListener() {
-            public void keyTyped(KeyEvent e) {}
-            public void keyPressed(KeyEvent e) {}
+            public void keyTyped(KeyEvent e) {
+            }
+
+            public void keyPressed(KeyEvent e) {
+            }
+
             public void keyReleased(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_F1) {
                     refresh();
@@ -136,18 +139,18 @@ public class QnABoardFrame extends BoardFrame {
 
     private void addAnswerPanel(BoardAnswerPanel answerPanel) {
         for (Component component : getComponents()) {
-            if(component instanceof BoardAnswerPanel) {
-                if(answerPanel == null) {
+            if (component instanceof BoardAnswerPanel) {
+                if (answerPanel == null) {
                     removePanel(component); // remove if answerPanel@param is null
                     return;
-                } else if(answerPanel.equals(component)) // if same instance then don't remove or add
+                } else if (answerPanel.equals(component)) // if same instance then don't remove or add
                     return;
 
                 removePanel(component); // remove the other instance if available
             }
         }
 
-        if(answerPanel == null) return;
+        if (answerPanel == null) return;
 
         addPanel(BoardAnswerPanel.class, answerPanel, ((GridBagLayout) getLayout()).getConstraints(questionPanel));
         answerPanel.setVisible(false);
@@ -197,7 +200,7 @@ public class QnABoardFrame extends BoardFrame {
                 responseSplitPanel.setBottomComponent(questionPanel.getContentResponseCardPanel());
                 break;
             case ANSWER:
-                if(!BoardAnswerPanel.isNoneLoaded())
+                if (!BoardAnswerPanel.isNoneLoaded())
                     responseSplitPanel.setBottomComponent(BoardAnswerPanel.getCurrentAnswerPanel().getContentResponseCardPanel());
                 break;
             case EDIT_ANSWER:
@@ -217,7 +220,7 @@ public class QnABoardFrame extends BoardFrame {
     public void applyFrameSwitchContext(BoardFrameSwitchDelegate delegate) {
         answerCardEditContentPanel.getContentResponseCardPanel().storeScroll();
         questionPanel.getContentResponseCardPanel().storeScroll();
-        if(!BoardAnswerPanel.isNoneLoaded())
+        if (!BoardAnswerPanel.isNoneLoaded())
             BoardAnswerPanel.getCurrentAnswerPanel().getContentResponseCardPanel().storeScroll();
 
         DBDataObject userData = delegate.getContext(DBUser.TABLE);
@@ -240,7 +243,7 @@ public class QnABoardFrame extends BoardFrame {
 
         answerCardEditContentPanel.getContentResponseCardPanel().restoreScrolls();
         questionPanel.getContentResponseCardPanel().restoreScrolls();
-        if(!BoardAnswerPanel.isNoneLoaded())
+        if (!BoardAnswerPanel.isNoneLoaded())
             BoardAnswerPanel.getCurrentAnswerPanel().getContentResponseCardPanel().restoreScrolls();
     }
 }

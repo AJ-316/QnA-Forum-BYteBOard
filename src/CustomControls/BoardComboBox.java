@@ -13,7 +13,6 @@ import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.plaf.basic.BasicComboPopup;
 import javax.swing.plaf.basic.ComboPopup;
 import java.awt.*;
-import java.awt.event.*;
 
 public class BoardComboBox extends JComboBox<String> {
 
@@ -57,7 +56,7 @@ public class BoardComboBox extends JComboBox<String> {
         setRenderer(new RoundedComboBoxRenderer(20, 20));
         setUI(new BasicComboBoxUI() {
             protected ComboBoxEditor createEditor() {
-                return new BasicComboBoxEditor.UIResource()  {
+                return new BasicComboBoxEditor.UIResource() {
                     protected JTextField createEditorComponent() {
                         return new BoardTextField(BoardComboBox.this.container.getMain(),
                                 BoardComboBox.this.container.getFrame(), BoardComboBox.this.container.getBackground());
@@ -106,7 +105,7 @@ public class BoardComboBox extends JComboBox<String> {
     public void setBackground(String bg) {
         super.setBackground(ResourceManager.getColor(bg));
 
-        if(container != null)
+        if (container != null)
             container.setBackground(getBackground());
     }
 
@@ -129,10 +128,11 @@ public class BoardComboBox extends JComboBox<String> {
     }
 
     protected JButton createDropDownButton() {
-        dropDownButton = new JButton(){
+        dropDownButton = new JButton() {
             public int getWidth() {
-                return ResourceManager.MICRO*2;
+                return ResourceManager.MICRO * 2;
             }
+
             public Dimension getSize(Dimension rv) {
                 return getPreferredSize();
             }
@@ -156,6 +156,14 @@ public class BoardComboBox extends JComboBox<String> {
 
     public void setIcon(String icon, int iconSize) {
         ResourceManager.setButtonIcons(dropDownButton, icon, iconSize);
+    }
+
+    public void addInsets(int insets) {
+        addInsets(insets, insets, insets, insets);
+    }
+
+    public void addInsets(int top, int left, int bottom, int right) {
+        setBorder(BorderFactory.createEmptyBorder(top, left, bottom, right));
     }
 
     private static class RoundedComboBoxRenderer extends JLabel implements ListCellRenderer<Object> {
@@ -194,13 +202,5 @@ public class BoardComboBox extends JComboBox<String> {
             g2.fillRoundRect(0, 0, getWidth(), getHeight(), arcWidth, arcHeight);
             super.paintComponent(g2);
         }
-    }
-
-    public void addInsets(int insets) {
-        addInsets(insets, insets, insets, insets);
-    }
-
-    public void addInsets(int top, int left, int bottom, int right) {
-        setBorder(BorderFactory.createEmptyBorder(top, left, bottom, right));
     }
 }

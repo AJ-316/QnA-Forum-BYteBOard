@@ -34,7 +34,7 @@ public class DBUser extends DBOperation {
         if (!isValueAvailable(key, emailOrUsername))
             return null;
 
-        if(isLogged) {
+        if (isLogged) {
             return ops.findValuesBy(ops.matchByValue(key, emailOrUsername),
                     K_USER_ID, K_USER_NAME, K_EMAIL, K_USER_PROFILE, K_USER_BYTESCORE)[0];
         }
@@ -66,14 +66,14 @@ public class DBUser extends DBOperation {
     public static void updateUser(String oldUserName, String userName, String userPassword, String userEmail, String userProfileIndex) {
         Map<String, String> keyValueMap = new HashMap<>();
 
-        if(userPassword != null)
+        if (userPassword != null)
             keyValueMap.put(K_PASSWORD, userPassword);
 
         keyValueMap.put(K_USER_NAME, userName);
         keyValueMap.put(K_EMAIL, userEmail);
         keyValueMap.put(K_USER_PROFILE, userProfileIndex);
 
-        String[] keyValues = new String[keyValueMap.size()*2];
+        String[] keyValues = new String[keyValueMap.size() * 2];
 
         int index = 0;
 

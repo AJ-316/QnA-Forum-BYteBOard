@@ -18,23 +18,23 @@ public class ProfileIconPane extends BoardLabel {
 
         addMouseListener(new MouseAdapter() {
             public void mouseEntered(MouseEvent e) {
-                if(isSelected()) return;
+                if (isSelected()) return;
                 setProfileIcon(getName(), ByteBoardTheme.ACCENT, ResourceManager.REGULAR);
             }
 
             public void mouseExited(MouseEvent e) {
-                if(isSelected()) return;
+                if (isSelected()) return;
                 resetIcon();
             }
 
             // fixme
             public void mousePressed(MouseEvent e) {
-                if(isSelected()) return;
+                if (isSelected()) return;
                 setProfileIcon(getName(), ByteBoardTheme.BASE, ResourceManager.REGULAR);
             }
 
             public void mouseReleased(MouseEvent e) {
-                if(isSelected()) return;
+                if (isSelected()) return;
                 selectProfile();
                 setUserProfile.accept(SELECTED_PROFILE);
             }
@@ -42,7 +42,7 @@ public class ProfileIconPane extends BoardLabel {
     }
 
     public void selectProfile() {
-        if(SELECTED_PROFILE != null)
+        if (SELECTED_PROFILE != null)
             SELECTED_PROFILE.resetIcon();
         SELECTED_PROFILE = this;
 

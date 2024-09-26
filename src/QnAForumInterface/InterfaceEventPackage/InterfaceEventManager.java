@@ -17,7 +17,7 @@ public class InterfaceEventManager {
 
     public static void invokeEvent(String event, Object... eventConstraints) {
         List<InterfaceEventListener> listeners = interfaceEventListeners.get(event);
-        if(listeners == null) return;
+        if (listeners == null) return;
 
         for (InterfaceEventListener listener : listeners) {
             listener.onInvoked(eventConstraints);
@@ -34,9 +34,9 @@ public class InterfaceEventManager {
 
     public static void removeListener(String event, InterfaceEventListener listener) {
         List<InterfaceEventListener> listeners = interfaceEventListeners.get(event);
-        if(listeners == null) return;
+        if (listeners == null) return;
 
         listeners.remove(listener);
-        if(listeners.isEmpty()) interfaceEventListeners.remove(event);
+        if (listeners.isEmpty()) interfaceEventListeners.remove(event);
     }
 }

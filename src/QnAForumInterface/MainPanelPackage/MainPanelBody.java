@@ -1,7 +1,7 @@
 package QnAForumInterface.MainPanelPackage;
 
-import CustomControls.SimpleScrollPane;
 import CustomControls.CustomJPanel;
+import CustomControls.SimpleScrollPane;
 import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
 
@@ -133,15 +133,15 @@ public class MainPanelBody extends JPanel {
         return contentBody.getText();
     }
 
+    public void setContentBody(String body) {
+        contentBody.setText(body);
+    }
+
     public String getContentHead() {
         return contentHead.getText();
     }
 
     public void setContentHead(String head) {
         contentHead.setText(head);
-    }
-
-    public void setContentBody(String body) {
-        contentBody.setText(body);
     }
 }

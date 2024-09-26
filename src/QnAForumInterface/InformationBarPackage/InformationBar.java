@@ -32,6 +32,7 @@ public abstract class InformationBar extends JPanel {
     }
 
     protected abstract void init();
+
     protected abstract void addMouseListeners();
 
     protected JLabel getLabel(String text, int align) {

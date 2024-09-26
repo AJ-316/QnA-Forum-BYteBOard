@@ -6,7 +6,9 @@ import Resources.ResourceManager;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class BoardButton extends JButton implements CustomControl {
 
@@ -32,7 +34,7 @@ public class BoardButton extends JButton implements CustomControl {
     public BoardButton(String text, String icon, int defaultState, int pressedState, int rolloverState, int iconSize) {
         super(text);
         this.iconSize = iconSize;
-        if(icon != null)
+        if (icon != null)
             ResourceManager.setButtonIcons(this, icon, defaultState, pressedState, rolloverState, iconSize);
 
         setFontPrimary(ByteBoardTheme.FONT_T_SEMIBOLD, 20);
@@ -45,7 +47,7 @@ public class BoardButton extends JButton implements CustomControl {
         addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER)
+                if (e.getKeyCode() == KeyEvent.VK_ENTER)
                     fireActionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED,
                             getActionCommand(),
                             EventQueue.getMostRecentEventTime(),
@@ -59,6 +61,10 @@ public class BoardButton extends JButton implements CustomControl {
         return super.getIcon();
     }
 
+    public void setIcon(String icon) {
+        ResourceManager.setButtonIcons(this, icon, iconSize);
+    }
+
     public Icon getPressedIcon() {
         setFGColor(defaultFGColor);
         return super.getPressedIcon();
@@ -67,10 +73,6 @@ public class BoardButton extends JButton implements CustomControl {
     public Icon getRolloverIcon() {
         setFGColor(rolloverFGColor);
         return super.getRolloverIcon();
-    }
-
-    public void setIcon(String icon) {
-        ResourceManager.setButtonIcons(this, icon, iconSize);
     }
 
     public void setIcon(String icon, int size) {
@@ -83,7 +85,7 @@ public class BoardButton extends JButton implements CustomControl {
 
     public void setRounded(boolean isRounded) {
         this.isRounded = isRounded;
-        if(isRounded)
+        if (isRounded)
             setBackground(ResourceManager.getColor(ByteBoardTheme.MAIN_LIGHT));
     }
 
@@ -98,15 +100,15 @@ public class BoardButton extends JButton implements CustomControl {
 
         int actualCornerRadius = getActualRadius();
 
-        if(isRounded) {
+        if (isRounded) {
 //            g2d.setColor(hasFocus() ? ResourceManager.getColor(ByteBoardTheme.ACCENT_DARK) : getBackground());
             g2d.setColor(getBackground());
-            g2d.fillRoundRect(0, 0, getWidth()-1, getHeight()-1, actualCornerRadius, actualCornerRadius);
+            g2d.fillRoundRect(0, 0, getWidth() - 1, getHeight() - 1, actualCornerRadius, actualCornerRadius);
         }
 
-        if(hasFocus()) {
+        if (hasFocus()) {
             g2d.setColor(ResourceManager.getColor(ByteBoardTheme.ACCENT));
-            g2d.drawRoundRect(0, 0, getWidth()-1, getHeight()-1, actualCornerRadius, actualCornerRadius);
+            g2d.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, actualCornerRadius, actualCornerRadius);
         }
 
         super.paintComponent(g2d);

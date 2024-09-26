@@ -20,7 +20,6 @@ public class BoardTagsDisplayPanel extends BoardScrollPanel {
         super(main, frame);
         setLayout(new FlowLayout(FlowLayout.LEFT, 4, 10));
         setBackground(ByteBoardTheme.MAIN);
-        scrollPane.setVisible(false);
         addInsets(5);
     }
 
@@ -53,9 +52,7 @@ public class BoardTagsDisplayPanel extends BoardScrollPanel {
     }
 
     public void addTag(String tag, String userID) {
-        if(contains(tag)) return;
-
-        scrollPane.setVisible(true);
+        if (contains(tag)) return;
         BoardTagButton tagButton = new BoardTagButton(getFrame(), "search", ResourceManager.DEFAULT_DARK);
         tagButton.setTag(tag, userID);
         tagButton.addInsets(5);
@@ -72,7 +69,8 @@ public class BoardTagsDisplayPanel extends BoardScrollPanel {
     }
 
     public BoardTagButton addTag(String tag, String tagID, ActionListener listener, Container parent) {
-        if(contains(tag)) return null;
+        if (contains(tag)) return null;
+        scrollPane.setVisible(false);
 
         BoardTagButton tagButton = new BoardTagButton(getFrame(), "cancel", ResourceManager.DEFAULT_DARK);
         tagButton.setTag(tag, this);
@@ -87,10 +85,11 @@ public class BoardTagsDisplayPanel extends BoardScrollPanel {
                 super.componentAdded(e);
                 scrollPane.setVisible(true);
             }
+
             @Override
             public void componentRemoved(ContainerEvent e) {
                 super.componentRemoved(e);
-                if(getComponents().length == 0)
+                if (getComponents().length == 0)
                     scrollPane.setVisible(false);
                 parent.revalidate();
             }
@@ -107,10 +106,10 @@ public class BoardTagsDisplayPanel extends BoardScrollPanel {
 
     public boolean contains(String tag) {
         for (Component component : getComponents()) {
-            if(!(component instanceof BoardTagButton))
+            if (!(component instanceof BoardTagButton))
                 continue;
 
-            if(((BoardTagButton) component).getTag().equals(tag))
+            if (((BoardTagButton) component).getTag().equals(tag))
                 return true;
         }
 

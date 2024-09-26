@@ -61,16 +61,6 @@ public class AnswerBar extends InformationBar {
         container.add(responderAnswer, gridBagConstraints);
     }
 
-    public static void setSelected(AnswerBar answerBar) {
-        if (SELECTED_ANSWER_BAR != null) {
-            SELECTED_ANSWER_BAR.setColor(SELECTED_ANSWER_BAR.defaultBackground);
-        }
-        SELECTED_ANSWER_BAR = answerBar;
-
-        if (answerBar != null)
-            answerBar.setColor(ResourceManager.getColor(ByteBoardTheme.ACCENT_DARK));
-    }
-
     protected void addMouseListeners() {
         AnswerBar bar = this;
         addMouseListener(new MouseAdapter() {
@@ -95,6 +85,16 @@ public class AnswerBar extends InformationBar {
 
     private boolean isSelected() {
         return SELECTED_ANSWER_BAR != null && SELECTED_ANSWER_BAR.equals(this);
+    }
+
+    public static void setSelected(AnswerBar answerBar) {
+        if (SELECTED_ANSWER_BAR != null) {
+            SELECTED_ANSWER_BAR.setColor(SELECTED_ANSWER_BAR.defaultBackground);
+        }
+        SELECTED_ANSWER_BAR = answerBar;
+
+        if (answerBar != null)
+            answerBar.setColor(ResourceManager.getColor(ByteBoardTheme.ACCENT_DARK));
     }
 
     public void setContent(String responderName, String responderProfileIndex, String answerBody, String answerID) {

@@ -4,9 +4,9 @@
  */
 package QnAForumInterface;
 
+import BYteBOardDatabase.*;
 import CustomControls.CustomJPanel;
 import CustomControls.SimpleScrollPane;
-import BYteBOardDatabase.*;
 import QnAForumInterface.InformationBarPackage.AnswerBar;
 import QnAForumInterface.InterfaceEventPackage.InterfaceEventManager;
 import QnAForumInterface.MainPanelPackage.MainPanel;
@@ -40,12 +40,12 @@ public class QnABoard extends JPanel {
         CurrentInstance = this;
 
         InterfaceEventManager.addListener("Update." + MainPanel.CONTENT_QUESTION + "Vote", ec -> {
-            String bytescore = DBVote.ops.voteQuestion(questionID, viewerUserID, (String) ec[0]);
+            String bytescore = DBVote.voteQuestion(questionID, viewerUserID, (String) ec[0]);
             questionPanel.updateByteScore(bytescore);
         });
 
         InterfaceEventManager.addListener("Update." + MainPanel.CONTENT_ANSWER + "Vote", ec -> {
-            String bytescore = DBVote.ops.voteAnswer(answerID, viewerUserID, (String) ec[0]);
+            String bytescore = DBVote.voteAnswer(answerID, viewerUserID, (String) ec[0]);
             answerPanel.updateByteScore(bytescore);
         });
     }
@@ -58,7 +58,7 @@ public class QnABoard extends JPanel {
         DBDataObject loggedUserData = DBUser.accessUser(username, false, true);
 
         QnABoard board = new QnABoard();
-        if(username.equals(questioner))
+        if (username.equals(questioner))
             board.questionPanel.disableVotes();
 
         board.viewerUserName = username;
@@ -86,7 +86,7 @@ public class QnABoard extends JPanel {
         // get all the answers of matching questionID
         DBDataObject[] answersOfQuestion = DBAnswer.ops.joinValuesBy(
                 DBAnswer.ops.matchByValue(DBAnswer.K_QUESTION_ID, questionID),
-                new String[] {DBAnswer.ops.matchByKey(DBAnswer.K_USER_ID, DBUser.ops.appendKeys(DBUser.K_USER_ID))},
+                new String[]{DBAnswer.ops.matchByKey(DBAnswer.K_USER_ID, DBUser.ops.appendKeys(DBUser.K_USER_ID))},
                 DBAnswer.ops.appendKeys(DBAnswer.K_ANSWER, DBAnswer.K_ANSWER_ID),
                 DBUser.ops.appendKeys(DBUser.K_USER_NAME, DBUser.K_USER_PROFILE));
 
@@ -114,7 +114,7 @@ public class QnABoard extends JPanel {
     }
 
     public void setAnswerPanelContent(String responderName, String responderProfileIndex, String answerBody, String answerID) {
-        if(responderName.equals(viewerUserName)) {
+        if (responderName.equals(viewerUserName)) {
             answerPanel.disableVotes();
         }
 

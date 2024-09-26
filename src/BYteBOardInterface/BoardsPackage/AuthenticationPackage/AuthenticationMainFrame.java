@@ -7,7 +7,7 @@ public class AuthenticationMainFrame extends MainFrame {
     public static final int ID = generateMainFrameID();
 
     public AuthenticationMainFrame() {
-        super("BYteBOard Authentication", 720, 16/9f, ID);
+        super("BYteBOard Authentication", 720, 16 / 9f, ID);
     }
 
     protected void init() {

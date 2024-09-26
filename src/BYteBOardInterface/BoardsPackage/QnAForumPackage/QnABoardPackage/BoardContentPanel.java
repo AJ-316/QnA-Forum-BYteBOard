@@ -4,30 +4,32 @@ import BYteBOardDatabase.*;
 import BYteBOardInterface.StructurePackage.BoardPanel;
 import BYteBOardInterface.StructurePackage.Frame;
 import BYteBOardInterface.StructurePackage.MainFrame;
-import CustomControls.*;
+import CustomControls.BoardLabel;
+import CustomControls.BoardTextArea;
 import CustomControls.CustomRendererPackage.RoundedBorder;
+import CustomControls.GridBagBuilder;
+import CustomControls.SimpleScrollPane;
 import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Arrays;
 import java.util.Map;
 
 public class BoardContentPanel extends BoardPanel {
 
     private final UpdateVoteDatabase voteUpdate;
+    protected BoardPanel contentBodyPanel;
+    protected BoardLabel contentBytes;
+    protected BoardTextArea contentBody;
     private String userID;
     private String contentID;
     private VoteButton upVoteButton;
     private VoteButton downVoteButton;
     private BoardPanel voteButtonsPanel;
-    protected BoardPanel contentBodyPanel;
     private BoardTagsDisplayPanel tagsDisplayPanel;
     private BoardLabel contentUsername;
-    protected BoardLabel contentBytes;
     private BoardTextArea contentHead;
-    protected BoardTextArea contentBody;
     private SimpleScrollPane bodyScrollPane;
     private BoardResponseCardPanel contentResponseCardPanel;
 
@@ -186,7 +188,7 @@ public class BoardContentPanel extends BoardPanel {
             String contentID = commentData.getValue(contentIDKey);
             BoardResponseCard card = cards.get(contentID);
 
-            if(card == null) {
+            if (card == null) {
                 addNewResponseCard(commentData);
                 continue;
             }
@@ -230,11 +232,6 @@ public class BoardContentPanel extends BoardPanel {
         this.contentHead.setName(contentBody);
     }
 
-    public void setContentBody(String contentBody) {
-        this.contentBody.setText(contentBody);
-        bodyScrollPane.resetScroll();
-    }
-
     public void setContentUsername(String title, String contentUsername, String contentUserprofile) {
         this.contentUsername.setText(title + contentUsername);
         this.contentUsername.setProfileIcon(contentUserprofile, ResourceManager.MINI);
@@ -270,6 +267,11 @@ public class BoardContentPanel extends BoardPanel {
 
     public String getContentBody() {
         return this.contentBody.getText();
+    }
+
+    public void setContentBody(String contentBody) {
+        this.contentBody.setText(contentBody);
+        bodyScrollPane.resetScroll();
     }
 
     public void setSelfViewer(boolean isSelfViewer) {

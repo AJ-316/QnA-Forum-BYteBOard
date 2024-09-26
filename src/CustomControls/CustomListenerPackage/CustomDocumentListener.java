@@ -31,11 +31,15 @@ public abstract class CustomDocumentListener implements DocumentListener {
         }
     }
 
-    public void removeUpdate(DocumentEvent e) { updateValidatedInsertListener(); }
-    public void changedUpdate(DocumentEvent e) {}
+    public void removeUpdate(DocumentEvent e) {
+        updateValidatedInsertListener();
+    }
+
+    public void changedUpdate(DocumentEvent e) {
+    }
 
     private void updateValidatedInsertListener() {
-        if(validatedInsertListener == null) return;
+        if (validatedInsertListener == null) return;
 
         SwingUtilities.invokeLater(() -> validatedInsertListener.invoke(textComponent.getText()));
     }

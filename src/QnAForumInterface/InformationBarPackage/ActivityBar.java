@@ -93,7 +93,7 @@ public class ActivityBar extends InformationBar {
         this.userName.setName(username);
         this.questionHead.setText(questionHead);
         this.questionID = questionID;
-        
+
         ResourceManager.setProfileIndexIcon(userProfileIndex, userProfile, ResourceManager.SMALL);
     }
 

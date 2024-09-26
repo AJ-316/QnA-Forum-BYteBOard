@@ -4,13 +4,12 @@
  */
 package QnAForumInterface;
 
-import CustomControls.CustomJPanel;
-import CustomControls.SimpleScrollPane;
 import BYteBOardDatabase.DBAnswer;
 import BYteBOardDatabase.DBQuestion;
 import BYteBOardDatabase.DBTag;
 import BYteBOardDatabase.DBUser;
-
+import CustomControls.CustomJPanel;
+import CustomControls.SimpleScrollPane;
 import QnAForumInterface.ProfileBoardPackage.ProfileBoard;
 import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
@@ -52,6 +51,7 @@ public class AskBoard extends JPanel {
     private JLabel userName;
     private JLabel userProfile;
     private String questionID;
+
     /**
      * Creates new form AskBoard
      */
@@ -116,13 +116,13 @@ public class AskBoard extends JPanel {
 
         tag = tag.replaceAll(" ", "");
         String[] tags = tagText.getText().split(" \\| ");
-        if(tag.length() > 10) {
+        if (tag.length() > 10) {
             tagsErrorLabel.setText("Tag too long!");
             tagsErrorLabel.setVisible(true);
             return;
         }
 
-        if(tags.length >= 5) {
+        if (tags.length >= 5) {
             tagsErrorLabel.setText("Maximum 5 Tags allowed!");
             tagsErrorLabel.setVisible(true);
             return;
@@ -597,9 +597,9 @@ public class AskBoard extends JPanel {
 
             if (headText.isEmpty() || bodyText.isEmpty()) return;
 
-            String questionID = DBQuestion.ops.addQuestion(headText, bodyText, userID);
+            String questionID = DBQuestion.addQuestion(headText, bodyText, userID);
             for (String tag : tags)
-                DBTag.ops.addTag(tag, questionID);
+                DBTag.addTag(tag, questionID);
 
         } else {
             String bodyText = body.getText().trim();

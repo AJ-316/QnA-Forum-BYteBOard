@@ -1,15 +1,9 @@
 package BYteBOardDatabase;
 
-import CustomControls.DEBUG;
-
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 public class DBVote extends DBOperation {
-
-    private static Map<String, Integer> SCORE_CHANGE_MAP2;
-    private static final Map<String, int[]> SCORE_CHANGE_MAP;
 
     public static final DBVote ops = new DBVote();
     public static final String TABLE = "qna_votes";
@@ -21,15 +15,17 @@ public class DBVote extends DBOperation {
     public static final String V_VOTE_UP = "up";
     public static final String V_VOTE_DOWN = "down";
     public static final String V_VOTE_NONE = "none";
+    private static final Map<String, int[]> SCORE_CHANGE_MAP;
+    private static Map<String, Integer> SCORE_CHANGE_MAP2;
 
     static {
         SCORE_CHANGE_MAP = new HashMap<>();
-        SCORE_CHANGE_MAP.put(V_VOTE_UP + "_" + V_VOTE_DOWN,    new int[]{-1,  1});
-        SCORE_CHANGE_MAP.put(V_VOTE_UP + "_" + V_VOTE_NONE,    new int[]{-1,  0});
-        SCORE_CHANGE_MAP.put(V_VOTE_DOWN + "_" + V_VOTE_UP,    new int[]{ 1, -1});
-        SCORE_CHANGE_MAP.put(V_VOTE_DOWN + "_" + V_VOTE_NONE,  new int[]{ 0, -1});
-        SCORE_CHANGE_MAP.put(V_VOTE_NONE + "_" + V_VOTE_DOWN,  new int[]{ 0,  1});
-        SCORE_CHANGE_MAP.put(V_VOTE_NONE + "_" + V_VOTE_UP,    new int[]{ 1,  0});
+        SCORE_CHANGE_MAP.put(V_VOTE_UP + "_" + V_VOTE_DOWN, new int[]{-1, 1});
+        SCORE_CHANGE_MAP.put(V_VOTE_UP + "_" + V_VOTE_NONE, new int[]{-1, 0});
+        SCORE_CHANGE_MAP.put(V_VOTE_DOWN + "_" + V_VOTE_UP, new int[]{1, -1});
+        SCORE_CHANGE_MAP.put(V_VOTE_DOWN + "_" + V_VOTE_NONE, new int[]{0, -1});
+        SCORE_CHANGE_MAP.put(V_VOTE_NONE + "_" + V_VOTE_DOWN, new int[]{0, 1});
+        SCORE_CHANGE_MAP.put(V_VOTE_NONE + "_" + V_VOTE_UP, new int[]{1, 0});
     }
 
     public DBVote() {
@@ -39,7 +35,7 @@ public class DBVote extends DBOperation {
     public static String voteAnswer(String answerID, String voterID, String voteType) {
         DBDataObject voteData = ops.fetchAnswerVoteData(voterID, answerID);
 
-        if(voteData == null || voteData.getValue(K_ANSWER_ID) == null) {
+        if (voteData == null || voteData.getValue(K_ANSWER_ID) == null) {
 
             // if user never voted or voted but not this answer then add it to votes as an answer vote
             ops.insertValue(new String[]{K_USER_ID, K_ANSWER_ID, K_VOTE_TYPE},
@@ -69,7 +65,7 @@ public class DBVote extends DBOperation {
     public static String voteQuestion(String questionID, String voterID, String voteType) {
         DBDataObject voteData = fetchQuestionVoteData(voterID, questionID);
 
-        if(voteData == null || voteData.getValue(K_QUESTION_ID) == null) {
+        if (voteData == null || voteData.getValue(K_QUESTION_ID) == null) {
 
             // if user never voted or voted but not this question then add it to votes as a question vote
             ops.insertValue(new String[]{K_USER_ID, K_QUESTION_ID, K_VOTE_TYPE},
@@ -88,7 +84,7 @@ public class DBVote extends DBOperation {
             // if user has voted this question then update it
             ops.updateValueBy(
                     ops.matchByValue(K_USER_ID, voterID) + DBOperation.AND +
-                    ops.matchByValue(K_QUESTION_ID, questionID), K_VOTE_TYPE, voteType);
+                            ops.matchByValue(K_QUESTION_ID, questionID), K_VOTE_TYPE, voteType);
         }
 
         DBDataObject questionData = DBQuestion.ops.findValuesBy(
@@ -121,28 +117,20 @@ public class DBVote extends DBOperation {
 
     private static int getByteScore(String oldVoteType, String newVoteType) {
         String key = oldVoteType + "_" + newVoteType;
-        int[] score = SCORE_CHANGE_MAP.getOrDefault(key, new int[] {0, 0});
+        int[] score = SCORE_CHANGE_MAP.getOrDefault(key, new int[]{0, 0});
         return score[0] + score[1] * -1;
     }
 
     private static int[] getVotes(String oldVoteType, String newVoteType) {
         String key = oldVoteType + "_" + newVoteType;
-        return SCORE_CHANGE_MAP.getOrDefault(key, new int[] {0, 0});
+        return SCORE_CHANGE_MAP.getOrDefault(key, new int[]{0, 0});
     }
 
     private static DBDataObject fetchQuestionVoteData(String userID, String questionID) {
         DBDataObject[] voteData = ops.findValuesBy(
                 ops.matchByValue(K_USER_ID, userID) + DBOperation.AND +
                         ops.matchByValue(K_QUESTION_ID, questionID), "*");
-        if(voteData.length == 0) return null;
-        return voteData[0];
-    }
-
-    private DBDataObject fetchAnswerVoteData(String userID, String answerID) {
-        DBDataObject[] voteData = ops.findValuesBy(
-                ops.matchByValue(K_USER_ID, userID) + DBOperation.AND +
-                        ops.matchByValue(K_ANSWER_ID, answerID), "*");
-        if(voteData.length == 0) return null;
+        if (voteData.length == 0) return null;
         return voteData[0];
     }
 
@@ -152,7 +140,7 @@ public class DBVote extends DBOperation {
                 ops.matchByValue(K_USER_ID, userID) + DBOperation.AND +
                         ops.matchByValue(contentKey, contentID), keys);
 
-        if(voteData == null || voteData.length == 0) return null;
+        if (voteData == null || voteData.length == 0) return null;
 
         return voteData[0];
     }
@@ -163,8 +151,16 @@ public class DBVote extends DBOperation {
                 ops.matchByValue(K_USER_ID, userID) + AND +
                         ops.matchByValue(contentKey, contentID), K_VOTE_TYPE);
 
-        if(voteData == null || voteData.length == 0) return V_VOTE_NONE;
+        if (voteData == null || voteData.length == 0) return V_VOTE_NONE;
 
         return voteData[0].getValue(K_VOTE_TYPE);
+    }
+
+    private DBDataObject fetchAnswerVoteData(String userID, String answerID) {
+        DBDataObject[] voteData = ops.findValuesBy(
+                ops.matchByValue(K_USER_ID, userID) + DBOperation.AND +
+                        ops.matchByValue(K_ANSWER_ID, answerID), "*");
+        if (voteData.length == 0) return null;
+        return voteData[0];
     }
 }

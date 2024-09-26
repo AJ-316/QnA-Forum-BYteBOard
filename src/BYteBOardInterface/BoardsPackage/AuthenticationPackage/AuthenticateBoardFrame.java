@@ -4,7 +4,8 @@ import BYteBOardInterface.StructurePackage.BoardFrame;
 import BYteBOardInterface.StructurePackage.BoardFrameSwitchDelegate;
 import BYteBOardInterface.StructurePackage.BoardPanel;
 import BYteBOardInterface.StructurePackage.MainFrame;
-import CustomControls.*;
+import CustomControls.BoardLabel;
+import CustomControls.GridBagBuilder;
 import Resources.ByteBoardTheme;
 
 import java.awt.*;

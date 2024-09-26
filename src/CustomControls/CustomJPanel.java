@@ -1,6 +1,5 @@
 package CustomControls;
 
-import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
 
 import javax.swing.*;
@@ -30,7 +29,7 @@ public class CustomJPanel extends JPanel {
     }
 
     protected void paintComponent(Graphics g) {
-        if(!isRounded) {
+        if (!isRounded) {
             super.paintComponent(g);
             return;
         }
@@ -60,16 +59,16 @@ public class CustomJPanel extends JPanel {
         if (shadowState == DROP_SHADOW) offset = 0;
         else if (shadowState == NONE) size = 0;
 
-        for (;i < size; i++) {
-            g2d.fillRoundRect(i + offset, i + offset, w - i*2 - offset, h - i*2 - offset, actualCornerRadius, actualCornerRadius);
+        for (; i < size; i++) {
+            g2d.fillRoundRect(i + offset, i + offset, w - i * 2 - offset, h - i * 2 - offset, actualCornerRadius, actualCornerRadius);
         }
 
         g2d.setColor(getBackground());
-        g2d.fillRoundRect(i, i, w - i*2, h - i*2, actualCornerRadius, actualCornerRadius);
+        g2d.fillRoundRect(i, i, w - i * 2, h - i * 2, actualCornerRadius, actualCornerRadius);
 
         if (borderColor != null) {
             g2d.setColor(borderColor);
-            g2d.drawRoundRect(i, i, w - i*2, h - i*2, actualCornerRadius, actualCornerRadius);
+            g2d.drawRoundRect(i, i, w - i * 2, h - i * 2, actualCornerRadius, actualCornerRadius);
         }
 
         super.paintComponent(g2d);
@@ -79,16 +78,16 @@ public class CustomJPanel extends JPanel {
         return cornerRadius;
     }
 
+    public void setCornerRadius(int cornerRadius) {
+        this.cornerRadius = cornerRadius;
+        repaint();
+    }
+
     public int getActualCornerRadius() {
         if (limitRadius)
             return Math.min(cornerRadius, Math.min(getWidth(), getHeight()) / 2);
 
         return cornerRadius;
-    }
-
-    public void setCornerRadius(int cornerRadius) {
-        this.cornerRadius = cornerRadius;
-        repaint();
     }
 
     public void setBorderColor(Color borderColor) {

@@ -4,12 +4,11 @@ import CustomControls.DEBUG;
 
 import java.sql.*;
 import java.util.*;
-import java.util.stream.Stream;
 
 public class DatabaseManager {
 
-    public static boolean PRINT_QUERY = false;
     public static final String PARAMETER_VALUE = "<?P_V?>";
+    public static boolean PRINT_QUERY = false;
     private static Connection connection;
 
     public static void init() {
@@ -70,13 +69,13 @@ public class DatabaseManager {
 
     private static String buildTableKeys(String[] tableKeysList) {
         StringBuilder tableKeys = new StringBuilder(" ");
-        for(String tableKey : tableKeysList) {
+        for (String tableKey : tableKeysList) {
             String[] tableKeySplit = tableKey.split(DBOperation.TABLE_KEY_DELIMITER);
 
             tableKeys.append(buildTableKeys(tableKeySplit[0], tableKeySplit[1].split(DBOperation.KEYS_DELIMITER)));
             tableKeys.append(DBOperation.KEYS_DELIMITER);
         }
-        tableKeys.deleteCharAt(tableKeys.length()-1).append(" ");
+        tableKeys.deleteCharAt(tableKeys.length() - 1).append(" ");
         return tableKeys.toString();
     }
 
@@ -85,7 +84,7 @@ public class DatabaseManager {
         for (String ftsKey : ftsKeys) {
             query.append(table).append(".").append(ftsKey).append(DBOperation.KEYS_DELIMITER);
         }
-        query.deleteCharAt(query.length()-1).append(") AGAINST (?) ");
+        query.deleteCharAt(query.length() - 1).append(") AGAINST (?) ");
     }
 
     private static String buildTableKeys(String table, String[] keys) {
@@ -93,12 +92,12 @@ public class DatabaseManager {
         for (String key : keys) {
             tableKeys.append(table).append(".").append(key).append(DBOperation.KEYS_DELIMITER);
         }
-        tableKeys.deleteCharAt(tableKeys.length()-1).append(" ");
+        tableKeys.deleteCharAt(tableKeys.length() - 1).append(" ");
         return tableKeys.toString();
     }
 
     private static void appendWhereClause(StringBuilder query, String whereCondition, String replaceTable, List<String> parameterValues) {
-        if(whereCondition == null) return;
+        if (whereCondition == null) return;
         query.append(" WHERE ");
 
         while (whereCondition.contains(PARAMETER_VALUE)) {
@@ -106,7 +105,7 @@ public class DatabaseManager {
             whereCondition = removeParameterValue(whereCondition);
         }
 
-        if(replaceTable != null) {
+        if (replaceTable != null) {
             whereCondition = whereCondition.substring(whereCondition.indexOf("."));
             query.append(replaceTable);
         }
@@ -122,7 +121,7 @@ public class DatabaseManager {
 
             // Set parameters
             for (int i = 0; i < parameterValues.size(); i++) {
-                query.replace(query.indexOf("?"), query.indexOf("?")+1, parameterValues.get(i));
+                query.replace(query.indexOf("?"), query.indexOf("?") + 1, parameterValues.get(i));
                 preparedStatement.setString(i + 1, parameterValues.get(i));
             }
 
@@ -153,7 +152,7 @@ public class DatabaseManager {
     }
 
     public static DBDataObject[] ftsLikeSearch(String table, String[] keys, String[] ftsKeys, String searchText, String likeCondition) {
-        if(table == null || keys == null || keys.length == 0 || ftsKeys == null || ftsKeys.length == 0) return null;
+        if (table == null || keys == null || keys.length == 0 || ftsKeys == null || ftsKeys.length == 0) return null;
 
         StringBuilder query = new StringBuilder("WITH fts_result AS ( ");
 
@@ -184,12 +183,12 @@ public class DatabaseManager {
     }
 
     private static void appendCase(StringBuilder query, String condition, String onConditionTrue, List<String> parameterValues) {
-        if(condition == null) {
+        if (condition == null) {
             query.append(" ELSE ").append(onConditionTrue).append(" ");
             return;
         }
 
-        while(condition.contains(PARAMETER_VALUE)) {
+        while (condition.contains(PARAMETER_VALUE)) {
             parameterValues.add(getParameterValue(condition));
             condition = removeParameterValue(condition);
         }
@@ -197,7 +196,8 @@ public class DatabaseManager {
     }
 
     public static DBDataObject[] likeRelevanceSearch(String table, String[] keys, String orderByKey, String... likeConditions) {
-        if(table == null || keys == null || keys.length == 0 || likeConditions == null || likeConditions.length == 0) return null;
+        if (table == null || keys == null || keys.length == 0 || likeConditions == null || likeConditions.length == 0)
+            return null;
 
         StringBuilder query = new StringBuilder();
 
@@ -209,19 +209,19 @@ public class DatabaseManager {
             appendCase(query, likeConditions[i], String.valueOf(i), parameterValues);
         }
 
-        boolean excludeRemaining = likeConditions[likeConditions.length-1] == null;
-        if(!excludeRemaining)
+        boolean excludeRemaining = likeConditions[likeConditions.length - 1] == null;
+        if (!excludeRemaining)
             appendCase(query, null, String.valueOf(likeConditions.length), parameterValues);
 
         query.append(" END AS relevance_score FROM ").append(table);
 
         if (excludeRemaining) {
-            query.append(" HAVING relevance_score NOT IN (").append(likeConditions.length-1).append(")");
+            query.append(" HAVING relevance_score NOT IN (").append(likeConditions.length - 1).append(")");
         }
 
         query.append(" ORDER BY relevance_score ");
 
-        if(orderByKey != null)
+        if (orderByKey != null)
             query.append(", ").append(table).append(".").append(orderByKey);
 
         return executeQuery(query, parameterValues);
@@ -267,7 +267,7 @@ public class DatabaseManager {
         String retrievedValue = "0";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query.toString())) {
-            if(parameterValue != null)
+            if (parameterValue != null)
                 preparedStatement.setString(1, parameterValue);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
@@ -278,7 +278,7 @@ public class DatabaseManager {
             e.printStackTrace();
         }
 
-        if(PRINT_QUERY)
+        if (PRINT_QUERY)
             DEBUG.printlnBlue("GENERATE_QUERY: " + query + " => " + retrievedValue);
 
         return Integer.parseInt(retrievedValue);
@@ -289,14 +289,14 @@ public class DatabaseManager {
 
         Map<Integer, String> parameterValues = new HashMap<>();
         int paramIndex = 0;
-        for (;paramIndex < updateKeysByNewValues.length; paramIndex++) {
+        for (; paramIndex < updateKeysByNewValues.length; paramIndex++) {
             String[] keyValue = updateKeysByNewValues[paramIndex].split(DBOperation.KEY_VALUE_DELIMITER);
 
             parameterValues.put(paramIndex, getParameterValue(keyValue[1]));
             query.append(keyValue[0]).append(" = ").append("?").append(DBOperation.KEYS_DELIMITER).append(" ");
         }
 
-        query.deleteCharAt(query.length()-2);
+        query.deleteCharAt(query.length() - 2);
 
         if (condition != null) {
             query.append("WHERE ");
@@ -310,8 +310,8 @@ public class DatabaseManager {
         try (PreparedStatement preparedStatement = connection.prepareStatement(query.toString())) {
 
             for (int i : parameterValues.keySet()) {
-                query.replace(query.indexOf("?"), query.indexOf("?")+1, parameterValues.get(i));
-                preparedStatement.setString(i+1, parameterValues.get(i));
+                query.replace(query.indexOf("?"), query.indexOf("?") + 1, parameterValues.get(i));
+                preparedStatement.setString(i + 1, parameterValues.get(i));
             }
 
             preparedStatement.executeUpdate();
@@ -319,26 +319,26 @@ public class DatabaseManager {
             e.printStackTrace();
         }
 
-        if(PRINT_QUERY)
+        if (PRINT_QUERY)
             DEBUG.printlnBlue(("QUERY: " + query));
     }
 
     public static String add(String table, String[] keys, String[] values, String whereCondition) {
         StringBuilder query = new StringBuilder("INSERT INTO ").append(table).append(" (");
-        String[] parameterValues = new String[values.length + (whereCondition!=null? 1 : 0)];
+        String[] parameterValues = new String[values.length + (whereCondition != null ? 1 : 0)];
 
         for (String key : keys) {
             query.append(key).append(DBOperation.KEYS_DELIMITER);
         }
 
-        query.deleteCharAt(query.length()-1).append(") VALUES (");
+        query.deleteCharAt(query.length() - 1).append(") VALUES (");
 
         for (int i = 0; i < values.length; i++) {
             parameterValues[i] = values[i];
             query.append("?").append(DBOperation.KEYS_DELIMITER);
         }
 
-        query.deleteCharAt(query.length()-1).append(") ");
+        query.deleteCharAt(query.length() - 1).append(") ");
 
         if (whereCondition != null) {
             query.append("WHERE ").append(removeParameterValue(whereCondition));
@@ -349,8 +349,8 @@ public class DatabaseManager {
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query.toString(), PreparedStatement.RETURN_GENERATED_KEYS)) {
             for (int i = 0; i < parameterValues.length; i++) {
-                query.replace(query.indexOf("?"), query.indexOf("?")+1, parameterValues[i]);
-                preparedStatement.setString(i+1, parameterValues[i]);
+                query.replace(query.indexOf("?"), query.indexOf("?") + 1, parameterValues[i]);
+                preparedStatement.setString(i + 1, parameterValues[i]);
             }
 
             preparedStatement.executeUpdate();
@@ -365,14 +365,14 @@ public class DatabaseManager {
             e.printStackTrace();
         }
 
-        if(PRINT_QUERY)
+        if (PRINT_QUERY)
             DEBUG.printlnBlue(("QUERY: " + query));
         return generatedKey;
     }
 
     public static DBDataObject[] getTop(String[] selectKeysFromTables, String[] onCondition, String whereCondition, String aggregateKeyFunc, String additionalOrderBy, String limit) {
-        if(selectKeysFromTables == null || selectKeysFromTables.length == 0 ||
-                (onCondition != null && onCondition.length+1 != selectKeysFromTables.length)) return null;
+        if (selectKeysFromTables == null || selectKeysFromTables.length == 0 ||
+                (onCondition != null && onCondition.length + 1 != selectKeysFromTables.length)) return null;
 
         StringBuilder query = new StringBuilder("SELECT ");
 
@@ -385,7 +385,7 @@ public class DatabaseManager {
         for (String selectKeysFromTable : selectKeysFromTables) {
             String[] tableKey = selectKeysFromTable.split(DBOperation.TABLE_KEY_DELIMITER);
 
-            if(tableKey[1].trim().isEmpty())
+            if (tableKey[1].trim().isEmpty())
                 continue;
 
             String[] keys = tableKey[1].split(DBOperation.KEYS_DELIMITER);
@@ -411,9 +411,9 @@ public class DatabaseManager {
 
             if (onCondition != null && onCondition[i - 1] != null) {
 
-                String condition = onCondition[i-1];
+                String condition = onCondition[i - 1];
 
-                if(condition.contains(PARAMETER_VALUE)) {
+                if (condition.contains(PARAMETER_VALUE)) {
                     parameterValues.put(i, getParameterValue(condition));
                     lastParamIndex = i;
                     condition = removeParameterValue(condition);
@@ -439,7 +439,7 @@ public class DatabaseManager {
         for (String selectKeysFromTable : selectKeysFromTables) {
             String[] tableKey = selectKeysFromTable.split(DBOperation.TABLE_KEY_DELIMITER);
 
-            if(tableKey[1].trim().isEmpty())
+            if (tableKey[1].trim().isEmpty())
                 continue;
 
             String[] keys = tableKey[1].split(DBOperation.KEYS_DELIMITER);
@@ -448,14 +448,14 @@ public class DatabaseManager {
                 query.append(tableKey[0]).append(".").append(key).append(DBOperation.KEYS_DELIMITER);
             }
         }
-        query.deleteCharAt(query.length()-1).append(" ");
+        query.deleteCharAt(query.length() - 1).append(" ");
 
         // append order by
         String[] additionalOrderByTableKeys = additionalOrderBy.split(DBOperation.TABLE_KEY_DELIMITER);
         additionalOrderBy = additionalOrderByTableKeys[0] + "." + additionalOrderByTableKeys[1].split(DBOperation.KEYS_DELIMITER)[0];
         query.append(" ORDER BY ").append(aggregateName).append(" DESC,").append(additionalOrderBy).append(" ASC");
 
-        if(limit != null)
+        if (limit != null)
             query.append(" LIMIT ").append(limit);
 
         DBDataObject[] dbObjects = null;
@@ -464,7 +464,7 @@ public class DatabaseManager {
                 ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
 
             for (int i : parameterValues.keySet()) {
-                query.replace(query.indexOf("?"), query.indexOf("?")+1, parameterValues.get(i));
+                query.replace(query.indexOf("?"), query.indexOf("?") + 1, parameterValues.get(i));
                 preparedStatement.setString(i, parameterValues.get(i));
             }
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -491,15 +491,15 @@ public class DatabaseManager {
             e.printStackTrace();
         }
 
-        if(PRINT_QUERY)
+        if (PRINT_QUERY)
             DEBUG.printlnBlue(("QUERY: " + query));
         //System.out.println(Arrays.toString(dbObjects));
         return dbObjects;
     }
 
     public static DBDataObject[] get(String[] selectKeysFromTables, String[] onCondition, String whereCondition, boolean isDistinct) {
-        if(selectKeysFromTables == null || selectKeysFromTables.length == 0 ||
-                (onCondition != null && onCondition.length+1 != selectKeysFromTables.length)) return null;
+        if (selectKeysFromTables == null || selectKeysFromTables.length == 0 ||
+                (onCondition != null && onCondition.length + 1 != selectKeysFromTables.length)) return null;
 
         StringBuilder query = new StringBuilder("SELECT ").append(isDistinct ? "DISTINCT " : "");
 
@@ -512,7 +512,7 @@ public class DatabaseManager {
         for (String selectKeysFromTable : selectKeysFromTables) {
             String[] tableKey = selectKeysFromTable.split(DBOperation.TABLE_KEY_DELIMITER);
 
-            if(tableKey[1].trim().isEmpty())
+            if (tableKey[1].trim().isEmpty())
                 continue;
 
             String[] keys = tableKey[1].split(DBOperation.KEYS_DELIMITER);
@@ -521,7 +521,7 @@ public class DatabaseManager {
                 query.append(tableKey[0]).append(".").append(key).append(DBOperation.KEYS_DELIMITER);
             }
         }
-        query.deleteCharAt(query.length()-1).append(" ");
+        query.deleteCharAt(query.length() - 1).append(" ");
 
         // append from
         query.append("FROM ").append(firstTable[0]).append(" ");
@@ -534,9 +534,9 @@ public class DatabaseManager {
 
             if (onCondition != null && onCondition[i - 1] != null) {
 
-                String condition = onCondition[i-1];
+                String condition = onCondition[i - 1];
 
-                if(condition.contains(PARAMETER_VALUE)) {
+                if (condition.contains(PARAMETER_VALUE)) {
                     parameterValues.put(i, getParameterValue(condition));
                     lastParamIndex = i;
                     condition = removeParameterValue(condition);
@@ -562,7 +562,7 @@ public class DatabaseManager {
                 ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
 
             for (int i : parameterValues.keySet()) {
-                query.replace(query.indexOf("?"), query.indexOf("?")+1, parameterValues.get(i));
+                query.replace(query.indexOf("?"), query.indexOf("?") + 1, parameterValues.get(i));
                 preparedStatement.setString(i, parameterValues.get(i));
             }
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -589,7 +589,7 @@ public class DatabaseManager {
             e.printStackTrace();
         }
 
-        if(PRINT_QUERY)
+        if (PRINT_QUERY)
             DEBUG.printlnBlue(("QUERY: " + query));
         // System.out.println(Arrays.toString(dbObjects));
         return dbObjects;

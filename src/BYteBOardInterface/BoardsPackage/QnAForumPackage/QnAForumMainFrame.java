@@ -5,15 +5,12 @@ import BYteBOardInterface.BoardsPackage.QnAForumPackage.QnABoardPackage.QnABoard
 import BYteBOardInterface.BoardsPackage.QnAForumPackage.SearchBoardPackage.SearchBoardFrame;
 import BYteBOardInterface.StructurePackage.MainFrame;
 
-import java.awt.*;
-import java.util.Arrays;
-
 public class QnAForumMainFrame extends MainFrame {
 
     public static final int ID = generateMainFrameID();
 
     public QnAForumMainFrame() {
-        super("BYteBOard QnA-Forum", 720, 16/9f, ID);
+        super("BYteBOard QnA-Forum", 720, 16 / 9f, ID);
     }
 
     protected void init() {

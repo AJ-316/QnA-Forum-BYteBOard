@@ -16,15 +16,13 @@ import java.util.Map;
 public class BoardResponseCardPanel extends BoardPanel {
 
     private final Map<String, BoardResponseCard> cardsMap = new HashMap<>();
-
+    protected BoardButton cancelAddResponseButton;
     private SimpleScrollPane scrollPane;
     private int lastScroll;
     private GridBagBuilder layoutBuilder;
     private BoardLabel statusLabel;
     private BoardLabel titleLabel;
     private BoardButton addResponseButton;
-    protected BoardButton cancelAddResponseButton;
-
     private CardSelectListener cardSelectListener;
 
     public BoardResponseCardPanel(MainFrame main, Frame frame) {
@@ -119,11 +117,11 @@ public class BoardResponseCardPanel extends BoardPanel {
     }
 
     public void selectCard(BoardResponseCard cardToSelect) {
-        if(cardSelectListener == null) return;
+        if (cardSelectListener == null) return;
 
         if (cardToSelect == null) {
             for (BoardResponseCard card : cardsMap.values()) {
-                if(card.isSelected()) {
+                if (card.isSelected()) {
                     card.setSelected(false);
                     cardSelectListener.invoke(null);
                     return;

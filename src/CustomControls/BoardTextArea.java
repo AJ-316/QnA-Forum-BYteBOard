@@ -27,9 +27,17 @@ public class BoardTextArea extends JTextArea implements CustomControl {
         setBackground(ResourceManager.getColor(ByteBoardTheme.MAIN_DARK));
 
         getDocument().addDocumentListener(new DocumentListener() {
-            public void insertUpdate(DocumentEvent e) {repaint();}
-            public void removeUpdate(DocumentEvent e) {repaint();}
-            public void changedUpdate(DocumentEvent e) {repaint();}
+            public void insertUpdate(DocumentEvent e) {
+                repaint();
+            }
+
+            public void removeUpdate(DocumentEvent e) {
+                repaint();
+            }
+
+            public void changedUpdate(DocumentEvent e) {
+                repaint();
+            }
         });
     }
 
@@ -40,11 +48,11 @@ public class BoardTextArea extends JTextArea implements CustomControl {
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        if(hintText == null) return;
+        if (hintText == null) return;
 
         if (getText().isEmpty()) {
             int h = getHeight();
-            ((Graphics2D)g).setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+            ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
             Insets ins = getInsets();
             FontMetrics fm = g.getFontMetrics();
             int c0 = getBackground().getRGB();

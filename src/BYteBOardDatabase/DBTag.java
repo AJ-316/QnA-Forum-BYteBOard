@@ -1,7 +1,5 @@
 package BYteBOardDatabase;
 
-import CustomControls.DEBUG;
-
 public class DBTag extends DBOperation {
 
     public static final DBTag ops = new DBTag();

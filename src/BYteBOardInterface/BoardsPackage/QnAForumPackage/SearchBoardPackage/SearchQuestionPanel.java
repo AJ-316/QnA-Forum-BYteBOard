@@ -3,25 +3,33 @@ package BYteBOardInterface.BoardsPackage.QnAForumPackage.SearchBoardPackage;
 import BYteBOardDatabase.DBDataObject;
 import BYteBOardDatabase.DBQueTag;
 import BYteBOardDatabase.DBQuestion;
-import BYteBOardDatabase.DBTag;
+import BYteBOardDatabase.DBUser;
+import BYteBOardInterface.BoardsPackage.QnAForumPackage.ProfileBoardPackage.BoardContentDisplayPanel;
+import BYteBOardInterface.BoardsPackage.QnAForumPackage.ProfileBoardPackage.ContentDisplayPane;
 import BYteBOardInterface.BoardsPackage.QnAForumPackage.QnABoardPackage.BoardTagsDisplayPanel;
 import BYteBOardInterface.StructurePackage.BoardPanel;
 import BYteBOardInterface.StructurePackage.Frame;
 import BYteBOardInterface.StructurePackage.MainFrame;
-import CustomControls.*;
+import CustomControls.BoardLabel;
+import CustomControls.BoardTagButton;
+import CustomControls.GridBagBuilder;
 import Resources.ByteBoardTheme;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class SearchQuestionPanel extends BoardPanel {
 
     private BoardLabel titleLabel;
     private BoardTagsDisplayPanel searchTagsPanel;
-    private GridBagBuilder questionsBuilder;
-    private BoardScrollPanel questionsPanel;
+    private BoardPanel searchTagsScrollPanel;
+    private BoardContentDisplayPanel questionsPanel;
 
     public SearchQuestionPanel(MainFrame main, Frame frame) {
         super(main, frame, ByteBoardTheme.MAIN);
+        setVisible(false);
     }
 
     public void init(MainFrame main, Frame frame) {
@@ -34,7 +42,7 @@ public class SearchQuestionPanel extends BoardPanel {
         titleLabel.setFGLight();
         titleLabel.addInsets(10);
 
-        BoardPanel searchTagsScrollPanel = new BoardPanel(main, frame);
+        searchTagsScrollPanel = new BoardPanel(main, frame);
         searchTagsScrollPanel.setLayout(new BorderLayout());
         searchTagsPanel = new BoardTagsDisplayPanel(main, frame);
         searchTagsPanel.addInsets(0);
@@ -42,17 +50,14 @@ public class SearchQuestionPanel extends BoardPanel {
         searchTagsScrollPanel.setMinimumSize(new Dimension(0, 60));
         searchTagsScrollPanel.add(searchTagsPanel.getComponent());
 
-        // todo tags panel hiding again!!!!!
-        //  also create contentClickablePane and its panel
         BoardPanel questionPanelHolder = new BoardPanel(main, frame, ByteBoardTheme.MAIN_DARK);
         questionPanelHolder.setLayout(new BorderLayout());
         questionPanelHolder.setCornerRadius(90);
         questionPanelHolder.addInsets(20);
-        questionsPanel = new BoardScrollPanel(main, frame);
-        questionsPanel.setBackground(ByteBoardTheme.MAIN_DARK);
-        questionsBuilder = new GridBagBuilder(questionsPanel, 1).weightX(1).insets(10).fillHorizontal();
+        questionsPanel = new BoardContentDisplayPanel(main, frame);
+        questionsPanel.setVisible(true);
 
-        questionPanelHolder.add(questionsPanel.getComponent());
+        questionPanelHolder.add(questionsPanel);
 
         GridBagBuilder builder = new GridBagBuilder(this, 1);
 
@@ -60,65 +65,88 @@ public class SearchQuestionPanel extends BoardPanel {
                 .addToNextCell(searchTagsScrollPanel)
                 .addToNextCell(titleLabel)
                 .weight(0, 1).insets(0)
-                .addToNextCell(questionPanelHolder);
+                .addToNextCell(questionsPanel);
 
         // requires one tag to be added first for the panel to be visible
         searchTagsPanel.remove(searchTagsPanel.addTag("tag", this));
     }
 
-    public void loadQuestionsBySimilarity(String[] similarQuestionIDs) {
-        if(similarQuestionIDs.length == 0) {
+    public void searchQuestions(List<DBDataObject> searchObjects, int type) {
+        if (searchObjects == null)
+            searchObjects = new ArrayList<>();
+
+        if (type == SearchBoardPanel.QUE_INPUT && !searchObjects.isEmpty()) {
+            setTagsVisible(false);
+            setTitle("Similar Question" + (searchObjects.size() > 1 ? "s - " : " - ") + searchObjects.size());
+        }
+
+        if (type == SearchBoardPanel.TAG_INPUT) {
+            searchObjects.clear();
+
+            for (Component component : searchTagsPanel.getComponents()) {
+                if (!(component instanceof BoardTagButton)) continue;
+                BoardTagButton tagButton = (BoardTagButton) component;
+
+                DBDataObject[] questionDataObjects = DBQueTag.getQuestionsOrdered(tagButton.getTagID(), "*");
+
+                Collections.addAll(searchObjects, questionDataObjects);
+            }
+
+            setTagsVisible(true);
+            setTitle("Related Question" + (searchObjects.size() > 1 ? "s - " : " - ") + searchObjects.size());
+        }
+
+        questionsPanel.clearQuestions();
+
+        if (searchObjects.isEmpty()) {
             setVisible(false);
             return;
         }
-        questionsPanel.removeAll();
 
-        setTitle("Similar Questions");
-
-        for (String questionID : similarQuestionIDs) {
-            DBDataObject questionDataObject = DBQuestion.getQuestion(questionID);
-            addQuestions(questionDataObject);
-        }
+        addQuestions(searchObjects);
         setVisible(true);
     }
 
-    public void loadQuestionsByTags() {
-        if(searchTagsPanel.getComponents().length == 0) {
-            setVisible(false);
-            return;
-        }
-        questionsPanel.removeAll();
-
-        setTitle("Related Questions");
-
-        System.out.println(DEBUG.PURPLE + "Searching related Questions of tags: ");
-        for (Component component : searchTagsPanel.getComponents()) {
-            if (!(component instanceof BoardTagButton)) continue;
-            BoardTagButton tagButton = (BoardTagButton) component;
-
-            DBDataObject[] questionDataObjects = DBQueTag.getQuestionsOrdered(tagButton.getTagID(), "*");
-
-            addQuestions(questionDataObjects);
-        }
-        System.out.println(DEBUG.NONE);
-        setVisible(true);
+    private void setTagsVisible(boolean flag) {
+        searchTagsScrollPanel.setVisible(flag);
+        if (!flag) searchTagsPanel.clearTags();
     }
 
-    private void addQuestions(DBDataObject... questionDataObjects) {
+    private void addQuestions(List<DBDataObject> questionDataObjects) {
         for (DBDataObject questionDataObject : questionDataObjects) {
             BoardLabel label = new BoardLabel(questionDataObject.getValue(DBQuestion.K_QUESTION_HEAD));
             label.setFGLight();
             label.setFontPrimary(ByteBoardTheme.FONT_T_BOLD, 30);
-            questionsBuilder.addToNextCell(label);
-            System.out.println("Loaded: " + questionDataObject);
+            ContentDisplayPane activityPane = questionsPanel.addActivity();
+            activityPane.setContentData(
+                    questionDataObject.getValue(DBQuestion.K_QUESTION_HEAD),
+                    questionDataObject.getValue(DBQuestion.K_QUESTION_ID),
+                    questionDataObject.getValue(DBQuestion.K_QUESTION_BYTESCORE));
+
+            DBDataObject userData = DBUser.getUser(questionDataObject.getValue(DBQuestion.K_USER_ID));
+            activityPane.setUserData(
+                    userData.getValue(DBUser.K_USER_PROFILE),
+                    userData.getValue(DBUser.K_USER_NAME),
+                    userData.getValue(DBUser.K_USER_ID));
         }
+        questionsPanel.resetScrolls();
+    }
+
+    public void setVisible(boolean aFlag) {
+        super.setVisible(aFlag);
+        questionsPanel.setVisible(aFlag);
     }
 
     private void setTitle(String text) {
         titleLabel.setText(text);
     }
 
-    public void addTag(String tag, String tagID) {
-        searchTagsPanel.addTag(tag, tagID, e -> EventQueue.invokeLater(this::loadQuestionsByTags), this);
+    public boolean addTag(String tag, String tagID) {
+        if (searchTagsPanel.contains(tag)) return false;
+
+        searchTagsScrollPanel.setVisible(true);
+        searchTagsPanel.addTag(tag, tagID, e -> EventQueue.invokeLater(() ->
+                searchQuestions(null, SearchBoardPanel.TAG_INPUT)), this);
+        return true;
     }
 }

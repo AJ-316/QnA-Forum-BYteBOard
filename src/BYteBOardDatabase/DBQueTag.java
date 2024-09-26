@@ -1,7 +1,5 @@
 package BYteBOardDatabase;
 
-import java.util.Arrays;
-
 public class DBQueTag extends DBOperation {
 
     public static final DBQueTag ops = new DBQueTag();
@@ -26,7 +24,7 @@ public class DBQueTag extends DBOperation {
 
     /**
      * @return all the questions that use the specified tagID
-     * */
+     */
     public static DBDataObject[] getQuestions(String tagID, String... selectQuestionKeys) {
         return ops.joinValuesBy(
                 ops.matchByValue(K_TAG_ID, tagID),
@@ -38,7 +36,7 @@ public class DBQueTag extends DBOperation {
     /**
      * @return all the questions that use the specified tagID; ordered by engagement that is
      * the questions on top will have more bytes <s>and more answers</s>
-     * */
+     */
     public static DBDataObject[] getQuestionsOrdered(String tagID, String... selectQuestionKeys) {
         return ops.joinValuesBy(
                 ops.matchByValue(K_TAG_ID, tagID) +

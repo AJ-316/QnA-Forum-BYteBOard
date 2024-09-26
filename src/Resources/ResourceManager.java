@@ -48,12 +48,12 @@ public class ResourceManager {
     }
 
     public static void setTheme(String name) {
-        if(CURRENT_THEME.equals(name)) return;
+        if (CURRENT_THEME.equals(name)) return;
 
         CURRENT_THEME = name;
         deleteIconCache();
         for (ByteBoardTheme theme : THEMES) {
-            if(theme.getName().equals(name)) {
+            if (theme.getName().equals(name)) {
                 theme.load();
                 return;
             }
@@ -62,7 +62,7 @@ public class ResourceManager {
 
     public static void loadTheme(String file) {
         ByteBoardTheme theme = ThemeLoader.getTheme(file);
-        if(theme == null) return;
+        if (theme == null) return;
         THEMES.add(theme);
     }
 
@@ -76,7 +76,7 @@ public class ResourceManager {
 
     public static String[] getThemes() {
         String[] themeNames = new String[THEMES.size()];
-        for(int i = 0; i < themeNames.length; i++)
+        for (int i = 0; i < themeNames.length; i++)
             themeNames[i] = THEMES.get(i).getName();
 
         return themeNames;
@@ -109,10 +109,10 @@ public class ResourceManager {
         String key = "QnAForum.icon." + label + "." + size;
 
         Icon icon = UIManager.getIcon(key);
-        if(icon != null)
+        if (icon != null)
             return icon;
 
-        if((icon = IconLoader.getImageIcon(label, size)) == null)
+        if ((icon = IconLoader.getImageIcon(label, size)) == null)
             return null;
 
         UIManager.put(key, icon);
@@ -125,10 +125,10 @@ public class ResourceManager {
                 (whiteRecolor == null ? "" : ("_" + whiteRecolor.getRGB())) + "." + size;
 
         Icon icon = UIManager.getIcon(key);
-        if(icon != null)
+        if (icon != null)
             return icon;
 
-        if((icon = IconLoader.getRecoloredIcon(label, blackRecolor, whiteRecolor, size)) == null)
+        if ((icon = IconLoader.getRecoloredIcon(label, blackRecolor, whiteRecolor, size)) == null)
             return null;
 
         UIManager.put(key, icon);
@@ -139,7 +139,7 @@ public class ResourceManager {
         String key = "QnAForum.icon." + label + "_" + state + "." + size;
 
         Icon icon = UIManager.getIcon(key);
-        if(icon != null)
+        if (icon != null)
             return icon;
 
         Color iconFg = Color.black;
@@ -148,26 +148,26 @@ public class ResourceManager {
             case ResourceManager.DEFAULT:
                 iconFg = ResourceManager.getColor(ByteBoardTheme.BASE);
                 iconBg = ResourceManager.getColor(ByteBoardTheme.MAIN);
-            break;
+                break;
             case ResourceManager.ROLLOVER:
                 iconFg = ResourceManager.getColor(ByteBoardTheme.BASE);
                 iconBg = ResourceManager.getColor(ByteBoardTheme.ACCENT);
-            break;
+                break;
             case ResourceManager.PRESSED:
                 iconFg = ResourceManager.getColor(ByteBoardTheme.ACCENT_DARK);
                 iconBg = ResourceManager.getColor(ByteBoardTheme.BASE);
-            break;
+                break;
             case ResourceManager.DEFAULT_LIGHT:
                 iconFg = ResourceManager.getColor(ByteBoardTheme.BASE);
                 iconBg = ResourceManager.getColor(ByteBoardTheme.MAIN_LIGHT);
-            break;
+                break;
             case ResourceManager.DEFAULT_DARK:
                 iconFg = ResourceManager.getColor(ByteBoardTheme.MAIN_DARK);
                 iconBg = ResourceManager.getColor(ByteBoardTheme.MAIN_LIGHT);
-            break;
+                break;
         }
 
-        if((icon = IconLoader.getRecoloredIcon(label, iconFg, iconBg, size)) == null)
+        if ((icon = IconLoader.getRecoloredIcon(label, iconFg, iconBg, size)) == null)
             return null;
 
         UIManager.put(key, icon);
@@ -183,10 +183,10 @@ public class ResourceManager {
         String key = "QnAForum.icon." + label + "_" + recolor.getRGB() + "." + size;
 
         Icon icon = UIManager.getIcon(key);
-        if(icon != null)
-           return icon;
+        if (icon != null)
+            return icon;
 
-        if((icon = IconLoader.getRecoloredIconTargeted(label, recolor, Color.white, size)) == null)
+        if ((icon = IconLoader.getRecoloredIconTargeted(label, recolor, Color.white, size)) == null)
             return null;
 
         UIManager.put(key, icon);

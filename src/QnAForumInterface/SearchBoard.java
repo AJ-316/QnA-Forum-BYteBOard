@@ -7,7 +7,6 @@ package QnAForumInterface;
 import BYteBOardDatabase.*;
 import CustomControls.CustomJPanel;
 import CustomControls.DEBUG;
-
 import QnAForumInterface.InformationBarPackage.ActivityBar;
 import QnAForumInterface.ProfileBoardPackage.ProfileBoard;
 import Resources.ByteBoardTheme;

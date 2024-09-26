@@ -60,7 +60,7 @@ public class BoardScrollPanel extends BoardPanel {
 
     public void setBackground(Color bg) {
         super.setBackground(bg);
-        if(scrollPane != null)
+        if (scrollPane != null)
             scrollPane.getViewport().setBackground(bg);
     }
 

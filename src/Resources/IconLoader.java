@@ -34,8 +34,8 @@ public class IconLoader {
 
         float grayscale = (red * 0.299f + green * 0.587f + blue * 0.114f) / 255.0f;
 
-        if(blackRecolor == null) blackRecolor = Color.black;
-        if(whiteRecolor == null) whiteRecolor = Color.white;
+        if (blackRecolor == null) blackRecolor = Color.black;
+        if (whiteRecolor == null) whiteRecolor = Color.white;
 
         int newRed = (int) (blackRecolor.getRed() * (1 - grayscale) + whiteRecolor.getRed() * grayscale);
         int newGreen = (int) (blackRecolor.getGreen() * (1 - grayscale) + whiteRecolor.getGreen() * grayscale);
@@ -82,7 +82,7 @@ public class IconLoader {
 
     public static Icon getImageIcon(String file, int size) {
         BufferedImage image = getImage(file);
-        if(image == null) return null;
+        if (image == null) return null;
 
         return new ImageIcon(getScaledImage(image, size));
     }

@@ -1,9 +1,9 @@
 package QnAForumInterface.ProfileBoardPackage;
 
-import CustomControls.CustomJPanel;
-import CustomControls.SimpleScrollPane;
 import BYteBOardDatabase.DBUser;
 import BYteBOardDatabase.EncryptionUtils;
+import CustomControls.CustomJPanel;
+import CustomControls.SimpleScrollPane;
 import QnAForumInterface.InterfaceEventPackage.InterfaceEventManager;
 import QnAForumInterface.WrapLayout;
 import Resources.ByteBoardTheme;
@@ -17,15 +17,13 @@ import java.awt.event.MouseEvent;
 
 public class UserProfileEditPanel extends JPanel {
 
-    private JButton backBtn;
-    private JButton saveEditBtn;
-
     private final EditControlsContainer editControlsContainer;
     private final UserProfileChooser profileChooser;
-
-    private JLabel editProfileIcon;
-    private JLabel editUserProfile;
-    private JLabel saveErrorLabel;
+    private JButton backBtn;
+    private JButton saveEditBtn;
+    private final JLabel editProfileIcon;
+    private final JLabel editUserProfile;
+    private final JLabel saveErrorLabel;
 
     public UserProfileEditPanel() {
         profileChooser = new UserProfileChooser();
@@ -212,7 +210,7 @@ public class UserProfileEditPanel extends JPanel {
         if (newPassword == null) {
             String currentProfileIndex = (String) userProfileData[0];
             String currentEmail = (String) userProfileData[2];
-            if(newEmail.equals(currentEmail) && newUsername.equals(currentUsername) && newProfileIndex.equals(currentProfileIndex)) {
+            if (newEmail.equals(currentEmail) && newUsername.equals(currentUsername) && newProfileIndex.equals(currentProfileIndex)) {
                 return;
             }
         }
@@ -247,6 +245,28 @@ public class UserProfileEditPanel extends JPanel {
         button.setContentAreaFilled(false);
         button.setFocusPainted(false);
         return button;
+    }
+
+    public JLabel getEditUserProfile() {
+        return editUserProfile;
+    }
+
+    public UserProfileChooser getProfileChooser() {
+        return profileChooser;
+    }
+
+    @Override
+    public void setVisible(boolean flagVisible) {
+        super.setVisible(flagVisible);
+        saveErrorLabel.setText("");
+
+        if (flagVisible) {
+            Object[] userData = InterfaceEventManager.invokeRequest("UserData.ProfileBoard");
+            editControlsContainer.setEditUsername((String) userData[1]);
+            editControlsContainer.setEditUserEmail((String) userData[2]);
+            saveEditBtn.requestFocus();
+        }
+        editControlsContainer.resetPasswordFields();
     }
 
     public static class UserProfileChooser extends CustomJPanel {
@@ -308,7 +328,7 @@ public class UserProfileEditPanel extends JPanel {
 
         public int getSelectedProfile() {
             for (int i = 0; i < profilesContainer.getComponents().length; i++) {
-                if(((ProfilePane) profilesContainer.getComponent(i)).isSelected()) return i;
+                if (((ProfilePane) profilesContainer.getComponent(i)).isSelected()) return i;
             }
             return 0;
         }
@@ -346,7 +366,7 @@ public class UserProfileEditPanel extends JPanel {
 
             addContent(
                     userRePasswordLabel = new JLabel("Re-Password:"),
-                    editUserRePassword = new JPasswordField(), 14,4);
+                    editUserRePassword = new JPasswordField(), 14, 4);
 
             editUserPassword.setAutoscrolls(false);
             editUserRePassword.setAutoscrolls(false);
@@ -379,14 +399,6 @@ public class UserProfileEditPanel extends JPanel {
             add(textField, constraintTextField);
         }
 
-        public void setEditUserEmail(String editUserEmail) {
-            this.editUserEmail.setText(editUserEmail);
-        }
-
-        public void setEditUsername(String editUsername) {
-            this.editUsername.setText(editUsername);
-        }
-
         public char[] getPassword() {
             return this.editUserPassword.getPassword();
         }
@@ -399,35 +411,21 @@ public class UserProfileEditPanel extends JPanel {
             return editUsername.getText();
         }
 
+        public void setEditUsername(String editUsername) {
+            this.editUsername.setText(editUsername);
+        }
+
         public String getEditUserEmail() {
             return editUserEmail.getText();
+        }
+
+        public void setEditUserEmail(String editUserEmail) {
+            this.editUserEmail.setText(editUserEmail);
         }
 
         public void resetPasswordFields() {
             editUserPassword.setText("");
             editUserRePassword.setText("");
         }
-    }
-
-    public JLabel getEditUserProfile() {
-        return editUserProfile;
-    }
-
-    public UserProfileChooser getProfileChooser() {
-        return profileChooser;
-    }
-
-    @Override
-    public void setVisible(boolean flagVisible) {
-        super.setVisible(flagVisible);
-        saveErrorLabel.setText("");
-
-        if (flagVisible) {
-            Object[] userData = InterfaceEventManager.invokeRequest("UserData.ProfileBoard");
-            editControlsContainer.setEditUsername((String) userData[1]);
-            editControlsContainer.setEditUserEmail((String) userData[2]);
-            saveEditBtn.requestFocus();
-        }
-        editControlsContainer.resetPasswordFields();
     }
 }

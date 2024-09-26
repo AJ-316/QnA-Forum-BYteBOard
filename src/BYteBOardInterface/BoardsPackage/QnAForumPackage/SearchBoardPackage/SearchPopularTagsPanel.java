@@ -5,7 +5,9 @@ import BYteBOardDatabase.DBTag;
 import BYteBOardInterface.StructurePackage.BoardPanel;
 import BYteBOardInterface.StructurePackage.Frame;
 import BYteBOardInterface.StructurePackage.MainFrame;
-import CustomControls.*;
+import CustomControls.BoardLabel;
+import CustomControls.BoardTagButton;
+import CustomControls.GridBagBuilder;
 import Resources.ResourceManager;
 
 import java.awt.*;
@@ -41,7 +43,7 @@ public class SearchPopularTagsPanel extends BoardPanel {
 
     protected void setPopularTags(DBDataObject[] tagDataObjects, String userID) {
         clearTags();
-        for(DBDataObject tag : tagDataObjects) {
+        for (DBDataObject tag : tagDataObjects) {
             BoardTagButton tagButton = new BoardTagButton(getFrame(), "add", ResourceManager.DEFAULT);
             tagButton.addInsets(10);
             tagButton.setFGLight();

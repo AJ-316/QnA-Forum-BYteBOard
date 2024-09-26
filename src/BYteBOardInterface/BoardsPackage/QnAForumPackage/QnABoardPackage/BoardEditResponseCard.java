@@ -65,7 +65,7 @@ public class BoardEditResponseCard extends BoardResponseCard {
     public void setSubmitAction(String userID, BoardResponseCardPanel cardPanel) {
         submitButton.addActionListener(e -> {
             String comment = contentText.getText().replace("\n", " ");
-            if(comment.isEmpty()) return;
+            if (comment.isEmpty()) return;
 
             DBComment.addComment(userID, comment, getContentKey(), getContentID());
             cardPanel.clearResponseCards();

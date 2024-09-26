@@ -11,12 +11,11 @@ import java.awt.event.MouseEvent;
 
 public class VoteButton extends BoardButton {
 
+    private final String icon;
+    private final String voteType;
     private Color defaultColor;
     private Color rolloverColor;
     private Color pressedColor;
-
-    private final String icon;
-    private final String voteType;
 
     public VoteButton(String icon, int iconSize, String voteType) {
         super(icon, iconSize);

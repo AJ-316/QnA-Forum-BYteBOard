@@ -5,7 +5,7 @@ import javax.swing.event.DocumentEvent;
 
 /**
  * Only supports max input limit, default min input limit is 0
- * */
+ */
 
 public class NumberDocumentListener extends CustomDocumentListener {
 
@@ -21,10 +21,10 @@ public class NumberDocumentListener extends CustomDocumentListener {
             SwingUtilities.invokeLater(() -> {
                 int lastCaretPosition = textComponent.getCaretPosition();
 
-                System.out.print("Removed: "+ text);
+                System.out.print("Removed: " + text);
                 String newText = text.substring(0, lastCaretPosition - 1) + text.substring(lastCaretPosition);
 
-                if(newText.isEmpty()) {
+                if (newText.isEmpty()) {
                     newText = "0";
                     lastCaretPosition++;
                 }
@@ -41,7 +41,7 @@ public class NumberDocumentListener extends CustomDocumentListener {
                 System.out.println("Starts with 0: " + text + ", New: " + text.replaceFirst("0", ""));
 
                 String newText = text.substring(1);
-                if(!validateTextInput(newText)) {
+                if (!validateTextInput(newText)) {
                     textComponent.setText(newText);
                 }
             }

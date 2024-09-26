@@ -31,7 +31,7 @@ public class ProfileButtonHolder extends CustomJPanel {
         ActionListener changeThemeBtnListener = e -> {
             String selectedTheme = (String) themeListBox.getSelectedItem();
             if (themeListBox.isVisible()) {
-                if(ResourceManager.getCurrentTheme().equals(selectedTheme)) {
+                if (ResourceManager.getCurrentTheme().equals(selectedTheme)) {
                     themeListBox.setVisible(false);
                     ((JButton) e.getSource()).setText("Change Theme");
                     return;
@@ -91,7 +91,7 @@ public class ProfileButtonHolder extends CustomJPanel {
 
             @Override
             protected JButton createArrowButton() {
-                JButton button = new JButton(){
+                JButton button = new JButton() {
                     @Override
                     public int getWidth() {
                         return ResourceManager.MICRO + 3;

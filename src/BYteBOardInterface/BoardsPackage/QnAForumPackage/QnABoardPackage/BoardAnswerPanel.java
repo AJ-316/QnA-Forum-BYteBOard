@@ -16,33 +16,6 @@ public class BoardAnswerPanel extends BoardContentPanel {
         super(main, frame, DBVote::voteAnswer);
     }
 
-    public void setData(String answerID, DBDataObject answerDataObject, String questionHead, String userID) {
-        // Load and set the answer panel data
-        setUserID(userID);
-        setContentID(answerDataObject.getValue(DBAnswer.K_ANSWER_ID));
-        setContentHead("Answering:\n", questionHead);
-        setContentBody(answerDataObject.getValue(DBAnswer.K_ANSWER));
-        setContentBytes(answerDataObject.getValue(DBAnswer.K_ANSWER_BYTESCORE));
-        setContentUserID(answerDataObject.getValue(DBAnswer.K_USER_ID));
-        setSelfViewer(answerDataObject.getValue(DBAnswer.K_USER_ID).equals(userID));
-
-        setVoteType(DBVote.getVoteType(userID, DBVote.K_ANSWER_ID, answerID));
-
-        DBDataObject userData = DBUser.getUser(answerDataObject.getValue(DBAnswer.K_USER_ID));
-        setContentUsername("Answered By - ", userData.getValue(DBUser.K_USER_NAME),
-                userData.getValue(DBUser.K_USER_PROFILE));
-
-        DBDataObject[] commentDataObjects = DBComment.getComments(DBComment.K_ANSWER_ID, answerID);
-        for (DBDataObject comment : commentDataObjects) {
-            DBDataObject commentUserdata = DBUser.getUser(comment.getValue(DBComment.K_USER_ID));
-            comment.putKeyValue(DBUser.K_USER_NAME, commentUserdata.getValue(DBUser.K_USER_NAME));
-            comment.putKeyValue(DBUser.K_USER_PROFILE, commentUserdata.getValue(DBUser.K_USER_PROFILE));
-            comment.putKeyValue(DBCFeedback.K_FEEDBACK, DBCFeedback.getFeedback(userID, comment.getValue(DBComment.K_COMMENT_ID)));
-        }
-
-        setContentResponseCards(commentDataObjects, DBComment.K_COMMENT_ID);
-    }
-
     protected static BoardAnswerPanel getPanel(MainFrame main, Frame frame, String answerID) {
         if (answerID == null) {
             if (currentAnswerID == null) return null;
@@ -81,6 +54,33 @@ public class BoardAnswerPanel extends BoardContentPanel {
         }
 
         ANSWER_PANELS.clear();
+    }
+
+    public void setData(String answerID, DBDataObject answerDataObject, String questionHead, String userID) {
+        // Load and set the answer panel data
+        setUserID(userID);
+        setContentID(answerDataObject.getValue(DBAnswer.K_ANSWER_ID));
+        setContentHead("Answering:\n", questionHead);
+        setContentBody(answerDataObject.getValue(DBAnswer.K_ANSWER));
+        setContentBytes(answerDataObject.getValue(DBAnswer.K_ANSWER_BYTESCORE));
+        setContentUserID(answerDataObject.getValue(DBAnswer.K_USER_ID));
+        setSelfViewer(answerDataObject.getValue(DBAnswer.K_USER_ID).equals(userID));
+
+        setVoteType(DBVote.getVoteType(userID, DBVote.K_ANSWER_ID, answerID));
+
+        DBDataObject userData = DBUser.getUser(answerDataObject.getValue(DBAnswer.K_USER_ID));
+        setContentUsername("Answered By - ", userData.getValue(DBUser.K_USER_NAME),
+                userData.getValue(DBUser.K_USER_PROFILE));
+
+        DBDataObject[] commentDataObjects = DBComment.getComments(DBComment.K_ANSWER_ID, answerID);
+        for (DBDataObject comment : commentDataObjects) {
+            DBDataObject commentUserdata = DBUser.getUser(comment.getValue(DBComment.K_USER_ID));
+            comment.putKeyValue(DBUser.K_USER_NAME, commentUserdata.getValue(DBUser.K_USER_NAME));
+            comment.putKeyValue(DBUser.K_USER_PROFILE, commentUserdata.getValue(DBUser.K_USER_PROFILE));
+            comment.putKeyValue(DBCFeedback.K_FEEDBACK, DBCFeedback.getFeedback(userID, comment.getValue(DBComment.K_COMMENT_ID)));
+        }
+
+        setContentResponseCards(commentDataObjects, DBComment.K_COMMENT_ID);
     }
 
     protected void createAddCommentCard(BoardResponseCardPanel commentsPanel) {

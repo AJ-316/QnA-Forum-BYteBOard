@@ -28,15 +28,47 @@ public abstract class ByteBoardTheme {
 
     private static final String FONT_K_PRIMARY = "primary";
     private static final String FONT_K_SECONDARY = "secondary";
+    private static String[] keyList;
+    public final static ByteBoardTheme ByteBoardBaseTheme = new ByteBoardTheme() {
+
+        public void init() {
+            setName("ByteBoardBaseTheme");
+            loadColorAttribute(BASE, "255, 255, 255");
+            loadColorAttribute(MAIN, "0, 120, 120");
+            loadColorAttribute(MAIN_LIGHT, "10, 130, 130");
+            loadColorAttribute(MAIN_DARK, "0, 80, 80");
+            loadColorAttribute(ACCENT, "81, 180, 127");
+            loadColorAttribute(ACCENT_DARK, "48, 150, 96");
+            loadColorAttribute(ERROR, "255, 80, 80");
+            loadColorAttribute(DISABLED, "153, 153, 153");
+
+            loadColorAttribute(TEXT_FG_LIGHT, "255, 255, 255");
+            loadColorAttribute(TEXT_FG_DARK, "0, 0, 0");
+            loadColorAttribute(TEXT_FG_MAIN, "0, 120, 120");
+            loadColorAttribute(TEXT_FG_MAIN_LIGHT, "10, 130, 130");
+            loadColorAttribute(TEXT_FG_MAIN_DARK, "0, 80, 80");
+
+            loadFontAttributes(FONT_K_PRIMARY, "inter");
+            loadFontAttributes(FONT_K_SECONDARY, "carltine");
+        }
+    };
+    private final Map<String, String> colorAttributes;
+    private final Map<String, String> fontAttributes;
+    private String name;
+    public ByteBoardTheme() {
+        colorAttributes = new HashMap<>();
+        fontAttributes = new HashMap<>();
+
+        init();
+    }
 
     public static String FONT_PRIMARY(String type, int size) {
         return UIManager.get("QnAForum.font." + FONT_K_PRIMARY) + type + size;
     }
+
     public static String FONT_SECONDARY(String type, int size) {
         return UIManager.getString("QnAForum.font." + FONT_K_SECONDARY) + type + size;
     }
-
-    private static String[] keyList;
 
     private static String[] getKeyList() {
         if (keyList == null) {
@@ -48,21 +80,24 @@ public abstract class ByteBoardTheme {
         return keyList;
     }
 
-    private final Map<String, String> colorAttributes;
-    private final Map<String, String> fontAttributes;
-    private String name;
-
-    public ByteBoardTheme() {
-        colorAttributes = new HashMap<>();
-        fontAttributes = new HashMap<>();
-
-        init();
+    private static void addColor(String label, int r, int g, int b) {
+        UIManager.put("QnAForum.color." + label, new Color(r, g, b));
     }
 
-    public void init(){}
+    private static void addFont(int type, String label, int... sizes) {
+        if (sizes.length == 0) return;
+
+        Font font = FontLoader.getFont(label.replace(".", ""), sizes[0], type);
+        for (int size : sizes) {
+            UIManager.put("QnAForum.font." + label + size, font.deriveFont((float) size));
+        }
+    }
+
+    public void init() {
+    }
 
     public void loadColorAttribute(String key, String value) {
-        if(key.isEmpty() || value.isEmpty()) return;
+        if (key.isEmpty() || value.isEmpty()) return;
 
         for (String validKey : getKeyList()) {
             if (validKey.equals(key)) {
@@ -82,17 +117,17 @@ public abstract class ByteBoardTheme {
 
         key = key.endsWith(FONT_K_PRIMARY) ? FONT_K_PRIMARY : key.endsWith(FONT_K_SECONDARY) ? FONT_K_SECONDARY : null;
 
-        if(key != null)
+        if (key != null)
             loadFontAttribute(key, value);
     }
 
     public void loadFontAttribute(String key, String value) {
-        if(key.isEmpty() || value.isEmpty()) return;
+        if (key.isEmpty() || value.isEmpty()) return;
         fontAttributes.put(key, value);
     }
 
     public void load() {
-        if(!this.equals(ByteBoardBaseTheme))
+        if (!this.equals(ByteBoardBaseTheme))
             ByteBoardBaseTheme.load();
 
         for (String key : colorAttributes.keySet()) {
@@ -121,7 +156,7 @@ public abstract class ByteBoardTheme {
 
     // note: doesn't use the style consideration
     private void createFont(String key, String value) {
-        if(key.equals(FONT_K_PRIMARY) || key.equals(FONT_K_SECONDARY)) {
+        if (key.equals(FONT_K_PRIMARY) || key.equals(FONT_K_SECONDARY)) {
             UIManager.put("QnAForum.font." + key, value);
             return;
         }
@@ -137,13 +172,14 @@ public abstract class ByteBoardTheme {
             }
 
             addFont(values.length == 1 ? 0 : Integer.parseInt(values[0]), key.toLowerCase(), sizes);
-        } catch (NumberFormatException ignored){}
+        } catch (NumberFormatException ignored) {
+        }
 
     }
 
     private void createColor(String key, String value) {
         String[] values = value.split(",");
-        if(values.length != 3) return;
+        if (values.length != 3) return;
 
         int[] rgb = new int[3];
 
@@ -158,19 +194,6 @@ public abstract class ByteBoardTheme {
         addColor(key, rgb[0], rgb[1], rgb[2]);
     }
 
-    private static void addColor(String label, int r, int g, int b) {
-        UIManager.put("QnAForum.color." + label, new Color(r, g, b));
-    }
-
-    private static void addFont(int type, String label, int... sizes) {
-        if (sizes.length == 0) return;
-
-        Font font = FontLoader.getFont(label.replace(".", ""), sizes[0], type);
-        for (int size : sizes) {
-            UIManager.put("QnAForum.font." + label + size, font.deriveFont((float) size));
-        }
-    }
-
     public String getName() {
         return name;
     }
@@ -178,30 +201,6 @@ public abstract class ByteBoardTheme {
     public void setName(String name) {
         this.name = name;
     }
-
-    public final static ByteBoardTheme ByteBoardBaseTheme = new ByteBoardTheme() {
-
-        public void init() {
-            setName("ByteBoardBaseTheme");
-            loadColorAttribute(BASE, "255, 255, 255");
-            loadColorAttribute(MAIN, "0, 120, 120");
-            loadColorAttribute(MAIN_LIGHT, "10, 130, 130");
-            loadColorAttribute(MAIN_DARK, "0, 80, 80");
-            loadColorAttribute(ACCENT, "81, 180, 127");
-            loadColorAttribute(ACCENT_DARK, "48, 150, 96");
-            loadColorAttribute(ERROR, "255, 80, 80");
-            loadColorAttribute(DISABLED, "153, 153, 153");
-
-            loadColorAttribute(TEXT_FG_LIGHT, "255, 255, 255");
-            loadColorAttribute(TEXT_FG_DARK, "0, 0, 0");
-            loadColorAttribute(TEXT_FG_MAIN, "0, 120, 120");
-            loadColorAttribute(TEXT_FG_MAIN_LIGHT, "10, 130, 130");
-            loadColorAttribute(TEXT_FG_MAIN_DARK, "0, 80, 80");
-
-            loadFontAttributes(FONT_K_PRIMARY, "inter");
-            loadFontAttributes(FONT_K_SECONDARY, "carltine");
-        }
-    };
 
 
 }

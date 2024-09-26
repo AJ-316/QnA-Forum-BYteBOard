@@ -1,6 +1,8 @@
 package BYteBOardInterface.BoardsPackage.QnAForumPackage.QnABoardPackage;
 
-import BYteBOardDatabase.*;
+import BYteBOardDatabase.DBAnswer;
+import BYteBOardDatabase.DBDataObject;
+import BYteBOardDatabase.DBUser;
 import BYteBOardInterface.StructurePackage.BoardPanel;
 import BYteBOardInterface.StructurePackage.Frame;
 import BYteBOardInterface.StructurePackage.MainFrame;
@@ -42,8 +44,8 @@ public class BoardEditContentPanel extends BoardContentPanel {
         submitButton = new BoardButton("Submit", "submit");
         submitButton.addInsets(10);
         submitButton.setFGLight();
-        submitButton.addActionListener(e-> {
-            if(!validateAnswer(getContentBody())) return;
+        submitButton.addActionListener(e -> {
+            if (!validateAnswer(getContentBody())) return;
 
             DBAnswer.addAnswer(getContentBody(), getUserID(), getContentID());
             setEditAnswerPanel(false);

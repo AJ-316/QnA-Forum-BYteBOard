@@ -56,7 +56,7 @@ public class UserProfileDisplayPanel extends JPanel {
 
         userEmail = new JLabel("EmailID");
         userEmail.setIcon(ResourceManager.getColoredIcon("email",
-                ResourceManager.getColor(ByteBoardTheme.MAIN_DARK), null,ResourceManager.SMALL));
+                ResourceManager.getColor(ByteBoardTheme.MAIN_DARK), null, ResourceManager.SMALL));
         userEmail.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_LIGHT));
         userEmail.setFont(ResourceManager.getFont("inter_semibold.20"));
         userEmail.setBorder(BorderFactory.createEmptyBorder(0, 40, 40, 60));

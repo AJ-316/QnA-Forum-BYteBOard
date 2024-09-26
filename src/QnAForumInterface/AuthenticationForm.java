@@ -42,7 +42,7 @@ public class AuthenticationForm extends JFrame {
 
     public static void authenticateUser(String username) {
         QnAForum.init(ProfileBoard.init(username));
-        if(instance != null)
+        if (instance != null)
             instance.dispose();
     }
 

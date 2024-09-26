@@ -18,26 +18,34 @@ public class BoardLabel extends JLabel implements CustomControl {
         init();
     }
 
-    /** regular icon */
+    /**
+     * regular icon
+     */
     public BoardLabel(String text, String icon) {
         this(text, icon, ResourceManager.NONE, ResourceManager.MINI);
     }
 
-    /** just the regular icon with size */
+    /**
+     * just the regular icon with size
+     */
     public BoardLabel(String icon, int size) {
         this("", icon, ResourceManager.NONE, size);
     }
 
-    /** state icon (recolored) */
+    /**
+     * state icon (recolored)
+     */
     public BoardLabel(String text, String icon, int state) {
         this(text, icon, state, ResourceManager.MINI);
     }
 
-    /** tate/regular icon with size */
+    /**
+     * tate/regular icon with size
+     */
     public BoardLabel(String text, String icon, int state, int size) {
         super(text);
 
-        if(state == ResourceManager.NONE)
+        if (state == ResourceManager.NONE)
             setIcon(ResourceManager.getIcon(icon, size));
         else
             setIcon(ResourceManager.getStateIcon(icon, state, size));

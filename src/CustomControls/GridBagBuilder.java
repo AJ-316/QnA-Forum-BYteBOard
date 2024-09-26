@@ -24,7 +24,7 @@ public class GridBagBuilder extends GridBagConstraints {
     }
 
     public GridBagBuilder addToCurrentCell(Component component) {
-        if(component != null)
+        if (component != null)
             container.add(component, this);
 
         return this;
@@ -82,8 +82,8 @@ public class GridBagBuilder extends GridBagConstraints {
 
     public GridBagBuilder skipCells(int cells) {
         currentCellPos += cells;
-        gridx = (currentCellPos-1) % cols;
-        gridy = (currentCellPos-1) / cols;
+        gridx = (currentCellPos - 1) % cols;
+        gridy = (currentCellPos - 1) / cols;
 
         return this;
     }

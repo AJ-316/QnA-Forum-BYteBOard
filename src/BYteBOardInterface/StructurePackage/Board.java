@@ -1,10 +1,8 @@
 package BYteBOardInterface.StructurePackage;
 
 import CustomControls.CustomJPanel;
-import CustomControls.DEBUG;
 
 import javax.swing.*;
-import java.util.Arrays;
 
 public abstract class Board extends CustomJPanel {
 
@@ -25,9 +23,11 @@ public abstract class Board extends CustomJPanel {
     public abstract void refresh();
 
     protected abstract void addPanel(Class<?> panelClass, Panel panel, Object constraints);
+
     protected abstract void addPanel(Class<?> panelClass, Panel panel);
 
     protected abstract void setPanelVisibility(Class<?> panelClass, boolean isVisible);
+
     protected abstract boolean getPanelVisibility(Class<?> panelClass);
 
     public void addInsets(int inset) {

@@ -1,0 +1,122 @@
+package BYteBOardInterface.BoardsPackage.QnAForumPackage.ProfileBoardPackage;
+
+import BYteBOardInterface.BoardsPackage.QnAForumPackage.QnABoardPackage.QnABoardFrame;
+import BYteBOardInterface.StructurePackage.BoardPanel;
+import BYteBOardInterface.StructurePackage.Frame;
+import BYteBOardInterface.StructurePackage.MainFrame;
+import CustomControls.BoardLabel;
+import CustomControls.BoardTextArea;
+import CustomControls.GridBagBuilder;
+import Resources.ByteBoardTheme;
+import Resources.ResourceManager;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+public class ContentDisplayPane extends BoardPanel {
+
+    private BoardTextArea contentText;
+    private BoardLabel contentResponseText;
+    private BoardLabel contentBytes;
+    private BoardLabel contentUsername;
+    private String userID;
+
+    public ContentDisplayPane(MainFrame main, Frame frame) {
+        super(main, frame, ByteBoardTheme.MAIN_LIGHT);
+
+        addListeners();
+    }
+
+    public void init(MainFrame main, Frame frame) {
+        setCornerRadius(80);
+        setLimitRadius(false);
+        addInsets(20);
+
+        initComponents();
+
+        BoardPanel footerPanel = new BoardPanel(main, frame);
+        footerPanel.setCornerRadius(60);
+        GridBagBuilder footerBuilder = new GridBagBuilder(footerPanel, 3);
+
+        footerBuilder.weight(0, 1).fillBoth()
+                .addToNextCell(contentBytes)
+                .weightX(1)
+                .addToNextCell(contentResponseText)
+                .addToNextCell(contentUsername);
+
+        GridBagBuilder builder = new GridBagBuilder(this, 1);
+
+        builder.weight(1, 1).fillHorizontal()
+                .addToNextCell(contentText)
+                .fillBoth().weightY(0)
+                .addToNextCell(footerPanel);
+
+        EventQueue.invokeLater(() -> {
+            setPreferredSize(new Dimension(600, 150));
+            getParent().revalidate();
+        });
+    }
+
+    private void initComponents() {
+        contentUsername = new BoardLabel("Username");
+        contentUsername.setFGLight();
+        contentUsername.setFontPrimary(ByteBoardTheme.FONT_T_REGULAR, 20);
+        contentUsername.setHorizontalTextPosition(SwingConstants.LEFT);
+        contentUsername.setAlignmentTrailing();
+
+        contentBytes = new BoardLabel("517465", "bytescore_icon");
+        contentBytes.setFGLight();
+        contentBytes.setFontPrimary(ByteBoardTheme.FONT_T_REGULAR, 20);
+        contentBytes.setAlignmentLeading();
+
+        contentText = new BoardTextArea("Content goes here, and it could be very long one so test it before moving on.");
+        contentText.setFGLight();
+        contentText.setFontPrimary(ByteBoardTheme.FONT_T_BOLD, 26);
+
+        contentResponseText = new BoardLabel("Responses: 40");
+        contentResponseText.setFGLight();
+        contentResponseText.setFontPrimary(ByteBoardTheme.FONT_T_REGULAR, 20);
+        contentResponseText.addInsets(0, 20, 0, 0);
+        contentResponseText.setAlignmentLeading();
+    }
+
+    // todo set number of responses to the content
+    public void setUserData(String userProfile, String username, String userID) {
+        contentUsername.setProfileIcon(userProfile, ResourceManager.MINI);
+        contentUsername.setText(username);
+        this.userID = userID;
+    }
+
+    public void setContentData(String contentText, String contentID, String bytes) {
+        this.contentText.setText(contentText);
+        this.contentText.setName(contentID);
+        contentBytes.setText(bytes);
+    }
+
+    public String getQuestionID() {
+        return contentText.getName();
+    }
+
+    public String getUserID() {
+        return userID;
+    }
+
+    private void addListeners() {
+        addMouseListener(new MouseAdapter() {
+            public void mouseReleased(MouseEvent e) {
+                setBackground(ByteBoardTheme.MAIN_LIGHT);
+                requestSwitchFrame(QnABoardFrame.class, getQuestionID(), getUserID());
+            }
+
+            public void mouseEntered(MouseEvent e) {
+                setBackground(ByteBoardTheme.ACCENT);
+            }
+
+            public void mouseExited(MouseEvent e) {
+                setBackground(ByteBoardTheme.MAIN_LIGHT);
+            }
+        });
+    }
+}

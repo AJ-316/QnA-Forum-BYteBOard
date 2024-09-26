@@ -1,7 +1,5 @@
 package CustomControls.CustomRendererPackage;
 
-import Resources.ResourceManager;
-
 import javax.swing.border.AbstractBorder;
 import java.awt.*;
 
@@ -30,7 +28,7 @@ public class RoundedBorder extends AbstractBorder {
         g2.setPaint(bgColor);
         g2.fillRoundRect(x, y, width - 1, height - 1, arcWidth, arcHeight);
 
-        if(borderColor != null) {
+        if (borderColor != null) {
             g2.setPaint(borderColor);
             g2.drawRoundRect(x, y, width - 1, height - 1, arcWidth, arcHeight);
         }

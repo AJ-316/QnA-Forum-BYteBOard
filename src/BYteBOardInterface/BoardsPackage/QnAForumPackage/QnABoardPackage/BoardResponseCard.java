@@ -6,7 +6,6 @@ import BYteBOardInterface.StructurePackage.Frame;
 import BYteBOardInterface.StructurePackage.MainFrame;
 import CustomControls.BoardLabel;
 import CustomControls.BoardTextArea;
-import CustomControls.DEBUG;
 import CustomControls.GridBagBuilder;
 import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
@@ -20,10 +19,10 @@ import java.awt.event.MouseEvent;
 public class BoardResponseCard extends BoardPanel {
 
     private static final Rectangle checkBounds = new Rectangle(0, 0, 0, 0);
-    private boolean isSelected;
     protected BoardTextArea contentText;
     protected BoardLabel contentUsername;
     protected BoardLabel contentAction;
+    private boolean isSelected;
     private MouseAdapter contentActionAdapter;
 
     public BoardResponseCard(MainFrame main, Frame frame) {
@@ -41,11 +40,6 @@ public class BoardResponseCard extends BoardPanel {
                 setPreferredSize(preferredSize);
             }
         });
-    }
-
-    public void setSelected(boolean selected) {
-        isSelected = selected;
-        highlightCard(selected, selected);
     }
 
     public void init(MainFrame main, Frame frame) {
@@ -140,9 +134,14 @@ public class BoardResponseCard extends BoardPanel {
         return isSelected;
     }
 
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+        highlightCard(selected, selected);
+    }
+
     /*cardSelectListener.invoke(isSelected ? getContentID() : null);*/
     private void highlightCard(boolean isHighlighted, boolean isSelected) {
-        if(isHighlighted) {
+        if (isHighlighted) {
             setBackground(isSelected ? ByteBoardTheme.ACCENT_DARK : ByteBoardTheme.ACCENT);
             setBorderColor(ByteBoardTheme.BASE);
             return;

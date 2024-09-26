@@ -7,8 +7,9 @@ import BYteBOardInterface.BoardsPackage.QnAForumPackage.QnABoardPackage.QnABoard
 import BYteBOardInterface.StructurePackage.BoardPanel;
 import BYteBOardInterface.StructurePackage.Frame;
 import BYteBOardInterface.StructurePackage.MainFrame;
-import CustomControls.*;
+import CustomControls.BoardComboBox;
 import CustomControls.CustomListenerPackage.SearchFieldListener;
+import CustomControls.GridBagBuilder;
 import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
 
@@ -19,23 +20,19 @@ import java.util.List;
 
 public class SearchBoardPanel extends BoardPanel {
 
-    private static final int NULL_INPUT = 0;
-    private static final int TAG_INPUT = 1;
-    private static final int QUE_INPUT = 2;
-
-    private String userID;
-    private static String lastSearchInput;
-    private BoardComboBox searchField;
-    private final List<String> itemIDList;
-
+    protected static final int NULL_INPUT = 0;
+    protected static final int TAG_INPUT = 1;
+    protected static final int QUE_INPUT = 2;
+    private final List<DBDataObject> searchDataObjects;
     private final SearchQuestionPanel questionPanel;
-
+    private String userID;
+    private BoardComboBox searchField;
     private int inputState;
 
     public SearchBoardPanel(MainFrame main, Frame frame, SearchQuestionPanel questionPanel) {
         super(main, frame);
+        this.searchDataObjects = new ArrayList<>();
         this.questionPanel = questionPanel;
-        itemIDList = new ArrayList<>();
         addListeners();
     }
 
@@ -59,98 +56,113 @@ public class SearchBoardPanel extends BoardPanel {
         searchField.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, Collections.emptySet());
         searchField.setFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS, Collections.emptySet());
 
-        // TODO remove the searchTagsDisplay from searchFieldPanel and add it to searched questions panel
-        /*searchTagsPanel = new BoardTagsDisplayPanel(main, frame);
-        searchTagsPanel.addInsets(0);
-        searchTagsPanel.setScrollSize(0, 60);
-        searchTagsPanel.setHorizontalDisplay();*/
-
         searchFieldBuilder.weight(1, 1).fillBoth()
-                .addToNextCell(searchField)
-                ;//.addToNextCell(searchTagsPanel.getComponent());
+                .addToNextCell(searchField);
 
         builder.weightX(1).fillHorizontal().insets(10)
                 .addToNextCell(searchFieldPanel);
-
-        //searchTagsPanel.addTag("tag", this);
-        //((BoardTagButton) searchTagsPanel.getComponent(0)).getActionListeners()[0].actionPerformed(null);
     }
 
     private void addListeners() {
         SearchFieldListener.create(searchField,
-                this::loadSearchSuggestions,
+                this::updateSearchField,
                 this::searchSelected);
     }
 
+    /*private boolean searchQuestion() {
+        String question = searchField.getTextField().getText();
+
+        String mostRelevantQueHead = "\n";
+        String mostRelevantQueID = "\n";
+
+        if(!searchDataObjects.isEmpty()) {
+            mostRelevantQueHead = searchDataObjects.get(0).getValue(DBQuestion.K_QUESTION_HEAD);
+            mostRelevantQueID = searchDataObjects.get(0).getValue(DBQuestion.K_QUESTION_ID);
+        }
+
+        // if the question selected is not same as most relevant question
+        if(question.equalsIgnoreCase(mostRelevantQueHead)) {
+            requestSwitchFrame(QnABoardFrame.class, mostRelevantQueID, getUserID());
+
+            clearSearchObjects();
+            searchField.getEditor().setItem("");
+            return true;
+        }
+
+        questionPanel.searchQuestions(searchDataObjects, QUE_INPUT);
+
+        return false;
+    }*/
+
     private void searchSelected() {
         searchField.setPopupVisible(false);
-
-        if(inputState == QUE_INPUT)
-            searchQuestion();
-        else if(inputState == TAG_INPUT)
-            searchTag();
-
+        searchByField();
         setInputState(NULL_INPUT);
     }
 
-    /*
-        Search() {
-            ClearIDs()
+    private void searchByTag(String tag, String tagID) {
+        if (!questionPanel.addTag(tag, tagID)) return;
+        clearSearchObjects();
+        questionPanel.searchQuestions(searchDataObjects, TAG_INPUT);
+        searchField.getEditor().setItem("#");
+    }
 
-            fetch searchText        = search.text
-            fetch validSearchText   = search.item(0)
-            fetch validSearchID     = ids[0]
+    private void searchByField() {
+        if (inputState == NULL_INPUT) return;
 
-            If searchText is validSearchText
-            Then
-                Switch Frame QnABoard (validSearchID)
-            Else
-                q.AddIDs(ids)
+        String search = searchField.getTextField().getText();
 
-            search.clear
+        String mostRelevantSearch = "\n";
+        String mostRelevantSearchID = "\n";
+
+        if (!searchDataObjects.isEmpty()) {
+            mostRelevantSearch = searchDataObjects.get(0).getValue(
+                    inputState == QUE_INPUT ? DBQuestion.K_QUESTION_HEAD : DBTag.K_TAG);
+            mostRelevantSearchID = searchDataObjects.get(0).getValue(
+                    inputState == QUE_INPUT ? DBQuestion.K_QUESTION_ID : DBTag.K_TAG_ID);
         }
-    */
 
-    private void searchQuestion() {
-        String question = searchField.getTextField().getText();
-        String nextValidQuestion = searchField.getItemAt(0);
-
-        String validQuestionID = null;
-        if(nextValidQuestion != null)
-            validQuestionID = itemIDList.get(0);
-
-        if(!question.equalsIgnoreCase(nextValidQuestion)) {
-            questionPanel.loadQuestionsBySimilarity(itemIDList.toArray(new String[0]));
+        if (inputState == TAG_INPUT) {
+            if (!search.substring(1).equalsIgnoreCase(mostRelevantSearch))
+                return;
+            searchByTag(mostRelevantSearch, mostRelevantSearchID);
             return;
         }
 
-        searchField.removeAllItems();
-        itemIDList.clear();
+        // if type == QUE_INPUT
+        if (search.equalsIgnoreCase(mostRelevantSearch)) {
+            requestSwitchFrame(QnABoardFrame.class, mostRelevantSearchID, getUserID());
 
-        requestSwitchFrame(QnABoardFrame.class, validQuestionID, getUserID());
-        searchField.getEditor().setItem("");
-    }
-
-    /*
-        Search() {
-            q.ClearIDs()
-
-            fetch searchText        = search.text | search.item(0)
-            fetch validSearchText   = search.item(0)
-            fetch validSearchID     = ids[0]
-
-            If searchText is validSearchText
-            Then
-                Switch Frame QnABoard (validSearchID)
-            Else
-                q.AddIDs(ids)
-
-            search.clear
+            clearSearchObjects();
+            searchField.getEditor().setItem("");
+            return;
         }
-    */
 
-    private void searchTag() {
-        if(itemIDList.isEmpty()) return;
+        questionPanel.searchQuestions(searchDataObjects, QUE_INPUT);
+    }
+/*
+
+    private boolean issValidSearchText(String searchText, String textKey, String idKey) {
+        String mostRelevantTag = "\n";
+        String mostRelevantTagID = "\n";
+
+        if(!searchDataObjects.isEmpty()) {
+            mostRelevantTag = searchDataObjects.get(0).getValue(textKey);
+            mostRelevantTagID = searchDataObjects.get(0).getValue(idKey);
+        }
+
+        // if the question selected is not same as most relevant question
+        if(searchText.equalsIgnoreCase(mostRelevantTag)) {
+            questionPanel.addTag(mostRelevantTag, mostRelevantTagID);
+            questionPanel.loadQuestionsByTags();
+            searchField.getEditor().setItem("#");
+            return true;
+        }
+
+        //return false;
+        // TODO //////////////////////////////////////////
+
+        if(searchDataObjects.isEmpty()) return false;
 
         String nextValidTag = searchField.getItemAt(0);
         String validTagID = itemIDList.get(0);
@@ -163,63 +175,119 @@ public class SearchBoardPanel extends BoardPanel {
 
         questionPanel.loadQuestionsByTags();
         searchField.getEditor().setItem("#");
+    }*/
+
+    private void clearSearchObjects() {
+        searchField.removeAllItems();
+        searchDataObjects.clear();
     }
 
-    private void loadSearchSuggestions(String text) {
-        text = text.trim();
+    private void setSearchFieldItems(String searchText, int type) {
+        int selectionStart = searchField.getTextField().getSelectionStart();
+        int selectionEnd = searchField.getTextField().getSelectionEnd();
 
-        if(text.isEmpty()) {
+        clearSearchObjects();
+
+        if (type == QUE_INPUT)
+            type = loadQuestions(searchText);
+        else if (type == TAG_INPUT)
+            type = loadTags(searchText);
+
+        searchField.getEditor().setItem(searchText);
+        searchField.getTextField().setSelectionStart(selectionStart);
+        searchField.getTextField().setSelectionEnd(selectionEnd);
+
+        setInputState(type);
+    }
+
+    private int loadQuestions(String searchText) {
+        DBDataObject[] suggestedQuestions = DBQuestion.searchByQuestion(searchText.trim(), "*");
+
+        for (DBDataObject question : suggestedQuestions) {
+            searchField.addItem(question.getValue(DBQuestion.K_QUESTION_HEAD));
+            searchDataObjects.add(question);
+        }
+        return QUE_INPUT;
+    }
+
+    private int loadTags(String searchText) {
+        String tag = searchText.substring(1);
+        if (searchText.length() > 1) {
+            for (DBDataObject tagDataObject : DBTag.getRelevantTags(tag, false)) {
+                searchField.addItem("#" + tagDataObject.getValue(DBTag.K_TAG));
+                searchDataObjects.add(tagDataObject);
+            }
+            return TAG_INPUT;
+        }
+
+        for (DBDataObject tagDataObject : DBTag.getRelevantTags(tag, true)) {
+            searchField.addItem("#" + tagDataObject.getValue(DBTag.K_TAG));
+            searchDataObjects.add(tagDataObject);
+        }
+        return NULL_INPUT;
+    }
+
+    private void updateSearchField(String text) {
+        if (text.isEmpty()) {
             setInputState(NULL_INPUT);
             return;
         }
 
-        if(text.equals(lastSearchInput)) return;
+        if (!text.startsWith("#")) {
+            setSearchFieldItems(text, QUE_INPUT);
+            /*//System.out.println("question: " + text);
+            int selectionStart = searchField.getTextField().getSelectionStart();
+            int selectionEnd = searchField.getTextField().getSelectionEnd();
 
-        lastSearchInput = text;
-
-        if(!text.startsWith("#")) {
-            //System.out.println("question: " + text);
             searchField.removeAllItems();
-            itemIDList.clear();
+            searchDataObjects.clear();
 
-            DBDataObject[] suggestedQuestions = DBQuestion.searchByQuestion(text, DBQuestion.K_QUESTION_HEAD, DBQuestion.K_QUESTION_ID);
+            DBDataObject[] suggestedQuestions = DBQuestion.searchByQuestion(text.trim(), DBQuestion.K_QUESTION_HEAD, DBQuestion.K_QUESTION_ID);
 
             for (DBDataObject question : suggestedQuestions) {
                 searchField.addItem(question.getValue(DBQuestion.K_QUESTION_HEAD));
-                itemIDList.add(question.getValue(DBQuestion.K_QUESTION_ID));
+                searchDataObjects.add(question);
             }
 
             searchField.getEditor().setItem(text);
-            setInputState(QUE_INPUT);
+            searchField.getTextField().setSelectionStart(selectionStart);
+            searchField.getTextField().setSelectionEnd(selectionEnd);
+            setInputState(QUE_INPUT);*/
             return;
         }
 
-        String finalText = text;
         EventQueue.invokeLater(() -> {
-            String tag = finalText.substring(1);
+            /*String tag = text.substring(1);
             //System.out.println("tag: " + tag);
-            searchField.removeAllItems();
-            itemIDList.clear();
+            int selectionStart = searchField.getTextField().getSelectionStart();
+            int selectionEnd = searchField.getTextField().getSelectionEnd();
 
-            if (finalText.length() > 1) {
+            searchField.removeAllItems();
+            searchDataObjects.clear();
+
+            if (text.length() > 1) {
                 for (DBDataObject tagDataObject : DBTag.getRelevantTags(tag, false)) {
                     searchField.addItem("#" + tagDataObject.getValue(DBTag.K_TAG));
-                    itemIDList.add(tagDataObject.getValue(DBTag.K_TAG_ID));
+                    searchDataObjects.add(tagDataObject);
                 }
 
-                searchField.getEditor().setItem(finalText);
+                searchField.getEditor().setItem(text);
+                searchField.getTextField().setSelectionStart(selectionStart);
+                searchField.getTextField().setSelectionEnd(selectionEnd);
                 setInputState(TAG_INPUT);
                 return;
             }
 
             for (DBDataObject tagDataObject : DBTag.getRelevantTags(tag, true)) {
                 searchField.addItem("#" + tagDataObject.getValue(DBTag.K_TAG));
-                itemIDList.add(tagDataObject.getValue(DBTag.K_TAG_ID));
+                searchDataObjects.add(tagDataObject);
             }
 
-            searchField.getEditor().setItem(finalText);
-
-            setInputState(NULL_INPUT);
+            searchField.getEditor().setItem(text);
+            searchField.getTextField().setSelectionStart(selectionStart);
+            searchField.getTextField().setSelectionEnd(selectionEnd);
+            setInputState(NULL_INPUT);*/
+            setSearchFieldItems(text, TAG_INPUT);
             searchField.setPopupVisible(true);
         });
     }
@@ -232,12 +300,6 @@ public class SearchBoardPanel extends BoardPanel {
         revalidate();
         repaint();
     }
-
-    /*private void addTag(String tag, String tagID) {
-        BoardTagButton tagButton = searchTagsPanel.addTag(tag, this);
-        tagButton.setTagID(tagID);
-        tagButton.addActionListener(e -> EventQueue.invokeLater(this::loadQuestionsByTags));
-    }*/
 
     public String getUserID() {
         return userID;

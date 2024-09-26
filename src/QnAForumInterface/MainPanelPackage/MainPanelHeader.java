@@ -1,9 +1,8 @@
 package QnAForumInterface.MainPanelPackage;
 
-import CustomControls.CustomJPanel;
-
-import CustomControls.DEBUG;
 import BYteBOardDatabase.DBVote;
+import CustomControls.CustomJPanel;
+import CustomControls.DEBUG;
 import QnAForumInterface.InformationBarPackage.AnswerBar;
 import QnAForumInterface.InterfaceEventPackage.InterfaceEventManager;
 import QnAForumInterface.QnABoard;
@@ -25,12 +24,11 @@ public class MainPanelHeader extends JPanel {
     private final JLabel contentUserName;
     private final JButton viewQuestionBtn;
     private final JLabel tagText;
-    private JButton upvoteBtn;
-    private JButton downvoteBtn;
-
     private final JLabel contentBytescore;
     private final CustomJPanel tagsPanel;
     private final String contentType;
+    private JButton upvoteBtn;
+    private JButton downvoteBtn;
 
     public MainPanelHeader(String contentType) {
         this.contentType = contentType;
@@ -99,7 +97,7 @@ public class MainPanelHeader extends JPanel {
                 ResourceManager.PRESSED, ResourceManager.PRESSED, ResourceManager.ROLLOVER, ResourceManager.SMALL);
         ResourceManager.setButtonIcons(downvoteBtn, "downvote", ResourceManager.MINI);
 
-        if(invokeDBEvent)
+        if (invokeDBEvent)
             InterfaceEventManager.invokeEvent("Update." + contentType + "Vote", DBVote.V_VOTE_UP);
         DEBUG.printlnYellow("Voting UP");
     }
@@ -112,7 +110,7 @@ public class MainPanelHeader extends JPanel {
 
         ResourceManager.setButtonIcons(upvoteBtn, "upvote", ResourceManager.MINI);
 
-        if(invokeDBEvent)
+        if (invokeDBEvent)
             InterfaceEventManager.invokeEvent("Update." + contentType + "Vote", DBVote.V_VOTE_DOWN);
         DEBUG.printlnYellow("Voting DOWN");
     }
@@ -123,7 +121,7 @@ public class MainPanelHeader extends JPanel {
         ResourceManager.setButtonIcons(upvoteBtn, "upvote", ResourceManager.MINI);
         ResourceManager.setButtonIcons(downvoteBtn, "downvote", ResourceManager.MINI);
 
-        if(invokeDBEvent)
+        if (invokeDBEvent)
             InterfaceEventManager.invokeEvent("Update." + contentType + "Vote", DBVote.V_VOTE_NONE);
         DEBUG.printlnYellow("Voting to NONE");
     }
@@ -135,13 +133,13 @@ public class MainPanelHeader extends JPanel {
         upvoteBtn = getBytescoreButton("upvote");
         downvoteBtn = getBytescoreButton("downvote");
         upvoteBtn.addActionListener(e -> {
-            if(upvoteBtn.getName().equals(DBVote.V_VOTE_UP)) voteNone(true);
+            if (upvoteBtn.getName().equals(DBVote.V_VOTE_UP)) voteNone(true);
             else upvote(true);
             System.out.println(upvoteBtn);
         });
 
         downvoteBtn.addActionListener(e -> {
-            if(downvoteBtn.getName().equals(DBVote.V_VOTE_DOWN)) voteNone(true);
+            if (downvoteBtn.getName().equals(DBVote.V_VOTE_DOWN)) voteNone(true);
             else downvote(true);
         });
 
@@ -283,15 +281,15 @@ public class MainPanelHeader extends JPanel {
         this.contentUserName.setText(contentUserName);
         this.contentBytescore.setText(contentBytescore);
 
-        if(lastVoteType.equals(DBVote.V_VOTE_UP))
+        if (lastVoteType.equals(DBVote.V_VOTE_UP))
             upvote(false);
-        else if(lastVoteType.equals(DBVote.V_VOTE_DOWN))
+        else if (lastVoteType.equals(DBVote.V_VOTE_DOWN))
             downvote(false);
         else voteNone(false);
 
         ResourceManager.setProfileIndexIcon(contentUserProfileIndex, contentUserProfile, ResourceManager.REGULAR);
 
-        if(tags == null) return;
+        if (tags == null) return;
 
         tagText.setText("");
         tagsPanel.setVisible(tags.length != 0);
@@ -306,7 +304,7 @@ public class MainPanelHeader extends JPanel {
 
         this.tagText.setToolTipText(String.join(", ", tagText.split(" \\| ")));
 
-        if(tagText.length() > 50) {
+        if (tagText.length() > 50) {
             tagText = tagText.substring(0, 50).trim();
 
             int lastDelimiter = tagText.indexOf("\\|", tagText.length() - 2);

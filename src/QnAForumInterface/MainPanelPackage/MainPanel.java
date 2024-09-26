@@ -77,7 +77,7 @@ public class MainPanel extends JPanel {
         setContentType(MainPanel.CONTENT_QUESTION);
         mainBody.setContentHead(heading);
 
-        System.out.println("Setting content: name:" + contentUserName + ", dp:" + contentUserProfileIndex + ", heading:" + heading + ", body:"+body+ ", contentScore: " + contentBytescore + ", lastVoteType: " + lastVoteType + "\u001b[0m");
+        System.out.println("Setting content: name:" + contentUserName + ", dp:" + contentUserProfileIndex + ", heading:" + heading + ", body:" + body + ", contentScore: " + contentBytescore + ", lastVoteType: " + lastVoteType + "\u001b[0m");
     }
 
     public void setContentType(String type) {

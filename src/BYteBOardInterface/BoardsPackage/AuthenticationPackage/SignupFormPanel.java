@@ -1,13 +1,13 @@
 package BYteBOardInterface.BoardsPackage.AuthenticationPackage;
 
-import BYteBOardInterface.StructurePackage.BoardPanel;
-import BYteBOardInterface.BoardsPackage.QnAForumPackage.QnAForumMainFrame;
-import BYteBOardInterface.StructurePackage.Frame;
-import BYteBOardInterface.StructurePackage.MainFrame;
-import CustomControls.*;
 import BYteBOardDatabase.DBDataObject;
 import BYteBOardDatabase.DBUser;
 import BYteBOardDatabase.EncryptionUtils;
+import BYteBOardInterface.BoardsPackage.QnAForumPackage.QnAForumMainFrame;
+import BYteBOardInterface.StructurePackage.BoardPanel;
+import BYteBOardInterface.StructurePackage.Frame;
+import BYteBOardInterface.StructurePackage.MainFrame;
+import CustomControls.*;
 import Resources.ByteBoardTheme;
 
 import java.awt.*;

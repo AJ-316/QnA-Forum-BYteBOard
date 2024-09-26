@@ -10,8 +10,6 @@ import CustomControls.GridBagBuilder;
 import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
 
-import java.awt.*;
-
 public class ProfileBoardButtonPanel extends BoardPanel {
 
     private String userID;
@@ -58,7 +56,7 @@ public class ProfileBoardButtonPanel extends BoardPanel {
     }
 
     private void addButtonListeners() {
-        activityButton.addActionListener(e -> setActivitiesVisible(!getPanelVisibility(ProfileBoardActivityPanel.class)));
+        activityButton.addActionListener(e -> setActivitiesVisible(!getPanelVisibility(BoardContentDisplayPanel.class)));
         editProfileButton.addActionListener(e -> setEditProfileVisible(true));
 
         searchButton.addActionListener(e -> requestSwitchFrame(SearchBoardFrame.class, getUserID()));
@@ -87,7 +85,7 @@ public class ProfileBoardButtonPanel extends BoardPanel {
     private void setActivitiesVisible(boolean isVisible) {
         activityButton.setText((isVisible ? "Hide" : "View") + " Activity");
         activityButton.setIcon(isVisible ? "hide" : "show");
-        setPanelVisibility(ProfileBoardActivityPanel.class, isVisible);
+        setPanelVisibility(BoardContentDisplayPanel.class, isVisible);
         setPanelVisibility(ProfileBoardUserDataPanel.class, !isVisible);
     }
 

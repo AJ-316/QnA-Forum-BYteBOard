@@ -4,14 +4,14 @@ import CustomControls.DEBUG;
 
 import java.util.HashMap;
 
-public class DBDataObject extends DBOperation{
+public class DBDataObject extends DBOperation {
     public DBDataObject() {
         super(new HashMap<>(), null);
     }
 
     @Override
     public String toString() {
-        if(keyValueMap == null) return super.toString();
+        if (keyValueMap == null) return super.toString();
         StringBuilder builder = new StringBuilder("\n").append(DEBUG.PURPLE).append(super.toString()).append(": ");
 
         for (String key : keyValueMap.keySet()) {

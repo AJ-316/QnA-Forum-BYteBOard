@@ -1,21 +1,20 @@
 package BYteBOardInterface.BoardsPackage.QnAForumPackage.ProfileBoardPackage;
 
+import BYteBOardDatabase.DBAnswer;
+import BYteBOardDatabase.DBDataObject;
+import BYteBOardDatabase.DBQuestion;
+import BYteBOardDatabase.DBUser;
 import BYteBOardInterface.StructurePackage.BoardFrame;
 import BYteBOardInterface.StructurePackage.BoardFrameSwitchDelegate;
 import BYteBOardInterface.StructurePackage.MainFrame;
-import CustomControls.DEBUG;
 import CustomControls.GridBagBuilder;
-import BYteBOardDatabase.*;
-
-import java.awt.*;
-import java.util.Arrays;
 
 public class ProfileBoardFrame extends BoardFrame {
 
     private ProfileBoardButtonPanel buttonPanel;
     private ProfileBoardUserDataPanel userDataPanel;
     private ProfileEditPanel editPanel;
-    private ProfileBoardActivityPanel activityPanel;
+    private BoardContentDisplayPanel activityPanel;
 
     public ProfileBoardFrame(MainFrame main) {
         super(main, (delegate, context) -> {
@@ -28,9 +27,9 @@ public class ProfileBoardFrame extends BoardFrame {
                     DBQuestion.ops.matchByValue(DBQuestion.K_USER_ID, userID), "*");
 
             // get all questionId's answered by matched user - join answers on questions and
-            DBDataObject[] questionsAnsweredByUser =   DBAnswer.ops.joinValuesBy(
-                            DBAnswer.ops.matchByValue(DBAnswer.K_USER_ID, userID),                                                        // where a.uid = userID
-                    new String[] {
+            DBDataObject[] questionsAnsweredByUser = DBAnswer.ops.joinValuesBy(
+                    DBAnswer.ops.matchByValue(DBAnswer.K_USER_ID, userID),                                                        // where a.uid = userID
+                    new String[]{
                             DBAnswer.ops.matchByKey(DBAnswer.K_QUESTION_ID, DBQuestion.ops.appendKeys(DBQuestion.K_QUESTION_ID)),   // join q on a.qid = q.qid
                             DBQuestion.ops.matchByKey(DBQuestion.K_USER_ID, DBUser.ops.appendKeys(DBUser.K_USER_ID))},              // join u on q.uid = u.uid
                     DBAnswer.ops.appendEmptyKeys(),                                                                                       // from a
@@ -47,15 +46,15 @@ public class ProfileBoardFrame extends BoardFrame {
 
             for (int i = 0; i < questionsAskedByUser.length; i++) {
                 questionID = questionsAskedByUser[i].getValue(DBQuestion.K_QUESTION_ID);
-                questionHead = "Questioned: " + questionsAskedByUser[i].getValue(DBQuestion.K_QUESTION_HEAD);
+                questionHead = questionsAskedByUser[i].getValue(DBQuestion.K_QUESTION_HEAD);
                 questionBytes = questionsAskedByUser[i].getValue(DBQuestion.K_QUESTION_BYTESCORE);
 
                 questionData.putKeyValue(String.valueOf(i),
                         questionerProfile + BoardFrameSwitchDelegate.DELIMITER +
-                        questionerUsername + BoardFrameSwitchDelegate.DELIMITER +
-                        questionID + BoardFrameSwitchDelegate.DELIMITER +
-                        questionHead + BoardFrameSwitchDelegate.DELIMITER +
-                        questionBytes);
+                                "Questioned by - " + questionerUsername + BoardFrameSwitchDelegate.DELIMITER +
+                                questionID + BoardFrameSwitchDelegate.DELIMITER +
+                                questionHead + BoardFrameSwitchDelegate.DELIMITER +
+                                questionBytes);
             }
 
             for (int i = 0; i < questionsAnsweredByUser.length; i++) {
@@ -63,12 +62,12 @@ public class ProfileBoardFrame extends BoardFrame {
                 questionerProfile = questionsAnsweredByUser[i].getValue(DBUser.K_USER_PROFILE);
                 questionerUsername = questionsAnsweredByUser[i].getValue(DBUser.K_USER_NAME);
                 questionID = questionsAnsweredByUser[i].getValue(DBQuestion.K_QUESTION_ID);
-                questionHead = "Answered: " + questionsAnsweredByUser[i].getValue(DBQuestion.K_QUESTION_HEAD);
+                questionHead = questionsAnsweredByUser[i].getValue(DBQuestion.K_QUESTION_HEAD);
                 questionBytes = questionsAnsweredByUser[i].getValue(DBQuestion.K_QUESTION_BYTESCORE);
 
                 questionData.putKeyValue(String.valueOf(i + questionsAskedByUser.length),
                         questionerProfile + BoardFrameSwitchDelegate.DELIMITER +
-                                questionerUsername + BoardFrameSwitchDelegate.DELIMITER +
+                                "Answered to - " + questionerUsername + BoardFrameSwitchDelegate.DELIMITER +
                                 questionID + BoardFrameSwitchDelegate.DELIMITER +
                                 questionHead + BoardFrameSwitchDelegate.DELIMITER +
                                 questionBytes);
@@ -84,7 +83,9 @@ public class ProfileBoardFrame extends BoardFrame {
         buttonPanel = new ProfileBoardButtonPanel(main, this);
         userDataPanel = new ProfileBoardUserDataPanel(main, this);
         editPanel = new ProfileEditPanel(main, this);
-        activityPanel = new ProfileBoardActivityPanel(main, this);
+        activityPanel = new BoardContentDisplayPanel(main, this);
+        activityPanel.setStatusLabel("No Activity\nLet's Get Started!");
+        activityPanel.setShadowState(OFFSET_SHADOW);
 
         GridBagBuilder builder = new GridBagBuilder(this, 3);
 
@@ -96,7 +97,7 @@ public class ProfileBoardFrame extends BoardFrame {
         addPanel(ProfileEditPanel.class, editPanel, builder);
 
         builder.skipCells(1);
-        addPanel(ProfileBoardActivityPanel.class, activityPanel, builder);
+        addPanel(BoardContentDisplayPanel.class, activityPanel, builder);
     }
 
     public void applyFrameSwitchContext(BoardFrameSwitchDelegate frameSwitchDelegate) {
@@ -119,14 +120,15 @@ public class ProfileBoardFrame extends BoardFrame {
 
         DBDataObject questionData = frameSwitchDelegate.getContext(DBQuestion.TABLE);
 
-        activityPanel.clearActivities();
+        activityPanel.clearQuestions();
 
         for (int i = 0; i < questionData.getKeyValueMap().size(); i++) {
             String[] contentData = questionData.getValue(String.valueOf(i)).split(BoardFrameSwitchDelegate.DELIMITER);
 
-            ActivityPane activityPane = activityPanel.addActivity();
+            ContentDisplayPane activityPane = activityPanel.addActivity();
             activityPane.setUserData(contentData[0], contentData[1], userData.getValue(DBUser.K_USER_ID));
             activityPane.setContentData(contentData[3], contentData[2], contentData[4]);
         }
+        activityPanel.resetScrolls();
     }
 }
