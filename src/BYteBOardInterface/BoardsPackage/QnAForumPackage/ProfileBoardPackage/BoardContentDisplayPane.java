@@ -1,5 +1,6 @@
 package BYteBOardInterface.BoardsPackage.QnAForumPackage.ProfileBoardPackage;
 
+import BYteBOardDatabase.DBOperation;
 import BYteBOardInterface.BoardsPackage.QnAForumPackage.QnABoardPackage.QnABoardFrame;
 import BYteBOardInterface.StructurePackage.BoardPanel;
 import BYteBOardInterface.StructurePackage.Frame;
@@ -14,8 +15,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.DecimalFormat;
+import java.util.Scanner;
 
-public class ContentDisplayPane extends BoardPanel {
+public class BoardContentDisplayPane extends BoardPanel {
 
     private BoardTextArea contentText;
     private BoardLabel contentResponseText;
@@ -23,7 +26,7 @@ public class ContentDisplayPane extends BoardPanel {
     private BoardLabel contentUsername;
     private String userID;
 
-    public ContentDisplayPane(MainFrame main, Frame frame) {
+    public BoardContentDisplayPane(MainFrame main, Frame frame) {
         super(main, frame, ByteBoardTheme.MAIN_LIGHT);
 
         addListeners();
@@ -86,13 +89,16 @@ public class ContentDisplayPane extends BoardPanel {
     public void setUserData(String userProfile, String username, String userID) {
         contentUsername.setProfileIcon(userProfile, ResourceManager.MINI);
         contentUsername.setText(username);
+
         this.userID = userID;
     }
 
-    public void setContentData(String contentText, String contentID, String bytes) {
+    public void setContentData(String contentText, String contentID, String contentResponseText, String bytes) {
         this.contentText.setText(contentText);
         this.contentText.setName(contentID);
-        contentBytes.setText(bytes);
+        this.contentResponseText.setText(contentResponseText);
+
+        contentBytes.setText(DBOperation.formatBytes(bytes, true));
     }
 
     public String getQuestionID() {
@@ -104,7 +110,7 @@ public class ContentDisplayPane extends BoardPanel {
     }
 
     private void addListeners() {
-        addMouseListener(new MouseAdapter() {
+        MouseAdapter adapter = new MouseAdapter() {
             public void mouseReleased(MouseEvent e) {
                 setBackground(ByteBoardTheme.MAIN_LIGHT);
                 requestSwitchFrame(QnABoardFrame.class, getQuestionID(), getUserID());
@@ -117,6 +123,8 @@ public class ContentDisplayPane extends BoardPanel {
             public void mouseExited(MouseEvent e) {
                 setBackground(ByteBoardTheme.MAIN_LIGHT);
             }
-        });
+        };
+        addMouseListener(adapter);
+        contentText.addMouseListener(adapter);
     }
 }

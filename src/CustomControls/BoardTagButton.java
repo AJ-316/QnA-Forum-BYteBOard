@@ -1,14 +1,20 @@
 package CustomControls;
 
+import BYteBOardDatabase.DBDataObject;
+import BYteBOardDatabase.DBTag;
+import BYteBOardInterface.BoardsPackage.QnAForumPackage.SearchBoardPackage.SearchBoardFrame;
 import BYteBOardInterface.StructurePackage.Frame;
 import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
 
 import java.awt.*;
+import java.awt.event.ActionListener;
 
 public class BoardTagButton extends BoardButton {
 
     private final Frame frame;
+    private ActionListener searchListener;
+    private ActionListener removeSelfListener;
 
     public BoardTagButton(Frame frame, String icon, int defaultIconState) {
         super("", icon, defaultIconState, ResourceManager.PRESSED, ResourceManager.ROLLOVER, ResourceManager.MICRO);
@@ -21,22 +27,28 @@ public class BoardTagButton extends BoardButton {
         setRolloverFGColor(ByteBoardTheme.TEXT_FG_LIGHT);
     }
 
-    public void setTag(String tag, String userID) {
-        setText(tag);
-        // TODO addActionListener(e -> frame.getBoardFrame().requestSwitchFrame(SearchBoardFrame.class, userID, tag));
+    public void setTag(DBDataObject tagDataObject, String userID) {
+        setText(tagDataObject.getValue(DBTag.K_TAG));
+        setName(tagDataObject.getValue(DBTag.K_TAG_ID));
+
+        if(searchListener == null) {
+            searchListener = e -> frame.getBoardFrame().requestSwitchFrame(SearchBoardFrame.class, userID, getTagID());
+            addActionListener(searchListener);
+        }
     }
 
-    public void setTag(String tag, Container container) {
-        setText(tag);
-        addActionListener(e -> container.remove(this));
+    public void setTag(DBDataObject tagDataObject, Container container) {
+        setText(tagDataObject.getValue(DBTag.K_TAG));
+        setName(tagDataObject.getValue(DBTag.K_TAG_ID));
+
+        if(removeSelfListener == null) {
+            removeSelfListener = e -> container.remove(this);
+            addActionListener(removeSelfListener);
+        }
     }
 
     public String getTagID() {
         return getName();
-    }
-
-    public void setTagID(String id) {
-        setName(id);
     }
 
     public String getTag() {

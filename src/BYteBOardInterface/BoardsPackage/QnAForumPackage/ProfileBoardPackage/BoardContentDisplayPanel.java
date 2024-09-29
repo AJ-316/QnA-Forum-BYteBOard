@@ -73,10 +73,10 @@ public class BoardContentDisplayPanel extends BoardPanel {
         statusLabel.setText(labelBuilder.toString());
     }
 
-    public ContentDisplayPane addActivity() {
+    public BoardContentDisplayPane addContentDisplayPanel() {
         removeActivityStatusLabel();
 
-        ContentDisplayPane pane = new ContentDisplayPane(getMain(), getFrame());
+        BoardContentDisplayPane pane = new BoardContentDisplayPane(getMain(), getFrame());
         layoutBuilder.addToNextCell(pane);
 
         addActivityStatusLabel("");

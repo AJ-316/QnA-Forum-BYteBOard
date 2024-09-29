@@ -1,11 +1,8 @@
 package BYteBOardInterface.BoardsPackage.QnAForumPackage.SearchBoardPackage;
 
-import BYteBOardDatabase.DBDataObject;
-import BYteBOardDatabase.DBQueTag;
-import BYteBOardDatabase.DBQuestion;
-import BYteBOardDatabase.DBUser;
+import BYteBOardDatabase.*;
 import BYteBOardInterface.BoardsPackage.QnAForumPackage.ProfileBoardPackage.BoardContentDisplayPanel;
-import BYteBOardInterface.BoardsPackage.QnAForumPackage.ProfileBoardPackage.ContentDisplayPane;
+import BYteBOardInterface.BoardsPackage.QnAForumPackage.ProfileBoardPackage.BoardContentDisplayPane;
 import BYteBOardInterface.BoardsPackage.QnAForumPackage.QnABoardPackage.BoardTagsDisplayPanel;
 import BYteBOardInterface.StructurePackage.BoardPanel;
 import BYteBOardInterface.StructurePackage.Frame;
@@ -68,7 +65,7 @@ public class SearchQuestionPanel extends BoardPanel {
                 .addToNextCell(questionsPanel);
 
         // requires one tag to be added first for the panel to be visible
-        searchTagsPanel.remove(searchTagsPanel.addTag("tag", this));
+        searchTagsPanel.remove(searchTagsPanel.addTag(new DBDataObject(), this));
     }
 
     public void searchQuestions(List<DBDataObject> searchObjects, int type) {
@@ -117,10 +114,13 @@ public class SearchQuestionPanel extends BoardPanel {
             BoardLabel label = new BoardLabel(questionDataObject.getValue(DBQuestion.K_QUESTION_HEAD));
             label.setFGLight();
             label.setFontPrimary(ByteBoardTheme.FONT_T_BOLD, 30);
-            ContentDisplayPane activityPane = questionsPanel.addActivity();
+            BoardContentDisplayPane activityPane = questionsPanel.addContentDisplayPanel();
+
+            String answerCount = "Answers: " + DBQuestion.getAnswerCount(questionDataObject.getValue(DBQuestion.K_QUESTION_ID));
             activityPane.setContentData(
                     questionDataObject.getValue(DBQuestion.K_QUESTION_HEAD),
                     questionDataObject.getValue(DBQuestion.K_QUESTION_ID),
+                    answerCount,
                     questionDataObject.getValue(DBQuestion.K_QUESTION_BYTESCORE));
 
             DBDataObject userData = DBUser.getUser(questionDataObject.getValue(DBQuestion.K_USER_ID));
@@ -141,11 +141,11 @@ public class SearchQuestionPanel extends BoardPanel {
         titleLabel.setText(text);
     }
 
-    public boolean addTag(String tag, String tagID) {
-        if (searchTagsPanel.contains(tag)) return false;
+    public boolean addTag(DBDataObject tagDataObject) {
+        if (searchTagsPanel.contains(tagDataObject.getValue(DBTag.K_TAG))) return false;
 
         searchTagsScrollPanel.setVisible(true);
-        searchTagsPanel.addTag(tag, tagID, e -> EventQueue.invokeLater(() ->
+        searchTagsPanel.addTag(tagDataObject, e -> EventQueue.invokeLater(() ->
                 searchQuestions(null, SearchBoardPanel.TAG_INPUT)), this);
         return true;
     }

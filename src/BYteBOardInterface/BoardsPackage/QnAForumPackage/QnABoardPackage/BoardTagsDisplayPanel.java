@@ -1,5 +1,7 @@
 package BYteBOardInterface.BoardsPackage.QnAForumPackage.QnABoardPackage;
 
+import BYteBOardDatabase.DBDataObject;
+import BYteBOardDatabase.DBTag;
 import BYteBOardInterface.StructurePackage.Frame;
 import BYteBOardInterface.StructurePackage.MainFrame;
 import CustomControls.BoardScrollPanel;
@@ -51,10 +53,11 @@ public class BoardTagsDisplayPanel extends BoardScrollPanel {
         addMouseWheelListener(scrollListener);
     }
 
-    public void addTag(String tag, String userID) {
+    public void addTag(DBDataObject tagDataObject, String userID) {
+        String tag = tagDataObject.getValue(DBTag.K_TAG);
         if (contains(tag)) return;
         BoardTagButton tagButton = new BoardTagButton(getFrame(), "search", ResourceManager.DEFAULT_DARK);
-        tagButton.setTag(tag, userID);
+        tagButton.setTag(tagDataObject, userID);
         tagButton.addInsets(5);
         add(tagButton);
 
@@ -64,17 +67,18 @@ public class BoardTagsDisplayPanel extends BoardScrollPanel {
         }
     }
 
-    public BoardTagButton addTag(String tag, Container parent) {
-        return addTag(tag, null, null, parent);
+    public BoardTagButton addTag(DBDataObject tagDataObject, Container parent) {
+        return addTag(tagDataObject, null, parent);
     }
 
-    public BoardTagButton addTag(String tag, String tagID, ActionListener listener, Container parent) {
+    public BoardTagButton addTag(DBDataObject tagDataObject, ActionListener listener, Container parent) {
+        String tag = tagDataObject.getValue(DBTag.K_TAG);
+
         if (contains(tag)) return null;
         scrollPane.setVisible(false);
 
         BoardTagButton tagButton = new BoardTagButton(getFrame(), "cancel", ResourceManager.DEFAULT_DARK);
-        tagButton.setTag(tag, this);
-        tagButton.setTagID(tagID);
+        tagButton.setTag(tagDataObject, this);
         tagButton.addActionListener(listener);
         tagButton.addInsets(5);
         add(tagButton);

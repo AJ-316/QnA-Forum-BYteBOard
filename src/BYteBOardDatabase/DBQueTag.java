@@ -15,11 +15,10 @@ public class DBQueTag extends DBOperation {
     }
 
     public static DBDataObject[] getTopTags(int limit) {
-        String tagTableKey = DBTag.ops.appendKeys(DBTag.K_TAG);
-
-        return ops.findTopValues(ops.getAggregate(COUNT, K_TAG_ID), tagTableKey,
+        return ops.findTopValues(ops.getAggregate(COUNT, K_TAG_ID),
+                DBTag.ops.appendKeys(DBTag.K_TAG),
                 new String[]{ops.matchByKey(K_TAG_ID, DBTag.ops.appendKeys(DBTag.K_TAG_ID))}, limit,
-                ops.appendKeys(K_TAG_ID), tagTableKey);
+                ops.appendEmptyKeys(), DBTag.ops.appendKeys(DBTag.K_TAG_ID, DBTag.K_TAG));
     }
 
     /**
@@ -49,7 +48,7 @@ public class DBQueTag extends DBOperation {
     public static DBDataObject[] getQueTags(String questionID) {
         return ops.joinValuesBy(ops.matchByValue(K_QUESTION_ID, questionID),
                 new String[]{ops.matchByKey(K_TAG_ID, DBTag.ops.appendKeys(DBTag.K_TAG_ID))},
-                ops.appendKeys("*"), DBTag.ops.appendKeys(DBTag.K_TAG));
+                ops.appendKeys("*"), DBTag.ops.appendKeys("*"));
     }
 
     public static void addQueTag(String tagID, String questionID) {

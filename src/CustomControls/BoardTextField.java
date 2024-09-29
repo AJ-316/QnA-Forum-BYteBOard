@@ -14,12 +14,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
+import java.util.function.Supplier;
 
 public class BoardTextField extends JTextField implements CustomControl {
 
     private BoardPanel container;
     private BoardLabel errorLabel;
     private String hintText;
+    private Supplier<Boolean> altHintCondition;
 
     public BoardTextField(MainFrame main, Frame frame, Color background) {
         init(main, frame, background, 9);
@@ -30,7 +32,7 @@ public class BoardTextField extends JTextField implements CustomControl {
     }
 
     private void init(MainFrame main, Frame frame, Color background, int cols) {
-        container = createContainer(main, frame, ByteBoardTheme.MAIN_LIGHT);
+        container = createContainer(main, frame);
 
         addInsets(0);
         setColumns(cols);
@@ -48,7 +50,6 @@ public class BoardTextField extends JTextField implements CustomControl {
 
         getDocument().addUndoableEditListener(e -> undoManager.addEdit(e.getEdit()));
 
-        // Ctrl+Z to undo
         getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.CTRL_DOWN_MASK), "Undo");
         getActionMap().put("Undo", new AbstractAction() {
             @Override
@@ -59,7 +60,6 @@ public class BoardTextField extends JTextField implements CustomControl {
             }
         });
 
-        // Ctrl+Y to redo
         getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke(KeyEvent.VK_Y, KeyEvent.CTRL_DOWN_MASK), "Redo");
         getActionMap().put("Redo", new AbstractAction() {
             @Override
@@ -71,8 +71,8 @@ public class BoardTextField extends JTextField implements CustomControl {
         });
     }
 
-    private BoardPanel createContainer(MainFrame main, Frame frame, String background) {
-        BoardPanel container = new BoardPanel(main, frame, background) {
+    private BoardPanel createContainer(MainFrame main, Frame frame) {
+        BoardPanel container = new BoardPanel(main, frame, ByteBoardTheme.MAIN_LIGHT) {
             public void paint(Graphics g) {
                 super.paint(g);
                 if (BoardTextField.this.hasFocus()) {
@@ -113,12 +113,20 @@ public class BoardTextField extends JTextField implements CustomControl {
         errorLabel.setText(errorText.length() > 28 ? errorText.substring(0, 28) : errorText);
     }
 
+    public void setAltHintCondition(Supplier<Boolean> altHintCondition) {
+        this.altHintCondition = altHintCondition;
+    }
+
+    public boolean isHintDisplayed() {
+        return altHintCondition.get() || getText().isEmpty();
+    }
+
     @Override
     public void paint(Graphics g) {
         super.paint(g);
         if (hintText == null) return;
 
-        if (getText().isEmpty()) {
+        if (isHintDisplayed()) {
             int h = getHeight();
             ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
             Insets ins = getInsets();
@@ -184,16 +192,4 @@ public class BoardTextField extends JTextField implements CustomControl {
         super.setForeground(c);
         super.setCaretColor(c);
     }
-
-    /*public static void initTextField(JTextField textField, CustomDocumentListener documentListener) {
-        textField.getDocument().addDocumentListener(documentListener);
-        documentListener.setTextField(textField);
-
-        if(textField.getParent() == null) return;
-
-        textField.setBackground(textField.getParent().getBackground());
-
-        if(!textField.getParent().getBackground().equals(ResourceManager.getColor(ByteBoardTheme.BASE)))
-            textField.setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_LIGHT));
-    }*/
 }

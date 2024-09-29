@@ -2,6 +2,7 @@ package BYteBOardInterface.BoardsPackage.QnAForumPackage.SearchBoardPackage;
 
 import BYteBOardDatabase.DBDataObject;
 import BYteBOardDatabase.DBQueTag;
+import BYteBOardDatabase.DBTag;
 import BYteBOardDatabase.DBUser;
 import BYteBOardInterface.BoardsPackage.QnAForumPackage.ProfileBoardPackage.ProfileBoardFrame;
 import BYteBOardInterface.StructurePackage.BoardFrame;
@@ -12,14 +13,11 @@ import CustomControls.BoardButton;
 import CustomControls.GridBagBuilder;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class SearchBoardFrame extends BoardFrame {
 
-    private BoardButton backButton;
     private SearchBoardPanel searchBoardPanel;
     private SearchPopularTagsPanel popularTagsPanel;
-    private SearchQuestionPanel searchQuestionPanel;
 
     public SearchBoardFrame(MainFrame main) {
         super(main, (delegate, context) -> {
@@ -27,6 +25,12 @@ public class SearchBoardFrame extends BoardFrame {
             context = delegate.getContextOrDefault(context, DBUser.TABLE, DBUser.K_USER_ID);
 
             String userID = context[0];
+
+            if(context.length > 1) {
+                DBDataObject tagData = DBTag.ops.findValuesBy(DBTag.ops.matchByValue(DBTag.K_TAG_ID, context[1]), "*")[0];
+                delegate.putContext(DBTag.TABLE, tagData);
+            } else
+                delegate.putContext(DBTag.TABLE, null);
 
             delegate.putContext(DBUser.TABLE, DBUser.getUser(userID));
             delegate.putContextList(DBQueTag.TABLE, DBQueTag.getTopTags(5));
@@ -38,11 +42,11 @@ public class SearchBoardFrame extends BoardFrame {
     public void init(MainFrame main) {
         GridBagBuilder builder = new GridBagBuilder(this, 1);
 
-        searchQuestionPanel = new SearchQuestionPanel(main, this);
+        SearchQuestionPanel searchQuestionPanel = new SearchQuestionPanel(main, this);
         searchBoardPanel = new SearchBoardPanel(main, this, searchQuestionPanel);
         popularTagsPanel = new SearchPopularTagsPanel(main, this);
 
-        backButton = new BoardButton("Profile", "home");
+        BoardButton backButton = new BoardButton("Profile", "home");
         backButton.addActionListener(e -> requestSwitchFrame(ProfileBoardFrame.class));
         backButton.setFGLight();
 
@@ -67,9 +71,9 @@ public class SearchBoardFrame extends BoardFrame {
 
         String userID = userData.getValue(DBUser.K_USER_ID);
 
-        List<DBDataObject> tagDataList = new ArrayList<>();
-        popularTagsPanel.setPopularTags(delegate.getContextList(DBQueTag.TABLE, tagDataList), userID);
-
         searchBoardPanel.setUserID(userID);
+        searchBoardPanel.searchByTag(delegate.getContext(DBTag.TABLE));
+
+        popularTagsPanel.setPopularTags(delegate.getContextList(DBQueTag.TABLE, new ArrayList<>()), userID);
     }
 }

@@ -39,38 +39,43 @@ public class ProfileBoardFrame extends BoardFrame {
             DBDataObject questionData = new DBDataObject();
 
             String questionerProfile = userData.getValue(DBUser.K_USER_PROFILE);
-            String questionerUsername = userData.getValue(DBUser.K_USER_NAME);
+            String questionerUsername = "Questioned by - " + userData.getValue(DBUser.K_USER_NAME);
             String questionID;
             String questionHead;
             String questionBytes;
+            String questionTotalAnswers;
 
             for (int i = 0; i < questionsAskedByUser.length; i++) {
                 questionID = questionsAskedByUser[i].getValue(DBQuestion.K_QUESTION_ID);
                 questionHead = questionsAskedByUser[i].getValue(DBQuestion.K_QUESTION_HEAD);
                 questionBytes = questionsAskedByUser[i].getValue(DBQuestion.K_QUESTION_BYTESCORE);
+                questionTotalAnswers = "Answers: " + DBQuestion.getAnswerCount(questionID);
 
                 questionData.putKeyValue(String.valueOf(i),
                         questionerProfile + BoardFrameSwitchDelegate.DELIMITER +
-                                "Questioned by - " + questionerUsername + BoardFrameSwitchDelegate.DELIMITER +
-                                questionID + BoardFrameSwitchDelegate.DELIMITER +
-                                questionHead + BoardFrameSwitchDelegate.DELIMITER +
-                                questionBytes);
+                        questionerUsername + BoardFrameSwitchDelegate.DELIMITER +
+                        questionID + BoardFrameSwitchDelegate.DELIMITER +
+                        questionHead + BoardFrameSwitchDelegate.DELIMITER +
+                        questionBytes + BoardFrameSwitchDelegate.DELIMITER +
+                        questionTotalAnswers);
             }
 
             for (int i = 0; i < questionsAnsweredByUser.length; i++) {
 
                 questionerProfile = questionsAnsweredByUser[i].getValue(DBUser.K_USER_PROFILE);
-                questionerUsername = questionsAnsweredByUser[i].getValue(DBUser.K_USER_NAME);
+                questionerUsername = "Answered to - " + questionsAnsweredByUser[i].getValue(DBUser.K_USER_NAME);
                 questionID = questionsAnsweredByUser[i].getValue(DBQuestion.K_QUESTION_ID);
                 questionHead = questionsAnsweredByUser[i].getValue(DBQuestion.K_QUESTION_HEAD);
                 questionBytes = questionsAnsweredByUser[i].getValue(DBQuestion.K_QUESTION_BYTESCORE);
+                questionTotalAnswers = "Answers: " + DBQuestion.getAnswerCount(questionID);
 
                 questionData.putKeyValue(String.valueOf(i + questionsAskedByUser.length),
                         questionerProfile + BoardFrameSwitchDelegate.DELIMITER +
-                                "Answered to - " + questionerUsername + BoardFrameSwitchDelegate.DELIMITER +
-                                questionID + BoardFrameSwitchDelegate.DELIMITER +
-                                questionHead + BoardFrameSwitchDelegate.DELIMITER +
-                                questionBytes);
+                        questionerUsername + BoardFrameSwitchDelegate.DELIMITER +
+                        questionID + BoardFrameSwitchDelegate.DELIMITER +
+                        questionHead + BoardFrameSwitchDelegate.DELIMITER +
+                        questionBytes + BoardFrameSwitchDelegate.DELIMITER +
+                        questionTotalAnswers);
             }
 
             delegate.putContext(DBUser.TABLE, userData);
@@ -125,9 +130,9 @@ public class ProfileBoardFrame extends BoardFrame {
         for (int i = 0; i < questionData.getKeyValueMap().size(); i++) {
             String[] contentData = questionData.getValue(String.valueOf(i)).split(BoardFrameSwitchDelegate.DELIMITER);
 
-            ContentDisplayPane activityPane = activityPanel.addActivity();
+            BoardContentDisplayPane activityPane = activityPanel.addContentDisplayPanel();
             activityPane.setUserData(contentData[0], contentData[1], userData.getValue(DBUser.K_USER_ID));
-            activityPane.setContentData(contentData[3], contentData[2], contentData[4]);
+            activityPane.setContentData(contentData[3], contentData[2], contentData[5], contentData[4]);
         }
         activityPanel.resetScrolls();
     }

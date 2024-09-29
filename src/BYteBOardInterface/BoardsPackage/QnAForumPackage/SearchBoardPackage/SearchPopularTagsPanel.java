@@ -35,20 +35,27 @@ public class SearchPopularTagsPanel extends BoardPanel {
                 .addToNextCell(label)
                 .weightX(1)
                 .addToNextCell(popularTagsPanel);
+
+        createTagButtons();
     }
 
-    protected void clearTags() {
-        popularTagsPanel.removeAll();
-    }
-
-    protected void setPopularTags(DBDataObject[] tagDataObjects, String userID) {
-        clearTags();
-        for (DBDataObject tag : tagDataObjects) {
+    protected void createTagButtons() {
+        for (int i = 0; i < 5; i++) {
             BoardTagButton tagButton = new BoardTagButton(getFrame(), "add", ResourceManager.DEFAULT);
             tagButton.addInsets(10);
             tagButton.setFGLight();
-            tagButton.setTag(tag.getValue(DBTag.K_TAG), userID);
             popularTagsPanel.add(tagButton);
+        }
+    }
+
+    protected void setPopularTags(DBDataObject[] tagDataObjects, String userID) {
+        for (int i = 0; i < popularTagsPanel.getComponentCount(); i++) {
+            Component component = popularTagsPanel.getComponent(i);
+            if(!(component instanceof BoardTagButton))
+                return;
+
+            BoardTagButton tagButton = (BoardTagButton) component;
+            tagButton.setTag(tagDataObjects[i], userID);
         }
     }
 }

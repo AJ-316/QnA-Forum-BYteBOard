@@ -1,5 +1,6 @@
 package BYteBOardDatabase;
 
+import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.Map;
 
@@ -13,6 +14,7 @@ public abstract class DBOperation {
     protected static final String TABLE_KEY_DELIMITER = ":";
     protected static final String KEY_VALUE_DELIMITER = "=";
     protected static final String KEYS_DELIMITER = ",";
+    private static final DecimalFormat bytesDF = new DecimalFormat("0.##");
     protected final Map<String, String> keyValueMap;
     private final String table;
     protected String[] keys;
@@ -21,6 +23,21 @@ public abstract class DBOperation {
         this.keyValueMap = keyValueMap;
         this.table = table;
         this.keys = keys;
+    }
+
+    public static String formatBytes(String bytesStr, boolean isPadded) {
+        double bytes = Double.parseDouble(bytesStr);
+
+        String formatted;
+        if (bytes >= 1_000_000) {
+            formatted = bytesDF.format(bytes / 1_000_000) + "M";
+        } else if (bytes >= 1_000) {
+            formatted = bytesDF.format(bytes / 1_000) + "k";
+        } else {
+            formatted = bytesDF.format(bytes);
+        }
+
+        return isPadded ? String.format("%-7s", formatted) : formatted;
     }
 
     public static String addOrderBy(String key, String order) {

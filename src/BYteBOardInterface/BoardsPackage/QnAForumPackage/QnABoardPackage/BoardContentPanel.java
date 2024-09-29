@@ -68,9 +68,9 @@ public class BoardContentPanel extends BoardPanel {
                 .addToNextCell(upVoteButton)
                 .addToNextCell(downVoteButton);
 
-        BoardPanel headerPane = new BoardPanel(main, frame);
-        GridBagBuilder headerPaneLayout = new GridBagBuilder(headerPane, 3);
-        headerPaneLayout.fillBoth().insets(10)
+        BoardPanel headHeaderPane = new BoardPanel(main, frame);
+        GridBagBuilder HeadHeaderPaneLayout = new GridBagBuilder(headHeaderPane, 3);
+        HeadHeaderPaneLayout.fillBoth().insets(10)
                 .addToNextCell(contentBytes).weight(1, 1)
                 .addToNextCell(tagsDisplayPanel.getComponent()).weight(0, 0)
                 .addToNextCell(contentUsername);
@@ -82,16 +82,16 @@ public class BoardContentPanel extends BoardPanel {
         contentHeadPanel.setBorderColor(ByteBoardTheme.MAIN_DARK);
         contentHeadPanel.add(contentHead);
 
-        BoardPanel footerPane = new BoardPanel(main, frame);
-        GridBagBuilder footerPaneLayout = new GridBagBuilder(footerPane, 2);
-        footerPaneLayout.insets(10)
+        BoardPanel headFooterPane = new BoardPanel(main, frame);
+        GridBagBuilder headFooterPaneLayout = new GridBagBuilder(headFooterPane, 2);
+        headFooterPaneLayout.insets(10)
                 .addToNextCell(voteButtonsPanel);
-        footerPaneLayout.weight(1, 1).fillBoth()
+        headFooterPaneLayout.weight(1, 1).fillBoth()
                 .addToNextCell(contentHeadPanel);
 
         panel.setLayout(new BorderLayout());
-        panel.add(headerPane, BorderLayout.NORTH);
-        panel.add(footerPane, BorderLayout.CENTER);
+        panel.add(headHeaderPane, BorderLayout.NORTH);
+        panel.add(headFooterPane, BorderLayout.CENTER);
         return panel;
     }
 
@@ -121,6 +121,7 @@ public class BoardContentPanel extends BoardPanel {
         contentUsername.setFontPrimary(ByteBoardTheme.FONT_T_SEMIBOLD, 20);
 
         contentHead = new BoardTextArea("Content Head goes here...");
+        contentHead.addInsets(10);
         contentHead.setFontPrimary(ByteBoardTheme.FONT_T_BOLD, 26);
 
         contentBody = new BoardTextArea("Content Body goes here...");
@@ -173,7 +174,7 @@ public class BoardContentPanel extends BoardPanel {
         tagsDisplayPanel.clearTags();
 
         for (DBDataObject tagDataObject : tagDataObjectList) {
-            tagsDisplayPanel.addTag(tagDataObject.getValue(DBTag.K_TAG), userID);
+            tagsDisplayPanel.addTag(tagDataObject, userID);
         }
     }
 

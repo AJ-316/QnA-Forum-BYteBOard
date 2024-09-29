@@ -16,6 +16,10 @@ public class DBQuestion extends DBOperation {
         super(null, TABLE, K_QUESTION_ID, K_QUESTION_HEAD, K_QUESTION_BODY, K_USER_ID, K_UPVOTES, K_DOWNVOTES, K_QUESTION_BYTESCORE);
     }
 
+    public static int getAnswerCount(String questionID) {
+        return DatabaseManager.count(DBAnswer.TABLE, DBAnswer.K_ANSWER, DBAnswer.ops.matchByValue(DBAnswer.K_QUESTION_ID, questionID));
+    }
+
     public static DBDataObject[] searchByQuestionHead(String question, String... selectKeys) {
         return ops.ftSearchValueBy(question,
                 ops.likeMatchContains(K_QUESTION_HEAD, getLastCharAndWord(question)),
