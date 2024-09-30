@@ -32,7 +32,7 @@ public abstract class ByteBoardTheme {
     public final static ByteBoardTheme ByteBoardBaseTheme = new ByteBoardTheme() {
 
         public void init() {
-            setName("ByteBoardBaseTheme");
+            setName("BYteBOard Classic");
             loadColorAttribute(BASE, "255, 255, 255");
             loadColorAttribute(MAIN, "0, 120, 120");
             loadColorAttribute(MAIN_LIGHT, "10, 130, 130");

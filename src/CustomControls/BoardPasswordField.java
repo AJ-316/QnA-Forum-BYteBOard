@@ -66,15 +66,12 @@ public class BoardPasswordField extends JPasswordField implements CustomControl 
         super.paint(g);
         if (hintText == null) return;
 
-        if (getPassword().length == 0) {
+        if (getDocument().getLength() == 0) {
             int h = getHeight();
             ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
             Insets ins = getInsets();
             FontMetrics fm = g.getFontMetrics();
-            int c0 = getBackground().getRGB();
-            int c1 = getForeground().getRGB();
-            int c = 0xfefefefe;
-            g.setColor(new Color(((c0 & c) >>> 1) + ((c1 & c) >>> 1), true));
+            g.setColor(BoardTextField.getHintColor(getBackground()));
             g.drawString(hintText, ins.left, h / 2 + fm.getAscent() / 2 - 2);
         }
     }

@@ -74,7 +74,7 @@ public class SearchQuestionPanel extends BoardPanel {
 
         if (type == SearchBoardPanel.QUE_INPUT && !searchObjects.isEmpty()) {
             setTagsVisible(false);
-            setTitle("Similar Question" + (searchObjects.size() > 1 ? "s - " : " - ") + searchObjects.size());
+            setSearchedResultsText("Similar Question");
         }
 
         if (type == SearchBoardPanel.TAG_INPUT) {
@@ -90,7 +90,7 @@ public class SearchQuestionPanel extends BoardPanel {
             }
 
             setTagsVisible(true);
-            setTitle("Related Question" + (searchObjects.size() > 1 ? "s - " : " - ") + searchObjects.size());
+            setSearchedResultsText("Related Question");
         }
 
         questionsPanel.clearQuestions();
@@ -111,25 +111,27 @@ public class SearchQuestionPanel extends BoardPanel {
 
     private void addQuestions(List<DBDataObject> questionDataObjects) {
         for (DBDataObject questionDataObject : questionDataObjects) {
-            BoardLabel label = new BoardLabel(questionDataObject.getValue(DBQuestion.K_QUESTION_HEAD));
-            label.setFGLight();
-            label.setFontPrimary(ByteBoardTheme.FONT_T_BOLD, 30);
-            BoardContentDisplayPane activityPane = questionsPanel.addContentDisplayPanel();
+            if(questionsPanel.containsPanel(questionDataObject.getValue(DBQuestion.K_QUESTION_ID)))
+                continue;
+
+            BoardContentDisplayPane questionPane = questionsPanel.addContentDisplayPanel();
 
             String answerCount = "Answers: " + DBQuestion.getAnswerCount(questionDataObject.getValue(DBQuestion.K_QUESTION_ID));
-            activityPane.setContentData(
+            questionPane.setContentData(
                     questionDataObject.getValue(DBQuestion.K_QUESTION_HEAD),
                     questionDataObject.getValue(DBQuestion.K_QUESTION_ID),
                     answerCount,
                     questionDataObject.getValue(DBQuestion.K_QUESTION_BYTESCORE));
 
             DBDataObject userData = DBUser.getUser(questionDataObject.getValue(DBQuestion.K_USER_ID));
-            activityPane.setUserData(
+            questionPane.setUserData(
                     userData.getValue(DBUser.K_USER_PROFILE),
                     userData.getValue(DBUser.K_USER_NAME),
                     userData.getValue(DBUser.K_USER_ID));
         }
+
         questionsPanel.resetScrolls();
+        setSearchedResultsSize(questionsPanel.getPaneCount());
     }
 
     public void setVisible(boolean aFlag) {
@@ -137,8 +139,12 @@ public class SearchQuestionPanel extends BoardPanel {
         questionsPanel.setVisible(aFlag);
     }
 
-    private void setTitle(String text) {
+    private void setSearchedResultsText(String text) {
         titleLabel.setText(text);
+    }
+
+    private void setSearchedResultsSize(int size) {
+        titleLabel.setText(titleLabel.getText() + (size > 1 ? "s - " + size : ""));
     }
 
     public boolean addTag(DBDataObject tagDataObject) {

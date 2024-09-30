@@ -1,5 +1,6 @@
 package BYteBOardInterface.BoardsPackage.QnAForumPackage;
 
+import BYteBOardInterface.BoardsPackage.QnAForumPackage.AskBoardPackage.AskBoardFrame;
 import BYteBOardInterface.BoardsPackage.QnAForumPackage.ProfileBoardPackage.ProfileBoardFrame;
 import BYteBOardInterface.BoardsPackage.QnAForumPackage.QnABoardPackage.QnABoardFrame;
 import BYteBOardInterface.BoardsPackage.QnAForumPackage.SearchBoardPackage.SearchBoardFrame;
@@ -17,6 +18,7 @@ public class QnAForumMainFrame extends MainFrame {
         new ProfileBoardFrame(this);
         new QnABoardFrame(this);
         new SearchBoardFrame(this);
+        new AskBoardFrame(this);
     }
 
     public void restartMainFrame() {

@@ -1,30 +1,70 @@
 package CustomControls.CustomListenerPackage;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.text.BadLocationException;
 
 public class TagListener extends CustomDocumentListener {
 
-    protected boolean validateTextInput(String text) {
-        if (!text.startsWith("#") || text.length() < 2) return false;
+    private final boolean isTagField;
 
-        String tagText = text.substring(1);
+    public TagListener(boolean isTagField) {
+        this.isTagField = isTagField;
+    }
 
-        if (!tagText.matches("^[a-zA-Z0-9]+$")) {
+    protected boolean validateTextInput(DocumentEvent e) throws BadLocationException {
+        String newText = e.getDocument().getText(0, e.getDocument().getLength());
+        String filteredText = getFilteredText(newText);
+
+        if (!newText.equals(filteredText)) {
             SwingUtilities.invokeLater(() -> {
-                int lastCaretPosition = textComponent.getCaretPosition() - 1;
-
-                if (lastCaretPosition - 1 == -1) {
-                    textComponent.setText("#");
-                    return;
+                try {
+                    e.getDocument().remove(0, e.getDocument().getLength());
+                    e.getDocument().insertString(0, filteredText, null);
+                } catch (BadLocationException ex) {
+                    ex.printStackTrace();
                 }
-
-                String newText = "#" + tagText.substring(0, lastCaretPosition - 1) + tagText.substring(lastCaretPosition);
-                System.out.println("Current: " + textComponent.getText() + ", Old: " + tagText + ", New: " + newText);
-                textComponent.setText(newText);
-                textComponent.setCaretPosition(lastCaretPosition);
-                textComponent.repaint();
             });
         }
         return false;
+    }
+
+    private String getFilteredText(String newText) {
+        String filteredText;
+
+        if (isTagField) {
+            filteredText = convertToCamelCase(newText.replaceAll("[^a-zA-Z0-9]", ""));
+        } else {
+
+            if (!newText.isEmpty() && newText.charAt(0) == '#') {
+                // convert to camel case if spaces present (allow spaces for camel case)
+                String content = newText.substring(1).replaceAll("[^a-zA-Z0-9 ]", "");
+                filteredText = "#" + convertToCamelCase(content);
+            } else
+                filteredText = newText;
+        }
+        return filteredText;
+    }
+
+    private String convertToCamelCase(String input) {
+
+        StringBuilder camelCase = new StringBuilder();
+        boolean nextUpperCase = false;
+
+        for (int i = 0; i < input.length(); i++) {
+            char c = input.charAt(i);
+
+            if (c == ' ') {
+                nextUpperCase = true; // capitalize the next letter
+            } else {
+                if (nextUpperCase) {
+                    camelCase.append(Character.toUpperCase(c)); // capitalize letter after space
+                    nextUpperCase = false;
+                } else {
+                    camelCase.append(i == 0 ? Character.toLowerCase(c) : c); // lowercase for the first char; normal for the rest
+                }
+            }
+        }
+        return camelCase.toString();
     }
 }

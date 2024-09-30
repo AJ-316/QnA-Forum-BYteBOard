@@ -19,12 +19,11 @@ public abstract class CustomDocumentListener implements DocumentListener {
         this.validatedInsertListener = validatedInsertListener;
     }
 
-    protected abstract boolean validateTextInput(String text) throws StringIndexOutOfBoundsException;
+    protected abstract boolean validateTextInput(DocumentEvent e) throws BadLocationException, StringIndexOutOfBoundsException;
 
     public void insertUpdate(DocumentEvent e) {
         try {
-            String inputText = e.getDocument().getText(0, e.getDocument().getLength());
-            validateTextInput(inputText);
+            validateTextInput(e);
             updateValidatedInsertListener();
         } catch (BadLocationException ex) {
             throw new RuntimeException(ex);
@@ -39,8 +38,13 @@ public abstract class CustomDocumentListener implements DocumentListener {
     }
 
     private void updateValidatedInsertListener() {
-        if (validatedInsertListener == null) return;
+        if (validatedInsertListener == null)
+            return;
 
-        SwingUtilities.invokeLater(() -> validatedInsertListener.invoke(textComponent.getText()));
+        SwingUtilities.invokeLater(() -> {
+            if (validatedInsertListener == null)
+                return;
+            validatedInsertListener.invoke(textComponent.getText());
+        });
     }
 }

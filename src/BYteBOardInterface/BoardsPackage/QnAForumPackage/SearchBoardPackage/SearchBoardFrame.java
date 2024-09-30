@@ -13,6 +13,7 @@ import CustomControls.BoardButton;
 import CustomControls.GridBagBuilder;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class SearchBoardFrame extends BoardFrame {
 
@@ -20,7 +21,7 @@ public class SearchBoardFrame extends BoardFrame {
     private SearchPopularTagsPanel popularTagsPanel;
 
     public SearchBoardFrame(MainFrame main) {
-        super(main, (delegate, context) -> {
+        super(main, true, (delegate, context) -> {
 
             context = delegate.getContextOrDefault(context, DBUser.TABLE, DBUser.K_USER_ID);
 
@@ -34,6 +35,8 @@ public class SearchBoardFrame extends BoardFrame {
 
             delegate.putContext(DBUser.TABLE, DBUser.getUser(userID));
             delegate.putContextList(DBQueTag.TABLE, DBQueTag.getTopTags(5));
+            System.out.println(Arrays.toString(DBQueTag.getTopTags(5)));
+            System.out.println(Arrays.toString(delegate.getContextList(DBQueTag.TABLE, new ArrayList<>())));
 
             return null;
         });

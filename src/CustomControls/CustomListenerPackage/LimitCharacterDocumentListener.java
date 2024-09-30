@@ -2,6 +2,7 @@ package CustomControls.CustomListenerPackage;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
+import javax.swing.text.BadLocationException;
 
 public class LimitCharacterDocumentListener extends CustomDocumentListener {
 
@@ -14,7 +15,8 @@ public class LimitCharacterDocumentListener extends CustomDocumentListener {
         this.listener = listener;
     }
 
-    protected boolean validateTextInput(String text) {
+    protected boolean validateTextInput(DocumentEvent e) throws BadLocationException {
+        String text = e.getDocument().getText(0, e.getDocument().getLength());
         boolean isDeleted = false;
         if (text.length() > maxLength) {
             SwingUtilities.invokeLater(() -> {

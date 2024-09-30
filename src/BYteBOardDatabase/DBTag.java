@@ -11,6 +11,12 @@ public class DBTag extends DBOperation {
         super(null, TABLE, K_TAG_ID, K_TAG);
     }
 
+    public static void main(String[] args) {
+        DatabaseManager.init();
+        DatabaseManager.PRINT_QUERY = true;
+        getRelevantTags("j", true);
+    }
+
     public static boolean isTagAvailable(String tag) {
         return ops.likeRelevanceSearchValue(new String[]{ops.likeMatchContains(K_TAG, tag)}, K_TAG).length == 0;
     }

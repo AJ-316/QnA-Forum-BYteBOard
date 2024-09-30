@@ -20,6 +20,7 @@ public class BoardEditContentPanel extends BoardContentPanel {
         super(main, frame, null);
 
         getContentResponseCardPanel().setCardSelectListener(cardSelectListener);
+        getContentResponseCardPanel().setTitle("Answers", "answer", "No Answers!");
         setVisible(false);
     }
 
@@ -38,8 +39,6 @@ public class BoardEditContentPanel extends BoardContentPanel {
 
     protected void initComponents(MainFrame main, Frame frame) {
         super.initComponents(main, frame);
-
-        getContentResponseCardPanel().setTitle("Answers", "answer", "No Answers!");
 
         submitButton = new BoardButton("Submit", "submit");
         submitButton.addInsets(10);

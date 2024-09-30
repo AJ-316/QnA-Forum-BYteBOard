@@ -1,5 +1,6 @@
 package BYteBOardInterface.BoardsPackage.QnAForumPackage.ProfileBoardPackage;
 
+import BYteBOardInterface.BoardsPackage.QnAForumPackage.AskBoardPackage.AskBoardFrame;
 import BYteBOardInterface.BoardsPackage.QnAForumPackage.SearchBoardPackage.SearchBoardFrame;
 import BYteBOardInterface.StructurePackage.BoardPanel;
 import BYteBOardInterface.StructurePackage.Frame;
@@ -9,6 +10,8 @@ import CustomControls.BoardComboBox;
 import CustomControls.GridBagBuilder;
 import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
+
+import javax.swing.*;
 
 public class ProfileBoardButtonPanel extends BoardPanel {
 
@@ -40,7 +43,7 @@ public class ProfileBoardButtonPanel extends BoardPanel {
                 .anchor(GridBagBuilder.NORTH)
                 .addToNextCell(themeComboBox.getComponent());
 
-        builder.weightY(0).anchor(GridBagBuilder.SOUTH)
+        builder.weight(1, 0).anchor(GridBagBuilder.SOUTH)
                 .addToNextCell(searchButton = createButton("    Search", "search"))
                 .addToNextCell(askButton = createButton("Ask Question", "question"))
                 .addToNextCell(activityButton = createButton("View Activity", "show"))
@@ -60,7 +63,7 @@ public class ProfileBoardButtonPanel extends BoardPanel {
         editProfileButton.addActionListener(e -> setEditProfileVisible(true));
 
         searchButton.addActionListener(e -> requestSwitchFrame(SearchBoardFrame.class, getUserID()));
-        askButton.addActionListener(e -> askButton.setEnabled(false));
+        askButton.addActionListener(e -> requestSwitchFrame(AskBoardFrame.class, getUserID()));
 
         logoutButton.addActionListener(e -> {
             requestSwitchMainFrame(0);

@@ -5,6 +5,7 @@ import BYteBOardInterface.StructurePackage.Frame;
 import BYteBOardInterface.StructurePackage.MainFrame;
 import CustomControls.BoardLabel;
 import CustomControls.BoardScrollPanel;
+import CustomControls.DEBUG;
 import CustomControls.GridBagBuilder;
 import Resources.ByteBoardTheme;
 
@@ -35,7 +36,7 @@ public class BoardContentDisplayPanel extends BoardPanel {
         statusLabel.setFGLight();
         statusLabel.setFontPrimary(ByteBoardTheme.FONT_T_THIN, 32);
 
-        contentsPanel = getActivityPanel(main, frame);
+        contentsPanel = getContentDisplayPanel(main, frame);
 
         builder.weight(1, 1).fillBoth();
         builder.addToCurrentCell(contentsPanel.getComponent());
@@ -43,7 +44,7 @@ public class BoardContentDisplayPanel extends BoardPanel {
         clearQuestions();
     }
 
-    private BoardScrollPanel getActivityPanel(MainFrame main, Frame frame) {
+    private BoardScrollPanel getContentDisplayPanel(MainFrame main, Frame frame) {
         BoardScrollPanel panel = new BoardScrollPanel(main, frame);
         panel.getComponent().setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         panel.setBackground(getBackground());
@@ -84,6 +85,10 @@ public class BoardContentDisplayPanel extends BoardPanel {
         return pane;
     }
 
+    public int getPaneCount() {
+        return contentsPanel.getComponentCount() - 1;
+    }
+
     public void resetScrolls() {
         EventQueue.invokeLater(() -> contentsPanel.getComponent().getVerticalScrollBar().setValue(0));
     }
@@ -102,4 +107,15 @@ public class BoardContentDisplayPanel extends BoardPanel {
         layoutBuilder.weightY(0);
     }
 
+    public boolean containsPanel(String contentID) {
+        for (Component component : contentsPanel.getComponents()) {
+            if(!(component instanceof BoardContentDisplayPane))
+                continue;
+
+            if(((BoardContentDisplayPane) component).getContentID().equals(contentID))
+                return true;
+        }
+
+        return false;
+    }
 }

@@ -24,7 +24,8 @@ public class SearchFieldListener implements KeyListener {
         this.searchTextField.addKeyListener(this);
         this.validatedInsertListener = validatedInsertListener;
         this.onKeySelectListener = onKeySelectListener;
-        searchTextField.addDocumentListener(new TagListener());
+        TagListener tagListener = new TagListener(false);
+        searchTextField.addDocumentListener(tagListener);
     }
 
     public static void create(BoardComboBox searchComboBox, ValidatedInsertListener validatedInsertListener,

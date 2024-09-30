@@ -45,20 +45,16 @@ public class BoardTextArea extends JTextArea implements CustomControl {
         this.hintText = text;
     }
 
-    @Override
     public void paint(Graphics g) {
         super.paint(g);
         if (hintText == null) return;
 
-        if (getText().isEmpty()) {
-            int h = getHeight();
+        if (getDocument().getLength() == 0) {
             ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
             Insets ins = getInsets();
             FontMetrics fm = g.getFontMetrics();
-            int c0 = getBackground().getRGB();
-            int c1 = getForeground().getRGB();
-            int c = 0xfefefefe;
-            g.setColor(new Color(((c0 & c) >>> 1) + ((c1 & c) >>> 1), true));
+
+            g.setColor(BoardTextField.getHintColor(getBackground()));
             g.drawString(hintText, ins.left, fm.getAscent() - 2);
         }
     }

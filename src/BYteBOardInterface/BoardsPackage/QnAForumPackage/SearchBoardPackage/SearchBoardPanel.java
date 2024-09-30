@@ -8,12 +8,14 @@ import BYteBOardInterface.StructurePackage.BoardPanel;
 import BYteBOardInterface.StructurePackage.Frame;
 import BYteBOardInterface.StructurePackage.MainFrame;
 import CustomControls.BoardComboBox;
+import CustomControls.CustomListenerPackage.CustomDocumentListener;
 import CustomControls.CustomListenerPackage.SearchFieldListener;
 import CustomControls.DEBUG;
 import CustomControls.GridBagBuilder;
 import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
 
+import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -83,12 +85,12 @@ public class SearchBoardPanel extends BoardPanel {
 
     private void updateSearchField(String text) {
         if (text.isEmpty()) {
-            setInputState(NULL_INPUT);
+            EventQueue.invokeLater(() -> setInputState(NULL_INPUT));
             return;
         }
 
         if (!text.startsWith("#")) {
-            setSearchFieldItems(text, QUE_INPUT);
+            EventQueue.invokeLater(() -> setSearchFieldItems(text, QUE_INPUT));
             return;
         }
 
@@ -103,17 +105,21 @@ public class SearchBoardPanel extends BoardPanel {
         int selectionEnd = searchField.getTextField().getSelectionEnd();
 
         clearSearchObjects();
-
         if (type == QUE_INPUT)
             type = loadQuestions(searchText);
         else if (type == TAG_INPUT)
             type = loadTags(searchText);
 
-        searchField.getEditor().setItem(searchText);
+        setSearchFieldText(searchText, selectionStart, selectionEnd, type);
+        setInputState(type);
+    }
+
+    private void setSearchFieldText(String searchText, int selectionStart, int selectionEnd, int inputState) {
+        DEBUG.printlnPurple("Setting text: " + searchText);
+        searchField.getTextField().setText(searchText);
         searchField.getTextField().setSelectionStart(selectionStart);
         searchField.getTextField().setSelectionEnd(selectionEnd);
-
-        setInputState(type);
+        setInputState(inputState);
     }
 
     private void searchSelected() {

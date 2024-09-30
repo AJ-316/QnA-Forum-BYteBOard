@@ -3,17 +3,19 @@ package BYteBOardInterface.StructurePackage;
 import BYteBOardDatabase.DBDataObject;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 public class BoardFrameSwitchDelegate {
 
     public static final String DELIMITER = "\0";
-    private final Map<String, DBDataObject> dataMap = new HashMap<>();
+    private final Map<String, DBDataObject> dataMap;
     private final DataRetriever dataRetriever;
 
-    public BoardFrameSwitchDelegate(DataRetriever dataRetriever) {
+    public BoardFrameSwitchDelegate(DataRetriever dataRetriever, boolean isOrderedContext) {
         this.dataRetriever = dataRetriever;
+        this.dataMap = isOrderedContext ? new LinkedHashMap<>() : new HashMap<>();
     }
 
     public String retrieveData(String... context) {

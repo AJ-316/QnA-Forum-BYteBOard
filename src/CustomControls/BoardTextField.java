@@ -22,6 +22,7 @@ public class BoardTextField extends JTextField implements CustomControl {
     private BoardLabel errorLabel;
     private String hintText;
     private Supplier<Boolean> altHintCondition;
+    private CustomDocumentListener customDocumentListener;
 
     public BoardTextField(MainFrame main, Frame frame, Color background) {
         init(main, frame, background, 9);
@@ -100,6 +101,10 @@ public class BoardTextField extends JTextField implements CustomControl {
         return container;
     }
 
+    public BoardLabel getErrorLabel() {
+        return errorLabel;
+    }
+
     public void setErrorLabel(String errorText) {
         if (errorLabel == null) {
             errorLabel = new BoardLabel();
@@ -118,7 +123,7 @@ public class BoardTextField extends JTextField implements CustomControl {
     }
 
     public boolean isHintDisplayed() {
-        return altHintCondition.get() || getText().isEmpty();
+        return (altHintCondition != null && altHintCondition.get()) || getDocument().getLength() == 0;
     }
 
     @Override
@@ -131,12 +136,22 @@ public class BoardTextField extends JTextField implements CustomControl {
             ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
             Insets ins = getInsets();
             FontMetrics fm = g.getFontMetrics();
-            int c0 = getBackground().getRGB();
-            int c1 = getForeground().getRGB();
-            int c = 0xfefefefe;
-            g.setColor(new Color(((c0 & c) >>> 1) + ((c1 & c) >>> 1), true));
+            g.setColor(BoardTextField.getHintColor(getBackground()));
             g.drawString(hintText, ins.left, h / 2 + fm.getAscent() / 2 - 2);
         }
+    }
+
+    public static Color getHintColor(Color backgroundColor) {
+        int brightness = (int) Math.sqrt(
+                backgroundColor.getRed() * backgroundColor.getRed() * 0.241 +
+                        backgroundColor.getGreen() * backgroundColor.getGreen() * 0.691 +
+                        backgroundColor.getBlue() * backgroundColor.getBlue() * 0.068
+        );
+
+        if (brightness > 130)
+            return new Color((50 << 16) | (50 << 8) | 50);
+
+        return new Color((200 << 16) | (200 << 8) | 200);
     }
 
     @Override
@@ -185,6 +200,11 @@ public class BoardTextField extends JTextField implements CustomControl {
     public void addDocumentListener(CustomDocumentListener documentListener) {
         getDocument().addDocumentListener(documentListener);
         documentListener.setTextComponent(this);
+        customDocumentListener = documentListener;
+    }
+
+    public CustomDocumentListener getCustomDocumentListener() {
+        return customDocumentListener;
     }
 
     @Override

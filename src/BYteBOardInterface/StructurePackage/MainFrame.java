@@ -3,11 +3,13 @@ package BYteBOardInterface.StructurePackage;
 import BYteBOardDatabase.DatabaseManager;
 import BYteBOardInterface.BoardsPackage.AuthenticationPackage.AuthenticationMainFrame;
 import BYteBOardInterface.BoardsPackage.QnAForumPackage.QnAForumMainFrame;
+import CustomControls.DEBUG;
 import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 

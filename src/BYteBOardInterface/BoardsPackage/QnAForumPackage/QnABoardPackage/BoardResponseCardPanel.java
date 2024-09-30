@@ -107,7 +107,7 @@ public class BoardResponseCardPanel extends BoardPanel {
 
     private BoardLabel createResponseStatusLabel() {
         BoardLabel statusLabel = new BoardLabel();
-        statusLabel.setText("<html><div style='text-align: center;'>No Comments<br>Yet</div></html>");
+        statusLabel.setText("");
         statusLabel.setName(statusLabel.getText());
         statusLabel.addInsets(10);
         statusLabel.setFGLight();

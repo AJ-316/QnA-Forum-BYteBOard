@@ -2,6 +2,7 @@ package CustomControls.CustomListenerPackage;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
+import javax.swing.text.BadLocationException;
 
 /**
  * Only supports max input limit, default min input limit is 0
@@ -15,7 +16,8 @@ public class NumberDocumentListener extends CustomDocumentListener {
         this.maxInput = maxInput;
     }
 
-    protected boolean validateTextInput(String text) {
+    protected boolean validateTextInput(DocumentEvent e) throws BadLocationException {
+        String text = e.getDocument().getText(0, e.getDocument().getLength());
         boolean isDeleted = false;
         if (!text.matches("[0-9]+") || Integer.parseInt(text) > maxInput) {
             SwingUtilities.invokeLater(() -> {
@@ -40,9 +42,12 @@ public class NumberDocumentListener extends CustomDocumentListener {
             if (text.length() > 1 && text.startsWith("0")) {
                 System.out.println("Starts with 0: " + text + ", New: " + text.replaceFirst("0", ""));
 
-                String newText = text.substring(1);
-                if (!validateTextInput(newText)) {
-                    textComponent.setText(newText);
+                try {
+                    if (!validateTextInput(e)) {
+                        textComponent.setText(text.substring(1));
+                    }
+                } catch (BadLocationException ex) {
+                    throw new RuntimeException(ex);
                 }
             }
         });

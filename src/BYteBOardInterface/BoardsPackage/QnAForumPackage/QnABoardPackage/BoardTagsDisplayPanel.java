@@ -96,6 +96,7 @@ public class BoardTagsDisplayPanel extends BoardScrollPanel {
                 if (getComponents().length == 0)
                     scrollPane.setVisible(false);
                 parent.revalidate();
+                parent.repaint();
             }
         });
 
@@ -104,6 +105,7 @@ public class BoardTagsDisplayPanel extends BoardScrollPanel {
             tagButton.addMouseWheelListener(scrollListener);
         }
         parent.revalidate();
+        parent.repaint();
 
         return tagButton;
     }
@@ -118,6 +120,18 @@ public class BoardTagsDisplayPanel extends BoardScrollPanel {
         }
 
         return false;
+    }
+
+    public BoardTagButton[] getTagButtons() {
+        BoardTagButton[] boardTagButtons = new BoardTagButton[getComponents().length];
+
+        for (int i = 0; i < boardTagButtons.length; i++) {
+            if (!(getComponent(i) instanceof BoardTagButton))
+                continue;
+            boardTagButtons[i] = ((BoardTagButton) getComponent(i));
+        }
+
+        return boardTagButtons;
     }
 
     public void clearTags() {

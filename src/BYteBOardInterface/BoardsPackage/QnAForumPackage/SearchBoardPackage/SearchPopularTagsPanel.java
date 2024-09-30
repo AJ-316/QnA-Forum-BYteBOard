@@ -7,6 +7,7 @@ import BYteBOardInterface.StructurePackage.Frame;
 import BYteBOardInterface.StructurePackage.MainFrame;
 import CustomControls.BoardLabel;
 import CustomControls.BoardTagButton;
+import CustomControls.DEBUG;
 import CustomControls.GridBagBuilder;
 import Resources.ResourceManager;
 
@@ -56,6 +57,7 @@ public class SearchPopularTagsPanel extends BoardPanel {
 
             BoardTagButton tagButton = (BoardTagButton) component;
             tagButton.setTag(tagDataObjects[i], userID);
+            DEBUG.printlnYellow("Popular Tag: " + tagDataObjects[i].getValue(DBTag.K_TAG) + "[" + tagDataObjects[i].getValue(DBTag.K_TAG_ID) + "]");
         }
     }
 }

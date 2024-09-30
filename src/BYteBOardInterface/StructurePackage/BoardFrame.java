@@ -11,9 +11,13 @@ public abstract class BoardFrame extends Board implements Frame {
     private String recoverContext;
 
     public BoardFrame(MainFrame main, BoardFrameSwitchDelegate.DataRetriever dataRetriever) {
+        this(main, false, dataRetriever);
+    }
+
+    public BoardFrame(MainFrame main, boolean isOrderedContext, BoardFrameSwitchDelegate.DataRetriever dataRetriever) {
         super(main);
 
-        frameSwitchDelegate = new BoardFrameSwitchDelegate(dataRetriever);
+        frameSwitchDelegate = new BoardFrameSwitchDelegate(dataRetriever, isOrderedContext);
         boardPanels = new HashMap<>();
 
         addInsets(10);

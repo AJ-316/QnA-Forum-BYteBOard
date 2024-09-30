@@ -144,7 +144,7 @@ public class ProfileEditPanel extends BoardPanel {
         saveButton.setAlignmentLeading();
         saveButton.setFGLight();
 
-        cancelButton = new BoardButton("Cancel", "cancel");
+        cancelButton = new BoardButton("    Cancel", "cancel");
         cancelButton.setAlignmentLeading();
         cancelButton.setFGLight();
 

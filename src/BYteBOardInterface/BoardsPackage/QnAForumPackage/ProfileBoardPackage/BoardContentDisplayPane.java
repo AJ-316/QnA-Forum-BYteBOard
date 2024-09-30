@@ -15,8 +15,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.text.DecimalFormat;
-import java.util.Scanner;
 
 public class BoardContentDisplayPane extends BoardPanel {
 
@@ -28,7 +26,6 @@ public class BoardContentDisplayPane extends BoardPanel {
 
     public BoardContentDisplayPane(MainFrame main, Frame frame) {
         super(main, frame, ByteBoardTheme.MAIN_LIGHT);
-
         addListeners();
     }
 
@@ -85,7 +82,6 @@ public class BoardContentDisplayPane extends BoardPanel {
         contentResponseText.setAlignmentLeading();
     }
 
-    // todo set number of responses to the content
     public void setUserData(String userProfile, String username, String userID) {
         contentUsername.setProfileIcon(userProfile, ResourceManager.MINI);
         contentUsername.setText(username);
@@ -101,7 +97,7 @@ public class BoardContentDisplayPane extends BoardPanel {
         contentBytes.setText(DBOperation.formatBytes(bytes, true));
     }
 
-    public String getQuestionID() {
+    public String getContentID() {
         return contentText.getName();
     }
 
@@ -113,7 +109,7 @@ public class BoardContentDisplayPane extends BoardPanel {
         MouseAdapter adapter = new MouseAdapter() {
             public void mouseReleased(MouseEvent e) {
                 setBackground(ByteBoardTheme.MAIN_LIGHT);
-                requestSwitchFrame(QnABoardFrame.class, getQuestionID(), getUserID());
+                requestSwitchFrame(QnABoardFrame.class, getContentID(), getUserID());
             }
 
             public void mouseEntered(MouseEvent e) {

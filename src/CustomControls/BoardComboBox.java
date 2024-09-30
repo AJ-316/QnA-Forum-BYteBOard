@@ -16,6 +16,7 @@ import java.awt.*;
 
 public class BoardComboBox extends JComboBox<String> {
 
+    private int dropLocation;
     private JButton dropDownButton;
     private BoardPanel container;
     private BoardLabel label;
@@ -34,6 +35,12 @@ public class BoardComboBox extends JComboBox<String> {
 
         init(main, frame, 22);
         getTextField().setColumns(columns);
+        getTextField().setBackground(bg);
+    }
+
+    public void setPopupVisible(boolean v) {
+        if(getItemCount() == 0) return;
+        super.setPopupVisible(v);
     }
 
     private void init(MainFrame main, Frame frame, int fontSize) {
@@ -50,6 +57,10 @@ public class BoardComboBox extends JComboBox<String> {
 
     public BoardTextField getTextField() {
         return (BoardTextField) getEditor().getEditorComponent();
+    }
+
+    public void setDropLocation(int dropLocation) {
+        this.dropLocation = dropLocation;
     }
 
     private void createPopupUI() {
@@ -76,6 +87,51 @@ public class BoardComboBox extends JComboBox<String> {
                         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
                         scrollPane.setHorizontalScrollBar(null);
                         return scrollPane;
+                    }
+
+                    public void show() {
+                        comboBox.firePopupMenuWillBecomeVisible();
+                        setListSelection(comboBox.getSelectedIndex());
+
+                        Point location = getPopupLocation();
+                        show(comboBox, location.x, dropLocation == SwingConstants.TOP ? -getPreferredSize().height : location.y);
+                    }
+
+                    private void setListSelection(int selectedIndex) {
+                        if (selectedIndex == -1) {
+                            list.clearSelection();
+                        } else {
+                            list.setSelectedIndex(selectedIndex);
+                            list.ensureIndexIsVisible(selectedIndex);
+                        }
+                    }
+
+                    private Point getPopupLocation() {
+                        Dimension popupSize = comboBox.getSize();
+                        Insets insets = getInsets();
+
+                        // reduce the width of the scrollpane by the insets so that the popup
+                        // is the same width as the combo box.
+                        popupSize.setSize(popupSize.width - (insets.right + insets.left),
+                                getPopupHeightForRowCount(comboBox.getMaximumRowCount()));
+                        Rectangle popupBounds = computePopupBounds(0, comboBox.getBounds().height,
+                                popupSize.width, popupSize.height);
+                        Dimension scrollSize = popupBounds.getSize();
+                        Point popupLocation = popupBounds.getLocation();
+
+                        scroller.setMaximumSize(scrollSize);
+                        scroller.setPreferredSize(scrollSize);
+                        scroller.setMinimumSize(scrollSize);
+
+                        list.revalidate();
+
+                        return popupLocation;
+                    }
+
+                    protected void configureList() {
+                        super.configureList();
+                        list.setFixedCellHeight(30);
+                        list.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
                     }
                 };
             }
@@ -127,6 +183,15 @@ public class BoardComboBox extends JComboBox<String> {
         return dropDownButton;
     }
 
+    public boolean contains(String item) {
+        for (int i = 0; i < getItemCount(); i++) {
+            if(getItemAt(i).equals(item))
+                return true;
+        }
+
+        return false;
+    }
+
     protected JButton createDropDownButton() {
         dropDownButton = new JButton() {
             public int getWidth() {
@@ -166,6 +231,10 @@ public class BoardComboBox extends JComboBox<String> {
         setBorder(BorderFactory.createEmptyBorder(top, left, bottom, right));
     }
 
+    public void setFontPrimary(String type, int size) {
+        setFont(ResourceManager.getFont(ByteBoardTheme.FONT_PRIMARY(type, size)));
+    }
+
     private static class RoundedComboBoxRenderer extends JLabel implements ListCellRenderer<Object> {
 
         private final int arcWidth;
@@ -179,6 +248,8 @@ public class BoardComboBox extends JComboBox<String> {
 
         public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
             setText(value != null ? value.toString() : "");
+            setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
+
             if (isSelected) {
                 setBackground(list.getSelectionBackground());
                 setForeground(list.getSelectionForeground());
