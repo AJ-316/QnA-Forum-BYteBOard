@@ -10,10 +10,14 @@ import CustomControls.CustomListenerPackage.LimitCharacterDocumentListener;
 import CustomControls.GridBagBuilder;
 
 import java.awt.*;
+import java.awt.event.ActionListener;
 
 public class BoardEditContentPanel extends BoardContentPanel {
 
-    private BoardButton submitButton;
+    private BoardButton previewStyleButton;
+    private BoardButton previewEditButton;
+    private BoardButton submitPreviewButton;
+    private BoardButton submitEditButton;
 
     public BoardEditContentPanel(Frame frame, BoardResponseCardPanel.CardSelectListener cardSelectListener) {
         super(frame, null);
@@ -27,13 +31,23 @@ public class BoardEditContentPanel extends BoardContentPanel {
         super.init(frame);
         setSelfViewer(true);
 
-        BoardPanel submitPanel = new BoardPanel(frame);
-        GridBagBuilder submitBuilder = new GridBagBuilder(submitPanel);
-        submitBuilder.weight(1, 1).insets(10, 10, 0, 10)
-                .fillVertical().anchor(GridBagBuilder.EAST)
-                .addToCurrentCell(submitButton);
+        BoardPanel previewBtnPanel = new BoardPanel(frame);
 
-        contentBodyPanel.add(submitPanel, BorderLayout.SOUTH);
+        GridBagBuilder btnBuilder = new GridBagBuilder(previewBtnPanel, 2);
+        btnBuilder.weight(1, 1)
+                .insets(10, 10, 0, 10)
+                .fillVertical().anchor(GridBagBuilder.EAST)
+                .addToNextCell(previewStyleButton)
+                .weightX(0)
+                .addToNextCell(submitEditButton);
+
+        contentBodyPanel.add(previewBtnPanel, BorderLayout.SOUTH);
+
+        BoardPanel editBtnPanel = new BoardPanel(frame);
+        editBtnPanel.setLayout(new GridBagLayout());
+        editBtnPanel.add(previewEditButton, btnBuilder.getConstraints(previewStyleButton));
+        editBtnPanel.add(submitPreviewButton, btnBuilder.getConstraints(submitEditButton));
+        contentStyledBodyPanel.add(editBtnPanel, BorderLayout.SOUTH);
 
         setEditableInput(true);
     }
@@ -41,10 +55,7 @@ public class BoardEditContentPanel extends BoardContentPanel {
     protected void initComponents(Frame frame) {
         super.initComponents(frame);
 
-        submitButton = new BoardButton("Submit", "submit");
-        submitButton.addInsets(10);
-        submitButton.setFGLight();
-        submitButton.addActionListener(e -> {
+        ActionListener submitListener = e -> {
             String text = getContentBody();
 
             if (!validateAnswer(text)) return;
@@ -54,6 +65,14 @@ public class BoardEditContentPanel extends BoardContentPanel {
             setEditAnswerPanel(false);
             getContentResponseCardPanel().resetResponseButtons(true);
             refresh();
+        };
+
+        submitEditButton = getButton("Submit", "submit", submitListener);
+        submitPreviewButton = getButton("Submit", "submit", submitListener);
+        previewEditButton = getButton("Edit", "edit", e -> setEditableInput(true));
+        previewStyleButton = getButton("Preview", "show", e -> {
+            setEditableInput(false);
+            setContentStyledBody(contentBody.getText());
         });
 
         contentBytes.setVisible(false);
@@ -62,6 +81,14 @@ public class BoardEditContentPanel extends BoardContentPanel {
         contentBody.addDocumentListener(listener);
         contentBody.setHintText("Type your answer here...");
         resetAddAnswer();
+    }
+
+    private BoardButton getButton(String text, String icon, ActionListener listener) {
+        BoardButton btn = new BoardButton(text, icon);
+        btn.addInsets(10);
+        btn.setFGLight();
+        btn.addActionListener(listener);
+        return btn;
     }
 
     // temp

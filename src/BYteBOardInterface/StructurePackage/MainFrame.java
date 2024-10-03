@@ -2,6 +2,7 @@ package BYteBOardInterface.StructurePackage;
 
 import BYteBOardDatabase.DatabaseManager;
 import BYteBOardInterface.BoardsPackage.AuthenticationPackage.AuthenticationMainFrame;
+import BYteBOardInterface.BoardsPackage.QnAForumPackage.QnAForumMainFrame;
 import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
 
@@ -38,7 +39,7 @@ public abstract class MainFrame extends JFrame {
         EventQueue.invokeLater(() -> {
             createMainFrames();
 
-            switchMainFrame(AuthenticationMainFrame.class);
+            switchMainFrame(QnAForumMainFrame.class, "1");
         });
     }
 

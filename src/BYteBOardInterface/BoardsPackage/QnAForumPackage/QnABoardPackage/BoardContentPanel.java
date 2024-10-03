@@ -28,7 +28,7 @@ public class BoardContentPanel extends BoardPanel {
     private BoardTagsDisplayPanel tagsDisplayPanel;
     private BoardLabel contentUsername;
     private BoardTextArea contentHead;
-    private SimpleScrollPane bodyScrollPane;
+    private SimpleScrollPane bodyStyledScrollPane;
     private BoardResponseCardPanel contentResponseCardPanel;
 
     public BoardContentPanel(Frame frame, UpdateVoteDatabase voteUpdate) {
@@ -47,10 +47,10 @@ public class BoardContentPanel extends BoardPanel {
 
         BoardPanel headerPanel = getContentHeadPanel(frame);
         contentStyledBodyPanel = getBodyPanel(frame, contentStyledBody,
-                (bodyScrollPane = new SimpleScrollPane(contentStyledBody)), ByteBoardTheme.MAIN_LIGHT, ByteBoardTheme.MAIN_DARK);
+                (bodyStyledScrollPane = new SimpleScrollPane(contentStyledBody)), ByteBoardTheme.MAIN_LIGHT, ByteBoardTheme.MAIN_DARK);
 
         contentBodyPanel = getBodyPanel(frame, contentBody,
-                (bodyScrollPane = new SimpleScrollPane(contentBody)), ByteBoardTheme.MAIN_DARK, ByteBoardTheme.ACCENT);
+                new SimpleScrollPane(contentBody), ByteBoardTheme.MAIN_DARK, ByteBoardTheme.ACCENT);
 
 
         GridBagBuilder builder = new GridBagBuilder(this, 1);
@@ -295,9 +295,8 @@ public class BoardContentPanel extends BoardPanel {
     }
 
     public void setContentStyledBody(String contentStyledBody) {
-        System.out.println(contentStyledBody);
         this.contentStyledBody.setTextWithStyles(contentStyledBody);
-        bodyScrollPane.resetScroll();
+        bodyStyledScrollPane.resetScroll();
     }
 
     public void setSelfViewer(boolean isSelfViewer) {

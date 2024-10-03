@@ -35,6 +35,7 @@ public class BoardResponseCardPanel extends BoardPanel {
         titleLabel.setColoredIcon(icon, ByteBoardTheme.MAIN_DARK, ByteBoardTheme.MAIN, ResourceManager.MINI);
 
         this.statusLabel.setText(statusLabel);
+        this.statusLabel.setName(statusLabel);
     }
 
     public void setCardSelectListener(CardSelectListener selectListener) {

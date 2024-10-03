@@ -30,6 +30,8 @@ public class BoardTextPane extends JTextPane implements CustomControl {
 
     private String hintText;
     private final Frame frame;
+    private int lineIndex;
+    private int linesCount;
 
     public BoardTextPane(Frame frame, String bg) {
         super();
@@ -95,85 +97,109 @@ public class BoardTextPane extends JTextPane implements CustomControl {
     }
 
     public void setTextWithStyles(String text) {
+        /*while (text.startsWith("\n")) {
+            text = text.substring(1);
+        }
+
+        while (text.endsWith("\n")) {
+            text = text.substring(0, text.length() - 1);
+        }*/
+        text = text.replaceAll("^\\n+|\\n+$", "");
 
         setText("");
         StyledDocument doc = getStyledDocument();
         doc.setCharacterAttributes(0, doc.getLength(), getStyle("default"), true);
 
         String[] lines = text.split("\n");
+        linesCount = lines.length;
         boolean inCodeBlock = false;
-        boolean isTextBlock = false;
+        boolean inTextBlock = false;
         boolean isListItem = false;
-        BoardPanel codePanel = null;
-        BoardPanel blockPanel = null;
+        BoardPanel codeBlockPanel = null;
+        BoardPanel textBlockPanel = null;
 
         try {
-        for (String line : lines) {
+            for (lineIndex = 0; lineIndex < linesCount; lineIndex++) {
+                String line = lines[lineIndex];
 
-            if (line.equals("'''")) {
-                inCodeBlock = !inCodeBlock;
-                if (inCodeBlock) {
-                    codePanel = addToCodeBlock(null, null);
-                } else
-                    addToCodeBlock(null, codePanel);
-                continue;
-            }
-
-            if (inCodeBlock) {
-                System.out.println("CODE BLOCK: " + line);
-                addToCodeBlock(line, codePanel);
-                continue;
-            }
-
-            line = line.trim();
-
-            if(line.endsWith(" \\"))
-                line = line.substring(0, line.length() - 1).trim() + "\n";
-            else if(!line.isEmpty() && !line.equals("\\"))
-                line += " ";
-
-            if (line.startsWith("> ")) {
-                if(isTextBlock) {
-                    addToTextBlock(null, blockPanel);
-                }
-
-                isTextBlock = true;
-                if (blockPanel == null) {
-                    blockPanel = addToTextBlock(null, null);
-                }
-
-                addToTextBlock(line.substring(2), blockPanel);
-                continue;
-            }
-
-            if (isTextBlock) {
-                if(line.equals("\\"))
-                    line = "\n";
-
-                if(line.isEmpty()) {
-                    addToTextBlock(null, blockPanel);
-                    isTextBlock = false;
+                if (line.equals("'''")) {
+                    inCodeBlock = !inCodeBlock;
+                    if (inCodeBlock) {
+                        codeBlockPanel = addToCodeBlock(null, null);
+                    } else
+                        addToCodeBlock(null, codeBlockPanel);
                     continue;
                 }
 
-                addToTextBlock(line, blockPanel);
-                continue;
+                if (inCodeBlock) {
+                    addToCodeBlock(line, codeBlockPanel);
+                    continue;
+                }
+
+                line = line.trim();
+
+                if (line.endsWith(" \\"))
+                    line = line.substring(0, line.length() - 1).trim() + "\n";
+                else if (!line.isEmpty() && !line.equals("\\"))
+                    line += " ";
+
+                if (line.startsWith("> ")) {
+                    if (inTextBlock) {
+                        addToTextBlock(null, textBlockPanel);
+                    }
+
+                    inTextBlock = true;
+                    if (textBlockPanel == null) {
+                        textBlockPanel = addToTextBlock(null, null);
+                    }
+
+                    addToTextBlock(line.substring(2), textBlockPanel);
+                    continue;
+                }
+
+                if (inTextBlock) {
+                    if (line.equals("\\"))
+                        line = "\n";
+
+                    if (line.isEmpty()) {
+                        addToTextBlock(null, textBlockPanel);
+                        inTextBlock = false;
+                        continue;
+                    }
+
+                    addToTextBlock(line, textBlockPanel);
+                    continue;
+                }
+
+                isListItem = insertListItem(line, isListItem);
+                if (isListItem) continue;
+
+                if (line.isEmpty())
+                    line = "\n";
+                else if (line.equals("\\"))
+                    line = "\n\n";
+
+                applyStyledText(doc, line);
             }
 
-            isListItem = insertListItem(line, isListItem);
-            if(isListItem) continue;
+            if (inCodeBlock) {
+                addToCodeBlock(null, codeBlockPanel);
+            } else if (inTextBlock) {
+                addToTextBlock(null, textBlockPanel);
+            }
 
-            if(line.isEmpty())
-                line = "\n";
-            else if(line.equals("\\"))
-                line = "\n\n";
-
-            applyStyledText(doc, line);
-            System.out.println("Appended: " + line);
-        }
-
+            trimNewLines(doc);
         } catch (BadLocationException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public static void trimNewLines(Document doc) throws BadLocationException {
+        while (doc.getLength() > 0 && doc.getText(0, 1).equals("\n")) {
+            doc.remove(0, 1);
+        }
+        while (doc.getLength() > 0 && doc.getText(doc.getLength() - 1, 1).equals("\n")) {
+            doc.remove(doc.getLength() - 1, 1);
         }
     }
 
@@ -213,8 +239,11 @@ public class BoardTextPane extends JTextPane implements CustomControl {
      * */
     private BoardPanel addToBlock(String line, BoardPanel blockPanel, boolean isCodeBlock) throws BadLocationException {
         if(blockPanel == null) {
+
             blockPanel = getBlockPanel(isCodeBlock);
-            if(line == null) return blockPanel; // start of code blockPanel
+            if(line == null)
+                return blockPanel; // start of code blockPanel
+
         } else if(line == null) {
 
             JTextComponent textComponent = ((JTextComponent) getBlockArea(blockPanel));
@@ -280,11 +309,7 @@ public class BoardTextPane extends JTextPane implements CustomControl {
         for (String keyword : TOKENS) {
             highlightPattern(doc, "\\b" + keyword + "\\b", ResourceManager.getAttributeSet(ByteBoardTheme.AS_CODE_TOKEN));
         }
-
-        System.out.println("\n\nNumbers: ");
         highlightPattern(doc, "\\b\\d+\\b", ResourceManager.getAttributeSet(ByteBoardTheme.AS_CODE_NUMBER));
-
-        System.out.println("\n\nStrings: ");
         highlightPattern(doc, "\".*?\"", ResourceManager.getAttributeSet(ByteBoardTheme.AS_CODE_STRING));
     }
 
@@ -348,7 +373,6 @@ public class BoardTextPane extends JTextPane implements CustomControl {
 
         SimpleScrollPane scrollPane = new SimpleScrollPane(scrollPanel);
         scrollPane.getHorizontalScrollBar().setUnitIncrement(10);
-        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
         scrollPane.setBackground(bgColor);
         return scrollPane;
     }

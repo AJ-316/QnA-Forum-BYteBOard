@@ -6,6 +6,7 @@ import BYteBOardInterface.StructurePackage.Frame;
 import BYteBOardInterface.StructurePackage.MainFrame;
 import CustomControls.BoardLabel;
 import CustomControls.BoardTextArea;
+import CustomControls.BoardTextPane;
 import CustomControls.GridBagBuilder;
 import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
@@ -19,7 +20,7 @@ import java.awt.event.MouseEvent;
 public class BoardResponseCard extends BoardPanel {
 
     private static final Rectangle checkBounds = new Rectangle(0, 0, 0, 0);
-    protected BoardTextArea contentText;
+    protected BoardTextPane contentText;
     protected BoardLabel contentUsername;
     protected BoardLabel contentAction;
     private boolean isSelected;
@@ -46,9 +47,9 @@ public class BoardResponseCard extends BoardPanel {
         setCornerRadius(20);
         addInsets(5);
 
-        contentText = new BoardTextArea("");
+        contentText = new BoardTextPane(frame, ByteBoardTheme.MAIN_DARK);
         contentText.setHintText("Content Response goes here...");
-        contentText.setLineWrap(true);
+        //contentText.setLineWrap(true);
         contentText.setFocusable(true);
         contentText.setEditable(false);
         contentText.setFontPrimary(ByteBoardTheme.FONT_T_REGULAR, 20);
@@ -97,7 +98,7 @@ public class BoardResponseCard extends BoardPanel {
     public void setCardData(String contentUsername, String contentUserprofile, String contentText, String contentID) {
         this.contentUsername.setText(contentUsername);
         this.contentUsername.setProfileIcon(contentUserprofile, ResourceManager.MINI);
-        this.contentText.setText(contentText);
+        this.contentText.setTextWithStyles(contentText);
         this.contentText.setName(contentID);
     }
 
