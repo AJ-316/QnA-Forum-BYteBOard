@@ -1,5 +1,7 @@
 package CustomControls;
 
+import Resources.ResourceManager;
+
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import java.awt.*;
@@ -105,6 +107,17 @@ public class SimpleScrollPane extends JScrollPane {
 
     public void setHorizontalScroll(int value) {
         SwingUtilities.invokeLater(() -> getHorizontalScrollBar().setValue(value));
+    }
+
+    public void setBackground(String bg) {
+        super.setBackground(ResourceManager.getColor(bg));
+        getViewport().setBackground(ResourceManager.getColor(bg));
+    }
+
+    @Override
+    public void setBackground(Color bg) {
+        super.setBackground(bg);
+        getViewport().setBackground(bg);
     }
 
     private static class ModernScrollBarUI extends BasicScrollBarUI {

@@ -1,6 +1,11 @@
 package Resources;
 
+import CustomControls.DEBUG;
+
 import javax.swing.*;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,13 +31,25 @@ public abstract class ByteBoardTheme {
     public final static String FONT_T_SEMIBOLD = "_semibold.";
     public final static String FONT_T_THIN = "_thin.";
 
+    public final static String AS_CODE_TEXT = "code.text";
+    public final static String AS_CODE_TOKEN = "code.token";
+    public final static String AS_CODE_NUMBER = "code.number";
+    public final static String AS_CODE_STRING = "code.string";
+
     private static final String FONT_K_PRIMARY = "primary";
     private static final String FONT_K_SECONDARY = "secondary";
     private static String[] keyList;
+    private static String[] attributeList;
+
     public final static ByteBoardTheme ByteBoardBaseTheme = new ByteBoardTheme() {
 
         public void init() {
             setName("BYteBOard Classic");
+            loadAttributeSet(AS_CODE_TEXT, "255, 255, 255");
+            loadAttributeSet(AS_CODE_TOKEN, "224, 126, 0");
+            loadAttributeSet(AS_CODE_NUMBER, "0, 119, 204");
+            loadAttributeSet(AS_CODE_STRING, "106, 171, 115");
+
             loadColorAttribute(BASE, "255, 255, 255");
             loadColorAttribute(MAIN, "0, 120, 120");
             loadColorAttribute(MAIN_LIGHT, "10, 130, 130");
@@ -49,13 +66,16 @@ public abstract class ByteBoardTheme {
             loadColorAttribute(TEXT_FG_MAIN_DARK, "0, 80, 80");
 
             loadFontAttributes(FONT_K_PRIMARY, "inter");
-            loadFontAttributes(FONT_K_SECONDARY, "carltine");
+            loadFontAttributes(FONT_K_SECONDARY, "jetbrains");
         }
     };
+
+    private final Map<String, String> attributeSets;
     private final Map<String, String> colorAttributes;
     private final Map<String, String> fontAttributes;
     private String name;
     public ByteBoardTheme() {
+        attributeSets = new HashMap<>();
         colorAttributes = new HashMap<>();
         fontAttributes = new HashMap<>();
 
@@ -70,14 +90,18 @@ public abstract class ByteBoardTheme {
         return UIManager.getString("QnAForum.font." + FONT_K_SECONDARY) + type + size;
     }
 
-    private static String[] getKeyList() {
-        if (keyList == null) {
-            keyList = new String[]{
-                    BASE, MAIN, MAIN_LIGHT, MAIN_DARK, ACCENT, ACCENT_DARK,
-                    ERROR, DISABLED, TEXT_FG_LIGHT, TEXT_FG_DARK, TEXT_FG_MAIN, TEXT_FG_MAIN_LIGHT, TEXT_FG_MAIN_DARK
-            };
-        }
-        return keyList;
+    private static String[] getColorKeyList() {
+        return keyList == null ? keyList = new String[]{
+                BASE, MAIN, MAIN_LIGHT, MAIN_DARK, ACCENT, ACCENT_DARK,
+                ERROR, DISABLED, TEXT_FG_LIGHT, TEXT_FG_DARK, TEXT_FG_MAIN, TEXT_FG_MAIN_LIGHT, TEXT_FG_MAIN_DARK} : keyList;
+    }
+
+    private static String[] getAttributeKeyList() {
+        return attributeList == null ? attributeList = new String[]{ AS_CODE_TEXT, AS_CODE_NUMBER, AS_CODE_STRING, AS_CODE_TOKEN } : attributeList;
+    }
+
+    private static void addAttribute(String label, AttributeSet attributeSet) {
+        UIManager.put("QnAForum.attribute." + label, attributeSet);
     }
 
     private static void addColor(String label, int r, int g, int b) {
@@ -96,10 +120,23 @@ public abstract class ByteBoardTheme {
     public void init() {
     }
 
+    public void loadAttributeSet(String key, String value) {
+        if (key.isEmpty() || value.isEmpty()) return;
+
+        String[] splitKey = key.split("_");
+
+        for (String validKey : getAttributeKeyList()) {
+            if(validKey.equals(splitKey[splitKey.length-1])) {
+                attributeSets.put(validKey, value);
+                return;
+            }
+        }
+    }
+
     public void loadColorAttribute(String key, String value) {
         if (key.isEmpty() || value.isEmpty()) return;
 
-        for (String validKey : getKeyList()) {
+        for (String validKey : getColorKeyList()) {
             if (validKey.equals(key)) {
                 colorAttributes.put(validKey, value);
                 return;
@@ -130,6 +167,10 @@ public abstract class ByteBoardTheme {
         if (!this.equals(ByteBoardBaseTheme))
             ByteBoardBaseTheme.load();
 
+        for (String key : attributeSets.keySet()) {
+            createAttribute(key, attributeSets.get(key));
+        }
+
         for (String key : colorAttributes.keySet()) {
             createColor(key, colorAttributes.get(key));
         }
@@ -137,6 +178,7 @@ public abstract class ByteBoardTheme {
         for (String key : fontAttributes.keySet()) {
             createFont(key, fontAttributes.get(key));
         }
+
         UIManager.put("Label.foreground", ResourceManager.getColor(ByteBoardTheme.TEXT_FG_DARK));
         UIManager.put("Button.foreground", ResourceManager.getColor(ByteBoardTheme.TEXT_FG_DARK));
 
@@ -178,8 +220,25 @@ public abstract class ByteBoardTheme {
     }
 
     private void createColor(String key, String value) {
+        int[] rgb = getRGB(value);
+        if(rgb == null) return;
+
+        addColor(key, rgb[0], rgb[1], rgb[2]);
+    }
+
+    public void createAttribute(String key, String value) {
+        int[] rgb = getRGB(value);
+        if(rgb == null) return;
+
+        SimpleAttributeSet attributeSet = new SimpleAttributeSet();
+        StyleConstants.setForeground(attributeSet, new Color(rgb[0], rgb[1], rgb[2]));
+
+        addAttribute(key, attributeSet);
+    }
+
+    private int[] getRGB(String value) {
         String[] values = value.split(",");
-        if (values.length != 3) return;
+        if (values.length != 3) return null;
 
         int[] rgb = new int[3];
 
@@ -188,10 +247,9 @@ public abstract class ByteBoardTheme {
                 rgb[i] = Integer.parseInt(values[i].trim());
 
         } catch (NumberFormatException ignored) {
-            return;
+            return null;
         }
-
-        addColor(key, rgb[0], rgb[1], rgb[2]);
+        return rgb;
     }
 
     public String getName() {

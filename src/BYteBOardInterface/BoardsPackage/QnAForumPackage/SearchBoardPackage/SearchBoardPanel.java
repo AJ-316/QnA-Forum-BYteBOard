@@ -35,22 +35,22 @@ public class SearchBoardPanel extends BoardPanel {
     private String userID;
     private int inputState;
 
-    public SearchBoardPanel(MainFrame main, Frame frame, SearchQuestionPanel questionPanel) {
-        super(main, frame);
+    public SearchBoardPanel(Frame frame, SearchQuestionPanel questionPanel) {
+        super(frame);
         this.searchDataObjects = new ArrayList<>();
         this.questionPanel = questionPanel;
         addListeners();
     }
 
-    public void init(MainFrame main, Frame frame) {
+    public void init(Frame frame) {
         GridBagBuilder builder = new GridBagBuilder(this, 1);
 
-        BoardPanel searchFieldPanel = new BoardPanel(main, frame, ByteBoardTheme.MAIN);
+        BoardPanel searchFieldPanel = new BoardPanel(frame, ByteBoardTheme.MAIN);
         searchFieldPanel.setCornerRadius(90);
         searchFieldPanel.addInsets(20);
         GridBagBuilder searchFieldBuilder = new GridBagBuilder(searchFieldPanel, 1);
 
-        searchField = new BoardComboBox(main, frame, ByteBoardTheme.MAIN, 10);
+        searchField = new BoardComboBox(frame, ByteBoardTheme.MAIN, 10);
         searchField.removeMouseListener(searchField.getMouseListeners()[0]);
         searchField.removeDropButtonActions();
         searchField.setMaximumRowCount(3);

@@ -24,12 +24,12 @@ public class SearchQuestionPanel extends BoardPanel {
     private BoardPanel searchTagsScrollPanel;
     private BoardContentDisplayPanel questionsPanel;
 
-    public SearchQuestionPanel(MainFrame main, Frame frame) {
-        super(main, frame, ByteBoardTheme.MAIN);
+    public SearchQuestionPanel(Frame frame) {
+        super(frame, ByteBoardTheme.MAIN);
         setVisible(false);
     }
 
-    public void init(MainFrame main, Frame frame) {
+    public void init(Frame frame) {
         setCornerRadius(90);
         addInsets(20);
 
@@ -39,19 +39,19 @@ public class SearchQuestionPanel extends BoardPanel {
         titleLabel.setFGLight();
         titleLabel.addInsets(10);
 
-        searchTagsScrollPanel = new BoardPanel(main, frame);
+        searchTagsScrollPanel = new BoardPanel(frame);
         searchTagsScrollPanel.setLayout(new BorderLayout());
-        searchTagsPanel = new BoardTagsDisplayPanel(main, frame);
+        searchTagsPanel = new BoardTagsDisplayPanel(frame);
         searchTagsPanel.addInsets(0);
         searchTagsPanel.setHorizontalDisplay();
         searchTagsScrollPanel.setMinimumSize(new Dimension(0, 60));
         searchTagsScrollPanel.add(searchTagsPanel.getComponent());
 
-        BoardPanel questionPanelHolder = new BoardPanel(main, frame, ByteBoardTheme.MAIN_DARK);
+        BoardPanel questionPanelHolder = new BoardPanel(frame, ByteBoardTheme.MAIN_DARK);
         questionPanelHolder.setLayout(new BorderLayout());
         questionPanelHolder.setCornerRadius(90);
         questionPanelHolder.addInsets(20);
-        questionsPanel = new BoardContentDisplayPanel(main, frame);
+        questionsPanel = new BoardContentDisplayPanel(frame);
         questionsPanel.setVisible(true);
 
         questionPanelHolder.add(questionsPanel);

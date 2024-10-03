@@ -17,11 +17,11 @@ public class SearchPopularTagsPanel extends BoardPanel {
 
     private BoardPanel popularTagsPanel;
 
-    public SearchPopularTagsPanel(MainFrame main, Frame frame) {
-        super(main, frame);
+    public SearchPopularTagsPanel(Frame frame) {
+        super(frame);
     }
 
-    public void init(MainFrame main, Frame frame) {
+    public void init(Frame frame) {
         addInsets(0, 40, 0, 0);
 
         GridBagBuilder builder = new GridBagBuilder(this, 2);
@@ -29,7 +29,7 @@ public class SearchPopularTagsPanel extends BoardPanel {
         BoardLabel label = new BoardLabel("Popular Tags");
         label.addInsets(5);
 
-        popularTagsPanel = new BoardPanel(main, frame);
+        popularTagsPanel = new BoardPanel(frame);
         popularTagsPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
 
         builder.weightY(1).fillBoth()

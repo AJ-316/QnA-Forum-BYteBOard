@@ -9,23 +9,23 @@ public class BoardPanel extends Board implements Panel {
 
     private final Frame frame;
 
-    public BoardPanel(MainFrame main, Frame frame) {
-        this(main, frame, null);
+    public BoardPanel(Frame frame) {
+        this(frame, null);
         setTransparent(true);
     }
 
-    public BoardPanel(MainFrame main, Frame frame, String bgColor) {
-        super(main);
+    public BoardPanel(Frame frame, String bgColor) {
+        super(frame.getBoardFrame().getMain());
         this.frame = frame;
         if (bgColor != null) {
             setBackground(ResourceManager.getColor(bgColor));
             if (bgColor.equals(ByteBoardTheme.MAIN))
                 setShadowState(OFFSET_SHADOW);
         }
-        init(main, frame);
+        init(frame);
     }
 
-    public void init(MainFrame main, Frame frame) {
+    public void init(Frame frame) {
     }
 
     public void refresh() {

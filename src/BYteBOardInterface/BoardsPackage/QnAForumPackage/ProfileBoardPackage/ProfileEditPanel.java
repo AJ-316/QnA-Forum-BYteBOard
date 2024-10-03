@@ -30,18 +30,18 @@ public class ProfileEditPanel extends BoardPanel {
     private BoardButton saveButton;
     private BoardButton cancelButton;
 
-    public ProfileEditPanel(MainFrame main, Frame frame) {
-        super(main, frame);
+    public ProfileEditPanel(Frame frame) {
+        super(frame);
 
         addButtonListeners();
         setVisible(false);
     }
 
-    public void init(MainFrame main, Frame frame) {
-        BoardPanel buttonsPanel = getButtonsPanel(main, frame);
+    public void init(Frame frame) {
+        BoardPanel buttonsPanel = getButtonsPanel(frame);
         profileLabel = new BoardLabel();
-        ProfileSelectionPanel profileSelectionPanel = new ProfileSelectionPanel(main, frame, profileLabel);
-        BoardPanel fieldsPanel = getFieldsPanel(main, frame);
+        ProfileSelectionPanel profileSelectionPanel = new ProfileSelectionPanel(frame, profileLabel);
+        BoardPanel fieldsPanel = getFieldsPanel(frame);
 //        builder.fill(GridBagConstraints.VERTICAL);
 //        builder.weightY(1);
 //        builder.addToNextCell(buttonsPanel, 1, 3);
@@ -68,8 +68,8 @@ public class ProfileEditPanel extends BoardPanel {
                 .addToNextCell(fieldsPanel);
     }
 
-    public BoardPanel getProfilePanel(MainFrame main, Frame frame) {
-        BoardPanel panel = new BoardPanel(main, frame);
+    public BoardPanel getProfilePanel(Frame frame) {
+        BoardPanel panel = new BoardPanel(frame);
         profileLabel.addInsets(20);
         profileLabel.setProfileIcon("0", ResourceManager.LARGE);
 
@@ -93,27 +93,27 @@ public class ProfileEditPanel extends BoardPanel {
         return label;
     }
 
-    public BoardPanel getFieldsPanel(MainFrame main, Frame frame) {
-        BoardPanel panel = new BoardPanel(main, frame, ByteBoardTheme.MAIN);
+    public BoardPanel getFieldsPanel(Frame frame) {
+        BoardPanel panel = new BoardPanel(frame, ByteBoardTheme.MAIN);
         panel.addInsets(25);
         panel.setCornerRadius(90);
 
-        BoardPanel profilePanel = getProfilePanel(main, frame);
+        BoardPanel profilePanel = getProfilePanel(frame);
 
         BoardLabel usernameLabel = getLabel("New Username");
-        usernameField = new BoardTextField(main, frame, ByteBoardTheme.MAIN_DARK, 20);
+        usernameField = new BoardTextField(frame, ByteBoardTheme.MAIN_DARK, 20);
 
         BoardLabel emailLabel = getLabel("New Email");
-        emailField = new BoardTextField(main, frame, ByteBoardTheme.MAIN_DARK, 20);
+        emailField = new BoardTextField(frame, ByteBoardTheme.MAIN_DARK, 20);
 
         BoardLabel oldPasswordLabel = getLabel("Old Password");
-        oldPasswordField = new BoardPasswordField(main, frame, ByteBoardTheme.MAIN_DARK, 20);
+        oldPasswordField = new BoardPasswordField(frame, ByteBoardTheme.MAIN_DARK, 20);
 
         BoardLabel newPasswordLabel = getLabel("New Password");
-        newPasswordField = new BoardPasswordField(main, frame, ByteBoardTheme.MAIN_DARK, 20);
+        newPasswordField = new BoardPasswordField(frame, ByteBoardTheme.MAIN_DARK, 20);
 
         BoardLabel rePasswordLabel = getLabel("Repeat Password");
-        rePasswordField = new BoardPasswordField(main, frame, ByteBoardTheme.MAIN_DARK, 20);
+        rePasswordField = new BoardPasswordField(frame, ByteBoardTheme.MAIN_DARK, 20);
 
         GridBagBuilder builder = new GridBagBuilder(panel, 3);
 
@@ -135,8 +135,8 @@ public class ProfileEditPanel extends BoardPanel {
         return panel;
     }
 
-    public BoardPanel getButtonsPanel(MainFrame main, Frame frame) {
-        BoardPanel panel = new BoardPanel(main, frame, ByteBoardTheme.MAIN);
+    public BoardPanel getButtonsPanel(Frame frame) {
+        BoardPanel panel = new BoardPanel(frame, ByteBoardTheme.MAIN);
         panel.setCornerRadius(90);
         panel.addInsets(30);
 

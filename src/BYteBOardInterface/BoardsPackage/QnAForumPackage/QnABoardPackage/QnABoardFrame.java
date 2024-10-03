@@ -9,6 +9,7 @@ import BYteBOardInterface.StructurePackage.MainFrame;
 import CustomControls.BoardButton;
 import CustomControls.BoardSplitPanel;
 import CustomControls.GridBagBuilder;
+import Resources.ByteBoardTheme;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -26,6 +27,7 @@ public class QnABoardFrame extends BoardFrame {
     private BoardButton viewQuestionButton;
     private BoardButton backButton;
     private BoardQuestionPanel questionPanel;
+    private BoardPanel btnPanel;
 
     private BoardEditContentPanel answerCardEditContentPanel;
 
@@ -91,9 +93,9 @@ public class QnABoardFrame extends BoardFrame {
     }
 
     public void init(MainFrame main) {
-        questionPanel = new BoardQuestionPanel(main, this);
+        questionPanel = new BoardQuestionPanel(this);
 
-        answerCardEditContentPanel = new BoardEditContentPanel(main, this, contentID -> {
+        answerCardEditContentPanel = new BoardEditContentPanel(this, contentID -> {
             if (contentID == null) {
                 switchBoardContent(QUESTION);
                 return;
@@ -118,14 +120,14 @@ public class QnABoardFrame extends BoardFrame {
         addPanel(BoardEditContentPanel.class, answerCardEditContentPanel, builder);
 
         builder.gridHeight(1).weight(0, 0)
-                .addToNextCell(createButtons(main));
+                .addToNextCell(createButtons());
     }
 
     /**
      * @param answerID Pass null to update the already loaded answer
      */
     private void setAnswerData(String answerID) {
-        BoardAnswerPanel answerPanel = BoardAnswerPanel.getPanel(getMain(), this, answerID);
+        BoardAnswerPanel answerPanel = BoardAnswerPanel.getPanel(this, answerID);
         if (answerPanel == null) return;
 
         answerID = BoardAnswerPanel.getCurrentAnswerID();
@@ -156,10 +158,8 @@ public class QnABoardFrame extends BoardFrame {
         answerPanel.setVisible(false);
     }
 
-    private BoardPanel createButtons(MainFrame main) {
+    private BoardPanel createButtons() {
         viewQuestionButton = new BoardButton("View Question", "question");
-        viewQuestionButton.setVisible(false);
-        viewQuestionButton.setAlignmentLeading();
         viewQuestionButton.setFGLight();
         viewQuestionButton.addActionListener(e -> switchBoardContent(QUESTION));
 
@@ -167,7 +167,6 @@ public class QnABoardFrame extends BoardFrame {
         viewQuestionButton.setMinimumSize(buttonSize);
 
         backButton = new BoardButton("Profile", "home");
-        backButton.setAlignmentLeading();
         backButton.setFGLight();
         backButton.setMinimumSize(buttonSize);
         backButton.addActionListener(e -> {
@@ -181,15 +180,21 @@ public class QnABoardFrame extends BoardFrame {
             addAnswerPanel(null);
         });
 
-        BoardPanel panel = new BoardPanel(main, this);
+        btnPanel = new BoardPanel(this, ByteBoardTheme.MAIN);
+        btnPanel.setLayout(new BorderLayout());
+        btnPanel.setCornerRadius(60);
+        btnPanel.addInsets(5);
+        btnPanel.add(backButton);
 
-        GridBagBuilder builder = new GridBagBuilder(panel, 1);
-        builder.weight(1, 1).fillBoth()
+        /*BoardPanel panel = new BoardPanel(this);
+
+        btnBuilder = new GridBagBuilder(panel, 1);
+        btnBuilder.weight(1, 1).fillBoth()
                 .addToNextCell(viewQuestionButton)
-                .addToNextCell(backButton);
+                .addToNextCell(backBtnPanel);*/
 
-        panel.setPreferredSize(buttonSize);
-        return panel;
+        btnPanel.setPreferredSize(buttonSize);
+        return btnPanel;
     }
 
     protected void switchBoardContent(int contentClass) {
@@ -213,8 +218,16 @@ public class QnABoardFrame extends BoardFrame {
         setPanelVisibility(BoardAnswerPanel.class, contentClass == ANSWER);
         setPanelVisibility(BoardEditContentPanel.class, contentClass == EDIT_ANSWER);
 
-        backButton.setVisible(contentClass == QUESTION || contentClass == EDIT_ANSWER);
-        viewQuestionButton.setVisible(contentClass == ANSWER);
+        //backButton.setVisible(contentClass == QUESTION || contentClass == EDIT_ANSWER);
+        //viewQuestionButton.setVisible(contentClass == ANSWER);
+
+        if(contentClass == QUESTION || contentClass == EDIT_ANSWER) {
+            btnPanel.removeAll();
+            btnPanel.add(backButton);
+        } else if(contentClass == ANSWER) {
+            btnPanel.removeAll();
+            btnPanel.add(viewQuestionButton);
+        }
     }
 
     public void applyFrameSwitchContext(BoardFrameSwitchDelegate delegate) {

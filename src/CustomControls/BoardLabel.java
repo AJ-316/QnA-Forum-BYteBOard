@@ -114,6 +114,10 @@ public class BoardLabel extends JLabel implements CustomControl {
         setForeground(ResourceManager.getColor(ByteBoardTheme.ERROR));
     }
 
+    public void setBackground(String bg) {
+        setBackground(ResourceManager.getColor(bg));
+    }
+
     public void addInsets(int top, int left, int bottom, int right) {
         setBorder(BorderFactory.createEmptyBorder(top, left, bottom, right));
     }

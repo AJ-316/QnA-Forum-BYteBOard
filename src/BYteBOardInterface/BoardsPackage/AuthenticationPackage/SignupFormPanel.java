@@ -19,8 +19,8 @@ public class SignupFormPanel extends BoardPanel {
     private BoardPasswordField passwordField;
     private BoardPasswordField rePasswordField;
 
-    public SignupFormPanel(MainFrame main, Frame frame) {
-        super(main, frame);
+    public SignupFormPanel(Frame frame) {
+        super(frame);
 
         GridBagBuilder builder = new GridBagBuilder(this, 1);
         builder.insets(0, 0, 0, 0);
@@ -34,12 +34,12 @@ public class SignupFormPanel extends BoardPanel {
         builder.addToNextCell(signupTitle);
 
         // Container for all input fields
-        BoardPanel fieldsContainer = new BoardPanel(main, frame, ByteBoardTheme.MAIN);
-        initFields(main, frame, fieldsContainer);
+        BoardPanel fieldsContainer = new BoardPanel(frame, ByteBoardTheme.MAIN);
+        initFields(frame, fieldsContainer);
         builder.addToNextCell(fieldsContainer);
 
         // Login Option
-        BoardPanel loginContainer = getLoginOptionContainer(main, frame);
+        BoardPanel loginContainer = getLoginOptionContainer(frame);
         builder.anchor(GridBagConstraints.SOUTH);
         builder.addToNextCell(loginContainer);
     }
@@ -82,10 +82,10 @@ public class SignupFormPanel extends BoardPanel {
         clearFieldErrors();
         DBUser.addUser(username, EncryptionUtils.encryptPwd(passwordField.getPassword()), email.toLowerCase());
         DBDataObject userData = DBUser.accessUser(username, false, true);
-        requestSwitchMainFrame(QnAForumMainFrame.ID, userData.getValue(DBUser.K_USER_ID));
+        requestSwitchMainFrame(QnAForumMainFrame.class, userData.getValue(DBUser.K_USER_ID));
     }
 
-    private void initFields(MainFrame main, Frame frame, BoardPanel fieldsContainer) {
+    private void initFields(Frame frame, BoardPanel fieldsContainer) {
         fieldsContainer.addInsets(20, 40, 20, 40);
         fieldsContainer.setCornerRadius(90);
 
@@ -101,7 +101,7 @@ public class SignupFormPanel extends BoardPanel {
         usernameLabel.addInsets(10);
 //        builder.addToNextCell(usernameLabel);
         // Username field
-        usernameField = new BoardTextField(main, frame, ByteBoardTheme.MAIN_DARK, 20);
+        usernameField = new BoardTextField(frame, ByteBoardTheme.MAIN_DARK, 20);
         usernameField.setHintText("Display Name");
 //        builder.addToNextCell(usernameField.getTextFieldContainer());
 
@@ -112,7 +112,7 @@ public class SignupFormPanel extends BoardPanel {
         emailLabel.addInsets(10);
 //        builder.addToNextCell(emailLabel);
         // Email field
-        emailField = new BoardTextField(main, frame, ByteBoardTheme.MAIN_DARK, 20);
+        emailField = new BoardTextField(frame, ByteBoardTheme.MAIN_DARK, 20);
         emailField.setHintText("example@gmail.com");
 //        builder.addToNextCell(emailField.getTextFieldContainer());
 
@@ -123,7 +123,7 @@ public class SignupFormPanel extends BoardPanel {
         passwordLabel.addInsets(10);
 //        builder.addToNextCell(passwordLabel);
         // Password field
-        passwordField = new BoardPasswordField(main, frame, ByteBoardTheme.MAIN_DARK, 20);
+        passwordField = new BoardPasswordField(frame, ByteBoardTheme.MAIN_DARK, 20);
         passwordField.setHintText("New Password");
 //        builder.addToNextCell(passwordField.getTextFieldContainer());
 
@@ -134,7 +134,7 @@ public class SignupFormPanel extends BoardPanel {
         rePasswordLabel.addInsets(10);
 //        builder.addToNextCell(rePasswordLabel);
         // RePassword field
-        rePasswordField = new BoardPasswordField(main, frame, ByteBoardTheme.MAIN_DARK, 20);
+        rePasswordField = new BoardPasswordField(frame, ByteBoardTheme.MAIN_DARK, 20);
         rePasswordField.setHintText("Repeat New Password");
 //        builder.addToNextCell(rePasswordField.getTextFieldContainer());
 
@@ -157,8 +157,8 @@ public class SignupFormPanel extends BoardPanel {
                 .addToNextCell(signupButton);
     }
 
-    private BoardPanel getLoginOptionContainer(MainFrame main, Frame frame) {
-        BoardPanel loginContainer = new BoardPanel(main, frame);
+    private BoardPanel getLoginOptionContainer(Frame frame) {
+        BoardPanel loginContainer = new BoardPanel(frame);
         loginContainer.addInsets(0, 0, 50, 0);
 
         GridBagBuilder builder = new GridBagBuilder(loginContainer);

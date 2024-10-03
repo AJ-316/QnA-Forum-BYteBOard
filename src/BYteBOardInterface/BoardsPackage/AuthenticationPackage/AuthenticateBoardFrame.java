@@ -20,7 +20,7 @@ public class AuthenticateBoardFrame extends BoardFrame {
     }
 
     public void init(MainFrame main) {
-        BoardPanel titlePanel = new BoardPanel(main, this, ByteBoardTheme.MAIN);
+        BoardPanel titlePanel = new BoardPanel(this, ByteBoardTheme.MAIN);
         titlePanel.addInsets(50);
         titlePanel.setCornerRadius(90);
         titlePanel.setLayout(new BorderLayout());
@@ -28,8 +28,8 @@ public class AuthenticateBoardFrame extends BoardFrame {
         BoardLabel titleIcon = new BoardLabel("byteboard/byteboard-logo-transparent2", -512);
         titlePanel.add(titleIcon, BorderLayout.CENTER);
 
-        loginFormPanel = new LoginFormPanel(main, this);
-        signupFormPanel = new SignupFormPanel(main, this);
+        loginFormPanel = new LoginFormPanel(this);
+        signupFormPanel = new SignupFormPanel(this);
         signupFormPanel.setVisible(false);
 
         GridBagBuilder builder = new GridBagBuilder(this, 2);

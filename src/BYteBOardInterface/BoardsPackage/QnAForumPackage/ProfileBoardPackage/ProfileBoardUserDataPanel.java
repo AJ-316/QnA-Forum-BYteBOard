@@ -15,18 +15,18 @@ public class ProfileBoardUserDataPanel extends BoardPanel {
     private BoardLabel userBytesLabel;
     private BoardLabel userEmailLabel;
 
-    public ProfileBoardUserDataPanel(MainFrame main, Frame frame) {
-        super(main, frame);
+    public ProfileBoardUserDataPanel(Frame frame) {
+        super(frame);
     }
 
-    public void init(MainFrame main, Frame frame) {
+    public void init(Frame frame) {
         GridBagBuilder builder = new GridBagBuilder(this, 2);
 
         userProfileLabel = new BoardLabel();
         userProfileLabel.setProfileIcon("0", ResourceManager.LARGE);
         userProfileLabel.addInsets(0, 0, 0, 40);
 
-        BoardPanel userDataPanel = new BoardPanel(main, frame, ByteBoardTheme.MAIN);
+        BoardPanel userDataPanel = new BoardPanel(frame, ByteBoardTheme.MAIN);
         userDataPanel.setCornerRadius(90);
         userDataPanel.setShadowState(BoardPanel.DROP_SHADOW);
         createUserData(userDataPanel);

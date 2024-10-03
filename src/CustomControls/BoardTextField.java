@@ -24,16 +24,16 @@ public class BoardTextField extends JTextField implements CustomControl {
     private Supplier<Boolean> altHintCondition;
     private CustomDocumentListener customDocumentListener;
 
-    public BoardTextField(MainFrame main, Frame frame, Color background) {
-        init(main, frame, background, 9);
+    public BoardTextField(Frame frame, Color background) {
+        init(frame, background, 9);
     }
 
-    public BoardTextField(MainFrame main, Frame frame, String background, int cols) {
-        init(main, frame, ResourceManager.getColor(background), cols);
+    public BoardTextField(Frame frame, String background, int cols) {
+        init(frame, ResourceManager.getColor(background), cols);
     }
 
-    private void init(MainFrame main, Frame frame, Color background, int cols) {
-        container = createContainer(main, frame);
+    private void init(Frame frame, Color background, int cols) {
+        container = createContainer(frame);
 
         addInsets(0);
         setColumns(cols);
@@ -72,8 +72,8 @@ public class BoardTextField extends JTextField implements CustomControl {
         });
     }
 
-    private BoardPanel createContainer(MainFrame main, Frame frame) {
-        BoardPanel container = new BoardPanel(main, frame, ByteBoardTheme.MAIN_LIGHT) {
+    private BoardPanel createContainer(Frame frame) {
+        BoardPanel container = new BoardPanel(frame, ByteBoardTheme.MAIN_LIGHT) {
             public void paint(Graphics g) {
                 super.paint(g);
                 if (BoardTextField.this.hasFocus()) {

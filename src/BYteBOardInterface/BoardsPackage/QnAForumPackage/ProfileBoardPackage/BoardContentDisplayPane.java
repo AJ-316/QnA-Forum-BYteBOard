@@ -24,19 +24,19 @@ public class BoardContentDisplayPane extends BoardPanel {
     private BoardLabel contentUsername;
     private String userID;
 
-    public BoardContentDisplayPane(MainFrame main, Frame frame) {
-        super(main, frame, ByteBoardTheme.MAIN_LIGHT);
+    public BoardContentDisplayPane(Frame frame) {
+        super(frame, ByteBoardTheme.MAIN_LIGHT);
         addListeners();
     }
 
-    public void init(MainFrame main, Frame frame) {
+    public void init(Frame frame) {
         setCornerRadius(80);
         setLimitRadius(false);
         addInsets(20);
 
         initComponents();
 
-        BoardPanel footerPanel = new BoardPanel(main, frame);
+        BoardPanel footerPanel = new BoardPanel(frame);
         footerPanel.setCornerRadius(60);
         GridBagBuilder footerBuilder = new GridBagBuilder(footerPanel, 3);
 

@@ -13,8 +13,8 @@ public class BoardScrollPanel extends BoardPanel {
 
     protected final SimpleScrollPane scrollPane;
 
-    public BoardScrollPanel(MainFrame main, Frame frame) {
-        super(main, frame);
+    public BoardScrollPanel(Frame frame) {
+        super(frame);
         scrollPane = new SimpleScrollPane(this);
         setVerticalUnitIncrement(15);
     }

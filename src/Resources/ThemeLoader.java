@@ -37,6 +37,11 @@ public class ThemeLoader {
                     theme.loadFontAttributes(key, value);
                     continue;
                 }
+
+                if (line.startsWith("attrib_")) {
+                    theme.loadAttributeSet(key, value);
+                    continue;
+                }
                 theme.loadColorAttribute(key, value);
             }
         } catch (IOException e) {

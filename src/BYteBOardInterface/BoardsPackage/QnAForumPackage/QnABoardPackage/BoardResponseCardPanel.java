@@ -25,8 +25,8 @@ public class BoardResponseCardPanel extends BoardPanel {
     private BoardButton addResponseButton;
     private CardSelectListener cardSelectListener;
 
-    public BoardResponseCardPanel(MainFrame main, Frame frame) {
-        super(main, frame, ByteBoardTheme.MAIN);
+    public BoardResponseCardPanel(Frame frame) {
+        super(frame, ByteBoardTheme.MAIN);
         clearResponseCards();
     }
 
@@ -55,13 +55,13 @@ public class BoardResponseCardPanel extends BoardPanel {
         cancelAddResponseButton.addActionListener(listener);
     }
 
-    public void init(MainFrame main, Frame frame) {
+    public void init(Frame frame) {
         setShadowState(BoardPanel.OFFSET_SHADOW);
         setLayout(new BorderLayout());
         setCornerRadius(30);
         addInsets(10);
 
-        BoardScrollPanel scrollPanePanel = new BoardScrollPanel(main, frame);
+        BoardScrollPanel scrollPanePanel = new BoardScrollPanel(frame);
         scrollPanePanel.setAutoscrolls(false);
         scrollPanePanel.setBackground(getBackground());
         scrollPanePanel.getComponent().setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -88,11 +88,11 @@ public class BoardResponseCardPanel extends BoardPanel {
         titleLabel.setFontPrimary(ByteBoardTheme.FONT_T_SEMIBOLD, 22);
         titleLabel.setForeground(ResourceManager.getColor(ByteBoardTheme.MAIN_DARK));
 
-        BoardPanel titleBar = new BoardPanel(main, frame);
+        BoardPanel titleBar = new BoardPanel(frame);
         titleBar.setLayout(new BorderLayout());
         titleBar.add(titleLabel, BorderLayout.WEST);
 
-        BoardPanel responseButtonPanel = new BoardPanel(main, frame);
+        BoardPanel responseButtonPanel = new BoardPanel(frame);
         GridBagBuilder buttonBuilder = new GridBagBuilder(responseButtonPanel);
         buttonBuilder.weight(1, 1).fillBoth()
                 .addToCurrentCell(addResponseButton)

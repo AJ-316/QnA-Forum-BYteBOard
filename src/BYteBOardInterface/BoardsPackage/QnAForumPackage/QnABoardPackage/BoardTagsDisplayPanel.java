@@ -18,8 +18,8 @@ public class BoardTagsDisplayPanel extends BoardScrollPanel {
     private MouseAdapter visibleScrollBarAdapter;
     private MouseWheelListener scrollListener;
 
-    public BoardTagsDisplayPanel(MainFrame main, Frame frame) {
-        super(main, frame);
+    public BoardTagsDisplayPanel(Frame frame) {
+        super(frame);
         setLayout(new FlowLayout(FlowLayout.LEFT, 4, 10));
         setBackground(ByteBoardTheme.MAIN);
         addInsets(5);

@@ -2,7 +2,7 @@ package BYteBOardInterface.StructurePackage;
 
 public interface Panel {
 
-    void init(MainFrame main, Frame frame);
+    void init(Frame frame);
 
     BoardPanel getBoardPanel();
 

@@ -85,10 +85,10 @@ public class ProfileBoardFrame extends BoardFrame {
     }
 
     public void init(MainFrame main) {
-        buttonPanel = new ProfileBoardButtonPanel(main, this);
-        userDataPanel = new ProfileBoardUserDataPanel(main, this);
-        editPanel = new ProfileEditPanel(main, this);
-        activityPanel = new BoardContentDisplayPanel(main, this);
+        buttonPanel = new ProfileBoardButtonPanel(this);
+        userDataPanel = new ProfileBoardUserDataPanel(this);
+        editPanel = new ProfileEditPanel(this);
+        activityPanel = new BoardContentDisplayPanel(this);
         activityPanel.setStatusLabel("No Activity\nLet's Get Started!");
         activityPanel.setShadowState(OFFSET_SHADOW);
 

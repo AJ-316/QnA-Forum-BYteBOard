@@ -5,7 +5,6 @@ import BYteBOardDatabase.DBDataObject;
 import BYteBOardDatabase.DBUser;
 import BYteBOardInterface.StructurePackage.BoardPanel;
 import BYteBOardInterface.StructurePackage.Frame;
-import BYteBOardInterface.StructurePackage.MainFrame;
 import CustomControls.BoardButton;
 import CustomControls.CustomListenerPackage.LimitCharacterDocumentListener;
 import CustomControls.GridBagBuilder;
@@ -16,39 +15,45 @@ public class BoardEditContentPanel extends BoardContentPanel {
 
     private BoardButton submitButton;
 
-    public BoardEditContentPanel(MainFrame main, Frame frame, BoardResponseCardPanel.CardSelectListener cardSelectListener) {
-        super(main, frame, null);
+    public BoardEditContentPanel(Frame frame, BoardResponseCardPanel.CardSelectListener cardSelectListener) {
+        super(frame, null);
 
         getContentResponseCardPanel().setCardSelectListener(cardSelectListener);
         getContentResponseCardPanel().setTitle("Answers", "answer", "No Answers!");
         setVisible(false);
     }
 
-    public void init(MainFrame main, Frame frame) {
-        super.init(main, frame);
+    public void init(Frame frame) {
+        super.init(frame);
         setSelfViewer(true);
 
-        BoardPanel submitPanel = new BoardPanel(main, frame);
+        BoardPanel submitPanel = new BoardPanel(frame);
         GridBagBuilder submitBuilder = new GridBagBuilder(submitPanel);
         submitBuilder.weight(1, 1).insets(10, 10, 0, 10)
                 .fillVertical().anchor(GridBagBuilder.EAST)
                 .addToCurrentCell(submitButton);
 
         contentBodyPanel.add(submitPanel, BorderLayout.SOUTH);
+
+        setEditableInput(true);
     }
 
-    protected void initComponents(MainFrame main, Frame frame) {
-        super.initComponents(main, frame);
+    protected void initComponents(Frame frame) {
+        super.initComponents(frame);
 
         submitButton = new BoardButton("Submit", "submit");
         submitButton.addInsets(10);
         submitButton.setFGLight();
         submitButton.addActionListener(e -> {
-            if (!validateAnswer(getContentBody())) return;
+            String text = getContentBody();
 
-            DBAnswer.addAnswer(getContentBody(), getUserID(), getContentID());
+            if (!validateAnswer(text)) return;
+            System.out.println(text);
+
+            DBAnswer.addAnswer(text, getUserID(), getContentID());
             setEditAnswerPanel(false);
             getContentResponseCardPanel().resetResponseButtons(true);
+            refresh();
         });
 
         contentBytes.setVisible(false);
@@ -56,7 +61,6 @@ public class BoardEditContentPanel extends BoardContentPanel {
         LimitCharacterDocumentListener listener = new LimitCharacterDocumentListener(LimitCharacterDocumentListener.MAX_TEXT_LENGTH, null);
         contentBody.addDocumentListener(listener);
         contentBody.setHintText("Type your answer here...");
-        contentBody.setEditable(true);
         resetAddAnswer();
     }
 

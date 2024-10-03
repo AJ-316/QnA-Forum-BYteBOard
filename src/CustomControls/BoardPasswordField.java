@@ -18,8 +18,8 @@ public class BoardPasswordField extends JPasswordField implements CustomControl 
     private BoardLabel errorLabel;
     private String hintText;
 
-    public BoardPasswordField(MainFrame main, Frame frame, String background, int cols) {
-        container = createContainer(main, frame, background);
+    public BoardPasswordField(Frame frame, String background, int cols) {
+        container = createContainer(frame, background);
 
         addInsets(0);
         setEchoChar('•');
@@ -32,8 +32,8 @@ public class BoardPasswordField extends JPasswordField implements CustomControl 
             setFGLight();
     }
 
-    private BoardPanel createContainer(MainFrame main, Frame frame, String background) {
-        BoardPanel container = new BoardPanel(main, frame, background) {
+    private BoardPanel createContainer(Frame frame, String background) {
+        BoardPanel container = new BoardPanel(frame, background) {
             public void paint(Graphics g) {
                 super.paint(g);
                 if (BoardPasswordField.this.hasFocus()) {
@@ -132,6 +132,10 @@ public class BoardPasswordField extends JPasswordField implements CustomControl 
         }
 
         errorLabel.setText(errorText.length() > 28 ? errorText.substring(0, 28) : errorText);
+    }
+
+    public void setBackground(String bg) {
+        setBackground(ResourceManager.getColor(bg));
     }
 
     @Override

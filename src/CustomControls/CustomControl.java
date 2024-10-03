@@ -2,6 +2,8 @@ package CustomControls;
 
 public interface CustomControl {
 
+    void setBackground(String bg);
+
     void setFontPrimary(String type, int size);
 
     void setFontSecondary(String type, int size);

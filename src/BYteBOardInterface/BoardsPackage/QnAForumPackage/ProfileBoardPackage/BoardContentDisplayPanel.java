@@ -18,13 +18,13 @@ public class BoardContentDisplayPanel extends BoardPanel {
     private BoardScrollPanel contentsPanel;
     private GridBagBuilder layoutBuilder;
 
-    public BoardContentDisplayPanel(MainFrame main, Frame frame) {
-        super(main, frame, ByteBoardTheme.MAIN_DARK);
+    public BoardContentDisplayPanel(Frame frame) {
+        super(frame, ByteBoardTheme.MAIN_DARK);
 
         setVisible(false);
     }
 
-    public void init(MainFrame main, Frame frame) {
+    public void init(Frame frame) {
         addInsets(20);
         setCornerRadius(90);
 
@@ -36,7 +36,7 @@ public class BoardContentDisplayPanel extends BoardPanel {
         statusLabel.setFGLight();
         statusLabel.setFontPrimary(ByteBoardTheme.FONT_T_THIN, 32);
 
-        contentsPanel = getContentDisplayPanel(main, frame);
+        contentsPanel = getContentDisplayPanel(frame);
 
         builder.weight(1, 1).fillBoth();
         builder.addToCurrentCell(contentsPanel.getComponent());
@@ -44,8 +44,8 @@ public class BoardContentDisplayPanel extends BoardPanel {
         clearQuestions();
     }
 
-    private BoardScrollPanel getContentDisplayPanel(MainFrame main, Frame frame) {
-        BoardScrollPanel panel = new BoardScrollPanel(main, frame);
+    private BoardScrollPanel getContentDisplayPanel(Frame frame) {
+        BoardScrollPanel panel = new BoardScrollPanel(frame);
         panel.getComponent().setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         panel.setBackground(getBackground());
         layoutBuilder = new GridBagBuilder(panel, 1);
@@ -77,7 +77,7 @@ public class BoardContentDisplayPanel extends BoardPanel {
     public BoardContentDisplayPane addContentDisplayPanel() {
         removeActivityStatusLabel();
 
-        BoardContentDisplayPane pane = new BoardContentDisplayPane(getMain(), getFrame());
+        BoardContentDisplayPane pane = new BoardContentDisplayPane(getFrame());
         layoutBuilder.addToNextCell(pane);
 
         addActivityStatusLabel("");

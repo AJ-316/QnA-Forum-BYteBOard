@@ -10,13 +10,11 @@ import BYteBOardInterface.StructurePackage.BoardFrameSwitchDelegate;
 import BYteBOardInterface.StructurePackage.BoardPanel;
 import BYteBOardInterface.StructurePackage.MainFrame;
 import CustomControls.*;
-import QnAForumInterface.TagExtractor;
 import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Arrays;
 
 public class AskBoardFrame extends BoardFrame {
 
@@ -26,9 +24,9 @@ public class AskBoardFrame extends BoardFrame {
     private BoardLabel usernameLabel;
     private BoardButton submitButton;
     private BoardButton backButton;
+    private BoardButton previewButton;
 
     private String userID;
-    //private BoardButton previewButton;
 
     public AskBoardFrame(MainFrame main) {
         super(main, (delegate, context) -> {
@@ -39,15 +37,15 @@ public class AskBoardFrame extends BoardFrame {
     }
 
     public void init(MainFrame main) {
-        askInputPanel = new AskInputPanel(main, this);
-        sidePanel = getSidePanel(main);
+        askInputPanel = new AskInputPanel(this);
+        sidePanel = getSidePanel(askInputPanel);
 
         add(askInputPanel, BorderLayout.CENTER);
         add(sidePanel, BorderLayout.WEST);
     }
 
-    private BoardPanel getSidePanel(MainFrame main) {
-        BoardPanel panel = new BoardPanel(main, this, ByteBoardTheme.MAIN);
+    private BoardPanel getSidePanel(AskInputPanel askInputPanel) {
+        BoardPanel panel = new BoardPanel(this, ByteBoardTheme.MAIN);
         panel.setCornerRadius(90);
         panel.addInsets(30);
         GridBagBuilder builder = new GridBagBuilder(panel, 1);
@@ -60,12 +58,21 @@ public class AskBoardFrame extends BoardFrame {
         usernameLabel.setFGLight();
         usernameLabel.addInsets(35);
 
-        submitButton = new BoardButton("    Submit", "submit");
+        submitButton = new BoardButton("   Submit", "submit");
         submitButton.setAlignmentLeading();
         submitButton.setFGLight();
         submitButton.addActionListener(e -> submitQuestion());
 
-        backButton = new BoardButton("    Profile", "home");
+        previewButton = new BoardButton("   Preview", "show");
+        previewButton.setAlignmentLeading();
+        previewButton.setFGLight();
+        previewButton.addActionListener(e -> {
+            boolean isPreviewVisible = askInputPanel.togglePreview();
+            previewButton.setText(isPreviewVisible ? "   Edit" : "   Preview");
+            previewButton.setIcon(isPreviewVisible ? "edit" : "show");
+        });
+
+        backButton = new BoardButton("   Profile", "home");
         backButton.setAlignmentLeading();
         backButton.setFGLight();
         backButton.addActionListener(e -> exitAskFrame());
@@ -73,6 +80,7 @@ public class AskBoardFrame extends BoardFrame {
         builder.weight(1, 1).fillBoth().insets(10)
                 .addToNextCell(usernameLabel)
                 .weightY(0)
+                .addToNextCell(previewButton)
                 .addToNextCell(submitButton)
                 .addToNextCell(backButton);
 

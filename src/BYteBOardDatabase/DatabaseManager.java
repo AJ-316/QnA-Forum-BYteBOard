@@ -284,92 +284,6 @@ public class DatabaseManager {
         return Integer.parseInt(retrievedValue);
     }
 
-    public static void update(String table, String[] updateKeysByNewValues, String condition) {
-        StringBuilder query = new StringBuilder("UPDATE ").append(table).append(" SET ");
-
-        Map<Integer, String> parameterValues = new HashMap<>();
-        int paramIndex = 0;
-        for (; paramIndex < updateKeysByNewValues.length; paramIndex++) {
-            String[] keyValue = updateKeysByNewValues[paramIndex].split(DBOperation.KEY_VALUE_DELIMITER);
-
-            parameterValues.put(paramIndex, getParameterValue(keyValue[1]));
-            query.append(keyValue[0]).append(" = ").append("?").append(DBOperation.KEYS_DELIMITER).append(" ");
-        }
-
-        query.deleteCharAt(query.length() - 2);
-
-        if (condition != null) {
-            query.append("WHERE ");
-            while (condition.contains(PARAMETER_VALUE)) {
-                parameterValues.put(paramIndex++, getParameterValue(condition));
-                condition = removeParameterValue(condition);
-            }
-            query.append(condition);
-        }
-
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query.toString())) {
-
-            for (int i : parameterValues.keySet()) {
-                query.replace(query.indexOf("?"), query.indexOf("?") + 1, parameterValues.get(i));
-                preparedStatement.setString(i + 1, parameterValues.get(i));
-            }
-
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        if (PRINT_QUERY)
-            DEBUG.printlnBlue(("QUERY: " + query));
-    }
-
-    public static String add(String table, String[] keys, String[] values, String whereCondition) {
-        StringBuilder query = new StringBuilder("INSERT INTO ").append(table).append(" (");
-        String[] parameterValues = new String[values.length + (whereCondition != null ? 1 : 0)];
-
-        for (String key : keys) {
-            query.append(key).append(DBOperation.KEYS_DELIMITER);
-        }
-
-        query.deleteCharAt(query.length() - 1).append(") VALUES (");
-
-        for (int i = 0; i < values.length; i++) {
-            parameterValues[i] = values[i];
-            query.append("?").append(DBOperation.KEYS_DELIMITER);
-        }
-
-        query.deleteCharAt(query.length() - 1).append(") ");
-
-        if (whereCondition != null) {
-            query.append("WHERE ").append(removeParameterValue(whereCondition));
-            parameterValues[parameterValues.length - 1] = getParameterValue(whereCondition);
-        }
-
-        String generatedKey = null;
-
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query.toString(), PreparedStatement.RETURN_GENERATED_KEYS)) {
-            for (int i = 0; i < parameterValues.length; i++) {
-                query.replace(query.indexOf("?"), query.indexOf("?") + 1, parameterValues[i]);
-                preparedStatement.setString(i + 1, parameterValues[i]);
-            }
-
-            preparedStatement.executeUpdate();
-
-            try (ResultSet generatedKeysSet = preparedStatement.getGeneratedKeys()) {
-
-                if (generatedKeysSet.next()) {
-                    generatedKey = String.valueOf(generatedKeysSet.getLong(1));
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        if (PRINT_QUERY)
-            DEBUG.printlnBlue(("QUERY: " + query));
-        return generatedKey;
-    }
-
     public static DBDataObject[] getTop(String[] selectKeysFromTables, String[] onCondition, String whereCondition, String aggregateKeyFunc, String additionalOrderBy, String limit) {
         if (selectKeysFromTables == null || selectKeysFromTables.length == 0 ||
                 (onCondition != null && onCondition.length + 1 != selectKeysFromTables.length)) return null;
@@ -495,6 +409,92 @@ public class DatabaseManager {
             DEBUG.printlnBlue(("QUERY: " + query));
         //System.out.println(Arrays.toString(dbObjects));
         return dbObjects;
+    }
+
+    public static void update(String table, String[] updateKeysByNewValues, String condition) {
+        StringBuilder query = new StringBuilder("UPDATE ").append(table).append(" SET ");
+
+        Map<Integer, String> parameterValues = new HashMap<>();
+        int paramIndex = 0;
+        for (; paramIndex < updateKeysByNewValues.length; paramIndex++) {
+            String[] keyValue = updateKeysByNewValues[paramIndex].split(DBOperation.KEY_VALUE_DELIMITER);
+
+            parameterValues.put(paramIndex, getParameterValue(keyValue[1]));
+            query.append(keyValue[0]).append(" = ").append("?").append(DBOperation.KEYS_DELIMITER).append(" ");
+        }
+
+        query.deleteCharAt(query.length() - 2);
+
+        if (condition != null) {
+            query.append("WHERE ");
+            while (condition.contains(PARAMETER_VALUE)) {
+                parameterValues.put(paramIndex++, getParameterValue(condition));
+                condition = removeParameterValue(condition);
+            }
+            query.append(condition);
+        }
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query.toString())) {
+
+            for (int i : parameterValues.keySet()) {
+                query.replace(query.indexOf("?"), query.indexOf("?") + 1, parameterValues.get(i));
+                preparedStatement.setString(i + 1, parameterValues.get(i));
+            }
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        if (PRINT_QUERY)
+            DEBUG.printlnBlue(("QUERY: " + query));
+    }
+
+    public static String add(String table, String[] keys, String[] values, String whereCondition) {
+        StringBuilder query = new StringBuilder("INSERT INTO ").append(table).append(" (");
+        String[] parameterValues = new String[values.length + (whereCondition != null ? 1 : 0)];
+
+        for (String key : keys) {
+            query.append(key).append(DBOperation.KEYS_DELIMITER);
+        }
+
+        query.deleteCharAt(query.length() - 1).append(") VALUES (");
+
+        for (int i = 0; i < values.length; i++) {
+            parameterValues[i] = values[i];
+            query.append("?").append(DBOperation.KEYS_DELIMITER);
+        }
+
+        query.deleteCharAt(query.length() - 1).append(") ");
+
+        if (whereCondition != null) {
+            query.append("WHERE ").append(removeParameterValue(whereCondition));
+            parameterValues[parameterValues.length - 1] = getParameterValue(whereCondition);
+        }
+
+        String generatedKey = null;
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query.toString(), PreparedStatement.RETURN_GENERATED_KEYS)) {
+            for (int i = 0; i < parameterValues.length; i++) {
+                query.replace(query.indexOf("?"), query.indexOf("?") + 1, parameterValues[i]);
+                preparedStatement.setString(i + 1, parameterValues[i]);
+            }
+
+            preparedStatement.executeUpdate();
+
+            try (ResultSet generatedKeysSet = preparedStatement.getGeneratedKeys()) {
+
+                if (generatedKeysSet.next()) {
+                    generatedKey = String.valueOf(generatedKeysSet.getLong(1));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        if (PRINT_QUERY)
+            DEBUG.printlnBlue(("QUERY: " + query));
+        return generatedKey;
     }
 
     public static DBDataObject[] get(String[] selectKeysFromTables, String[] onCondition, String whereCondition, boolean isDistinct) {

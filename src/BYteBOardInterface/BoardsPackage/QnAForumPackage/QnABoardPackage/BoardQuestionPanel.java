@@ -2,12 +2,11 @@ package BYteBOardInterface.BoardsPackage.QnAForumPackage.QnABoardPackage;
 
 import BYteBOardDatabase.*;
 import BYteBOardInterface.StructurePackage.Frame;
-import BYteBOardInterface.StructurePackage.MainFrame;
 
 public class BoardQuestionPanel extends BoardContentPanel {
 
-    public BoardQuestionPanel(MainFrame main, Frame frame) {
-        super(main, frame, DBVote::voteQuestion);
+    public BoardQuestionPanel(Frame frame) {
+        super(frame, DBVote::voteQuestion);
     }
 
     public void setData(DBDataObject questionDataObject, DBDataObject[] commentDataObjects, DBDataObject[] tagDataObjects, String userID) {
@@ -16,7 +15,7 @@ public class BoardQuestionPanel extends BoardContentPanel {
 
         setContentID(questionDataObject.getValue(DBQuestion.K_QUESTION_ID));
         setContentHead("Question:\n", questionDataObject.getValue(DBQuestion.K_QUESTION_HEAD));
-        setContentBody(questionDataObject.getValue(DBQuestion.K_QUESTION_BODY));
+        setContentStyledBody(questionDataObject.getValue(DBQuestion.K_QUESTION_BODY));
         setContentBytes(questionDataObject.getValue(DBQuestion.K_QUESTION_BYTESCORE));
 
         setContentUserID(questionDataObject.getValue(DBQuestion.K_USER_ID));
@@ -30,7 +29,7 @@ public class BoardQuestionPanel extends BoardContentPanel {
     }
 
     protected void createAddCommentCard(BoardResponseCardPanel commentsPanel) {
-        BoardEditResponseCard card = new BoardEditResponseCard(getMain(), getFrame());
+        BoardEditResponseCard card = new BoardEditResponseCard(getFrame());
         card.setSubmitAction(getUserID(), getContentResponseCardPanel());
         card.setCommentContentType(DBComment.K_QUESTION_ID, getContentID());
 

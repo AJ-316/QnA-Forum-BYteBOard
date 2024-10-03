@@ -17,12 +17,12 @@ public class BoardEditResponseCard extends BoardResponseCard {
 
     private BoardButton submitButton;
 
-    public BoardEditResponseCard(MainFrame main, Frame frame) {
-        super(main, frame);
+    public BoardEditResponseCard(Frame frame) {
+        super(frame);
     }
 
-    public void init(MainFrame main, Frame frame) {
-        super.init(main, frame);
+    public void init(Frame frame) {
+        super.init(frame);
 
         GridBagLayout layout = (GridBagLayout) getLayout();
         GridBagBuilder builder = (GridBagBuilder) layout.getConstraints(contentText);

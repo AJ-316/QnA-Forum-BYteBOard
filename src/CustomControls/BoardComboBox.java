@@ -21,19 +21,19 @@ public class BoardComboBox extends JComboBox<String> {
     private BoardPanel container;
     private BoardLabel label;
 
-    public BoardComboBox(MainFrame main, Frame frame, String[] itemsList, String selectedItem) {
+    public BoardComboBox(Frame frame, String[] itemsList, String selectedItem) {
         super(itemsList);
         setForeground(ByteBoardTheme.MAIN_DARK);
 
-        init(main, frame, 16);
+        init(frame, 16);
         setSelectedItem(selectedItem);
     }
 
-    public BoardComboBox(MainFrame main, Frame frame, String bg, int columns) {
+    public BoardComboBox(Frame frame, String bg, int columns) {
         setBackground(bg);
         setForeground(ByteBoardTheme.TEXT_FG_LIGHT);
 
-        init(main, frame, 22);
+        init(frame, 22);
         getTextField().setColumns(columns);
         getTextField().setBackground(bg);
     }
@@ -43,8 +43,8 @@ public class BoardComboBox extends JComboBox<String> {
         super.setPopupVisible(v);
     }
 
-    private void init(MainFrame main, Frame frame, int fontSize) {
-        container = createContainer(main, frame);
+    private void init(Frame frame, int fontSize) {
+        container = createContainer(frame);
         setFont(ResourceManager.getFont(ByteBoardTheme.FONT_PRIMARY(ByteBoardTheme.FONT_T_BOLD, fontSize)));
         addInsets(10);
         createPopupUI();
@@ -69,8 +69,7 @@ public class BoardComboBox extends JComboBox<String> {
             protected ComboBoxEditor createEditor() {
                 return new BasicComboBoxEditor.UIResource() {
                     protected JTextField createEditorComponent() {
-                        return new BoardTextField(BoardComboBox.this.container.getMain(),
-                                BoardComboBox.this.container.getFrame(), BoardComboBox.this.container.getBackground());
+                        return new BoardTextField(BoardComboBox.this.container.getFrame(), BoardComboBox.this.container.getBackground());
                     }
                 };
             }
@@ -165,8 +164,8 @@ public class BoardComboBox extends JComboBox<String> {
             container.setBackground(getBackground());
     }
 
-    private BoardPanel createContainer(MainFrame main, Frame frame) {
-        BoardPanel panel = new BoardScrollPanel(main, frame);
+    private BoardPanel createContainer(Frame frame) {
+        BoardPanel panel = new BoardScrollPanel(frame);
         panel.setLayout(new BorderLayout());
         panel.setBackground(getBackground());
         panel.setCornerRadius(40);

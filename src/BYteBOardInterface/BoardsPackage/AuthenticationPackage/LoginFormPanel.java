@@ -17,8 +17,8 @@ public class LoginFormPanel extends BoardPanel {
     protected BoardTextField usernameOrEmailField;
     private BoardPasswordField passwordField;
 
-    public LoginFormPanel(MainFrame main, Frame frame) {
-        super(main, frame);
+    public LoginFormPanel(Frame frame) {
+        super(frame);
 
         GridBagBuilder builder = new GridBagBuilder(this, 1);
         builder.weightY(1);
@@ -31,12 +31,12 @@ public class LoginFormPanel extends BoardPanel {
         builder.addToNextCell(loginTitle);
 
         // Container for all input fields
-        BoardPanel fieldsContainer = new BoardPanel(main, frame, ByteBoardTheme.MAIN);
-        initFields(main, frame, fieldsContainer);
+        BoardPanel fieldsContainer = new BoardPanel(frame, ByteBoardTheme.MAIN);
+        initFields(frame, fieldsContainer);
         builder.addToNextCell(fieldsContainer);
 
         // Signup Option
-        BoardPanel signupContainer = getSignupOptionContainer(main, frame);
+        BoardPanel signupContainer = getSignupOptionContainer(frame);
         builder.anchor(GridBagConstraints.SOUTH);
         builder.addToNextCell(signupContainer);
     }
@@ -66,13 +66,12 @@ public class LoginFormPanel extends BoardPanel {
         }
 
         clearFieldErrors();
-        requestSwitchMainFrame(QnAForumMainFrame.ID, userData.getValue(DBUser.K_USER_ID));
+        requestSwitchMainFrame(QnAForumMainFrame.class, userData.getValue(DBUser.K_USER_ID));
     }
 
-    private void initFields(MainFrame main, Frame frame, BoardPanel fieldsContainer) {
+    private void initFields(Frame frame, BoardPanel fieldsContainer) {
         fieldsContainer.addInsets(40);
         fieldsContainer.setCornerRadius(90);
-
 
 //
 //        builder.fill(GridBagConstraints.BOTH);
@@ -86,7 +85,7 @@ public class LoginFormPanel extends BoardPanel {
 //        builder.addToNextCell(usernameOrEmailLabel);
 
         // Username Email field
-        usernameOrEmailField = new BoardTextField(main, frame, ByteBoardTheme.MAIN_DARK, 20);
+        usernameOrEmailField = new BoardTextField(frame, ByteBoardTheme.MAIN_DARK, 20);
         usernameOrEmailField.setHintText("Username or Email");
 //        builder.addToNextCell(usernameOrEmailField.getTextFieldContainer());
 
@@ -98,7 +97,7 @@ public class LoginFormPanel extends BoardPanel {
 //        builder.addToNextCell(passwordLabel);
 
         // Password field
-        passwordField = new BoardPasswordField(main, frame, ByteBoardTheme.MAIN_DARK, 20);
+        passwordField = new BoardPasswordField(frame, ByteBoardTheme.MAIN_DARK, 20);
         passwordField.setHintText("********");
 //        builder.addToNextCell(passwordField.getTextFieldContainer());
 
@@ -120,8 +119,8 @@ public class LoginFormPanel extends BoardPanel {
                 .addToNextCell(loginButton);
     }
 
-    private BoardPanel getSignupOptionContainer(MainFrame main, Frame frame) {
-        BoardPanel signupContainer = new BoardPanel(main, frame);
+    private BoardPanel getSignupOptionContainer(Frame frame) {
+        BoardPanel signupContainer = new BoardPanel(frame);
         signupContainer.addInsets(0, 0, 50, 0);
 
         GridBagBuilder builder = new GridBagBuilder(signupContainer);

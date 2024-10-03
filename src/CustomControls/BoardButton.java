@@ -6,9 +6,7 @@ import Resources.ResourceManager;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 
 public class BoardButton extends JButton implements CustomControl {
 
@@ -157,6 +155,10 @@ public class BoardButton extends JButton implements CustomControl {
 
         setRolloverFGColor(fg.equals(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_DARK)) ?
                 ByteBoardTheme.ACCENT_DARK : ByteBoardTheme.ACCENT);
+    }
+
+    public void setBackground(String bg) {
+        setBackground(ResourceManager.getColor(bg));
     }
 
     public void setRolloverFGColor(String fgColor) {

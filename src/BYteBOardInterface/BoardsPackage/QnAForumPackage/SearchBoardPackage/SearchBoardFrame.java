@@ -45,15 +45,15 @@ public class SearchBoardFrame extends BoardFrame {
     public void init(MainFrame main) {
         GridBagBuilder builder = new GridBagBuilder(this, 1);
 
-        SearchQuestionPanel searchQuestionPanel = new SearchQuestionPanel(main, this);
-        searchBoardPanel = new SearchBoardPanel(main, this, searchQuestionPanel);
-        popularTagsPanel = new SearchPopularTagsPanel(main, this);
+        SearchQuestionPanel searchQuestionPanel = new SearchQuestionPanel(this);
+        searchBoardPanel = new SearchBoardPanel(this, searchQuestionPanel);
+        popularTagsPanel = new SearchPopularTagsPanel(this);
 
         BoardButton backButton = new BoardButton("Profile", "home");
         backButton.addActionListener(e -> requestSwitchFrame(ProfileBoardFrame.class));
         backButton.setFGLight();
 
-        BoardPanel searchPanel = new BoardPanel(main, this);
+        BoardPanel searchPanel = new BoardPanel(this);
         GridBagBuilder searchPanelBuilder = new GridBagBuilder(searchPanel, 1);
         searchPanelBuilder.weightX(1).fillHorizontal()
                 .addToNextCell(searchBoardPanel)

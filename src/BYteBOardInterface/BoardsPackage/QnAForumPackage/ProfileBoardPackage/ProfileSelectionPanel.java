@@ -15,18 +15,18 @@ public class ProfileSelectionPanel extends BoardPanel {
 
     private final BoardLabel userProfileLabel;
 
-    public ProfileSelectionPanel(MainFrame main, Frame frame, BoardLabel userProfileLabel) {
-        super(main, frame, ByteBoardTheme.MAIN);
+    public ProfileSelectionPanel(Frame frame, BoardLabel userProfileLabel) {
+        super(frame, ByteBoardTheme.MAIN);
         this.userProfileLabel = userProfileLabel;
         setVisible(false);
     }
 
-    public void init(MainFrame main, Frame frame) {
+    public void init(Frame frame) {
         addInsets(20);
         setCornerRadius(90);
         setLayout(new BorderLayout());
 
-        BoardScrollPanel profilesScrollPane = new BoardScrollPanel(main, frame);
+        BoardScrollPanel profilesScrollPane = new BoardScrollPanel(frame);
         profilesScrollPane.setVerticalUnitIncrement(8);
 
         int layoutGap = 5;

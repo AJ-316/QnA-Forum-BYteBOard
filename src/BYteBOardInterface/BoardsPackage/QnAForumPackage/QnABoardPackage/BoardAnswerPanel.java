@@ -2,7 +2,6 @@ package BYteBOardInterface.BoardsPackage.QnAForumPackage.QnABoardPackage;
 
 import BYteBOardDatabase.*;
 import BYteBOardInterface.StructurePackage.Frame;
-import BYteBOardInterface.StructurePackage.MainFrame;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,11 +11,11 @@ public class BoardAnswerPanel extends BoardContentPanel {
     private static final Map<String, BoardAnswerPanel> ANSWER_PANELS = new HashMap<>();
     private static String currentAnswerID;
 
-    public BoardAnswerPanel(MainFrame main, Frame frame) {
-        super(main, frame, DBVote::voteAnswer);
+    public BoardAnswerPanel(Frame frame) {
+        super(frame, DBVote::voteAnswer);
     }
 
-    protected static BoardAnswerPanel getPanel(MainFrame main, Frame frame, String answerID) {
+    protected static BoardAnswerPanel getPanel(Frame frame, String answerID) {
         if (answerID == null) {
             if (currentAnswerID == null) return null;
             answerID = currentAnswerID;
@@ -26,11 +25,11 @@ public class BoardAnswerPanel extends BoardContentPanel {
 
         BoardAnswerPanel answerPanel = ANSWER_PANELS.get(answerID);
 
-        return answerPanel != null ? answerPanel : addPanel(main, frame, answerID);
+        return answerPanel != null ? answerPanel : addPanel(frame, answerID);
     }
 
-    protected static BoardAnswerPanel addPanel(MainFrame main, Frame frame, String answerID) {
-        BoardAnswerPanel answerPanel = new BoardAnswerPanel(main, frame);
+    protected static BoardAnswerPanel addPanel(Frame frame, String answerID) {
+        BoardAnswerPanel answerPanel = new BoardAnswerPanel(frame);
         ANSWER_PANELS.put(answerID, answerPanel);
         return answerPanel;
     }
@@ -61,7 +60,7 @@ public class BoardAnswerPanel extends BoardContentPanel {
         setUserID(userID);
         setContentID(answerDataObject.getValue(DBAnswer.K_ANSWER_ID));
         setContentHead("Answering:\n", questionHead);
-        setContentBody(answerDataObject.getValue(DBAnswer.K_ANSWER));
+        setContentStyledBody(answerDataObject.getValue(DBAnswer.K_ANSWER));
         setContentBytes(answerDataObject.getValue(DBAnswer.K_ANSWER_BYTESCORE));
         setContentUserID(answerDataObject.getValue(DBAnswer.K_USER_ID));
         setSelfViewer(answerDataObject.getValue(DBAnswer.K_USER_ID).equals(userID));
@@ -84,7 +83,7 @@ public class BoardAnswerPanel extends BoardContentPanel {
     }
 
     protected void createAddCommentCard(BoardResponseCardPanel commentsPanel) {
-        BoardEditResponseCard card = new BoardEditResponseCard(getMain(), getFrame());
+        BoardEditResponseCard card = new BoardEditResponseCard(getFrame());
         card.setSubmitAction(getUserID(), getContentResponseCardPanel());
         card.setCommentContentType(DBComment.K_ANSWER_ID, getContentID());
 

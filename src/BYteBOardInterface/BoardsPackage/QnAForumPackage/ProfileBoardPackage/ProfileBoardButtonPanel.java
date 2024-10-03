@@ -1,5 +1,6 @@
 package BYteBOardInterface.BoardsPackage.QnAForumPackage.ProfileBoardPackage;
 
+import BYteBOardInterface.BoardsPackage.AuthenticationPackage.AuthenticationMainFrame;
 import BYteBOardInterface.BoardsPackage.QnAForumPackage.AskBoardPackage.AskBoardFrame;
 import BYteBOardInterface.BoardsPackage.QnAForumPackage.SearchBoardPackage.SearchBoardFrame;
 import BYteBOardInterface.StructurePackage.BoardPanel;
@@ -24,14 +25,14 @@ public class ProfileBoardButtonPanel extends BoardPanel {
 
     private BoardComboBox themeComboBox;
 
-    public ProfileBoardButtonPanel(MainFrame main, Frame frame) {
-        super(main, frame, ByteBoardTheme.MAIN);
+    public ProfileBoardButtonPanel(Frame frame) {
+        super(frame, ByteBoardTheme.MAIN);
 
         addButtonListeners();
     }
 
-    public void init(MainFrame main, Frame frame) {
-        themeComboBox = new BoardComboBox(main, frame, ResourceManager.getThemes(), ResourceManager.getCurrentTheme());
+    public void init(Frame frame) {
+        themeComboBox = new BoardComboBox(frame, ResourceManager.getThemes(), ResourceManager.getCurrentTheme());
         themeComboBox.setLabel("Themes", "theme");
         themeComboBox.setBackground(ByteBoardTheme.MAIN_LIGHT);
 
@@ -66,7 +67,7 @@ public class ProfileBoardButtonPanel extends BoardPanel {
         askButton.addActionListener(e -> requestSwitchFrame(AskBoardFrame.class, getUserID()));
 
         logoutButton.addActionListener(e -> {
-            requestSwitchMainFrame(0);
+            requestSwitchMainFrame(AuthenticationMainFrame.class);
             setActivitiesVisible(false);
             setEditProfileVisible(false);
         });

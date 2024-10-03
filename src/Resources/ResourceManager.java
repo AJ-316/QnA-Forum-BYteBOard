@@ -1,6 +1,7 @@
 package Resources;
 
 import javax.swing.*;
+import javax.swing.text.AttributeSet;
 import java.awt.*;
 import java.io.File;
 import java.net.URL;
@@ -80,6 +81,10 @@ public class ResourceManager {
             themeNames[i] = THEMES.get(i).getName();
 
         return themeNames;
+    }
+
+    public static AttributeSet getAttributeSet(String label) {
+        return (AttributeSet) UIManager.get("QnAForum.attribute." + label);
     }
 
     public static Color getColor(String label) {

@@ -24,7 +24,7 @@ public class BoardTextArea extends JTextArea implements CustomControl {
         addInsets(0);
         setFGLight();
         setFontPrimary(ByteBoardTheme.FONT_T_REGULAR, 20);
-        setBackground(ResourceManager.getColor(ByteBoardTheme.MAIN_DARK));
+        setBackground(ByteBoardTheme.MAIN_DARK);
 
         getDocument().addDocumentListener(new DocumentListener() {
             public void insertUpdate(DocumentEvent e) {
@@ -62,6 +62,10 @@ public class BoardTextArea extends JTextArea implements CustomControl {
     public void addDocumentListener(CustomDocumentListener documentListener) {
         getDocument().addDocumentListener(documentListener);
         documentListener.setTextComponent(this);
+    }
+
+    public void setBackground(String bg) {
+        setBackground(ResourceManager.getColor(bg));
     }
 
     public void setFontPrimary(String type, int size) {

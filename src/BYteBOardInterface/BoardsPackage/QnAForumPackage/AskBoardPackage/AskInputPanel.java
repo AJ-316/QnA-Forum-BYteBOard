@@ -21,22 +21,26 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.Arrays;
 
 public class AskInputPanel extends BoardPanel {
 
     private BoardTextArea headInput;
     private BoardTextArea bodyInput;
+    private BoardTextPane bodyPreview;
     private BoardComboBox tagInput;
+
+    private BoardPanel bodyPanel;
+    private BoardPanel bodyPreviewPanel;
+
     private BoardTagsDisplayPanel tagsDisplayPanel;
     private TagListener tagListener;
     private boolean isTagsSuggestionVisible;
 
-    public AskInputPanel(MainFrame main, Frame frame) {
-        super(main, frame);
+    public AskInputPanel(Frame frame) {
+        super(frame);
     }
 
-    public void init(MainFrame main, Frame frame) {
+    public void init(Frame frame) {
         GridBagBuilder builder = new GridBagBuilder(this, 1);
 
         headInput = new BoardTextArea("");
@@ -44,96 +48,130 @@ public class AskInputPanel extends BoardPanel {
         headInput.setEditable(true);
         headInput.setFontPrimary(ByteBoardTheme.FONT_T_SEMIBOLD, 24);
         headInput.addDocumentListener(new LimitCharacterDocumentListener(255, null));
-        BoardPanel headPanel = getInputPanel(main, frame, "Question Title (brief and clear)", headInput);
 
         bodyInput = new BoardTextArea("");
         bodyInput.setHintText("Type Body...");
         bodyInput.setEditable(true);
         bodyInput.setFontPrimary(ByteBoardTheme.FONT_T_REGULAR, 20);
         bodyInput.addDocumentListener(new LimitCharacterDocumentListener(LimitCharacterDocumentListener.MAX_TEXT_LENGTH, null));
-        BoardPanel bodyPanel = getInputPanel(main, frame, "Question Explanation (elaborate on your query)", bodyInput);
 
-        BoardPanel tagPanel = new BoardPanel(main, frame, ByteBoardTheme.MAIN_DARK);
-        tagPanel.setCornerRadius(90);
-        tagPanel.addInsets(20);
-        tagPanel.setLayout(new BorderLayout());
-        tagsDisplayPanel = new BoardTagsDisplayPanel(main, frame);
-        tagsDisplayPanel.setBackground(ByteBoardTheme.MAIN_DARK);
+        bodyPreview = new BoardTextPane(frame, ByteBoardTheme.MAIN_LIGHT);
 
-        tagInput = new BoardComboBox(main, frame, ByteBoardTheme.MAIN_DARK, 20);
-        tagInput.setFontPrimary(ByteBoardTheme.FONT_T_REGULAR, 20);
-        tagInput.removeMouseListener(tagInput.getMouseListeners()[0]);
-        tagInput.removeDropButtonActions();
-        tagInput.getDropDownButton().addActionListener(e -> tagInput.setPopupVisible(!tagInput.isPopupVisible()));
-        tagInput.setMaximumRowCount(3);
-        tagInput.setDropLocation(SwingConstants.TOP);
-        tagInput.setEditable(true);
-        tagInput.getTextField().addInsets(5, 0, 10, 0);
-        tagInput.getTextField().setHintText("Add Tags...");
-        tagInput.getTextField().setErrorLabel("");
-        tagInput.getTextField().getErrorLabel().addInsets(0, 10, 0, 0);
-        tagPanel.add(tagsDisplayPanel, BorderLayout.NORTH);
-        tagPanel.add(tagInput);
-        tagPanel.add(tagInput.getTextField().getErrorLabel(), BorderLayout.SOUTH);
+        BoardPanel headPanel = getInputPanel(frame, "edit:Question Title (brief and clear)", headInput, ByteBoardTheme.MAIN_DARK, ByteBoardTheme.ACCENT);
+        headPanel.setMinimumSize(new Dimension(0, 200));
 
-        // TODO:
-        //  1) Get Tags for DB
-        //  2) Add tags to Display Panel
-        //  3) Submit Button Listener
+        bodyPanel = getInputPanel(frame, "edit:Question Explanation (elaborate on your query)", bodyInput, ByteBoardTheme.MAIN_DARK, ByteBoardTheme.ACCENT);
+
+        bodyPreviewPanel = getInputPanel(frame, "show:Preview", bodyPreview, ByteBoardTheme.MAIN_LIGHT, ByteBoardTheme.MAIN_DARK);
+        bodyPreviewPanel.setVisible(false);
+
+        BoardPanel tagPanel = getTagPanel(frame);
 
         builder.weightX(1).fillBoth().insets(5)
                 .addToNextCell(headPanel)
                 .weightY(1)
                 .addToNextCell(bodyPanel)
+                .addToCurrentCell(bodyPreviewPanel)
                 .weightY(0)
                 .addToNextCell(tagPanel);
+    }
 
-        //SearchFieldListener.create(tagInput, t -> EventQueue.invokeLater(() -> setTagSuggestions(tagInput.getTextField().getText())),
-        //        () -> EventQueue.invokeLater(() -> addTag(tagInput.getTextField().getText())));
-        tagInput.getTextField().addKeyListener(new KeyAdapter() {
+    public boolean togglePreview() {
+        bodyPreviewPanel.setVisible(!bodyPreviewPanel.isVisible());
+        boolean isPreviewVisible = bodyPreviewPanel.isVisible();
+
+        bodyPanel.setVisible(!isPreviewVisible);
+
+        if(isPreviewVisible) {
+            bodyPreview.setTextWithStyles(bodyInput.getText());
+        }
+
+        return isPreviewVisible;
+    }
+
+    private BoardComboBox getTagInput(Frame frame) {
+        BoardComboBox comboBox = new BoardComboBox(frame, ByteBoardTheme.MAIN_DARK, 20);
+        comboBox.setFontPrimary(ByteBoardTheme.FONT_T_REGULAR, 20);
+
+        comboBox.setMaximumRowCount(3);
+        comboBox.setDropLocation(SwingConstants.TOP);
+
+        comboBox.setEditable(true);
+        comboBox.getTextField().addInsets(5, 0, 10, 0);
+        comboBox.getTextField().setHintText("Add Tags...");
+        comboBox.getTextField().setErrorLabel("");
+        comboBox.getTextField().getErrorLabel().addInsets(0, 10, 0, 0);
+
+        comboBox.removeMouseListener(comboBox.getMouseListeners()[0]);
+        comboBox.removeDropButtonActions();
+        comboBox.getDropDownButton().addActionListener(e -> comboBox.setPopupVisible(!comboBox.isPopupVisible()));
+
+        comboBox.getTextField().addKeyListener(new KeyAdapter() {
             public void keyTyped(KeyEvent e) {
-                EventQueue.invokeLater(() -> setTagSuggestions(tagInput.getTextField().getText()));
+                EventQueue.invokeLater(() -> setTagSuggestions(comboBox.getTextField().getText()));
             }
 
             public void keyReleased(KeyEvent e) {
                 if(e.getKeyCode() == KeyEvent.VK_ESCAPE)
-                    tagInput.setPopupVisible(isTagsSuggestionVisible = false);
+                    comboBox.setPopupVisible(isTagsSuggestionVisible = false);
                 else if(e.getKeyCode() == KeyEvent.VK_SPACE && e.isControlDown())
-                    tagInput.setPopupVisible(isTagsSuggestionVisible = true);
+                    comboBox.setPopupVisible(isTagsSuggestionVisible = true);
             }
         });
 
-        tagInput.getTextField().addActionListener(e ->
-                EventQueue.invokeLater(() -> addTag(tagInput.getTextField().getText())));
+        comboBox.getTextField().addActionListener(e ->
+                EventQueue.invokeLater(() -> addTag(comboBox.getTextField().getText())));
 
         tagListener = new TagListener(true);
-        enableTagListener();
+        return comboBox;
     }
 
-    private BoardPanel getInputPanel(MainFrame main, Frame frame, String title, Component input) {
-        BoardPanel panel = new BoardPanel(main, frame, ByteBoardTheme.MAIN);
+    private BoardPanel getTagPanel(Frame frame) {
+        BoardPanel panel = new BoardPanel(frame, ByteBoardTheme.MAIN_DARK);
+        panel.setCornerRadius(90);
+        panel.addInsets(20);
+        panel.setLayout(new BorderLayout());
+
+        tagsDisplayPanel = new BoardTagsDisplayPanel(frame);
+        tagsDisplayPanel.setBackground(ByteBoardTheme.MAIN_DARK);
+
+        tagInput = getTagInput(frame);
+        enableTagListener();
+
+        panel.add(tagsDisplayPanel, BorderLayout.NORTH);
+        panel.add(tagInput);
+        panel.add(tagInput.getTextField().getErrorLabel(), BorderLayout.SOUTH);
+
+        return panel;
+    }
+
+    private BoardPanel getInputPanel(Frame frame, String title, Component input, String bgColor, String borderColor) {
+        BoardPanel panel = new BoardPanel(frame, ByteBoardTheme.MAIN);
         panel.setLayout(new BorderLayout());
         panel.setCornerRadius(90);
         panel.addInsets(20);
 
+        ((CustomControl) input).setBackground(bgColor);
+
         SimpleScrollPane scrollPane = new SimpleScrollPane(input);
         scrollPane.setOpaque(false);
         scrollPane.setBorder(new RoundedBorder(60, 60, 30,
-                ResourceManager.getColor(ByteBoardTheme.MAIN_LIGHT),
-                ResourceManager.getColor(ByteBoardTheme.MAIN_DARK)));
-        scrollPane.getViewport().setBackground(ResourceManager.getColor(ByteBoardTheme.MAIN_LIGHT));
+                ResourceManager.getColor(bgColor),
+                ResourceManager.getColor(borderColor)));
+        scrollPane.getViewport().setBackground(ResourceManager.getColor(bgColor));
 
-        BoardLabel titleLabel = new BoardLabel(title, "edit", ResourceManager.DEFAULT, ResourceManager.MINI);
+        String[] titleLabelIcon = title.split(":");
+        BoardLabel titleLabel = new BoardLabel(titleLabelIcon[1], titleLabelIcon[0], ResourceManager.DEFAULT, ResourceManager.MINI);
         titleLabel.setFGLight();
         titleLabel.setAlignmentLeading();
         titleLabel.addInsets(10);
 
         input.addFocusListener(new FocusListener() {
             public void focusGained(FocusEvent e) {
-                titleLabel.setIcon("edit", ResourceManager.ROLLOVER, ResourceManager.MINI);
+                titleLabel.setIcon(titleLabelIcon[0], ResourceManager.ROLLOVER, ResourceManager.MINI);
             }
             public void focusLost(FocusEvent e) {
-                titleLabel.setIcon("edit", ResourceManager.DEFAULT, ResourceManager.MINI);
+                titleLabel.setIcon(titleLabelIcon[0], ResourceManager.DEFAULT, ResourceManager.MINI);
             }
         });
 
@@ -209,7 +247,7 @@ public class AskInputPanel extends BoardPanel {
     }
 
     public String getHead() {
-        return headInput.getText();
+        return headInput.getText().replaceAll("\n", " ");
     }
 
     public String getBody() {

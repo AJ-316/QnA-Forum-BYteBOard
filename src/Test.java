@@ -3,7 +3,6 @@ import Resources.ResourceManager;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.text.*;
@@ -154,7 +153,6 @@ public class Test extends JFrame {
                 int start = m.start();
                 int end = m.end();
                 doc.setCharacterAttributes(start, end - start, attr, false);
-                System.out.println(text.substring(start, end));
             }
         } catch (Exception e) {
             e.printStackTrace();

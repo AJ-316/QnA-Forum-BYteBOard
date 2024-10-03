@@ -2,24 +2,22 @@ package BYteBOardInterface.StructurePackage;
 
 import BYteBOardDatabase.DatabaseManager;
 import BYteBOardInterface.BoardsPackage.AuthenticationPackage.AuthenticationMainFrame;
-import BYteBOardInterface.BoardsPackage.QnAForumPackage.QnAForumMainFrame;
-import CustomControls.DEBUG;
 import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Arrays;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
 public abstract class MainFrame extends JFrame {
 
-    private static final MainFrame[] MAIN_FRAMES = new MainFrame[2];
-    private static int FRAMES_ID_COUNTER = 0;
     private final Map<String, Frame> boardFrames;
     private final Container contentPane;
-    public MainFrame(String title, int height, float ratio, int id) {
+    private static MainFrame currentMainFrame;
+
+    public MainFrame(String title, int height, float ratio) {
         setTitle(title);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new Dimension((int) (height * ratio), height));
@@ -32,35 +30,21 @@ public abstract class MainFrame extends JFrame {
         contentPane = getContentPane();
         contentPane.setLayout(new BorderLayout());
 
-        MAIN_FRAMES[id] = this;
-
         setLayout(new BorderLayout());
         init();
-    }
-
-    protected static int generateMainFrameID() {
-        return FRAMES_ID_COUNTER++;
     }
 
     public static void initMainFrames() {
         EventQueue.invokeLater(() -> {
             createMainFrames();
 
-            MAIN_FRAMES[QnAForumMainFrame.ID].prepareMainFrame("1");
-            MAIN_FRAMES[QnAForumMainFrame.ID].setVisible(true);
+            switchMainFrame(AuthenticationMainFrame.class);
         });
     }
 
     protected static void createMainFrames() {
-        for (int i = 0; i < MAIN_FRAMES.length; i++) {
-            if (MAIN_FRAMES[i] != null) {
-                MAIN_FRAMES[i].dispose();
-                MAIN_FRAMES[i] = null;
-            }
-        }
-
-        new AuthenticationMainFrame();
-        new QnAForumMainFrame();
+        if(currentMainFrame != null)
+            currentMainFrame.dispose();
     }
 
     public static void main(String[] args) {
@@ -102,19 +86,27 @@ public abstract class MainFrame extends JFrame {
 
     public abstract void restartMainFrame();
 
-    public void restartMainFrame(int mainFrameID, String recoverContext) {
+    public void restartMainFrame(Class<?> mainFrameClass, String recoverContext) {
         dispose();
         EventQueue.invokeLater(() -> {
             createMainFrames();
-            switchMainFrame(mainFrameID, recoverContext);
+            switchMainFrame(mainFrameClass, recoverContext);
         });
     }
 
-    public void switchMainFrame(int mainFrameID, String... switchBoardFrameContext) {
-        this.setVisible(false);
-        this.dispose();
+    protected static void switchMainFrame(Class<?> mainFrameClass, String... switchBoardFrameContext) {
+        if(currentMainFrame != null) {
+            currentMainFrame.setVisible(false);
+            currentMainFrame.dispose();
+            currentMainFrame = null;
+        }
 
-        MAIN_FRAMES[mainFrameID].prepareMainFrame(switchBoardFrameContext);
-        MAIN_FRAMES[mainFrameID].setVisible(true);
+        try {
+            currentMainFrame = (MainFrame) mainFrameClass.getDeclaredConstructor().newInstance();
+            currentMainFrame.prepareMainFrame(switchBoardFrameContext);
+            currentMainFrame.setVisible(true);
+        } catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

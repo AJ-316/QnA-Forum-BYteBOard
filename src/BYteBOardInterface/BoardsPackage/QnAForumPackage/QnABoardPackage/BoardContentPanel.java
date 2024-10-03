@@ -3,24 +3,22 @@ package BYteBOardInterface.BoardsPackage.QnAForumPackage.QnABoardPackage;
 import BYteBOardDatabase.*;
 import BYteBOardInterface.StructurePackage.BoardPanel;
 import BYteBOardInterface.StructurePackage.Frame;
-import BYteBOardInterface.StructurePackage.MainFrame;
-import CustomControls.BoardLabel;
-import CustomControls.BoardTextArea;
+import CustomControls.*;
 import CustomControls.CustomRendererPackage.RoundedBorder;
-import CustomControls.GridBagBuilder;
-import CustomControls.SimpleScrollPane;
 import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
 
-import javax.swing.*;
+import javax.swing.text.BadLocationException;
 import java.awt.*;
 import java.util.Map;
 
 public class BoardContentPanel extends BoardPanel {
 
     private final UpdateVoteDatabase voteUpdate;
+    protected BoardPanel contentStyledBodyPanel;
     protected BoardPanel contentBodyPanel;
     protected BoardLabel contentBytes;
+    protected BoardTextPane contentStyledBody;
     protected BoardTextArea contentBody;
     private String userID;
     private String contentID;
@@ -33,8 +31,8 @@ public class BoardContentPanel extends BoardPanel {
     private SimpleScrollPane bodyScrollPane;
     private BoardResponseCardPanel contentResponseCardPanel;
 
-    public BoardContentPanel(MainFrame main, Frame frame, UpdateVoteDatabase voteUpdate) {
-        super(main, frame);
+    public BoardContentPanel(Frame frame, UpdateVoteDatabase voteUpdate) {
+        super(frame);
         this.voteUpdate = voteUpdate;
 
         setPreferredSize(new Dimension(900, getPreferredSize().height));
@@ -44,45 +42,58 @@ public class BoardContentPanel extends BoardPanel {
         addResponseButtonListeners();
     }
 
-    public void init(MainFrame main, Frame frame) {
-        initComponents(main, frame);
+    public void init(Frame frame) {
+        initComponents(frame);
 
-        BoardPanel headerPanel = getContentHeadPanel(main, frame);
-        contentBodyPanel = getContentBodyPanel(main, frame);
+        BoardPanel headerPanel = getContentHeadPanel(frame);
+        contentStyledBodyPanel = getBodyPanel(frame, contentStyledBody,
+                (bodyScrollPane = new SimpleScrollPane(contentStyledBody)), ByteBoardTheme.MAIN_LIGHT, ByteBoardTheme.MAIN_DARK);
+
+        contentBodyPanel = getBodyPanel(frame, contentBody,
+                (bodyScrollPane = new SimpleScrollPane(contentBody)), ByteBoardTheme.MAIN_DARK, ByteBoardTheme.ACCENT);
+
 
         GridBagBuilder builder = new GridBagBuilder(this, 1);
         builder.weightX(1).fillBoth()
                 .addToNextCell(headerPanel)
                 .weightY(1)
-                .addToNextCell(contentBodyPanel);
+                .addToNextCell(contentStyledBodyPanel)
+                .addToCurrentCell(contentBodyPanel);
+
+        setEditableInput(false);
     }
 
-    private BoardPanel getContentHeadPanel(MainFrame main, Frame frame) {
-        BoardPanel panel = new BoardPanel(main, frame, ByteBoardTheme.MAIN);
+    protected void setEditableInput(boolean isEditable) {
+        contentStyledBodyPanel.setVisible(!isEditable);
+        contentBodyPanel.setVisible(isEditable);
+    }
+
+    private BoardPanel getContentHeadPanel(Frame frame) {
+        BoardPanel panel = new BoardPanel(frame, ByteBoardTheme.MAIN);
         panel.setCornerRadius(90);
         panel.addInsets(20);
 
-        voteButtonsPanel = new BoardPanel(main, frame);
+        voteButtonsPanel = new BoardPanel(frame);
         GridBagBuilder votePanelBuilder = new GridBagBuilder(voteButtonsPanel, 1);
         votePanelBuilder.insets(10, 5, 10, 5)
                 .addToNextCell(upVoteButton)
                 .addToNextCell(downVoteButton);
 
-        BoardPanel headHeaderPane = new BoardPanel(main, frame);
+        BoardPanel headHeaderPane = new BoardPanel(frame);
         GridBagBuilder HeadHeaderPaneLayout = new GridBagBuilder(headHeaderPane, 3);
         HeadHeaderPaneLayout.fillBoth().insets(10)
                 .addToNextCell(contentBytes).weight(1, 1)
                 .addToNextCell(tagsDisplayPanel.getComponent()).weight(0, 0)
                 .addToNextCell(contentUsername);
 
-        BoardPanel contentHeadPanel = new BoardPanel(main, frame, ByteBoardTheme.MAIN_LIGHT);
+        BoardPanel contentHeadPanel = new BoardPanel(frame, ByteBoardTheme.MAIN_LIGHT);
         contentHeadPanel.setLayout(new BorderLayout());
         contentHeadPanel.addInsets(20);
         contentHeadPanel.setCornerRadius(90);
         contentHeadPanel.setBorderColor(ByteBoardTheme.MAIN_DARK);
         contentHeadPanel.add(contentHead);
 
-        BoardPanel headFooterPane = new BoardPanel(main, frame);
+        BoardPanel headFooterPane = new BoardPanel(frame);
         GridBagBuilder headFooterPaneLayout = new GridBagBuilder(headFooterPane, 2);
         headFooterPaneLayout.insets(10)
                 .addToNextCell(voteButtonsPanel);
@@ -95,11 +106,11 @@ public class BoardContentPanel extends BoardPanel {
         return panel;
     }
 
-    protected void initComponents(MainFrame main, Frame frame) {
-        tagsDisplayPanel = new BoardTagsDisplayPanel(main, frame);
+    protected void initComponents(Frame frame) {
+        tagsDisplayPanel = new BoardTagsDisplayPanel(frame);
         tagsDisplayPanel.setHorizontalDisplay();
 
-        contentResponseCardPanel = new BoardResponseCardPanel(main, frame);
+        contentResponseCardPanel = new BoardResponseCardPanel(frame);
         contentResponseCardPanel.setTitle("Comments", "comment", "No Comments!");
 
         upVoteButton = new VoteButton("upvote", ResourceManager.SMALL, DBVote.V_VOTE_UP);
@@ -124,27 +135,36 @@ public class BoardContentPanel extends BoardPanel {
         contentHead.addInsets(10);
         contentHead.setFontPrimary(ByteBoardTheme.FONT_T_BOLD, 26);
 
-        contentBody = new BoardTextArea("Content Body goes here...");
-        contentBody.setFontPrimary(ByteBoardTheme.FONT_T_REGULAR, 22);
-        contentBody.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 20));
+        contentStyledBody = new BoardTextPane(frame, ByteBoardTheme.MAIN);
+        contentBody = new BoardTextArea("");
+        contentBody.setEditable(true);
     }
 
-    private BoardPanel getContentBodyPanel(MainFrame main, Frame frame) {
-        BoardPanel panel = new BoardPanel(main, frame, ByteBoardTheme.MAIN);
+    private BoardPanel getBodyPanel(Frame frame, Component component, SimpleScrollPane scrollPane, String bgColor, String borderColor) {
+        BoardPanel panel = new BoardPanel(frame, ByteBoardTheme.MAIN);
         panel.setLayout(new BorderLayout());
         panel.setCornerRadius(90);
-        panel.addInsets(40);
+        panel.addInsets(20);
 
-        bodyScrollPane = new SimpleScrollPane(contentBody);
+        ((CustomControl)component).setBackground(bgColor);
+
+        scrollPane.setOpaque(false);
+        scrollPane.setBorder(new RoundedBorder(60, 60, 30,
+                ResourceManager.getColor(bgColor),
+                ResourceManager.getColor(borderColor)));
+        scrollPane.getViewport().setBackground(ResourceManager.getColor(bgColor));
+
+        panel.add(scrollPane);
+        return panel;
+    }
+
+    private void getBodyScrollPane(Component component, String bgColor, String borderColor) {
+        SimpleScrollPane bodyScrollPane = new SimpleScrollPane(component);
         bodyScrollPane.setOpaque(false);
         bodyScrollPane.setBorder(new RoundedBorder(60, 60, 30,
-                ResourceManager.getColor(ByteBoardTheme.MAIN_LIGHT),
-                ResourceManager.getColor(ByteBoardTheme.MAIN_DARK)));
-
-        bodyScrollPane.getViewport().setBackground(ResourceManager.getColor(ByteBoardTheme.MAIN_LIGHT));
-
-        panel.add(bodyScrollPane);
-        return panel;
+                ResourceManager.getColor(bgColor),
+                ResourceManager.getColor(borderColor)));
+        bodyScrollPane.getViewport().setBackground(ResourceManager.getColor(bgColor));
     }
 
     protected void addResponseButtonListeners() {
@@ -201,7 +221,7 @@ public class BoardContentPanel extends BoardPanel {
     }
 
     protected BoardResponseCard addNewResponseCard(DBDataObject commentData) {
-        BoardResponseCard card = new BoardResponseCard(getMain(), getFrame());
+        BoardResponseCard card = new BoardResponseCard(getFrame());
         updateResponseCard(card, commentData);
         contentResponseCardPanel.addResponseCard(card);
         return card;
@@ -266,12 +286,17 @@ public class BoardContentPanel extends BoardPanel {
         return this.contentHead.getName();
     }
 
-    public String getContentBody() {
-        return this.contentBody.getText();
+    public String getContentStyledBody() {
+        return this.contentStyledBody.getText();
     }
 
-    public void setContentBody(String contentBody) {
-        this.contentBody.setText(contentBody);
+    public String getContentBody() {
+        return contentBody.getText();
+    }
+
+    public void setContentStyledBody(String contentStyledBody) {
+        System.out.println(contentStyledBody);
+        this.contentStyledBody.setTextWithStyles(contentStyledBody);
         bodyScrollPane.resetScroll();
     }
 

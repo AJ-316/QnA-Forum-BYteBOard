@@ -25,8 +25,8 @@ public class BoardResponseCard extends BoardPanel {
     private boolean isSelected;
     private MouseAdapter contentActionAdapter;
 
-    public BoardResponseCard(MainFrame main, Frame frame) {
-        super(main, frame, ByteBoardTheme.MAIN_DARK);
+    public BoardResponseCard(Frame frame) {
+        super(frame, ByteBoardTheme.MAIN_DARK);
         Dimension preferredSize = new Dimension(200, 0);
 
         setBorderColor(ByteBoardTheme.MAIN_DARK);
@@ -42,7 +42,7 @@ public class BoardResponseCard extends BoardPanel {
         });
     }
 
-    public void init(MainFrame main, Frame frame) {
+    public void init(Frame frame) {
         setCornerRadius(20);
         addInsets(5);
 

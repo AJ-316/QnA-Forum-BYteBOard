@@ -11,6 +11,6 @@ text_fg_dark = 180, 180, 180
 text_fg_main = 40, 42, 54
 
 font_n_primary = inter
-font_n_secondary = carltine
+font_n_secondary = jetbrains
 
 
