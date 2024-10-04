@@ -59,7 +59,6 @@ public class BoardEditContentPanel extends BoardContentPanel {
             String text = getContentBody();
 
             if (!validateAnswer(text)) return;
-            System.out.println(text);
 
             DBAnswer.addAnswer(text, getUserID(), getContentID());
             setEditAnswerPanel(false);

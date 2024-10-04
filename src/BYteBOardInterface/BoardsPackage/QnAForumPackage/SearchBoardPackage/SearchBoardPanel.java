@@ -216,6 +216,7 @@ public class SearchBoardPanel extends BoardPanel {
     }
 
     public void setUserID(String userID) {
+        questionPanel.setUserID(userID);
         this.userID = userID;
     }
 }

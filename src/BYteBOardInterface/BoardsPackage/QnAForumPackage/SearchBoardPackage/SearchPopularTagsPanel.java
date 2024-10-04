@@ -55,9 +55,15 @@ public class SearchPopularTagsPanel extends BoardPanel {
             if(!(component instanceof BoardTagButton))
                 return;
 
+            if(i >= tagDataObjects.length) {
+                component.setVisible(false);
+                continue;
+            }
+
+            component.setVisible(true);
             BoardTagButton tagButton = (BoardTagButton) component;
             tagButton.setTag(tagDataObjects[i], userID);
-            DEBUG.printlnYellow("Popular Tag: " + tagDataObjects[i].getValue(DBTag.K_TAG) + "[" + tagDataObjects[i].getValue(DBTag.K_TAG_ID) + "]");
+            //DE BUG.printlnYellow("Popular Tag: " + tagDataObjects[i].getValue(DBTag.K_TAG) + "[" + tagDataObjects[i].getValue(DBTag.K_TAG_ID) + "]");
         }
     }
 }

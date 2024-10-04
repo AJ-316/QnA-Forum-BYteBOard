@@ -1,3 +1,5 @@
+CREATE DATABASE  IF NOT EXISTS `byteboarddb_qnaforum` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `byteboarddb_qnaforum`;
 -- MySQL dump 10.13  Distrib 8.0.38, for Win64 (x86_64)
 --
 -- Host: localhost    Database: byteboarddb_qnaforum
@@ -24,7 +26,7 @@ DROP TABLE IF EXISTS `answers`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `answers` (
   `answer_id` int NOT NULL AUTO_INCREMENT,
-  `answer` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `answer` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `answer_user_id` int NOT NULL,
   `answer_question_id` int NOT NULL,
   `answer_upvotes` int DEFAULT '0',
@@ -35,7 +37,7 @@ CREATE TABLE `answers` (
   KEY `question_id_answers_fk_idx` (`answer_question_id`),
   CONSTRAINT `question_id_answers_fk` FOREIGN KEY (`answer_question_id`) REFERENCES `questions` (`question_id`),
   CONSTRAINT `user_id_answers_fk` FOREIGN KEY (`answer_user_id`) REFERENCES `qna_users` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -59,7 +61,7 @@ CREATE TABLE `comments` (
   CONSTRAINT `answer_id_comment_fk` FOREIGN KEY (`comment_answer_id`) REFERENCES `answers` (`answer_id`),
   CONSTRAINT `question_id_comment_fk` FOREIGN KEY (`comment_question_id`) REFERENCES `questions` (`question_id`),
   CONSTRAINT `user_id_comment_fk` FOREIGN KEY (`comment_user_id`) REFERENCES `qna_users` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=65 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=67 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -168,7 +170,7 @@ CREATE TABLE `qna_tags` (
   `tag_id` int NOT NULL AUTO_INCREMENT,
   `tag` varchar(45) NOT NULL,
   PRIMARY KEY (`tag_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -230,7 +232,7 @@ CREATE TABLE `question_tags` (
   KEY `tag_id_qt_fk_idx` (`qt_tag_id`),
   CONSTRAINT `quesion_id_qt_fk` FOREIGN KEY (`qt_question_id`) REFERENCES `questions` (`question_id`),
   CONSTRAINT `tag_id_qt_fk` FOREIGN KEY (`qt_tag_id`) REFERENCES `qna_tags` (`tag_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=59 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -242,8 +244,8 @@ DROP TABLE IF EXISTS `questions`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `questions` (
   `question_id` int NOT NULL AUTO_INCREMENT,
-  `question_head` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `question_body` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `question_head` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `question_body` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `question_user_id` int NOT NULL,
   `question_upvotes` int DEFAULT '0',
   `question_downvotes` int DEFAULT '0',
@@ -251,11 +253,19 @@ CREATE TABLE `questions` (
   PRIMARY KEY (`question_id`),
   UNIQUE KEY `question_head_UNIQUE` (`question_head`),
   KEY `user_id_questions_fk_idx` (`question_user_id`),
-  FULLTEXT KEY `question_search_idx` (`question_head`,`question_body`),
   FULLTEXT KEY `question_head_search_idx` (`question_head`),
+  FULLTEXT KEY `question_search_idx` (`question_head`,`question_body`),
   CONSTRAINT `user_id_questions_fk` FOREIGN KEY (`question_user_id`) REFERENCES `qna_users` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping events for database 'byteboarddb_qnaforum'
+--
+
+--
+-- Dumping routines for database 'byteboarddb_qnaforum'
+--
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -266,4 +276,4 @@ CREATE TABLE `questions` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-10-01  1:06:09
+-- Dump completed on 2024-10-04 10:25:44

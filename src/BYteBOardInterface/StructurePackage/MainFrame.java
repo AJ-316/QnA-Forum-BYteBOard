@@ -39,7 +39,7 @@ public abstract class MainFrame extends JFrame {
         EventQueue.invokeLater(() -> {
             createMainFrames();
 
-            switchMainFrame(QnAForumMainFrame.class, "1");
+            switchMainFrame(AuthenticationMainFrame.class);
         });
     }
 

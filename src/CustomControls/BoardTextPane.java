@@ -127,7 +127,7 @@ public class BoardTextPane extends JTextPane implements CustomControl {
                     if (inCodeBlock) {
                         codeBlockPanel = addToCodeBlock(null, null);
                     } else
-                        addToCodeBlock(null, codeBlockPanel);
+                        codeBlockPanel = addToCodeBlock(null, codeBlockPanel);
                     continue;
                 }
 
@@ -162,7 +162,7 @@ public class BoardTextPane extends JTextPane implements CustomControl {
                         line = "\n";
 
                     if (line.isEmpty()) {
-                        addToTextBlock(null, textBlockPanel);
+                        textBlockPanel = addToTextBlock(null, textBlockPanel);
                         inTextBlock = false;
                         continue;
                     }

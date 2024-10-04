@@ -23,6 +23,7 @@ public class SearchQuestionPanel extends BoardPanel {
     private BoardTagsDisplayPanel searchTagsPanel;
     private BoardPanel searchTagsScrollPanel;
     private BoardContentDisplayPanel questionsPanel;
+    private String userID;
 
     public SearchQuestionPanel(Frame frame) {
         super(frame, ByteBoardTheme.MAIN);
@@ -127,7 +128,7 @@ public class SearchQuestionPanel extends BoardPanel {
             questionPane.setUserData(
                     userData.getValue(DBUser.K_USER_PROFILE),
                     userData.getValue(DBUser.K_USER_NAME),
-                    userData.getValue(DBUser.K_USER_ID));
+                    getUserID());
         }
 
         questionsPanel.resetScrolls();
@@ -154,5 +155,13 @@ public class SearchQuestionPanel extends BoardPanel {
         searchTagsPanel.addTag(tagDataObject, e -> EventQueue.invokeLater(() ->
                 searchQuestions(null, SearchBoardPanel.TAG_INPUT)), this);
         return true;
+    }
+
+    public String getUserID() {
+        return userID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
     }
 }
