@@ -8,11 +8,13 @@ import BYteBOardInterface.StructurePackage.Frame;
 import BYteBOardInterface.StructurePackage.MainFrame;
 import CustomControls.BoardButton;
 import CustomControls.BoardComboBox;
+import CustomControls.DEBUG;
 import CustomControls.GridBagBuilder;
 import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
 
 import javax.swing.*;
+import java.awt.event.ItemEvent;
 
 public class ProfileBoardButtonPanel extends BoardPanel {
 
@@ -72,8 +74,10 @@ public class ProfileBoardButtonPanel extends BoardPanel {
         });
 
         themeComboBox.addItemListener(e -> {
-            ResourceManager.setTheme(e.getItem().toString());
-            restartMainFrame();
+            if(e.getStateChange() == ItemEvent.SELECTED) {
+                ResourceManager.setTheme(e.getItem().toString());
+                restartMainFrame();
+            }
         });
     }
 

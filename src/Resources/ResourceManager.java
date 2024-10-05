@@ -1,5 +1,7 @@
 package Resources;
 
+import CustomControls.BoardLoader;
+
 import javax.swing.*;
 import javax.swing.text.AttributeSet;
 import java.awt.*;
@@ -27,12 +29,10 @@ public class ResourceManager {
     private static String CURRENT_THEME = "";
 
     public static void init() {
-        //initLookNFeel();
         THEMES.add(ByteBoardTheme.ByteBoardBaseTheme);
         setTheme(ByteBoardTheme.ByteBoardBaseTheme.getName());
 
         loadAvailableThemes();
-        //EventQueue.invokeLater(() -> setTheme("Dark Theme"));
     }
 
     private static void loadAvailableThemes() {
@@ -40,10 +40,14 @@ public class ResourceManager {
         if (dirURL != null && dirURL.getProtocol().equals("file")) {
             File directory = new File(dirURL.getFile());
             String[] files = directory.list();
+
             if (files != null) {
+                BoardLoader.setProgressTarget(files.length + 1);
                 for (String fileName : files) {
                     loadTheme(fileName.substring(0, fileName.length() - 4));
+                    BoardLoader.progress("Loading Resources...");
                 }
+                BoardLoader.progress();
             }
         }
     }

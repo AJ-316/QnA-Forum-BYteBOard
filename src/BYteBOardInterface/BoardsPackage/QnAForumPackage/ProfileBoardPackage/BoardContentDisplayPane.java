@@ -55,7 +55,8 @@ public class BoardContentDisplayPane extends BoardPanel {
 
         EventQueue.invokeLater(() -> {
             setPreferredSize(new Dimension(600, 150));
-            getParent().revalidate();
+            if(getParent() != null)
+                getParent().revalidate();
         });
     }
 

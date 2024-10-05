@@ -1,0 +1,14 @@
+base            =
+main            =
+main_light      =
+main_dark       =
+accent          =
+accent_dark     =
+error           =
+disabled        =
+text_fg_light   =
+text_fg_dark    =
+text_fg_main    =
+
+font_n_primary = inter
+font_n_secondary = jetbrains

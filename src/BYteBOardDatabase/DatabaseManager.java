@@ -1,5 +1,7 @@
 package BYteBOardDatabase;
 
+import CustomControls.BoardDialog;
+import CustomControls.BoardLoader;
 import CustomControls.DEBUG;
 
 import java.sql.*;
@@ -12,6 +14,8 @@ public class DatabaseManager {
     private static Connection connection;
 
     public static void init() {
+        BoardLoader.setProgressTarget(2);
+        BoardLoader.progress("Connecting to Database...");
         establishConnection("byteboarddb_qnaforum");
     }
 
@@ -19,8 +23,13 @@ public class DatabaseManager {
         try {
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + database, "root", "rootpwd");
             System.out.println("Connected to the database.");
+            BoardLoader.progress();
+            BoardLoader.stop(true);
         } catch (SQLException e) {
             System.err.println("Error connecting to the database: " + e.getMessage());
+            BoardDialog.create(null, null,
+                    "Error connecting to the Database: " + e.getMessage(),
+                    evt -> BoardLoader.stop(false));
         }
     }
 

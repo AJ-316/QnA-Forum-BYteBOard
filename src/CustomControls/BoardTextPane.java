@@ -33,8 +33,19 @@ public class BoardTextPane extends JTextPane implements CustomControl {
     private int lineIndex;
     private int linesCount;
 
+    public BoardTextPane(String bg) {
+        this.frame = null;
+        setOpaque(false);
+        setEditable(false);
+
+        setBackground(ResourceManager.getColor(bg));
+        setCaretColor(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_LIGHT));
+
+        setFGLight();
+        setFontPrimary(ByteBoardTheme.FONT_T_REGULAR, 20);
+    }
+
     public BoardTextPane(Frame frame, String bg) {
-        super();
         this.frame = frame;
 
         setOpaque(false);

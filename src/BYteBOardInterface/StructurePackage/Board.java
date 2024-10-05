@@ -1,5 +1,6 @@
 package BYteBOardInterface.StructurePackage;
 
+import CustomControls.BoardLoader;
 import CustomControls.CustomJPanel;
 
 import javax.swing.*;
@@ -7,6 +8,8 @@ import javax.swing.*;
 public abstract class Board extends CustomJPanel {
 
     private final MainFrame main;
+
+    public Board() { main = null; }
 
     public Board(MainFrame main) {
         this.main = main;
@@ -34,8 +37,12 @@ public abstract class Board extends CustomJPanel {
         addInsets(inset, inset, inset, inset);
     }
 
+    protected void requestSwitchMainFrame(String switchLoadText, Class<?> mainFrameClass, String... switchContext) {
+        MainFrame.switchMainFrame(switchLoadText, mainFrameClass, switchContext);
+    }
+
     protected void requestSwitchMainFrame(Class<?> mainFrameClass, String... switchContext) {
-        MainFrame.switchMainFrame(mainFrameClass, switchContext);
+        requestSwitchMainFrame(getMain().getSwitchLoadingText(), mainFrameClass, switchContext);
     }
 
     public void restartMainFrame() {

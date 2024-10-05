@@ -18,8 +18,7 @@ public class ThemeLoader {
         BufferedReader reader = new BufferedReader(inputStreamReader);
 
         String line;
-        ByteBoardTheme theme = new ByteBoardTheme() {
-        };
+        ByteBoardTheme theme = new ByteBoardTheme() {};
         theme.setName(file);
 
         String key, value;

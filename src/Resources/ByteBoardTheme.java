@@ -1,6 +1,6 @@
 package Resources;
 
-import CustomControls.DEBUG;
+import CustomControls.BoardLoader;
 
 import javax.swing.*;
 import javax.swing.text.AttributeSet;

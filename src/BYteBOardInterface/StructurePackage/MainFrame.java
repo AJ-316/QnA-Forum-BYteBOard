@@ -2,8 +2,10 @@ package BYteBOardInterface.StructurePackage;
 
 import BYteBOardDatabase.DatabaseManager;
 import BYteBOardInterface.BoardsPackage.AuthenticationPackage.AuthenticationMainFrame;
-import BYteBOardInterface.BoardsPackage.QnAForumPackage.QnAForumMainFrame;
+import BYteBOardInterface.BoardsPackage.QnAForumPackage.ProfileBoardPackage.ProfileBoardFrame;
 import CustomControls.BoardDialog;
+import CustomControls.BoardFrameLoader;
+import CustomControls.BoardLoader;
 import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
 
@@ -19,7 +21,7 @@ public abstract class MainFrame extends JFrame {
     private final Container contentPane;
     private static MainFrame currentMainFrame;
 
-    public MainFrame(String title, int height, float ratio) {
+    public MainFrame(String title, int height, float ratio, String... switchBoardFrameContext) {
         setTitle(title);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new Dimension((int) (height * ratio), height));
@@ -33,26 +35,20 @@ public abstract class MainFrame extends JFrame {
         contentPane.setLayout(new BorderLayout());
 
         setLayout(new BorderLayout());
-        init();
-    }
-
-    public static void initMainFrames() {
-        EventQueue.invokeLater(() -> {
-            createMainFrames();
-
-            switchMainFrame(AuthenticationMainFrame.class);
-        });
-    }
-
-    protected static void createMainFrames() {
-        if(currentMainFrame != null)
-            currentMainFrame.dispose();
+        init(switchBoardFrameContext);
     }
 
     public static void main(String[] args) {
+        BoardLoader.start(() -> switchMainFrame("Setting up Authentication Form...", AuthenticationMainFrame.class));
+
         ResourceManager.init();
         DatabaseManager.init();
-        MainFrame.initMainFrames();
+    }
+
+    public void createBoardFrames(Class<?>[] boardFrames, String... switchContext) {
+        BoardFrameLoader.createLoader(this, boardFrames, () -> {
+            prepareMainFrame(switchContext);
+        });
     }
 
     public void addBoardFrame(BoardFrame frame) {
@@ -82,33 +78,42 @@ public abstract class MainFrame extends JFrame {
         return boardFrames.get(frameClass.getSimpleName());
     }
 
-    protected abstract void init();
-
+    protected abstract void init(String... switchBoardFrameContext);
     protected abstract void prepareMainFrame(String... switchBoardFrameContext);
-
     public abstract void restartMainFrame();
 
-    public void restartMainFrame(Class<?> mainFrameClass, String recoverContext) {
-        dispose();
-        EventQueue.invokeLater(() -> {
-            createMainFrames();
-            switchMainFrame(mainFrameClass, recoverContext);
-        });
+    public void restartMainFrame(String recoverContext) {
+        EventQueue.invokeLater(() -> switchMainFrame("Restarting...", getClass(), recoverContext));
     }
 
-    protected static void switchMainFrame(Class<?> mainFrameClass, String... switchBoardFrameContext) {
+    protected static void switchMainFrame(String switchLoadText, Class<?> mainFrameClass, String... switchBoardFrameContext) {
+
         if(currentMainFrame != null) {
             currentMainFrame.setVisible(false);
             currentMainFrame.dispose();
             currentMainFrame = null;
         }
 
-        try {
-            currentMainFrame = (MainFrame) mainFrameClass.getDeclaredConstructor().newInstance();
-            currentMainFrame.prepareMainFrame(switchBoardFrameContext);
-            currentMainFrame.setVisible(true);
-        } catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
+        BoardLoader.start(MainFrame::showCurrentMainFrame);
+        BoardLoader.setText(switchLoadText);
+
+        EventQueue.invokeLater(() -> {
+            try {
+                currentMainFrame = (MainFrame) mainFrameClass.getDeclaredConstructor(String[].class).newInstance((Object) switchBoardFrameContext);
+            } catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
+                BoardDialog.create(null, null,
+                        "Error Initializing" + e.getMessage(),
+                        evt -> BoardLoader.stop(false));
+            }
+        });
+    }
+
+    public String getSwitchLoadingText() {
+        return "Switching Frame";
+    }
+
+    public static void showCurrentMainFrame() {
+        if(currentMainFrame == null) return;
+        currentMainFrame.setVisible(true);
     }
 }

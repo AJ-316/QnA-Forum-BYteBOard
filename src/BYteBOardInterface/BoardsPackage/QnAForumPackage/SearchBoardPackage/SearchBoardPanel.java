@@ -115,7 +115,6 @@ public class SearchBoardPanel extends BoardPanel {
     }
 
     private void setSearchFieldText(String searchText, int selectionStart, int selectionEnd, int inputState) {
-        DEBUG.printlnPurple("Setting text: " + searchText);
         searchField.getTextField().setText(searchText);
         searchField.getTextField().setSelectionStart(selectionStart);
         searchField.getTextField().setSelectionEnd(selectionEnd);

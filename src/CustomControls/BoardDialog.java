@@ -3,6 +3,7 @@ package CustomControls;
 import BYteBOardInterface.StructurePackage.BoardPanel;
 import BYteBOardInterface.StructurePackage.Frame;
 import Resources.ByteBoardTheme;
+import Resources.ResourceManager;
 
 import javax.swing.*;
 import javax.swing.text.SimpleAttributeSet;
@@ -13,26 +14,30 @@ import java.awt.event.ActionListener;
 
 public class BoardDialog extends JDialog {
 
-    public BoardDialog(Frame frame, Component locationRelativeTo, String msg, ActionListener onConfirmListener) {
-        super(frame.getBoardFrame().getMain(), true);
+    public BoardDialog(JFrame frame, Component locationRelativeTo, String msg, ActionListener onConfirmListener) {
+        super(frame, true);
         setResizable(false);
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         setTitle("Confirm");
 
-        BoardPanel pane = new BoardPanel(frame, ByteBoardTheme.MAIN);
+        BoardPanel pane = new BoardPanel();
+        pane.setBackground(ResourceManager.getColor(ByteBoardTheme.MAIN));
+        pane.setShadowState(BoardPanel.OFFSET_SHADOW);
         pane.setCornerRadius(40);
         pane.addInsets(10);
 
         ActionListener disposeListener = e -> dispose();
 
-        BoardButton acceptBtn = new BoardButton("Yes", "cancel");
+        BoardButton acceptBtn = new BoardButton("Yes", "accept");
         acceptBtn.addActionListener(onConfirmListener);
         acceptBtn.addActionListener(disposeListener);
+        acceptBtn.addInsets(5);
 
-        BoardButton cancelBtn = new BoardButton("No", "cancel");
+        BoardButton cancelBtn = new BoardButton(" No", "cancel");
         cancelBtn.addActionListener(disposeListener);
+        cancelBtn.addInsets(5);
 
-        BoardTextPane msgText = new BoardTextPane(frame, ByteBoardTheme.MAIN_LIGHT);
+        BoardTextPane msgText = new BoardTextPane(ByteBoardTheme.MAIN_LIGHT);
         msgText.setText(msg);
         msgText.setFocusable(false);
 
@@ -41,7 +46,8 @@ public class BoardDialog extends JDialog {
         StyleConstants.setAlignment(centerAttribute, StyleConstants.ALIGN_CENTER);
         documentStyle.setParagraphAttributes(0, documentStyle.getLength(), centerAttribute, false);
 
-        BoardPanel msgPanel = new BoardPanel(frame, ByteBoardTheme.MAIN_LIGHT);
+        BoardPanel msgPanel = new BoardPanel();
+        msgPanel.setBackground(ByteBoardTheme.MAIN_LIGHT);
         msgPanel.setLayout(new BorderLayout());
         msgPanel.setCornerRadius(40);
         msgPanel.addInsets(20);
@@ -52,10 +58,17 @@ public class BoardDialog extends JDialog {
 
         builder.gridWidth(2).weightY(1).fillHorizontal().insets(10)
                 .addToNextCell(msgPanel)
-                .skipCells(1)
-                .gridWidth(1).weight(1, 0).fillBoth()
-                .addToNextCell(acceptBtn)
-                .addToNextCell(cancelBtn);
+                .skipCells(1).weight(1, 0).fillBoth();
+
+        if(frame != null) {
+            builder.gridWidth(1)
+                    .addToNextCell(acceptBtn)
+                    .addToNextCell(cancelBtn);
+
+        } else {
+            acceptBtn.setText("OK");
+            builder.addToNextCell(acceptBtn);
+        }
 
         add(pane);
         pack();
@@ -65,6 +78,6 @@ public class BoardDialog extends JDialog {
     }
 
     public static void create(Frame frame, Component locationRelativeTo, String msg, ActionListener onConfirm) {
-        new BoardDialog(frame, locationRelativeTo, msg, onConfirm);
+        new BoardDialog(frame == null ? null : frame.getBoardFrame().getMain(), locationRelativeTo, msg, onConfirm);
     }
 }

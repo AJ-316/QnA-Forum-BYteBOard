@@ -9,6 +9,8 @@ public class BoardPanel extends Board implements Panel {
 
     private final Frame frame;
 
+    public BoardPanel() { frame = null; }
+
     public BoardPanel(Frame frame) {
         this(frame, null);
         setTransparent(true);

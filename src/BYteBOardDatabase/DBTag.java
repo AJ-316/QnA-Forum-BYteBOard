@@ -34,7 +34,12 @@ public class DBTag extends DBOperation {
     }
 
     public static void addTag(String tag, String questionID) {
-        String tagID = ops.insertValue(new String[]{K_TAG}, new String[]{tag});
+        DBDataObject[] existingTagDataObjects = ops.findValuesBy(ops.matchByValue(K_TAG, tag), DBTag.K_TAG_ID);
+
+        String tagID = existingTagDataObjects.length > 0 ?
+                existingTagDataObjects[0].getValue(DBTag.K_TAG_ID) :
+                ops.insertValue(new String[]{K_TAG}, new String[]{tag});
+
         DBQueTag.addQueTag(tagID, questionID);
     }
 }
