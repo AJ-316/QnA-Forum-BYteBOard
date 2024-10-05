@@ -19,7 +19,6 @@ public class BoardTagButton extends BoardButton {
     public BoardTagButton(Frame frame, String icon, int defaultIconState) {
         super("", icon, defaultIconState, ResourceManager.PRESSED, ResourceManager.ROLLOVER, ResourceManager.MICRO);
         this.frame = frame;
-        setFGLight();
         setForeground(ResourceManager.getColor(ByteBoardTheme.MAIN_DARK));
         setAlignmentCenter();
         addInsets(5);

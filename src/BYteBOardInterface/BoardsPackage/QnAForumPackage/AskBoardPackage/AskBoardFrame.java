@@ -60,12 +60,10 @@ public class AskBoardFrame extends BoardFrame {
 
         submitButton = new BoardButton("   Submit", "submit");
         submitButton.setAlignmentLeading();
-        submitButton.setFGLight();
         submitButton.addActionListener(e -> submitQuestion());
 
         previewButton = new BoardButton("   Preview", "show");
         previewButton.setAlignmentLeading();
-        previewButton.setFGLight();
         previewButton.addActionListener(e -> {
             boolean isPreviewVisible = askInputPanel.togglePreview();
             previewButton.setText(isPreviewVisible ? "   Edit" : "   Preview");
@@ -74,7 +72,6 @@ public class AskBoardFrame extends BoardFrame {
 
         backButton = new BoardButton("   Profile", "home");
         backButton.setAlignmentLeading();
-        backButton.setFGLight();
         backButton.addActionListener(e -> exitAskFrame());
 
         builder.weight(1, 1).fillBoth().insets(10)
@@ -88,17 +85,20 @@ public class AskBoardFrame extends BoardFrame {
     }
 
     private void submitQuestion() {
-        if(!askInputPanel.validateTags() || !askInputPanel.validateQuestion()) return;
+        if (!askInputPanel.validateTags() || !askInputPanel.validateQuestion()) return;
 
-        String questionID = DBQuestion.addQuestion(askInputPanel.getHead(), askInputPanel.getBody(), getUserID());
+        BoardDialog.create(this, submitButton,
+                "Are you ready to\nsubmit your question?", evt -> {
+                    String questionID = DBQuestion.addQuestion(askInputPanel.getHead(), askInputPanel.getBody(), getUserID());
 
-        askInputPanel.clearTagInputError();
-        for (BoardTagButton boardTagButton : askInputPanel.getTagButtons()) {
-            DBTag.addTag(boardTagButton.getText(), questionID);
-        }
+                    askInputPanel.clearTagInputError();
+                    for (BoardTagButton boardTagButton : askInputPanel.getTagButtons()) {
+                        DBTag.addTag(boardTagButton.getText(), questionID);
+                    }
 
-        askInputPanel.clearQuestion();
-        exitAskFrame();
+                    askInputPanel.clearQuestion();
+                    exitAskFrame();
+                });
     }
 
     private void exitAskFrame() {

@@ -6,6 +6,7 @@ import BYteBOardDatabase.DBUser;
 import BYteBOardInterface.StructurePackage.BoardPanel;
 import BYteBOardInterface.StructurePackage.Frame;
 import CustomControls.BoardButton;
+import CustomControls.BoardDialog;
 import CustomControls.CustomListenerPackage.LimitCharacterDocumentListener;
 import CustomControls.GridBagBuilder;
 
@@ -60,10 +61,13 @@ public class BoardEditContentPanel extends BoardContentPanel {
 
             if (!validateAnswer(text)) return;
 
-            DBAnswer.addAnswer(text, getUserID(), getContentID());
-            setEditAnswerPanel(false);
-            getContentResponseCardPanel().resetResponseButtons(true);
-            refresh();
+            BoardDialog.create(frame, (Component) e.getSource(),
+                    "Are you ready to\nsubmit your answer?", evt -> {
+                        DBAnswer.addAnswer(text, getUserID(), getContentID());
+                        setEditAnswerPanel(false);
+                        getContentResponseCardPanel().resetResponseButtons(true);
+                        refresh();
+                    });
         };
 
         submitEditButton = getButton("Submit", "submit", submitListener);
@@ -85,7 +89,6 @@ public class BoardEditContentPanel extends BoardContentPanel {
     private BoardButton getButton(String text, String icon, ActionListener listener) {
         BoardButton btn = new BoardButton(text, icon);
         btn.addInsets(10);
-        btn.setFGLight();
         btn.addActionListener(listener);
         return btn;
     }

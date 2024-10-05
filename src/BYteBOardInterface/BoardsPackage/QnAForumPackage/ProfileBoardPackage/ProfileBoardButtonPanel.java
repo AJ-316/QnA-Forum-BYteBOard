@@ -54,7 +54,6 @@ public class ProfileBoardButtonPanel extends BoardPanel {
 
     private BoardButton createButton(String text, String icon) {
         BoardButton button = new BoardButton(text, icon);
-        button.setFGLight();
         button.setAlignmentLeading();
         return button;
     }

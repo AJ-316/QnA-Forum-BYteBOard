@@ -3,6 +3,7 @@ package BYteBOardInterface.StructurePackage;
 import BYteBOardDatabase.DatabaseManager;
 import BYteBOardInterface.BoardsPackage.AuthenticationPackage.AuthenticationMainFrame;
 import BYteBOardInterface.BoardsPackage.QnAForumPackage.QnAForumMainFrame;
+import CustomControls.BoardDialog;
 import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
 

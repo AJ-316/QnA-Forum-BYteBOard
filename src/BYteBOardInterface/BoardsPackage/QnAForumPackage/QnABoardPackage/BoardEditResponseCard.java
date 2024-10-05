@@ -2,12 +2,8 @@ package BYteBOardInterface.BoardsPackage.QnAForumPackage.QnABoardPackage;
 
 import BYteBOardDatabase.DBComment;
 import BYteBOardInterface.StructurePackage.Frame;
-import BYteBOardInterface.StructurePackage.MainFrame;
-import CustomControls.BoardButton;
-import CustomControls.BoardLabel;
+import CustomControls.*;
 import CustomControls.CustomListenerPackage.LimitCharacterDocumentListener;
-import CustomControls.GridBagBuilder;
-import CustomControls.SimpleScrollPane;
 import Resources.ByteBoardTheme;
 import Resources.ResourceManager;
 
@@ -50,7 +46,6 @@ public class BoardEditResponseCard extends BoardResponseCard {
 
         submitButton = new BoardButton("submit", ResourceManager.MICRO);
         submitButton.setText("Submit");
-        submitButton.setFGLight();
         submitButton.setFontPrimary(ByteBoardTheme.FONT_T_SEMIBOLD, 18);
 
         builder.gridWidth(2).weight(1, 1).insets(10).fillBoth()
@@ -67,10 +62,14 @@ public class BoardEditResponseCard extends BoardResponseCard {
             String comment = contentText.getText().replace("\n", " ");
             if (comment.isEmpty()) return;
 
-            DBComment.addComment(userID, comment, getContentKey(), getContentID());
-            cardPanel.clearResponseCards();
-            cardPanel.resetResponseButtons(true);
-            refresh();
+            BoardDialog.create(getFrame(), (Component) e.getSource(),
+                    "Are you ready to\nsubmit your comment?", evt -> {
+                        DBComment.addComment(userID, comment, getContentKey(), getContentID());
+                        cardPanel.clearResponseCards();
+                        cardPanel.resetResponseButtons(true);
+                        refresh();
+                    });
+
         });
     }
 

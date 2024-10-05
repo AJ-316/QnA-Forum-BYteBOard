@@ -51,7 +51,6 @@ public class SearchBoardFrame extends BoardFrame {
 
         BoardButton backButton = new BoardButton("Profile", "home");
         backButton.addActionListener(e -> requestSwitchFrame(ProfileBoardFrame.class));
-        backButton.setFGLight();
 
         BoardPanel searchPanel = new BoardPanel(this);
         GridBagBuilder searchPanelBuilder = new GridBagBuilder(searchPanel, 1);

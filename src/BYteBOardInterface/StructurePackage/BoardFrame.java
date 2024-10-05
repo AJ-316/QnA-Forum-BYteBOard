@@ -80,11 +80,15 @@ public abstract class BoardFrame extends Board implements Frame {
     public final void refresh() {
         recoverContext = frameSwitchDelegate.retrieveData();
         applyFrameSwitchContext(frameSwitchDelegate);
+        revalidate();
+        repaint();
     }
 
     public final void setContext(String... context) {
         recoverContext = frameSwitchDelegate.retrieveData(context);
         applyFrameSwitchContext(frameSwitchDelegate);
+        revalidate();
+        repaint();
     }
 
     public String recoverContext() {

@@ -39,7 +39,7 @@ public class BoardButton extends JButton implements CustomControl {
         setBorderPainted(false);
         setFocusPainted(false);
         setContentAreaFilled(false);
-        setFGDark();
+        setFGLight();
         addInsets(15);
 
         addKeyListener(new KeyAdapter() {
@@ -130,6 +130,7 @@ public class BoardButton extends JButton implements CustomControl {
 
     public void setFGDark() {
         setForeground(ResourceManager.getColor(ByteBoardTheme.TEXT_FG_DARK));
+        setRounded(false);
     }
 
     public void setFGLight() {

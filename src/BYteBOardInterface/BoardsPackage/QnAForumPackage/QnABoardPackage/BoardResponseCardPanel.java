@@ -72,13 +72,11 @@ public class BoardResponseCardPanel extends BoardPanel {
 
         addResponseButton = new BoardButton("Add Response", "edit", ResourceManager.DEFAULT_LIGHT,
                 ResourceManager.PRESSED, ResourceManager.ROLLOVER, ResourceManager.MICRO);
-        addResponseButton.setFGLight();
         addResponseButton.setFontPrimary(ByteBoardTheme.FONT_T_SEMIBOLD, 18);
         addResponseButton.addInsets(0, 10, 0, 10);
 
         cancelAddResponseButton = new BoardButton("Cancel", "cancel", ResourceManager.DEFAULT_LIGHT,
                 ResourceManager.PRESSED, ResourceManager.ROLLOVER, ResourceManager.MICRO);
-        cancelAddResponseButton.setFGLight();
         cancelAddResponseButton.setFontPrimary(ByteBoardTheme.FONT_T_SEMIBOLD, 18);
         cancelAddResponseButton.addInsets(0, 10, 0, 10);
         cancelAddResponseButton.setVisible(false);

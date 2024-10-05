@@ -44,7 +44,6 @@ public class SearchPopularTagsPanel extends BoardPanel {
         for (int i = 0; i < 5; i++) {
             BoardTagButton tagButton = new BoardTagButton(getFrame(), "add", ResourceManager.DEFAULT);
             tagButton.addInsets(10);
-            tagButton.setFGLight();
             popularTagsPanel.add(tagButton);
         }
     }

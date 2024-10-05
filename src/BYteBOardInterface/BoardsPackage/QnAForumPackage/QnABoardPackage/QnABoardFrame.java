@@ -163,14 +163,12 @@ public class QnABoardFrame extends BoardFrame {
 
     private BoardPanel createButtons() {
         viewQuestionButton = new BoardButton("View Question", "question");
-        viewQuestionButton.setFGLight();
         viewQuestionButton.addActionListener(e -> switchBoardContent(QUESTION));
 
         Dimension buttonSize = new Dimension(400, viewQuestionButton.getPreferredSize().height);
         viewQuestionButton.setMinimumSize(buttonSize);
 
         backButton = new BoardButton("Profile", "home");
-        backButton.setFGLight();
         backButton.setMinimumSize(buttonSize);
         backButton.addActionListener(e -> {
             requestSwitchFrame(ProfileBoardFrame.class);

@@ -73,16 +73,11 @@ public class LoginFormPanel extends BoardPanel {
         fieldsContainer.addInsets(40);
         fieldsContainer.setCornerRadius(90);
 
-//
-//        builder.fill(GridBagConstraints.BOTH);
-//        builder.insets(10, 10, 10, 10);
-
         // Username Email Label
         BoardLabel usernameOrEmailLabel = new BoardLabel("Username");
         usernameOrEmailLabel.setFGLight();
         usernameOrEmailLabel.setAlignmentTrailing();
         usernameOrEmailLabel.addInsets(10);
-//        builder.addToNextCell(usernameOrEmailLabel);
 
         // Username Email field
         usernameOrEmailField = new BoardTextField(frame, ByteBoardTheme.MAIN_DARK, 20);
@@ -94,20 +89,14 @@ public class LoginFormPanel extends BoardPanel {
         passwordLabel.setFGLight();
         passwordLabel.setAlignmentTrailing();
         passwordLabel.addInsets(10);
-//        builder.addToNextCell(passwordLabel);
 
         // Password field
         passwordField = new BoardPasswordField(frame, ByteBoardTheme.MAIN_DARK, 20);
         passwordField.setHintText("********");
-//        builder.addToNextCell(passwordField.getTextFieldContainer());
 
         // Login Button
         BoardButton loginButton = new BoardButton("Login", "login");
-        loginButton.setFGLight();
         loginButton.addActionListener(e -> initFormSubmission());
-//        builder.fill(GridBagConstraints.NONE);
-//        builder.insets(40, 10, 10, 10);
-//        builder.addToNextCell(loginButton, 2, 1);
 
         GridBagBuilder builder = new GridBagBuilder(fieldsContainer, 2);
 
@@ -132,6 +121,7 @@ public class LoginFormPanel extends BoardPanel {
 
         // Signup Button
         BoardButton signUpButton = new BoardButton("Signup", "add");
+        signUpButton.setFGDark();
         signUpButton.addActionListener(e -> {
             setPanelVisibility(SignupFormPanel.class, true);
             setVisible(false);

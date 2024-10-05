@@ -142,11 +142,9 @@ public class ProfileEditPanel extends BoardPanel {
 
         saveButton = new BoardButton("Save Changes", "save");
         saveButton.setAlignmentLeading();
-        saveButton.setFGLight();
 
         cancelButton = new BoardButton("    Cancel", "cancel");
         cancelButton.setAlignmentLeading();
-        cancelButton.setFGLight();
 
         GridBagBuilder builder = new GridBagBuilder(panel, 1);
         builder.weightY(1).insets(10).fillHorizontal()
