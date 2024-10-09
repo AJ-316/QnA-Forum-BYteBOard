@@ -1,0 +1,7 @@
+# project specific
+.idea
+out
+
+# files
+*.class
+*.log

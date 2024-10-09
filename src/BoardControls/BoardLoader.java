@@ -115,17 +115,6 @@ public class BoardLoader extends JDialog {
         progressTimer.start();
     }*/
 
-    public static void stop(boolean isComplete) {
-        if (CURRENT == null) return;
-
-        CURRENT.dispose();
-
-        if (isComplete)
-            EventQueue.invokeLater(CURRENT.onComplete);
-
-        CURRENT = null;
-    }
-
     public static void progress() {
         if (CURRENT == null) return;
         progress(CURRENT.loadingText.getText());
@@ -149,6 +138,24 @@ public class BoardLoader extends JDialog {
             CURRENT.dispose();
         }
         CURRENT = new BoardLoader(onConfirm);
+    }
+
+    public static void stop() {
+        if (CURRENT == null) return;
+        CURRENT.dispose();
+
+        EventQueue.invokeLater(CURRENT.onComplete);
+        CURRENT = null;
+    }
+
+    public static void forceStop(String errorMsg) {
+        if(CURRENT == null) return;
+
+        CURRENT.setVisible(false);
+        BoardDialog.create(null, null, errorMsg, evt -> {
+            if(CURRENT != null)
+                CURRENT.dispose();
+        }, 10);
     }
 
     public static void setText(String text) {

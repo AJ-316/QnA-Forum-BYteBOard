@@ -32,9 +32,7 @@ public class BoardFrameLoader extends SwingWorker<Void, Void> {
                 frameClass.getDeclaredConstructor(MainFrame.class).newInstance(mainFrame);
                 BoardLoader.progress();
             } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-                BoardDialog.create(null, null,
-                        "Error Initializing: " + e.getMessage(),
-                        evt -> BoardLoader.stop(false));
+                BoardLoader.forceStop("Error Initializing:\n" + e.getMessage());
                 break;
             }
         }
@@ -47,11 +45,9 @@ public class BoardFrameLoader extends SwingWorker<Void, Void> {
     protected void done() {
         try {
             get();
-            BoardLoader.stop(true);
+            BoardLoader.stop();
         } catch (Exception e) {
-            BoardDialog.create(null, null,
-                    "Error Finalizing: " + e.getMessage(),
-                    evt -> BoardLoader.stop(false));
+            BoardLoader.forceStop("Error Finalizing:\n" + e.getMessage());
         }
     }
 }
