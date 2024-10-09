@@ -100,9 +100,7 @@ public abstract class MainFrame extends JFrame {
             try {
                 currentMainFrame = (MainFrame) mainFrameClass.getDeclaredConstructor(String[].class).newInstance((Object) switchBoardFrameContext);
             } catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
-                BoardDialog.create(null, null,
-                        "Error Initializing" + e.getMessage(),
-                        evt -> BoardLoader.stop(false));
+                BoardLoader.forceStop("Error Initializing:\n" + e.getMessage());
             }
         });
     }

@@ -4,8 +4,19 @@ import BoardControls.BoardDialog;
 import BoardControls.BoardLoader;
 import Tools.DEBUG;
 
+import javax.swing.*;
+import javax.swing.Timer;
+import java.awt.*;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.sql.*;
 import java.util.*;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class DatabaseManager {
 
@@ -13,23 +24,92 @@ public class DatabaseManager {
     public static boolean PRINT_QUERY = false;
     private static Connection connection;
 
+    public static void main(String[] args) {
+        String subnet = "192.168.0."; // Change to your local subnet
+        int numThreads = 10; // Number of threads to use
+
+        ExecutorService executor = Executors.newFixedThreadPool(numThreads);
+
+        for (int i = 1; i < 255; i++) {
+            final int hostSuffix = i;
+            executor.submit(() -> {
+                String host = subnet + hostSuffix;
+                try {
+                    InetAddress address = InetAddress.getByName(host);
+                    if (address.isReachable(500)) { // 500 ms timeout
+                        System.out.println(host + " is reachable: " + Arrays.toString(address.getAddress()));
+                    } else {
+                        System.out.print(" -");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+        }
+
+        executor.shutdown();
+
+        try {
+            // Wait for all tasks to finish or timeout after a maximum wait time
+            if (!executor.awaitTermination(10, TimeUnit.SECONDS)) {
+                System.err.println("Some tasks were not completed in time.");
+                // todo await until completed all or force shutdown
+                //  reachable ip addresses to be added to sql
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void scanForIP() {
+
+    }
+
+    public static void main2(String[] args) {
+        String remoteHost = "8.8.8.8"; // Google's public DNS server
+        int remotePort = 53; // DNS port
+
+        try (Socket socket = new Socket(remoteHost, remotePort)) {
+            InetAddress localAddress = socket.getLocalAddress();
+            String localIP = localAddress.getHostAddress();
+            System.out.println("Local IP Address: " + localIP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /*
+        // to get system's IP:
+        InetAddress.getLocalHost().getHostAddress()
+
+        // to give IP access to DB:
+        GRANT ALL PRIVILEGES ON your_database.* TO 'your_user'@'192.168.1.50' IDENTIFIED BY 'your_password';
+        FLUSH PRIVILEGES;
+    */
+
     public static void init() {
         BoardLoader.setProgressTarget(2);
         BoardLoader.progress("Connecting to Database...");
-        establishConnection("byteboarddb_qnaforum");
+        establishConnection("192.168.0.103", "byteboarddb_qnaforum"); // 192.168.0.102
     }
 
-    public static void establishConnection(String database) {
+    public static void establishConnection(String host, String database) {
         try {
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + database, "root", "rootpwd");
+            connection = DriverManager.getConnection("jdbc:mysql://" + host + ":3306/" + database, "aj", "ajpwd");
             System.out.println("Connected to the database.");
             BoardLoader.progress();
-            BoardLoader.stop(true);
+            BoardLoader.stop();
         } catch (SQLException e) {
-            System.err.println("Error connecting to the database: " + e.getMessage());
-            BoardDialog.create(null, null,
-                    "Error connecting to the Database: " + e.getMessage(),
-                    evt -> BoardLoader.stop(false));
+            StringBuilder builder = new StringBuilder("Error connecting to the database:\n");
+
+            String[] splitMsg = e.getMessage().split(":");
+            String msg = splitMsg[splitMsg.length - 1].replaceAll("\n+", "; ");
+            builder.append("\nErrorCode: ").append(e.getErrorCode())
+                    .append("\nSQL State: ").append(e.getSQLState())
+                    .append("\nMessage: ").append(msg);
+
+            System.err.println(builder);
+            BoardLoader.forceStop(builder.toString());
         }
     }
 
@@ -245,16 +325,6 @@ public class DatabaseManager {
         FROM qna_tags
         ORDER BY relevance_score, tag;
 */
-
-    public static void main(String[] args) {
-        init();
-        PRINT_QUERY = true;
-        //DBDataObject[] d = DBQuestion.searchByQuestionHead("What is Java", DBQuestion.K_QUESTION_HEAD, DBQuestion.K_QUESTION_BODY);
-        DBDataObject[] d2 = likeRelevanceSearch(DBTag.TABLE, new String[]{DBTag.K_TAG}, DBTag.K_TAG,
-                DBTag.ops.likeMatchStartsWith(DBTag.K_TAG, "Op"),
-                DBTag.ops.likeMatchContains(DBTag.K_TAG, "Op"));
-        close();
-    }
 
     // selectKeysFromTables = "table1:key1,key3", "table3:*", "table2:key3"
     // whereCondition/onCondition = "table1.key1 = table2.key2" (explicitValue == "table1.key1 = <?P_V?>'this is a value'<?P_V?>")

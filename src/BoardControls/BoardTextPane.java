@@ -265,6 +265,7 @@ public class BoardTextPane extends JTextPane implements BoardControl {
 
             if(isCodeBlock) {
                 applyCodeSyntaxHighlighting((BoardTextPane) getBlockArea(blockPanel));
+                getBlockScroll(blockPanel).resetScroll();
             }
 
             insertText("\n");
@@ -287,7 +288,6 @@ public class BoardTextPane extends JTextPane implements BoardControl {
         if (blockArea instanceof BoardTextArea) {
             BoardTextArea textArea = (BoardTextArea) blockArea;
             textArea.append(line);
-
             return;
         }
 
@@ -303,13 +303,17 @@ public class BoardTextPane extends JTextPane implements BoardControl {
     }
 
     private Component getBlockArea(JPanel panel) {
-        Component component = ((JScrollPane) ((BoardPanel) panel.getComponent(0)).getComponent(0)).getViewport().getView();
+        Component component = getBlockScroll(panel).getViewport().getView();
 
         if(component instanceof JTextComponent) {
             return component;
         }
 
         return ((BoardPanel) component).getComponent(0);
+    }
+
+    private SimpleScrollPane getBlockScroll(JPanel panel) {
+        return  (SimpleScrollPane) ((BoardPanel) panel.getComponent(0)).getComponent(0);
     }
 
     private void applyCodeSyntaxHighlighting(BoardTextPane codeArea) {
@@ -377,6 +381,7 @@ public class BoardTextPane extends JTextPane implements BoardControl {
         BoardTextPane textPane = new BoardTextPane(frame, bgColor);
         textPane.setFGLight();
         textPane.setFontSecondary(ByteBoardTheme.FONT_T_SEMIBOLD, 18);
+        textPane.addInsets(10, 0, 15, 0);
 
         BoardPanel scrollPanel = new BoardPanel(frame);
         scrollPanel.setLayout(new BorderLayout());
