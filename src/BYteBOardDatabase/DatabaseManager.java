@@ -1,8 +1,8 @@
 package BYteBOardDatabase;
 
-import CustomControls.BoardDialog;
-import CustomControls.BoardLoader;
-import CustomControls.DEBUG;
+import BoardControls.BoardDialog;
+import BoardControls.BoardLoader;
+import Tools.DEBUG;
 
 import java.sql.*;
 import java.util.*;

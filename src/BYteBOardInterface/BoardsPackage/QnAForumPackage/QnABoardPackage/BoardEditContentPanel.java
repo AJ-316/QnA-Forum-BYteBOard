@@ -5,10 +5,10 @@ import BYteBOardDatabase.DBDataObject;
 import BYteBOardDatabase.DBUser;
 import BYteBOardInterface.StructurePackage.BoardPanel;
 import BYteBOardInterface.StructurePackage.Frame;
-import CustomControls.BoardButton;
-import CustomControls.BoardDialog;
-import CustomControls.CustomListenerPackage.LimitCharacterDocumentListener;
-import CustomControls.GridBagBuilder;
+import BoardControls.BoardButton;
+import BoardControls.BoardDialog;
+import BoardEventListeners.LimitCharacterDocumentListener;
+import BoardControls.UIPackage.GridBagBuilder;
 
 import java.awt.*;
 import java.awt.event.ActionListener;

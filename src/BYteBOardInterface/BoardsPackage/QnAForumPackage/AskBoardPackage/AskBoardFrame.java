@@ -9,9 +9,13 @@ import BYteBOardInterface.StructurePackage.BoardFrame;
 import BYteBOardInterface.StructurePackage.BoardFrameSwitchDelegate;
 import BYteBOardInterface.StructurePackage.BoardPanel;
 import BYteBOardInterface.StructurePackage.MainFrame;
-import CustomControls.*;
-import Resources.ByteBoardTheme;
-import Resources.ResourceManager;
+import BoardControls.BoardButton;
+import BoardControls.BoardDialog;
+import BoardControls.BoardLabel;
+import BoardControls.BoardTagButton;
+import BoardControls.UIPackage.GridBagBuilder;
+import BoardResources.ByteBoardTheme;
+import BoardResources.ResourceManager;
 
 import javax.swing.*;
 import java.awt.*;

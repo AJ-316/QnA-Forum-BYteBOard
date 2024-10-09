@@ -3,13 +3,11 @@ package BYteBOardInterface.BoardsPackage.QnAForumPackage.QnABoardPackage;
 import BYteBOardDatabase.DBCFeedback;
 import BYteBOardInterface.StructurePackage.BoardPanel;
 import BYteBOardInterface.StructurePackage.Frame;
-import BYteBOardInterface.StructurePackage.MainFrame;
-import CustomControls.BoardLabel;
-import CustomControls.BoardTextArea;
-import CustomControls.BoardTextPane;
-import CustomControls.GridBagBuilder;
-import Resources.ByteBoardTheme;
-import Resources.ResourceManager;
+import BoardControls.BoardLabel;
+import BoardControls.BoardTextPane;
+import BoardControls.UIPackage.GridBagBuilder;
+import BoardResources.ByteBoardTheme;
+import BoardResources.ResourceManager;
 
 import java.awt.*;
 import java.awt.event.ComponentAdapter;

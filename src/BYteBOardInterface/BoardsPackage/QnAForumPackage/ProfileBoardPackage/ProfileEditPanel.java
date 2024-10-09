@@ -5,10 +5,13 @@ import BYteBOardDatabase.DBUser;
 import BYteBOardDatabase.EncryptionUtils;
 import BYteBOardInterface.StructurePackage.BoardPanel;
 import BYteBOardInterface.StructurePackage.Frame;
-import BYteBOardInterface.StructurePackage.MainFrame;
-import CustomControls.*;
-import Resources.ByteBoardTheme;
-import Resources.ResourceManager;
+import BoardControls.BoardButton;
+import BoardControls.BoardLabel;
+import BoardControls.BoardPasswordField;
+import BoardControls.BoardTextField;
+import BoardControls.UIPackage.GridBagBuilder;
+import BoardResources.ByteBoardTheme;
+import BoardResources.ResourceManager;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;

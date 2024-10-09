@@ -3,12 +3,12 @@ package BYteBOardInterface.BoardsPackage.QnAForumPackage.QnABoardPackage;
 import BYteBOardDatabase.*;
 import BYteBOardInterface.StructurePackage.BoardPanel;
 import BYteBOardInterface.StructurePackage.Frame;
-import CustomControls.*;
-import CustomControls.CustomRendererPackage.RoundedBorder;
-import Resources.ByteBoardTheme;
-import Resources.ResourceManager;
+import BoardControls.*;
+import BoardControls.UIPackage.GridBagBuilder;
+import BoardControls.UIPackage.RoundedBorder;
+import BoardResources.ByteBoardTheme;
+import BoardResources.ResourceManager;
 
-import javax.swing.text.BadLocationException;
 import java.awt.*;
 import java.util.Map;
 
@@ -146,7 +146,7 @@ public class BoardContentPanel extends BoardPanel {
         panel.setCornerRadius(90);
         panel.addInsets(20);
 
-        ((CustomControl)component).setBackground(bgColor);
+        ((BoardControl)component).setBackground(bgColor);
 
         scrollPane.setOpaque(false);
         scrollPane.setBorder(new RoundedBorder(60, 60, 30,

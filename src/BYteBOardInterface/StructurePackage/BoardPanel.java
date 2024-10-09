@@ -1,7 +1,7 @@
 package BYteBOardInterface.StructurePackage;
 
-import Resources.ByteBoardTheme;
-import Resources.ResourceManager;
+import BoardResources.ByteBoardTheme;
+import BoardResources.ResourceManager;
 
 import java.awt.*;
 

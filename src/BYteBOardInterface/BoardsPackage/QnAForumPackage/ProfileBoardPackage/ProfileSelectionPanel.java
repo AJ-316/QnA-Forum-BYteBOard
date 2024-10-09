@@ -2,12 +2,11 @@ package BYteBOardInterface.BoardsPackage.QnAForumPackage.ProfileBoardPackage;
 
 import BYteBOardInterface.StructurePackage.BoardPanel;
 import BYteBOardInterface.StructurePackage.Frame;
-import BYteBOardInterface.StructurePackage.MainFrame;
-import CustomControls.BoardLabel;
-import CustomControls.BoardScrollPanel;
-import QnAForumInterface.WrapLayout;
-import Resources.ByteBoardTheme;
-import Resources.ResourceManager;
+import BoardControls.BoardLabel;
+import BoardControls.BoardScrollPanel;
+import BoardControls.UIPackage.WrapLayout;
+import BoardResources.ByteBoardTheme;
+import BoardResources.ResourceManager;
 
 import java.awt.*;
 

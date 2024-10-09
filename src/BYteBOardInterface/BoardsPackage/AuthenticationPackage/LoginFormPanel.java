@@ -6,9 +6,12 @@ import BYteBOardDatabase.EncryptionUtils;
 import BYteBOardInterface.BoardsPackage.QnAForumPackage.QnAForumMainFrame;
 import BYteBOardInterface.StructurePackage.BoardPanel;
 import BYteBOardInterface.StructurePackage.Frame;
-import BYteBOardInterface.StructurePackage.MainFrame;
-import CustomControls.*;
-import Resources.ByteBoardTheme;
+import BoardControls.BoardButton;
+import BoardControls.BoardLabel;
+import BoardControls.BoardPasswordField;
+import BoardControls.BoardTextField;
+import BoardControls.UIPackage.GridBagBuilder;
+import BoardResources.ByteBoardTheme;
 
 import java.awt.*;
 

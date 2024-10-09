@@ -6,16 +6,15 @@ import BYteBOardInterface.StructurePackage.BoardFrame;
 import BYteBOardInterface.StructurePackage.BoardFrameSwitchDelegate;
 import BYteBOardInterface.StructurePackage.BoardPanel;
 import BYteBOardInterface.StructurePackage.MainFrame;
-import CustomControls.BoardButton;
-import CustomControls.BoardSplitPanel;
-import CustomControls.GridBagBuilder;
-import Resources.ByteBoardTheme;
+import BoardControls.BoardButton;
+import BoardControls.BoardSplitPanel;
+import BoardControls.UIPackage.GridBagBuilder;
+import BoardResources.ByteBoardTheme;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class QnABoardFrame extends BoardFrame {
@@ -42,8 +41,6 @@ public class QnABoardFrame extends BoardFrame {
 
             String questionID = context[0];
             String userID = context[1];
-
-            System.out.println("Context: " + Arrays.toString(context));
 
             DBDataObject questionDataObject = DBQuestion.getQuestion(questionID);
             questionDataObject.putKeyValue(DBVote.V_VOTE_UP, DBVote.getVoteType(userID, DBVote.K_QUESTION_ID, questionID));
@@ -239,7 +236,7 @@ public class QnABoardFrame extends BoardFrame {
 
         DBDataObject userData = delegate.getContext(DBUser.TABLE);
         userID = userData.getValue(DBUser.K_USER_ID);
-        System.out.println("LoggedIn: " + userData);
+
         DBDataObject questionDataObject = delegate.getContext(DBQuestion.TABLE);
         List<DBDataObject> questionDataList = new ArrayList<>();
 

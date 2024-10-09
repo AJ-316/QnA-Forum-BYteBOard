@@ -1,15 +1,12 @@
 package BYteBOardInterface.BoardsPackage.QnAForumPackage.SearchBoardPackage;
 
 import BYteBOardDatabase.DBDataObject;
-import BYteBOardDatabase.DBTag;
 import BYteBOardInterface.StructurePackage.BoardPanel;
 import BYteBOardInterface.StructurePackage.Frame;
-import BYteBOardInterface.StructurePackage.MainFrame;
-import CustomControls.BoardLabel;
-import CustomControls.BoardTagButton;
-import CustomControls.DEBUG;
-import CustomControls.GridBagBuilder;
-import Resources.ResourceManager;
+import BoardControls.BoardLabel;
+import BoardControls.BoardTagButton;
+import BoardControls.UIPackage.GridBagBuilder;
+import BoardResources.ResourceManager;
 
 import java.awt.*;
 

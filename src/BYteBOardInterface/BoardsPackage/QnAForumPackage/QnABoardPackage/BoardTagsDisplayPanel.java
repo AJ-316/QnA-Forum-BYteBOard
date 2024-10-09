@@ -3,11 +3,10 @@ package BYteBOardInterface.BoardsPackage.QnAForumPackage.QnABoardPackage;
 import BYteBOardDatabase.DBDataObject;
 import BYteBOardDatabase.DBTag;
 import BYteBOardInterface.StructurePackage.Frame;
-import BYteBOardInterface.StructurePackage.MainFrame;
-import CustomControls.BoardScrollPanel;
-import CustomControls.BoardTagButton;
-import Resources.ByteBoardTheme;
-import Resources.ResourceManager;
+import BoardControls.BoardScrollPanel;
+import BoardControls.BoardTagButton;
+import BoardResources.ByteBoardTheme;
+import BoardResources.ResourceManager;
 
 import javax.swing.*;
 import java.awt.*;

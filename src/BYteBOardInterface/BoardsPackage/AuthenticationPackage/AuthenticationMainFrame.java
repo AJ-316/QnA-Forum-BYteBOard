@@ -1,13 +1,6 @@
 package BYteBOardInterface.BoardsPackage.AuthenticationPackage;
 
-import BYteBOardInterface.BoardsPackage.QnAForumPackage.AskBoardPackage.AskBoardFrame;
-import BYteBOardInterface.BoardsPackage.QnAForumPackage.ProfileBoardPackage.ProfileBoardFrame;
-import BYteBOardInterface.BoardsPackage.QnAForumPackage.QnABoardPackage.QnABoardFrame;
-import BYteBOardInterface.BoardsPackage.QnAForumPackage.SearchBoardPackage.SearchBoardFrame;
 import BYteBOardInterface.StructurePackage.MainFrame;
-import CustomControls.BoardLoader;
-
-import java.awt.*;
 
 public class AuthenticationMainFrame extends MainFrame {
 

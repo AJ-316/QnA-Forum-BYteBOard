@@ -7,7 +7,7 @@ import BYteBOardDatabase.DBUser;
 import BYteBOardInterface.StructurePackage.BoardFrame;
 import BYteBOardInterface.StructurePackage.BoardFrameSwitchDelegate;
 import BYteBOardInterface.StructurePackage.MainFrame;
-import CustomControls.GridBagBuilder;
+import BoardControls.UIPackage.GridBagBuilder;
 
 public class ProfileBoardFrame extends BoardFrame {
 

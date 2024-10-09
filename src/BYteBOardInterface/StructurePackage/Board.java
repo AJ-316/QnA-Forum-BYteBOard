@@ -1,7 +1,6 @@
 package BYteBOardInterface.StructurePackage;
 
-import CustomControls.BoardLoader;
-import CustomControls.CustomJPanel;
+import BoardControls.CustomJPanel;
 
 import javax.swing.*;
 

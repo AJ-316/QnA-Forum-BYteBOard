@@ -1,9 +1,9 @@
 package BYteBOardInterface.BoardsPackage.QnAForumPackage.QnABoardPackage;
 
 import BYteBOardDatabase.DBVote;
-import CustomControls.BoardButton;
-import Resources.ByteBoardTheme;
-import Resources.ResourceManager;
+import BoardControls.BoardButton;
+import BoardResources.ByteBoardTheme;
+import BoardResources.ResourceManager;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;

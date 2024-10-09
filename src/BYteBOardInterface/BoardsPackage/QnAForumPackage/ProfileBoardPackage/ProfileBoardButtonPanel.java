@@ -5,15 +5,12 @@ import BYteBOardInterface.BoardsPackage.QnAForumPackage.AskBoardPackage.AskBoard
 import BYteBOardInterface.BoardsPackage.QnAForumPackage.SearchBoardPackage.SearchBoardFrame;
 import BYteBOardInterface.StructurePackage.BoardPanel;
 import BYteBOardInterface.StructurePackage.Frame;
-import BYteBOardInterface.StructurePackage.MainFrame;
-import CustomControls.BoardButton;
-import CustomControls.BoardComboBox;
-import CustomControls.DEBUG;
-import CustomControls.GridBagBuilder;
-import Resources.ByteBoardTheme;
-import Resources.ResourceManager;
+import BoardControls.BoardButton;
+import BoardControls.BoardComboBox;
+import BoardControls.UIPackage.GridBagBuilder;
+import BoardResources.ByteBoardTheme;
+import BoardResources.ResourceManager;
 
-import javax.swing.*;
 import java.awt.event.ItemEvent;
 
 public class ProfileBoardButtonPanel extends BoardPanel {

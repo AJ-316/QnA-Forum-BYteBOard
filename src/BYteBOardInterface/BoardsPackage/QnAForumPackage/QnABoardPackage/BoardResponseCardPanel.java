@@ -2,10 +2,13 @@ package BYteBOardInterface.BoardsPackage.QnAForumPackage.QnABoardPackage;
 
 import BYteBOardInterface.StructurePackage.BoardPanel;
 import BYteBOardInterface.StructurePackage.Frame;
-import BYteBOardInterface.StructurePackage.MainFrame;
-import CustomControls.*;
-import Resources.ByteBoardTheme;
-import Resources.ResourceManager;
+import BoardControls.BoardButton;
+import BoardControls.BoardLabel;
+import BoardControls.BoardScrollPanel;
+import BoardControls.UIPackage.GridBagBuilder;
+import BoardControls.SimpleScrollPane;
+import BoardResources.ByteBoardTheme;
+import BoardResources.ResourceManager;
 
 import javax.swing.*;
 import java.awt.*;

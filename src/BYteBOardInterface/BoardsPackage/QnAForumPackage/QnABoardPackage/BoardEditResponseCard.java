@@ -2,10 +2,14 @@ package BYteBOardInterface.BoardsPackage.QnAForumPackage.QnABoardPackage;
 
 import BYteBOardDatabase.DBComment;
 import BYteBOardInterface.StructurePackage.Frame;
-import CustomControls.*;
-import CustomControls.CustomListenerPackage.LimitCharacterDocumentListener;
-import Resources.ByteBoardTheme;
-import Resources.ResourceManager;
+import BoardControls.BoardButton;
+import BoardControls.BoardDialog;
+import BoardControls.BoardLabel;
+import BoardControls.UIPackage.GridBagBuilder;
+import BoardControls.SimpleScrollPane;
+import BoardEventListeners.LimitCharacterDocumentListener;
+import BoardResources.ByteBoardTheme;
+import BoardResources.ResourceManager;
 
 import java.awt.*;
 

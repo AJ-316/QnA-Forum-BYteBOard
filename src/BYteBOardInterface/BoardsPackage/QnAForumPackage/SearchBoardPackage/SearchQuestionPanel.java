@@ -6,11 +6,10 @@ import BYteBOardInterface.BoardsPackage.QnAForumPackage.ProfileBoardPackage.Boar
 import BYteBOardInterface.BoardsPackage.QnAForumPackage.QnABoardPackage.BoardTagsDisplayPanel;
 import BYteBOardInterface.StructurePackage.BoardPanel;
 import BYteBOardInterface.StructurePackage.Frame;
-import BYteBOardInterface.StructurePackage.MainFrame;
-import CustomControls.BoardLabel;
-import CustomControls.BoardTagButton;
-import CustomControls.GridBagBuilder;
-import Resources.ByteBoardTheme;
+import BoardControls.BoardLabel;
+import BoardControls.BoardTagButton;
+import BoardControls.UIPackage.GridBagBuilder;
+import BoardResources.ByteBoardTheme;
 
 import java.awt.*;
 import java.util.ArrayList;

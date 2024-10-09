@@ -2,12 +2,11 @@ package BYteBOardInterface.StructurePackage;
 
 import BYteBOardDatabase.DatabaseManager;
 import BYteBOardInterface.BoardsPackage.AuthenticationPackage.AuthenticationMainFrame;
-import BYteBOardInterface.BoardsPackage.QnAForumPackage.ProfileBoardPackage.ProfileBoardFrame;
-import CustomControls.BoardDialog;
-import CustomControls.BoardFrameLoader;
-import CustomControls.BoardLoader;
-import Resources.ByteBoardTheme;
-import Resources.ResourceManager;
+import BoardControls.BoardDialog;
+import BoardControls.BoardFrameLoader;
+import BoardControls.BoardLoader;
+import BoardResources.ByteBoardTheme;
+import BoardResources.ResourceManager;
 
 import javax.swing.*;
 import java.awt.*;

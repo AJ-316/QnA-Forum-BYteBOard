@@ -1,8 +1,8 @@
 package BYteBOardInterface.BoardsPackage.QnAForumPackage.ProfileBoardPackage;
 
-import CustomControls.BoardLabel;
-import Resources.ByteBoardTheme;
-import Resources.ResourceManager;
+import BoardControls.BoardLabel;
+import BoardResources.ByteBoardTheme;
+import BoardResources.ResourceManager;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;

@@ -4,12 +4,11 @@ import BYteBOardDatabase.DBOperation;
 import BYteBOardInterface.BoardsPackage.QnAForumPackage.QnABoardPackage.QnABoardFrame;
 import BYteBOardInterface.StructurePackage.BoardPanel;
 import BYteBOardInterface.StructurePackage.Frame;
-import BYteBOardInterface.StructurePackage.MainFrame;
-import CustomControls.BoardLabel;
-import CustomControls.BoardTextArea;
-import CustomControls.GridBagBuilder;
-import Resources.ByteBoardTheme;
-import Resources.ResourceManager;
+import BoardControls.BoardLabel;
+import BoardControls.BoardTextArea;
+import BoardControls.UIPackage.GridBagBuilder;
+import BoardResources.ByteBoardTheme;
+import BoardResources.ResourceManager;
 
 import javax.swing.*;
 import java.awt.*;

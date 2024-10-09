@@ -2,11 +2,10 @@ package BYteBOardInterface.BoardsPackage.QnAForumPackage.ProfileBoardPackage;
 
 import BYteBOardInterface.StructurePackage.BoardPanel;
 import BYteBOardInterface.StructurePackage.Frame;
-import BYteBOardInterface.StructurePackage.MainFrame;
-import CustomControls.BoardLabel;
-import CustomControls.GridBagBuilder;
-import Resources.ByteBoardTheme;
-import Resources.ResourceManager;
+import BoardControls.BoardLabel;
+import BoardControls.UIPackage.GridBagBuilder;
+import BoardResources.ByteBoardTheme;
+import BoardResources.ResourceManager;
 
 public class ProfileBoardUserDataPanel extends BoardPanel {
 

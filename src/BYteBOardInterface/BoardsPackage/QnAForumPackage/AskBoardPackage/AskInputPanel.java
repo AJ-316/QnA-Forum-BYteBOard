@@ -5,15 +5,13 @@ import BYteBOardDatabase.DBTag;
 import BYteBOardInterface.BoardsPackage.QnAForumPackage.QnABoardPackage.BoardTagsDisplayPanel;
 import BYteBOardInterface.StructurePackage.BoardPanel;
 import BYteBOardInterface.StructurePackage.Frame;
-import BYteBOardInterface.StructurePackage.MainFrame;
-import CustomControls.*;
-import CustomControls.CustomListenerPackage.LimitCharacterDocumentListener;
-import CustomControls.CustomListenerPackage.SearchFieldListener;
-import CustomControls.CustomListenerPackage.TagListener;
-import CustomControls.CustomRendererPackage.RoundedBorder;
-import QnAForumInterface.TagExtractor;
-import Resources.ByteBoardTheme;
-import Resources.ResourceManager;
+import BoardControls.*;
+import BoardControls.UIPackage.GridBagBuilder;
+import BoardEventListeners.LimitCharacterDocumentListener;
+import BoardEventListeners.TagListener;
+import BoardControls.UIPackage.RoundedBorder;
+import BoardResources.ByteBoardTheme;
+import BoardResources.ResourceManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -151,7 +149,7 @@ public class AskInputPanel extends BoardPanel {
         panel.setCornerRadius(90);
         panel.addInsets(20);
 
-        ((CustomControl) input).setBackground(bgColor);
+        ((BoardControl) input).setBackground(bgColor);
 
         SimpleScrollPane scrollPane = new SimpleScrollPane(input);
         scrollPane.setOpaque(false);

@@ -9,8 +9,8 @@ import BYteBOardInterface.StructurePackage.BoardFrame;
 import BYteBOardInterface.StructurePackage.BoardFrameSwitchDelegate;
 import BYteBOardInterface.StructurePackage.BoardPanel;
 import BYteBOardInterface.StructurePackage.MainFrame;
-import CustomControls.BoardButton;
-import CustomControls.GridBagBuilder;
+import BoardControls.BoardButton;
+import BoardControls.UIPackage.GridBagBuilder;
 
 import java.util.ArrayList;
 import java.util.Arrays;

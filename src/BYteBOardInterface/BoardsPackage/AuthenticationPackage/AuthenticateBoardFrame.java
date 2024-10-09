@@ -4,9 +4,9 @@ import BYteBOardInterface.StructurePackage.BoardFrame;
 import BYteBOardInterface.StructurePackage.BoardFrameSwitchDelegate;
 import BYteBOardInterface.StructurePackage.BoardPanel;
 import BYteBOardInterface.StructurePackage.MainFrame;
-import CustomControls.BoardLabel;
-import CustomControls.GridBagBuilder;
-import Resources.ByteBoardTheme;
+import BoardControls.BoardLabel;
+import BoardControls.UIPackage.GridBagBuilder;
+import BoardResources.ByteBoardTheme;
 
 import java.awt.*;
 
@@ -25,7 +25,7 @@ public class AuthenticateBoardFrame extends BoardFrame {
         titlePanel.setCornerRadius(90);
         titlePanel.setLayout(new BorderLayout());
 
-        BoardLabel titleIcon = new BoardLabel("byteboard/byteboard-logo-transparent2", -512);
+        BoardLabel titleIcon = new BoardLabel("byteboard/byteboard-logo-transparent", -512);
         titlePanel.add(titleIcon, BorderLayout.CENTER);
 
         loginFormPanel = new LoginFormPanel(this);
