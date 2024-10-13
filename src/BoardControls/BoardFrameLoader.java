@@ -9,6 +9,13 @@ public class BoardFrameLoader extends SwingWorker<Void, Void> {
     private final Class<?>[] frames;
     private final MainFrame mainFrame;
 
+    public BoardFrameLoader(MainFrame mainFrame, Class<?>[] frames) {
+        this.mainFrame = mainFrame;
+        this.frames = frames;
+        BoardLoader.setProgressTarget(frames.length + 2);
+        BoardLoader.progress();
+    }
+
     public static void createLoader(MainFrame mainFrame, Class<?>[] frames, Runnable onComplete) {
         BoardFrameLoader loader = new BoardFrameLoader(mainFrame, frames);
         loader.execute();
@@ -19,20 +26,14 @@ public class BoardFrameLoader extends SwingWorker<Void, Void> {
         });
     }
 
-    public BoardFrameLoader(MainFrame mainFrame, Class<?>[] frames) {
-        this.mainFrame = mainFrame;
-        this.frames = frames;
-        BoardLoader.setProgressTarget(frames.length + 2);
-        BoardLoader.progress();
-    }
-
     protected Void doInBackground() {
         for (Class<?> frameClass : frames) {
             try {
                 frameClass.getDeclaredConstructor(MainFrame.class).newInstance(mainFrame);
                 BoardLoader.progress();
-            } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-                BoardLoader.forceStop("Error Initializing:\n" + e.getMessage());
+            } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
+                     NoSuchMethodException e) {
+                BoardLoader.forceStop("Error Initializing", e.getMessage());
                 break;
             }
         }
@@ -47,7 +48,7 @@ public class BoardFrameLoader extends SwingWorker<Void, Void> {
             get();
             BoardLoader.stop();
         } catch (Exception e) {
-            BoardLoader.forceStop("Error Finalizing:\n" + e.getMessage());
+            BoardLoader.forceStop("Error Finalizing", e.getMessage());
         }
     }
 }

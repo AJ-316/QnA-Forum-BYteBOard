@@ -8,7 +8,9 @@ public abstract class Board extends CustomJPanel {
 
     private final MainFrame main;
 
-    public Board() { main = null; }
+    public Board() {
+        main = null;
+    }
 
     public Board(MainFrame main) {
         this.main = main;

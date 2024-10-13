@@ -1,10 +1,10 @@
 package BoardControls;
 
 import BYteBOardInterface.StructurePackage.BoardPanel;
+import BYteBOardInterface.StructurePackage.Frame;
 import BoardEventListeners.CustomDocumentListener;
 import BoardResources.ByteBoardTheme;
 import BoardResources.ResourceManager;
-import BYteBOardInterface.StructurePackage.Frame;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -27,9 +27,8 @@ public class BoardTextPane extends JTextPane implements BoardControl {
             "null", "package", "private", "protected", "public", "return", "short", "static", "strictfp",
             "super", "switch", "synchronized", "this", "throw", "throws", "transient", "try", "void", "volatile", "while"
     };
-
-    private String hintText;
     private final Frame frame;
+    private String hintText;
     private int lineIndex;
     private int linesCount;
 
@@ -70,6 +69,15 @@ public class BoardTextPane extends JTextPane implements BoardControl {
                 repaint();
             }
         });
+    }
+
+    public static void trimNewLines(Document doc) throws BadLocationException {
+        while (doc.getLength() > 0 && doc.getText(0, 1).equals("\n")) {
+            doc.remove(0, 1);
+        }
+        while (doc.getLength() > 0 && doc.getText(doc.getLength() - 1, 1).equals("\n")) {
+            doc.remove(doc.getLength() - 1, 1);
+        }
     }
 
     public void setHintText(String text) {
@@ -205,17 +213,8 @@ public class BoardTextPane extends JTextPane implements BoardControl {
         }
     }
 
-    public static void trimNewLines(Document doc) throws BadLocationException {
-        while (doc.getLength() > 0 && doc.getText(0, 1).equals("\n")) {
-            doc.remove(0, 1);
-        }
-        while (doc.getLength() > 0 && doc.getText(doc.getLength() - 1, 1).equals("\n")) {
-            doc.remove(doc.getLength() - 1, 1);
-        }
-    }
-
     private boolean insertListItem(String line, boolean isListItem) throws BadLocationException {
-        if(line.isEmpty()) return false;
+        if (line.isEmpty()) return false;
 
         String bulletPoint = line.startsWith("* ") ? BULLET_POINT_1 : line.startsWith("- ") ? BULLET_POINT_2 : null;
 
@@ -229,7 +228,7 @@ public class BoardTextPane extends JTextPane implements BoardControl {
             isListItem = true;
         }
 
-        if(isListItem)
+        if (isListItem)
             insertText(line);
 
         return isListItem;
@@ -247,15 +246,15 @@ public class BoardTextPane extends JTextPane implements BoardControl {
      * start    - line and block = null <br/>
      * addLine  - none = null <br/>
      * end      - block = null <br/>
-     * */
+     */
     private BoardPanel addToBlock(String line, BoardPanel blockPanel, boolean isCodeBlock) throws BadLocationException {
-        if(blockPanel == null) {
+        if (blockPanel == null) {
 
             blockPanel = getBlockPanel(isCodeBlock);
-            if(line == null)
+            if (line == null)
                 return blockPanel; // start of code blockPanel
 
-        } else if(line == null) {
+        } else if (line == null) {
 
             JTextComponent textComponent = ((JTextComponent) getBlockArea(blockPanel));
             Document doc = textComponent.getDocument();
@@ -263,7 +262,7 @@ public class BoardTextPane extends JTextPane implements BoardControl {
                 doc.remove(doc.getLength() - 1, 1);
             }
 
-            if(isCodeBlock) {
+            if (isCodeBlock) {
                 applyCodeSyntaxHighlighting((BoardTextPane) getBlockArea(blockPanel));
                 getBlockScroll(blockPanel).resetScroll();
             }
@@ -274,7 +273,7 @@ public class BoardTextPane extends JTextPane implements BoardControl {
             return null; // end of code blockPanel
         }
 
-        if(isCodeBlock)
+        if (isCodeBlock)
             line = line + "\n";
 
         addLineToBlock(line, blockPanel); // add line to code blockPanel
@@ -305,7 +304,7 @@ public class BoardTextPane extends JTextPane implements BoardControl {
     private Component getBlockArea(JPanel panel) {
         Component component = getBlockScroll(panel).getViewport().getView();
 
-        if(component instanceof JTextComponent) {
+        if (component instanceof JTextComponent) {
             return component;
         }
 
@@ -313,7 +312,7 @@ public class BoardTextPane extends JTextPane implements BoardControl {
     }
 
     private SimpleScrollPane getBlockScroll(JPanel panel) {
-        return  (SimpleScrollPane) ((BoardPanel) panel.getComponent(0)).getComponent(0);
+        return (SimpleScrollPane) ((BoardPanel) panel.getComponent(0)).getComponent(0);
     }
 
     private void applyCodeSyntaxHighlighting(BoardTextPane codeArea) {
@@ -357,7 +356,7 @@ public class BoardTextPane extends JTextPane implements BoardControl {
                 int pad = 12;
 
                 g2d.setColor(new Color(255, 255, 255, 50));
-                g2d.fillRoundRect(pad, pad, 5, getHeight() - pad*2, 5, 5);
+                g2d.fillRoundRect(pad, pad, 5, getHeight() - pad * 2, 5, 5);
             }
         };
         panel.setLayout(new BorderLayout());

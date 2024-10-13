@@ -11,12 +11,8 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 import java.awt.*;
-import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Arrays;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class BoardDialog extends JDialog {
 
@@ -70,7 +66,7 @@ public class BoardDialog extends JDialog {
 
         add(pane);
 
-        if(frame == null) {
+        if (frame == null) {
             acceptButton.setText("OK");
             acceptButton.setName("OK");
 
@@ -101,22 +97,6 @@ public class BoardDialog extends JDialog {
         }
 
         setLocationRelativeTo(locationRelativeTo);
-    }
-
-    public void selfDestroy(int delaySeconds) {
-        final int[] counter = new int[] { delaySeconds };
-
-        selfDestroyTimer = new Timer(1000, null);
-        selfDestroyTimer.addActionListener(e -> {
-            if (counter[0]-- <= 0) {
-                acceptButton.getActionListeners()[0].actionPerformed(null);
-                acceptButton.getActionListeners()[1].actionPerformed(null);
-                acceptButton.getActionListeners()[2].actionPerformed(null);
-                return;
-            }
-            acceptButton.setText(acceptButton.getName() + " (" + counter[0] + ")");
-        });
-        selfDestroyTimer.start();
     }
 
     private static String wrapText(String text, int maxLineLength) {
@@ -150,10 +130,27 @@ public class BoardDialog extends JDialog {
                 locationRelativeTo, msg, onConfirm).setVisible(true);
     }
 
-    public static void create(Frame frame, Component locationRelativeTo, String msg, ActionListener onConfirm, int selfDestroyDelaySeconds) {
+    public static void create(Frame frame, Component locationRelativeTo, String title, String msg, ActionListener onConfirm, int selfDestroyDelaySeconds) {
         msg = wrapText(msg, MAX_MSG_WIDTH);
         BoardDialog dialog = new BoardDialog(frame == null ? null : frame.getBoardFrame().getMain(), locationRelativeTo, msg, onConfirm);
         dialog.selfDestroy(selfDestroyDelaySeconds);
+        dialog.setTitle(title);
         dialog.setVisible(true);
+    }
+
+    public void selfDestroy(int delaySeconds) {
+        final int[] counter = new int[]{delaySeconds};
+
+        selfDestroyTimer = new Timer(1000, null);
+        selfDestroyTimer.addActionListener(e -> {
+            if (counter[0]-- <= 0) {
+                acceptButton.getActionListeners()[0].actionPerformed(null);
+                acceptButton.getActionListeners()[1].actionPerformed(null);
+                acceptButton.getActionListeners()[2].actionPerformed(null);
+                return;
+            }
+            acceptButton.setText(acceptButton.getName() + " (" + counter[0] + ")");
+        });
+        selfDestroyTimer.start();
     }
 }

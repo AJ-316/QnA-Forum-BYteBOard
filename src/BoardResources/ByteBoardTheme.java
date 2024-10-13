@@ -72,6 +72,7 @@ public abstract class ByteBoardTheme {
     private final Map<String, String> colorAttributes;
     private final Map<String, String> fontAttributes;
     private String name;
+
     public ByteBoardTheme() {
         attributeSets = new HashMap<>();
         colorAttributes = new HashMap<>();
@@ -95,7 +96,7 @@ public abstract class ByteBoardTheme {
     }
 
     private static String[] getAttributeKeyList() {
-        return attributeList == null ? attributeList = new String[]{ AS_CODE_TEXT, AS_CODE_NUMBER, AS_CODE_STRING, AS_CODE_TOKEN } : attributeList;
+        return attributeList == null ? attributeList = new String[]{AS_CODE_TEXT, AS_CODE_NUMBER, AS_CODE_STRING, AS_CODE_TOKEN} : attributeList;
     }
 
     private static void addAttribute(String label, AttributeSet attributeSet) {
@@ -124,7 +125,7 @@ public abstract class ByteBoardTheme {
         String[] splitKey = key.split("_");
 
         for (String validKey : getAttributeKeyList()) {
-            if(validKey.equals(splitKey[splitKey.length-1])) {
+            if (validKey.equals(splitKey[splitKey.length - 1])) {
                 attributeSets.put(validKey, value);
                 return;
             }
@@ -219,14 +220,14 @@ public abstract class ByteBoardTheme {
 
     private void createColor(String key, String value) {
         int[] rgb = getRGB(value);
-        if(rgb == null) return;
+        if (rgb == null) return;
 
         addColor(key, rgb[0], rgb[1], rgb[2]);
     }
 
     public void createAttribute(String key, String value) {
         int[] rgb = getRGB(value);
-        if(rgb == null) return;
+        if (rgb == null) return;
 
         SimpleAttributeSet attributeSet = new SimpleAttributeSet();
         StyleConstants.setForeground(attributeSet, new Color(rgb[0], rgb[1], rgb[2]));

@@ -1,8 +1,8 @@
 package BYteBOardInterface.BoardsPackage.QnAForumPackage.SearchBoardPackage;
 
 import BYteBOardDatabase.*;
-import BYteBOardInterface.BoardsPackage.QnAForumPackage.ProfileBoardPackage.BoardContentDisplayPanel;
 import BYteBOardInterface.BoardsPackage.QnAForumPackage.ProfileBoardPackage.BoardContentDisplayPane;
+import BYteBOardInterface.BoardsPackage.QnAForumPackage.ProfileBoardPackage.BoardContentDisplayPanel;
 import BYteBOardInterface.BoardsPackage.QnAForumPackage.QnABoardPackage.BoardTagsDisplayPanel;
 import BYteBOardInterface.StructurePackage.BoardPanel;
 import BYteBOardInterface.StructurePackage.Frame;
@@ -111,7 +111,7 @@ public class SearchQuestionPanel extends BoardPanel {
 
     private void addQuestions(List<DBDataObject> questionDataObjects) {
         for (DBDataObject questionDataObject : questionDataObjects) {
-            if(questionsPanel.containsPanel(questionDataObject.getValue(DBQuestion.K_QUESTION_ID)))
+            if (questionsPanel.containsPanel(questionDataObject.getValue(DBQuestion.K_QUESTION_ID)))
                 continue;
 
             BoardContentDisplayPane questionPane = questionsPanel.addContentDisplayPanel();

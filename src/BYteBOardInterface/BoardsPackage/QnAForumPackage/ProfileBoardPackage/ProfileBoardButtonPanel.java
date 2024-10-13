@@ -71,7 +71,7 @@ public class ProfileBoardButtonPanel extends BoardPanel {
         });
 
         themeComboBox.addItemListener(e -> {
-            if(e.getStateChange() == ItemEvent.SELECTED) {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
                 ResourceManager.setTheme(e.getItem().toString());
                 restartMainFrame();
             }

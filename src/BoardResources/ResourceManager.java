@@ -1,14 +1,23 @@
 package BoardResources;
 
+import BoardControls.BoardDialog;
 import BoardControls.BoardLoader;
+import Tools.DEBUG;
 
 import javax.swing.*;
 import javax.swing.text.AttributeSet;
 import java.awt.*;
 import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.List;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 public class ResourceManager {
 
@@ -36,19 +45,66 @@ public class ResourceManager {
     }
 
     private static void loadAvailableThemes() {
-        URL dirURL = ResourceManager.class.getResource("Themes/");
-        if (dirURL != null && dirURL.getProtocol().equals("file")) {
-            File directory = new File(dirURL.getFile());
-            String[] files = directory.list();
+        String directory = "Themes/";
+        URL dirURL = ResourceManager.class.getClassLoader().getResource(directory);
 
+        if (dirURL == null) {
+            throw new NullPointerException("Directory " + directory + " not found.");
+        }
+
+        try {
+            if (dirURL.getProtocol().equals("file"))
+                loadThemesFromFile(dirURL);
+
+            else if (dirURL.getProtocol().equals("jar"))
+                loadThemesFromJar(dirURL, directory);
+
+            else {
+                String errorMsg = "Unsupported protocol: " + dirURL.getProtocol();
+                BoardLoader.forceStop("Failed to load themes", errorMsg);
+                throw new UnsupportedOperationException(errorMsg);
+            }
+
+        } catch (URISyntaxException | IOException ex) {
+            BoardLoader.forceStop("Failed to load themes", ex.toString());
+            throw new RuntimeException("Failed to load themes", ex);
+        }
+    }
+
+    private static void loadThemesFromFile(URL dirURL) throws URISyntaxException {
+        File folder = new File(dirURL.toURI());
+
+        if (folder.isDirectory()) {
+            File[] files = folder.listFiles();
             if (files != null) {
                 BoardLoader.setProgressTarget(files.length + 1);
-                for (String fileName : files) {
-                    loadTheme(fileName.substring(0, fileName.length() - 4));
+                for (File file : files) {
+                    String fileName = file.getName();
+                    loadTheme(fileName.substring(0, fileName.length() - 4));  // Remove file extension
                     BoardLoader.progress("Loading Resources...");
                 }
                 BoardLoader.progress();
             }
+        }
+    }
+
+    private static void loadThemesFromJar(URL dirURL, String directory) throws IOException {
+        String jarPath = dirURL.getPath().substring(5, dirURL.getPath().indexOf("!"));
+        try (JarFile jar = new JarFile(new File(jarPath))) {
+            Enumeration<JarEntry> entries = jar.entries();
+            BoardLoader.setProgressTarget(jar.size() + 1);
+
+            while (entries.hasMoreElements()) {
+                JarEntry entry = entries.nextElement();
+                String entryName = entry.getName();
+
+                if (entryName.startsWith(directory) && !entry.isDirectory()) {
+                    entryName = entryName.substring(directory.length()); // remove dir prefix
+                    loadTheme(entryName.substring(0, entryName.length() - 4)); // remove file ext
+                }
+                BoardLoader.progress("Loading Resources...");
+            }
+            BoardLoader.progress();
         }
     }
 
@@ -221,7 +277,6 @@ public class ResourceManager {
     }
 
     private static void initLookNFeel() {
-        System.out.println(UIManager.getLookAndFeel());
         try {
             for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
                 if ("Windows".equals(info.getName())) {

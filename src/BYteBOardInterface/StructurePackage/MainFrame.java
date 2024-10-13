@@ -2,7 +2,6 @@ package BYteBOardInterface.StructurePackage;
 
 import BYteBOardDatabase.DatabaseManager;
 import BYteBOardInterface.BoardsPackage.AuthenticationPackage.AuthenticationMainFrame;
-import BoardControls.BoardDialog;
 import BoardControls.BoardFrameLoader;
 import BoardControls.BoardLoader;
 import BoardResources.ByteBoardTheme;
@@ -16,9 +15,9 @@ import java.util.Map;
 
 public abstract class MainFrame extends JFrame {
 
+    private static MainFrame currentMainFrame;
     private final Map<String, Frame> boardFrames;
     private final Container contentPane;
-    private static MainFrame currentMainFrame;
 
     public MainFrame(String title, int height, float ratio, String... switchBoardFrameContext) {
         setTitle(title);
@@ -42,6 +41,32 @@ public abstract class MainFrame extends JFrame {
 
         ResourceManager.init();
         DatabaseManager.init();
+    }
+
+    protected static void switchMainFrame(String switchLoadText, Class<?> mainFrameClass, String... switchBoardFrameContext) {
+
+        if (currentMainFrame != null) {
+            currentMainFrame.setVisible(false);
+            currentMainFrame.dispose();
+            currentMainFrame = null;
+        }
+
+        BoardLoader.start(MainFrame::showCurrentMainFrame);
+        BoardLoader.setText(switchLoadText);
+
+        EventQueue.invokeLater(() -> {
+            try {
+                currentMainFrame = (MainFrame) mainFrameClass.getDeclaredConstructor(String[].class).newInstance((Object) switchBoardFrameContext);
+            } catch (NoSuchMethodException | InvocationTargetException | InstantiationException |
+                     IllegalAccessException e) {
+                BoardLoader.forceStop("Error Initializing", e.getMessage());
+            }
+        });
+    }
+
+    public static void showCurrentMainFrame() {
+        if (currentMainFrame == null) return;
+        currentMainFrame.setVisible(true);
     }
 
     public void createBoardFrames(Class<?>[] boardFrames, String... switchContext) {
@@ -78,39 +103,16 @@ public abstract class MainFrame extends JFrame {
     }
 
     protected abstract void init(String... switchBoardFrameContext);
+
     protected abstract void prepareMainFrame(String... switchBoardFrameContext);
+
     public abstract void restartMainFrame();
 
     public void restartMainFrame(String recoverContext) {
         EventQueue.invokeLater(() -> switchMainFrame("Restarting...", getClass(), recoverContext));
     }
 
-    protected static void switchMainFrame(String switchLoadText, Class<?> mainFrameClass, String... switchBoardFrameContext) {
-
-        if(currentMainFrame != null) {
-            currentMainFrame.setVisible(false);
-            currentMainFrame.dispose();
-            currentMainFrame = null;
-        }
-
-        BoardLoader.start(MainFrame::showCurrentMainFrame);
-        BoardLoader.setText(switchLoadText);
-
-        EventQueue.invokeLater(() -> {
-            try {
-                currentMainFrame = (MainFrame) mainFrameClass.getDeclaredConstructor(String[].class).newInstance((Object) switchBoardFrameContext);
-            } catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
-                BoardLoader.forceStop("Error Initializing:\n" + e.getMessage());
-            }
-        });
-    }
-
     public String getSwitchLoadingText() {
         return "Switching Frame";
-    }
-
-    public static void showCurrentMainFrame() {
-        if(currentMainFrame == null) return;
-        currentMainFrame.setVisible(true);
     }
 }

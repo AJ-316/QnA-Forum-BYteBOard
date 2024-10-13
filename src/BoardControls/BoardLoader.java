@@ -134,7 +134,7 @@ public class BoardLoader extends JDialog {
     }
 
     public static void start(Runnable onConfirm) {
-        if(CURRENT != null) {
+        if (CURRENT != null) {
             CURRENT.dispose();
         }
         CURRENT = new BoardLoader(onConfirm);
@@ -148,18 +148,18 @@ public class BoardLoader extends JDialog {
         CURRENT = null;
     }
 
-    public static void forceStop(String errorMsg) {
-        if(CURRENT == null) return;
+    public static void forceStop(String titleMsg, String errorMsg) {
+        if (CURRENT == null) return;
 
         CURRENT.setVisible(false);
-        BoardDialog.create(null, null, errorMsg, evt -> {
-            if(CURRENT != null)
+        BoardDialog.create(null, null, titleMsg, errorMsg, evt -> {
+            if (CURRENT != null)
                 CURRENT.dispose();
         }, 10);
     }
 
     public static void setText(String text) {
-        if(CURRENT == null) return;
+        if (CURRENT == null) return;
         CURRENT.loadingText.setText(text);
     }
 }

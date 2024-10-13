@@ -31,6 +31,19 @@ public class BoardTextField extends JTextField implements BoardControl {
         init(frame, ResourceManager.getColor(background), cols);
     }
 
+    public static Color getHintColor(Color backgroundColor) {
+        int brightness = (int) Math.sqrt(
+                backgroundColor.getRed() * backgroundColor.getRed() * 0.241 +
+                        backgroundColor.getGreen() * backgroundColor.getGreen() * 0.691 +
+                        backgroundColor.getBlue() * backgroundColor.getBlue() * 0.068
+        );
+
+        if (brightness > 130)
+            return new Color((50 << 16) | (50 << 8) | 50);
+
+        return new Color((200 << 16) | (200 << 8) | 200);
+    }
+
     private void init(Frame frame, Color background, int cols) {
         container = createContainer(frame);
 
@@ -138,19 +151,6 @@ public class BoardTextField extends JTextField implements BoardControl {
             g.setColor(BoardTextField.getHintColor(getBackground()));
             g.drawString(hintText, ins.left, h / 2 + fm.getAscent() / 2 - 2);
         }
-    }
-
-    public static Color getHintColor(Color backgroundColor) {
-        int brightness = (int) Math.sqrt(
-                backgroundColor.getRed() * backgroundColor.getRed() * 0.241 +
-                        backgroundColor.getGreen() * backgroundColor.getGreen() * 0.691 +
-                        backgroundColor.getBlue() * backgroundColor.getBlue() * 0.068
-        );
-
-        if (brightness > 130)
-            return new Color((50 << 16) | (50 << 8) | 50);
-
-        return new Color((200 << 16) | (200 << 8) | 200);
     }
 
     @Override

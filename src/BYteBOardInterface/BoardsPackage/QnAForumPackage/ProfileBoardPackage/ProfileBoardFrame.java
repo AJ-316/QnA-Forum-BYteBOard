@@ -53,11 +53,11 @@ public class ProfileBoardFrame extends BoardFrame {
 
                 questionData.putKeyValue(String.valueOf(i),
                         questionerProfile + BoardFrameSwitchDelegate.DELIMITER +
-                        questionerUsername + BoardFrameSwitchDelegate.DELIMITER +
-                        questionID + BoardFrameSwitchDelegate.DELIMITER +
-                        questionHead + BoardFrameSwitchDelegate.DELIMITER +
-                        questionBytes + BoardFrameSwitchDelegate.DELIMITER +
-                        questionTotalAnswers);
+                                questionerUsername + BoardFrameSwitchDelegate.DELIMITER +
+                                questionID + BoardFrameSwitchDelegate.DELIMITER +
+                                questionHead + BoardFrameSwitchDelegate.DELIMITER +
+                                questionBytes + BoardFrameSwitchDelegate.DELIMITER +
+                                questionTotalAnswers);
             }
 
             for (int i = 0; i < questionsAnsweredByUser.length; i++) {
@@ -71,11 +71,11 @@ public class ProfileBoardFrame extends BoardFrame {
 
                 questionData.putKeyValue(String.valueOf(i + questionsAskedByUser.length),
                         questionerProfile + BoardFrameSwitchDelegate.DELIMITER +
-                        questionerUsername + BoardFrameSwitchDelegate.DELIMITER +
-                        questionID + BoardFrameSwitchDelegate.DELIMITER +
-                        questionHead + BoardFrameSwitchDelegate.DELIMITER +
-                        questionBytes + BoardFrameSwitchDelegate.DELIMITER +
-                        questionTotalAnswers);
+                                questionerUsername + BoardFrameSwitchDelegate.DELIMITER +
+                                questionID + BoardFrameSwitchDelegate.DELIMITER +
+                                questionHead + BoardFrameSwitchDelegate.DELIMITER +
+                                questionBytes + BoardFrameSwitchDelegate.DELIMITER +
+                                questionTotalAnswers);
             }
 
             delegate.putContext(DBUser.TABLE, userData);

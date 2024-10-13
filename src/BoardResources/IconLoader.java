@@ -1,5 +1,7 @@
 package BoardResources;
 
+import Tools.DEBUG;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -121,9 +123,8 @@ public class IconLoader {
     }
 
     private static BufferedImage getImage(String image) {
-        String path = "Icons/" + image + ".png";
+        String path = "/Icons/" + image + ".png";
         URL imagePath = IconLoader.class.getResource(path);
-
         BufferedImage img;
 
         try {

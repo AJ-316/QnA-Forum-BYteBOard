@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- *  FlowLayout subclass that fully supports wrapping of components.
+ * FlowLayout subclass that fully supports wrapping of components.
  */
 public class WrapLayout extends FlowLayout {
 
@@ -22,6 +22,7 @@ public class WrapLayout extends FlowLayout {
      * The value of the alignment argument must be one of
      * <code>WrapLayout</code>, <code>WrapLayout</code>,
      * or <code>WrapLayout</code>.
+     *
      * @param align the alignment value
      */
     public WrapLayout(int align) {
@@ -35,17 +36,34 @@ public class WrapLayout extends FlowLayout {
      * The value of the alignment argument must be one of
      * <code>WrapLayout</code>, <code>WrapLayout</code>,
      * or <code>WrapLayout</code>.
+     *
      * @param align the alignment value
-     * @param hgap the horizontal gap between components
-     * @param vgap the vertical gap between components
+     * @param hgap  the horizontal gap between components
+     * @param vgap  the vertical gap between components
      */
     public WrapLayout(int align, int hgap, int vgap) {
         super(align, hgap, vgap);
     }
 
+    private static int getTargetWidth(Container target) {
+        int targetWidth = target.getSize().width;
+        Container container = target;
+
+        while (container.getSize().width == 0 && container.getParent() != null) {
+            container = container.getParent();
+        }
+
+        targetWidth = container.getSize().width;
+
+        if (targetWidth == 0)
+            targetWidth = Integer.MAX_VALUE;
+        return targetWidth;
+    }
+
     /**
      * Returns the preferred dimensions for this layout given the
      * <i>visible</i> components in the specified target container.
+     *
      * @param target the component which needs to be laid out
      * @return the preferred dimensions to lay out the
      * subcomponents of the specified container
@@ -58,6 +76,7 @@ public class WrapLayout extends FlowLayout {
     /**
      * Returns the minimum dimensions needed to layout the <i>visible</i>
      * components contained in the specified target container.
+     *
      * @param target the component which needs to be laid out
      * @return the minimum dimensions to lay out the
      * subcomponents of the specified container
@@ -73,7 +92,7 @@ public class WrapLayout extends FlowLayout {
      * Returns the minimum or preferred dimension needed to layout the target
      * container.
      *
-     * @param target target to get layout size for
+     * @param target    target to get layout size for
      * @param preferred should preferred size be calculated
      * @return the dimension to layout the target container
      */
@@ -142,28 +161,13 @@ public class WrapLayout extends FlowLayout {
         }
     }
 
-    private static int getTargetWidth(Container target) {
-        int targetWidth = target.getSize().width;
-        Container container = target;
-
-        while (container.getSize().width == 0 && container.getParent() != null) {
-            container = container.getParent();
-        }
-
-        targetWidth = container.getSize().width;
-
-        if (targetWidth == 0)
-            targetWidth = Integer.MAX_VALUE;
-        return targetWidth;
-    }
-
     /**
-     *  A new row has been completed. Use the dimensions of this row
-     *  to update the preferred size for the container.
+     * A new row has been completed. Use the dimensions of this row
+     * to update the preferred size for the container.
      *
-     *  @param dim update the width and height when appropriate
-     *  @param rowWidth the width of the row to add
-     *  @param rowHeight the height of the row to add
+     * @param dim       update the width and height when appropriate
+     * @param rowWidth  the width of the row to add
+     * @param rowHeight the height of the row to add
      */
     private void addRow(Dimension dim, int rowWidth, int rowHeight) {
         dim.width = Math.max(dim.width, rowWidth);

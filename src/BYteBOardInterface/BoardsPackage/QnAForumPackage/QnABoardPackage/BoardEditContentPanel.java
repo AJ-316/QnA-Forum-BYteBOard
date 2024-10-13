@@ -7,8 +7,8 @@ import BYteBOardInterface.StructurePackage.BoardPanel;
 import BYteBOardInterface.StructurePackage.Frame;
 import BoardControls.BoardButton;
 import BoardControls.BoardDialog;
-import BoardEventListeners.LimitCharacterDocumentListener;
 import BoardControls.UIPackage.GridBagBuilder;
+import BoardEventListeners.LimitCharacterDocumentListener;
 
 import java.awt.*;
 import java.awt.event.ActionListener;

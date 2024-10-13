@@ -10,15 +10,15 @@ public class ThemeLoader {
     public static ByteBoardTheme getTheme(String file) {
         if (file == null) return null;
 
-        InputStream is = ThemeLoader.class.getResourceAsStream("Themes/" + file + ".bbt");
-
+        InputStream is = ThemeLoader.class.getResourceAsStream("/Themes/" + file + ".bbt");
         if (is == null) return null;
 
         InputStreamReader inputStreamReader = new InputStreamReader(is);
         BufferedReader reader = new BufferedReader(inputStreamReader);
 
         String line;
-        ByteBoardTheme theme = new ByteBoardTheme() {};
+        ByteBoardTheme theme = new ByteBoardTheme() {
+        };
         theme.setName(file);
 
         String key, value;

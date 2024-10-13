@@ -7,8 +7,8 @@ import BYteBOardInterface.BoardsPackage.QnAForumPackage.QnABoardPackage.QnABoard
 import BYteBOardInterface.StructurePackage.BoardPanel;
 import BYteBOardInterface.StructurePackage.Frame;
 import BoardControls.BoardComboBox;
-import BoardEventListeners.SearchFieldListener;
 import BoardControls.UIPackage.GridBagBuilder;
+import BoardEventListeners.SearchFieldListener;
 import BoardResources.ByteBoardTheme;
 import BoardResources.ResourceManager;
 
@@ -58,7 +58,7 @@ public class SearchBoardPanel extends BoardPanel {
         searchField.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, Collections.emptySet());
         searchField.setFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS, Collections.emptySet());
         searchField.getTextField().setAltHintCondition(() -> {
-            if(searchField.getTextField().getText().equals("#")) {
+            if (searchField.getTextField().getText().equals("#")) {
                 searchField.getTextField().setHintText("   Tag Search...");
                 return true;
             }

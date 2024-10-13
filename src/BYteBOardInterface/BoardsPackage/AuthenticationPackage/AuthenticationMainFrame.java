@@ -10,7 +10,7 @@ public class AuthenticationMainFrame extends MainFrame {
 
     protected void init(String... switchContext) {
 
-        createBoardFrames(new Class<?>[] { AuthenticateBoardFrame.class }, switchContext);
+        createBoardFrames(new Class<?>[]{AuthenticateBoardFrame.class}, switchContext);
     }
 
     protected void prepareMainFrame(String... switchBoardFrameContext) {

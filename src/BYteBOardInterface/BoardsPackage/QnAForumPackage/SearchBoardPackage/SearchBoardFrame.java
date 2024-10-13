@@ -27,7 +27,7 @@ public class SearchBoardFrame extends BoardFrame {
 
             String userID = context[0];
 
-            if(context.length > 1) {
+            if (context.length > 1) {
                 DBDataObject tagData = DBTag.ops.findValuesBy(DBTag.ops.matchByValue(DBTag.K_TAG_ID, context[1]), "*")[0];
                 delegate.putContext(DBTag.TABLE, tagData);
             } else
@@ -35,8 +35,6 @@ public class SearchBoardFrame extends BoardFrame {
 
             delegate.putContext(DBUser.TABLE, DBUser.getUser(userID));
             delegate.putContextList(DBQueTag.TABLE, DBQueTag.getTopTags(5));
-            System.out.println(Arrays.toString(DBQueTag.getTopTags(5)));
-            System.out.println(Arrays.toString(delegate.getContextList(DBQueTag.TABLE, new ArrayList<>())));
 
             return null;
         });

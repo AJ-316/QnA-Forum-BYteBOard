@@ -7,9 +7,9 @@ import BYteBOardInterface.StructurePackage.BoardPanel;
 import BYteBOardInterface.StructurePackage.Frame;
 import BoardControls.*;
 import BoardControls.UIPackage.GridBagBuilder;
+import BoardControls.UIPackage.RoundedBorder;
 import BoardEventListeners.LimitCharacterDocumentListener;
 import BoardEventListeners.TagListener;
-import BoardControls.UIPackage.RoundedBorder;
 import BoardResources.ByteBoardTheme;
 import BoardResources.ResourceManager;
 
@@ -80,7 +80,7 @@ public class AskInputPanel extends BoardPanel {
 
         bodyPanel.setVisible(!isPreviewVisible);
 
-        if(isPreviewVisible) {
+        if (isPreviewVisible) {
             bodyPreview.setTextWithStyles(bodyInput.getText());
         }
 
@@ -110,9 +110,9 @@ public class AskInputPanel extends BoardPanel {
             }
 
             public void keyReleased(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ESCAPE)
+                if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
                     comboBox.setPopupVisible(isTagsSuggestionVisible = false);
-                else if(e.getKeyCode() == KeyEvent.VK_SPACE && e.isControlDown())
+                else if (e.getKeyCode() == KeyEvent.VK_SPACE && e.isControlDown())
                     comboBox.setPopupVisible(isTagsSuggestionVisible = true);
             }
         });
@@ -168,6 +168,7 @@ public class AskInputPanel extends BoardPanel {
             public void focusGained(FocusEvent e) {
                 titleLabel.setIcon(titleLabelIcon[0], ResourceManager.ROLLOVER, ResourceManager.MINI);
             }
+
             public void focusLost(FocusEvent e) {
                 titleLabel.setIcon(titleLabelIcon[0], ResourceManager.DEFAULT, ResourceManager.MINI);
             }
@@ -190,7 +191,7 @@ public class AskInputPanel extends BoardPanel {
     }
 
     public boolean validateTags() {
-        if(tagsDisplayPanel.getTagButtons().length < 3) {
+        if (tagsDisplayPanel.getTagButtons().length < 3) {
             tagInput.getTextField().setErrorLabel("Enter at least 3 tags");
             return false;
         }
@@ -215,7 +216,7 @@ public class AskInputPanel extends BoardPanel {
     }
 
     private void setTagSuggestions(String tag) {
-        if(tag.isEmpty()) return;
+        if (tag.isEmpty()) return;
 
         disableTagListener();
         DBDataObject[] suggestedTags = DBTag.getRelevantTags(tag, true);

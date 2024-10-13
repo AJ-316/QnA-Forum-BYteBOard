@@ -30,7 +30,7 @@ public class BoardTagButton extends BoardButton {
         setText(tagDataObject.getValue(DBTag.K_TAG));
         setName(tagDataObject.getValue(DBTag.K_TAG_ID));
 
-        if(searchListener == null) {
+        if (searchListener == null) {
             searchListener = e -> frame.getBoardFrame().requestSwitchFrame(SearchBoardFrame.class, userID, getTagID());
             addActionListener(searchListener);
         }
@@ -40,7 +40,7 @@ public class BoardTagButton extends BoardButton {
         setText(tagDataObject.getValue(DBTag.K_TAG));
         setName(tagDataObject.getValue(DBTag.K_TAG_ID));
 
-        if(removeSelfListener == null) {
+        if (removeSelfListener == null) {
             removeSelfListener = e -> container.remove(this);
             addActionListener(removeSelfListener);
         }

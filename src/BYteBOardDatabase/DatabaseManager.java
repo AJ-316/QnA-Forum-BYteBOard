@@ -1,82 +1,20 @@
 package BYteBOardDatabase;
 
-import BoardControls.BoardDialog;
 import BoardControls.BoardLoader;
 import Tools.DEBUG;
 
-import javax.swing.*;
-import javax.swing.Timer;
-import java.awt.*;
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.net.UnknownHostException;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
+import java.io.InputStream;
 import java.sql.*;
 import java.util.*;
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 public class DatabaseManager {
 
     public static final String PARAMETER_VALUE = "<?P_V?>";
     public static boolean PRINT_QUERY = false;
     private static Connection connection;
-
-    public static void main(String[] args) {
-        String subnet = "192.168.0."; // Change to your local subnet
-        int numThreads = 10; // Number of threads to use
-
-        ExecutorService executor = Executors.newFixedThreadPool(numThreads);
-
-        for (int i = 1; i < 255; i++) {
-            final int hostSuffix = i;
-            executor.submit(() -> {
-                String host = subnet + hostSuffix;
-                try {
-                    InetAddress address = InetAddress.getByName(host);
-                    if (address.isReachable(500)) { // 500 ms timeout
-                        System.out.println(host + " is reachable: " + Arrays.toString(address.getAddress()));
-                    } else {
-                        System.out.print(" -");
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            });
-        }
-
-        executor.shutdown();
-
-        try {
-            // Wait for all tasks to finish or timeout after a maximum wait time
-            if (!executor.awaitTermination(10, TimeUnit.SECONDS)) {
-                System.err.println("Some tasks were not completed in time.");
-                // todo await until completed all or force shutdown
-                //  reachable ip addresses to be added to sql
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void scanForIP() {
-
-    }
-
-    public static void main2(String[] args) {
-        String remoteHost = "8.8.8.8"; // Google's public DNS server
-        int remotePort = 53; // DNS port
-
-        try (Socket socket = new Socket(remoteHost, remotePort)) {
-            InetAddress localAddress = socket.getLocalAddress();
-            String localIP = localAddress.getHostAddress();
-            System.out.println("Local IP Address: " + localIP);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     /*
         // to get system's IP:
@@ -90,30 +28,65 @@ public class DatabaseManager {
     public static void init() {
         BoardLoader.setProgressTarget(2);
         BoardLoader.progress("Connecting to Database...");
-        establishConnection("192.168.0.103", "byteboarddb_qnaforum"); // 192.168.0.102
+        establishConnection();
     }
 
-    public static void establishConnection(String host, String database) {
+    private static JsonObject getConnectionInfo() {
+
+        String file = "db_config.json";
+        InputStream inputStream = DatabaseManager.class.getResourceAsStream(file);
+
+        if (inputStream == null) {
+            System.err.println("File not found! -> " + file);
+            return null;
+        }
+
+        JsonReader jsonReader = Json.createReader(inputStream);
+        JsonObject jsonObject = jsonReader.readObject();
+        jsonReader.close();
+
+        return jsonObject;
+    }
+
+    public static void establishConnection() {
         try {
-            connection = DriverManager.getConnection("jdbc:mysql://" + host + ":3306/" + database, "aj", "ajpwd");
+            JsonObject conInfo = getConnectionInfo();
+            String host;
+            String user;
+            String pass;
+
+            try {
+                host = conInfo.getString("host");
+                user = conInfo.getString("user");
+                pass = conInfo.getString("pass");
+            } catch (NullPointerException ignored) {
+                host = "localhost";
+                user = "root";
+                pass = "rootpwd";
+            }
+
+            connection = DriverManager.getConnection("jdbc:mysql://" + host + ":3306/byteboarddb_qnaforum", user, pass);
+            Runtime.getRuntime().addShutdownHook(new Thread(DatabaseManager::close));
+
             System.out.println("Connected to the database.");
             BoardLoader.progress();
             BoardLoader.stop();
         } catch (SQLException e) {
-            StringBuilder builder = new StringBuilder("Error connecting to the database:\n");
+            StringBuilder builder = new StringBuilder();
 
-            String[] splitMsg = e.getMessage().split(":");
-            String msg = splitMsg[splitMsg.length - 1].replaceAll("\n+", "; ");
-            builder.append("\nErrorCode: ").append(e.getErrorCode())
+            String msg = e.getMessage().replaceAll("\n+", "; ");
+            builder.append("ErrorCode: ").append(e.getErrorCode())
                     .append("\nSQL State: ").append(e.getSQLState())
                     .append("\nMessage: ").append(msg);
 
             System.err.println(builder);
-            BoardLoader.forceStop(builder.toString());
+            BoardLoader.forceStop("Error connecting to the database", builder.toString());
         }
     }
 
     public static void close() {
+        if(connection == null) return;
+
         try {
             connection.close();
         } catch (SQLException ex) {

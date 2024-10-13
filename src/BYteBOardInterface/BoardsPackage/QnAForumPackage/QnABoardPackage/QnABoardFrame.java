@@ -219,10 +219,10 @@ public class QnABoardFrame extends BoardFrame {
         //backButton.setVisible(contentClass == QUESTION || contentClass == EDIT_ANSWER);
         //viewQuestionButton.setVisible(contentClass == ANSWER);
 
-        if(contentClass == QUESTION || contentClass == EDIT_ANSWER) {
+        if (contentClass == QUESTION || contentClass == EDIT_ANSWER) {
             btnPanel.removeAll();
             btnPanel.add(backButton);
-        } else if(contentClass == ANSWER) {
+        } else if (contentClass == ANSWER) {
             btnPanel.removeAll();
             btnPanel.add(viewQuestionButton);
         }

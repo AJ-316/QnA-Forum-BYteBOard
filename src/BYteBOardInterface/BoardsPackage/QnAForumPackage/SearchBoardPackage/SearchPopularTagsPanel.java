@@ -48,10 +48,10 @@ public class SearchPopularTagsPanel extends BoardPanel {
     protected void setPopularTags(DBDataObject[] tagDataObjects, String userID) {
         for (int i = 0; i < popularTagsPanel.getComponentCount(); i++) {
             Component component = popularTagsPanel.getComponent(i);
-            if(!(component instanceof BoardTagButton))
+            if (!(component instanceof BoardTagButton))
                 return;
 
-            if(i >= tagDataObjects.length) {
+            if (i >= tagDataObjects.length) {
                 component.setVisible(false);
                 continue;
             }

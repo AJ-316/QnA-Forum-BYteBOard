@@ -5,8 +5,8 @@ import BYteBOardInterface.StructurePackage.Frame;
 import BoardControls.BoardButton;
 import BoardControls.BoardLabel;
 import BoardControls.BoardScrollPanel;
-import BoardControls.UIPackage.GridBagBuilder;
 import BoardControls.SimpleScrollPane;
+import BoardControls.UIPackage.GridBagBuilder;
 import BoardResources.ByteBoardTheme;
 import BoardResources.ResourceManager;
 

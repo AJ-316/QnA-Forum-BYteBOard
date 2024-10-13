@@ -107,10 +107,10 @@ public class BoardContentDisplayPanel extends BoardPanel {
 
     public boolean containsPanel(String contentID) {
         for (Component component : contentsPanel.getComponents()) {
-            if(!(component instanceof BoardContentDisplayPane))
+            if (!(component instanceof BoardContentDisplayPane))
                 continue;
 
-            if(((BoardContentDisplayPane) component).getContentID().equals(contentID))
+            if (((BoardContentDisplayPane) component).getContentID().equals(contentID))
                 return true;
         }
 

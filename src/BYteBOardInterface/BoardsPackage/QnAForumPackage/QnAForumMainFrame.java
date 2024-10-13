@@ -13,7 +13,7 @@ public class QnAForumMainFrame extends MainFrame {
     }
 
     protected void init(String... switchContext) {
-        createBoardFrames(new Class<?>[] {
+        createBoardFrames(new Class<?>[]{
                 ProfileBoardFrame.class,
                 QnABoardFrame.class,
                 SearchBoardFrame.class,

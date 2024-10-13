@@ -38,7 +38,7 @@ public class BoardComboBox extends JComboBox<String> {
     }
 
     public void setPopupVisible(boolean v) {
-        if(getItemCount() == 0) return;
+        if (getItemCount() == 0) return;
         super.setPopupVisible(v);
     }
 
@@ -183,7 +183,7 @@ public class BoardComboBox extends JComboBox<String> {
 
     public boolean contains(String item) {
         for (int i = 0; i < getItemCount(); i++) {
-            if(getItemAt(i).equals(item))
+            if (getItemAt(i).equals(item))
                 return true;
         }
 

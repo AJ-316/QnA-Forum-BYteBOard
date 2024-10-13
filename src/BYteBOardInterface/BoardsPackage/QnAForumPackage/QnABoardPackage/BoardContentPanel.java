@@ -146,7 +146,7 @@ public class BoardContentPanel extends BoardPanel {
         panel.setCornerRadius(90);
         panel.addInsets(20);
 
-        ((BoardControl)component).setBackground(bgColor);
+        ((BoardControl) component).setBackground(bgColor);
 
         scrollPane.setOpaque(false);
         scrollPane.setBorder(new RoundedBorder(60, 60, 30,
@@ -290,13 +290,13 @@ public class BoardContentPanel extends BoardPanel {
         return this.contentStyledBody.getText();
     }
 
-    public String getContentBody() {
-        return contentBody.getText();
-    }
-
     public void setContentStyledBody(String contentStyledBody) {
         this.contentStyledBody.setTextWithStyles(contentStyledBody);
         bodyStyledScrollPane.resetScroll();
+    }
+
+    public String getContentBody() {
+        return contentBody.getText();
     }
 
     public void setSelfViewer(boolean isSelfViewer) {
